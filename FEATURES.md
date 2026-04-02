@@ -71,7 +71,52 @@
 - [ ] Default categories on first use
 - [ ] Filter tasks by category
 
-### 1.5 Calendar Views
+### 1.5 Event Management
+
+Events are a separate concept from tasks — they have no completion tracking, use status-based lifecycle (CONFIRMED / TENTATIVE / CANCELLED), and support guests, RSVP, meeting links, and Google Calendar sync.
+
+- [ ] Item type selector (Task / Event toggle)
+- [ ] Create event (title, description)
+- [ ] Edit event
+- [ ] Delete event (with confirmation)
+- [ ] Event status: CONFIRMED / TENTATIVE / CANCELLED
+- [ ] Start date / time picker
+- [ ] End date / time picker (supports multi-day events)
+- [ ] All-day event toggle (hasTime flag)
+- [ ] Timezone selection (start + end timezone)
+- [ ] Duration setting
+- [ ] Location field (address, coordinates, place ID)
+- [ ] Guest list management (add / remove by email)
+- [ ] Meeting link field (Google Meet, Zoom, etc.)
+- [ ] Event reminders (first + second reminder)
+- [ ] Event display on calendar (distinct from tasks)
+
+### 1.6 Recurring Events
+
+- [ ] Daily / weekly / monthly / yearly recurrence (same patterns as tasks)
+- [ ] Custom interval support
+- [ ] End conditions (by date, by count, never)
+- [ ] Individual instance management (modify / remove single occurrence)
+- [ ] "Update all future" for recurring event chains
+
+### 1.7 Event Attendees & RSVP
+
+- [ ] Attendee list display with RSVP status
+- [ ] RSVP actions: Accept / Decline / Tentative / Needs Action
+- [ ] Organizer indicator
+- [ ] Attendee invitation notifications
+- [ ] View events you're attending (as guest)
+
+### 1.8 Google Calendar Sync
+
+- [ ] Bidirectional sync with Google Calendar
+- [ ] Google Calendar OAuth connection
+- [ ] Auto-sync on event create / update / delete
+- [ ] Conflict detection via etag
+- [ ] Google Meet link integration
+- [ ] Sync status indicators
+
+### 1.9 Calendar Views
 
 - [ ] Week view (default)
 - [ ] Month view (full month grid)
@@ -113,7 +158,7 @@
 - [ ] Chat panel UI in group detail view
 - [ ] Message timestamps and sender info
 
-### 2.4 Group Tasks
+### 2.4 Group Tasks & Events
 
 - [ ] Assign tasks to group members
 - [ ] "For All Members" group activity type
@@ -121,6 +166,8 @@
 - [ ] Join All / Leave All for recurring group activities
 - [ ] Participant RSVP tracking (Invited / Confirmed / Declined / Left)
 - [ ] Participant avatar display with completion status
+- [ ] Group events (events scoped to a group)
+- [ ] Recurring group events with participant management
 
 ### 2.5 Targets / Goals
 
@@ -152,7 +199,7 @@
 - [ ] Scheduling modes (spread vs. concentrated)
 - [ ] Week-by-week preview with pager
 - [ ] Smart start date selection
-- [ ] Confirm and execute (create actual tasks from templates)
+- [ ] Confirm and execute (create actual tasks and events from templates)
 
 ### 2.8 AI Chat Planner
 
@@ -172,7 +219,7 @@
 
 ### 3.1 Advanced Search
 
-- [ ] Text search across tasks
+- [ ] Text search across tasks and events
 - [ ] Filter by priority
 - [ ] Filter by category
 - [ ] Filter by plan
@@ -219,8 +266,10 @@
 - [ ] Five-week expanded view
 - [ ] Infinite scroll with virtual scrolling
 - [ ] Task drag-and-drop between dates to reschedule
-- [ ] Multi-day task visual continuations
+- [ ] Event drag-and-drop between dates to reschedule
+- [ ] Multi-day event visual continuations (spanning bars)
 - [ ] Hide completed tasks toggle
+- [ ] Unified task + event display with visual distinction
 
 ### 3.6 Data Sync (Web Adaptation)
 
