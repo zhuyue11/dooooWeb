@@ -1,44 +1,12 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Flag } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { Plus, Flag, Check, CalendarDays, Users, Crown } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
-import { getTasks } from '@/lib/api';
-import type { Task } from '@/types/api';
-
-// ── Date helpers ──────────────────────────────────────────────────────
-
-function startOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-}
-
-function toISODate(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-/** Monday of the current week */
-function startOfWeek(d: Date): Date {
-  const day = d.getDay(); // 0=Sun … 6=Sat
-  const diff = day === 0 ? 6 : day - 1; // offset to Monday
-  const mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - diff);
-  return mon;
-}
-
-/** Sunday of the current week */
-function endOfWeek(d: Date): Date {
-  const mon = startOfWeek(d);
-  return new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 6);
-}
-
-function formatTime(date: string): string {
-  const d = new Date(date);
-  const h = d.getHours();
-  const m = String(d.getMinutes()).padStart(2, '0');
-  return `${h}:${m}`;
-}
+import { getTasks, getAssignedGroupTasks, getEvents, getAttendingEvents, toggleTask } from '@/lib/api';
+import { useGroups } from '@/hooks/useGroups';
+import type { Event } from '@/types/api';
+import { startOfDay, toISODate, startOfWeek, endOfWeek, formatTime } from '@/utils/date';
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -56,18 +24,116 @@ function formatDate(): string {
   });
 }
 
-// ── Category colors for schedule ──────────────────────────────────────
+import { CATEGORY_NAMES } from '@/utils/category';
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
-  cme63mc0q0005f2ui0dfg1tqg: { bg: '#dbeafe', text: '#1e40af' },  // Work
-  cme63mc0q0006f2ui0dfg1tqh: { bg: '#d1fae5', text: '#065f46' },  // Personal
-  cme63mc0q000af2ui0dfg1tql: { bg: '#ffedd5', text: '#9a3412' },  // Home
-  cme63mc0q000bf2ui0dfg1tqm: { bg: '#cffafe', text: '#155e75' },  // Travel
-  cme63mc0q0007f2ui0dfg1tqi: { bg: '#fef3c7', text: '#92400e' },  // Shopping
-  cme63mc0q0008f2ui0dfg1tqj: { bg: '#fce7f3', text: '#9d174d' },  // Health
-  cme63mc0q0009f2ui0dfg1tqk: { bg: '#eef2ff', text: '#3730a3' },  // Learning
+// ── Dashboard row (shared across Today, Overdue, To-do, Upcoming panels) ──
+
+type DashboardItem = {
+  id: string; title: string; date?: string | null; hasTime?: boolean;
+  isCompleted: boolean; categoryId?: string; priority?: string;
+  timeOfDay?: string | null; itemType: 'TASK' | 'EVENT';
+  groupId?: string; isForAllMembers?: boolean; groupName?: string;
+  trackCompletion?: boolean;
+  /** Current user's participation status for group activities */
+  participantInstanceStatus?: string;
+  assigneeId?: string; userId?: string;
 };
-const DEFAULT_SCHEDULE_COLOR = { bg: '#f3f4f6', text: '#374151' };
+
+function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
+  item: DashboardItem;
+  now: Date;
+  onToggle?: (item: DashboardItem) => void;
+  showDate?: boolean;
+  currentUserId?: string;
+}) {
+  const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
+
+  // Matching dooooApp's shouldShowToggle logic
+  const shouldShowToggle = (() => {
+    if (item.itemType === 'EVENT') return false;
+    if (!item.groupId) return true; // Personal tasks always show toggle
+    if (item.isForAllMembers) {
+      if (item.trackCompletion === false) return false;
+      // Only CONFIRMED or COMPLETED participants see the toggle
+      return item.participantInstanceStatus === 'CONFIRMED' ||
+             item.participantInstanceStatus === 'COMPLETED';
+    }
+    // Regular group task: assignee or creator sees toggle
+    if (item.assigneeId) return currentUserId === item.assigneeId;
+    return currentUserId === item.userId;
+  })();
+  const metaParts: string[] = [];
+  if (showDate && item.date) {
+    metaParts.push(formatRelativeDate(item.date, now));
+  }
+  if (item.hasTime && item.date) {
+    metaParts.push(formatTime(item.date));
+  } else if (item.timeOfDay) {
+    metaParts.push(item.timeOfDay.charAt(0) + item.timeOfDay.slice(1).toLowerCase());
+  }
+  if (item.categoryId && CATEGORY_NAMES[item.categoryId]) {
+    metaParts.push(CATEGORY_NAMES[item.categoryId]);
+  }
+
+  return (
+    <div className={`flex items-center gap-3 rounded-lg px-3 py-2.5 ${item.isCompleted ? 'bg-muted' : ''}`}>
+      {/* Toggle / icon */}
+      {item.itemType === 'EVENT' ? (
+        <CalendarDays size={18} className="flex-shrink-0 text-[#5b21b6]" />
+      ) : !shouldShowToggle ? (
+        item.isForAllMembers && item.userId === currentUserId ? (
+          <Crown size={16} className="flex-shrink-0 text-[#f59e0b]" />
+        ) : (
+          <div className="h-[18px] w-[18px] flex-shrink-0" />
+        )
+      ) : item.isCompleted ? (
+        <button
+          onClick={() => onToggle?.(item)}
+          className="flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-primary"
+        >
+          <Check size={12} className="text-primary-foreground" strokeWidth={3} />
+        </button>
+      ) : (
+        <button
+          onClick={() => onToggle?.(item)}
+          className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-primary"
+        />
+      )}
+      {/* Content */}
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className={`text-sm font-medium ${item.isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
+          {item.title}
+        </span>
+        {metaParts.length > 0 && (
+          <span className="text-xs text-muted-foreground">{metaParts.join(' · ')}</span>
+        )}
+      </div>
+      {/* Group name badge */}
+      {item.groupId && (
+        <span className="flex flex-shrink-0 items-center gap-1 rounded-full border border-[#3b82f6] px-2 py-0.5 text-[10px] font-medium text-[#3b82f6]">
+          <Users size={10} />
+          {item.groupName || 'Group'}
+        </span>
+      )}
+      {/* Activity badge (additional tag for isForAllMembers group activities) */}
+      {item.isForAllMembers && (
+        <span className="flex-shrink-0 rounded-full bg-[#f0fdf4] px-2 py-0.5 text-[10px] font-medium text-[#15803d]">
+          Activity
+        </span>
+      )}
+      {isHighPriority && <Flag size={16} className="flex-shrink-0 text-destructive" />}
+    </div>
+  );
+}
+
+function formatRelativeDate(dateStr: string, now: Date): string {
+  const d = new Date(dateStr);
+  const today = startOfDay(now);
+  const tomorrow = new Date(today.getTime() + 86400000);
+  if (d >= today && d < tomorrow) return 'Today';
+  if (d >= tomorrow && d < new Date(tomorrow.getTime() + 86400000)) return 'Tomorrow';
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
 
 // ── Component ─────────────────────────────────────────────────────────
 
@@ -84,86 +150,174 @@ export function HomePage() {
   }, [now]);
   const weekStartStr = useMemo(() => toISODate(startOfWeek(now)), [now]);
   const weekEndStr = useMemo(() => toISODate(endOfWeek(now)), [now]);
-
-  // 1. Today's tasks
+  // Events use datetime comparison — extend end by 1 day to cover full last day
+  const weekEndNextStr = useMemo(() => {
+    const d = endOfWeek(now);
+    d.setDate(d.getDate() + 1);
+    return toISODate(d);
+  }, [now]);
+  // ── Personal tasks ──
   const { data: todayTasks = [], isLoading: loadingToday } = useQuery({
     queryKey: ['dashboard-today', todayStr],
     queryFn: () => getTasks({ date: todayStr }),
   });
-
-  // 2. This week's tasks (for "This Week" + "Completion Rate")
   const { data: weekTasks = [], isLoading: loadingWeek } = useQuery({
     queryKey: ['dashboard-week', weekStartStr, weekEndStr],
     queryFn: () => getTasks({ fromDate: weekStartStr, toDate: weekEndStr }),
   });
-
-  // 3. Past tasks (for overdue count — filter client-side for !isCompleted)
   const { data: pastTasks = [], isLoading: loadingPast } = useQuery({
     queryKey: ['dashboard-past', yesterdayStr],
     queryFn: () => getTasks({ toDate: yesterdayStr }),
   });
-
-  // 4. All incomplete tasks (for "To-do" count)
   const { data: todoTasks = [], isLoading: loadingTodo } = useQuery({
     queryKey: ['dashboard-todo'],
     queryFn: () => getTasks({ status: 'PENDING' }),
   });
-
-  // 5. Upcoming tasks (today + future, not completed)
-  const { data: upcomingRaw = [], isLoading: loadingUpcoming } = useQuery({
+  const { data: upcomingPersonal = [], isLoading: loadingUpcoming } = useQuery({
     queryKey: ['dashboard-upcoming', todayStr],
     queryFn: () => getTasks({ fromDate: todayStr, status: 'PENDING' }),
   });
 
-  const isLoading = loadingToday || loadingWeek || loadingPast || loadingTodo || loadingUpcoming;
+  // ── Assigned group tasks ──
+  const { data: groupTasks = [], isLoading: loadingGroup } = useQuery({
+    queryKey: ['dashboard-assigned-group-tasks'],
+    queryFn: getAssignedGroupTasks,
+    staleTime: 2 * 60 * 1000,
+  });
 
-  // ── Derived metrics ──
+  // ── Groups (for group name lookup) ──
+  const { groupNameMap } = useGroups();
 
-  const overdueTasks = useMemo(
-    () => pastTasks.filter((t) => !t.isCompleted),
-    [pastTasks],
+  // ── Events (owned + attending) ──
+  const { data: ownedEvents = [], isLoading: loadingEvents } = useQuery({
+    queryKey: ['dashboard-events', todayStr, weekEndNextStr],
+    queryFn: () => getEvents({ from: todayStr, to: weekEndNextStr }),
+  });
+  const { data: attendingEvents = [], isLoading: loadingAttending } = useQuery({
+    queryKey: ['dashboard-attending-events', todayStr, weekEndNextStr],
+    queryFn: () => getAttendingEvents({ from: todayStr, to: weekEndNextStr }),
+  });
+
+  const isLoading = loadingToday || loadingWeek || loadingPast || loadingTodo || loadingUpcoming || loadingGroup || loadingEvents || loadingAttending;
+
+  // ── Merge events (deduplicate owned + attending) ──
+  const allEvents = useMemo(() => {
+    const seen = new Set<string>();
+    const merged: Event[] = [];
+    for (const ev of [...ownedEvents, ...attendingEvents]) {
+      if (!seen.has(ev.id)) { seen.add(ev.id); merged.push(ev); }
+    }
+    return merged;
+  }, [ownedEvents, attendingEvents]);
+
+  // ── dateType helpers (matching dooooApp business logic) ──
+  // To-do item = no date OR dateType === 'DUE'
+  // Schedule item = has date AND dateType !== 'DUE' (SCHEDULED or undefined)
+  const isTodo = (t: { date?: string | null; dateType?: string }) =>
+    !t.date || t.dateType === 'DUE';
+  const isScheduleItem = (t: { date?: string | null; dateType?: string }) =>
+    !!t.date && t.dateType !== 'DUE';
+
+  // ── Group tasks filtered by date ──
+  const groupTasksToday = useMemo(() =>
+    groupTasks.filter((t) => t.date && toISODate(new Date(t.date)) === todayStr),
+    [groupTasks, todayStr],
+  );
+  const groupTasksThisWeek = useMemo(() =>
+    groupTasks.filter((t) => {
+      if (!t.date) return false;
+      const d = toISODate(new Date(t.date));
+      return d >= weekStartStr && d <= weekEndStr;
+    }),
+    [groupTasks, weekStartStr, weekEndStr],
+  );
+  const groupTasksOverdue = useMemo(() =>
+    groupTasks.filter((t) => {
+      if (!t.date || t.isCompleted) return false;
+      return toISODate(new Date(t.date)) < todayStr;
+    }),
+    [groupTasks, todayStr],
+  );
+  const groupTasksUpcoming = useMemo(() =>
+    groupTasks.filter((t) => {
+      if (!t.date || t.isCompleted) return false;
+      return toISODate(new Date(t.date)) >= todayStr;
+    }),
+    [groupTasks, todayStr],
   );
 
-  const todayCompleted = useMemo(
-    () => todayTasks.filter((t) => t.isCompleted).length,
-    [todayTasks],
+  // ── Events filtered by date ──
+  const eventsToday = useMemo(() =>
+    allEvents.filter((e) => e.date && toISODate(new Date(e.date)) === todayStr),
+    [allEvents, todayStr],
   );
 
-  const weekCompleted = useMemo(
-    () => weekTasks.filter((t) => t.isCompleted).length,
-    [weekTasks],
+  // ── METRICS (count ALL items regardless of dateType) ──
+
+  // Today's Tasks: personal + group tasks (NOT events — events aren't tasks)
+  const allTodayCount = todayTasks.length + groupTasksToday.length;
+  const allTodayCompleted = useMemo(
+    () => todayTasks.filter((t) => t.isCompleted).length + groupTasksToday.filter((t) => t.isCompleted).length,
+    [todayTasks, groupTasksToday],
   );
+
+  // Overdue: all past incomplete (personal + group, both SCHEDULED and DUE past their date)
+  const allOverdue = useMemo(
+    () => [...pastTasks.filter((t) => !t.isCompleted), ...groupTasksOverdue],
+    [pastTasks, groupTasksOverdue],
+  );
+
+  // This Week: personal + group tasks (NOT events)
+  const allWeekCount = weekTasks.length + groupTasksThisWeek.length;
+  const allWeekCompleted = useMemo(
+    () => weekTasks.filter((t) => t.isCompleted).length + groupTasksThisWeek.filter((t) => t.isCompleted).length,
+    [weekTasks, groupTasksThisWeek],
+  );
+
+  // To-do: no-date + DUE tasks (incomplete) — these go in the to-do panel, not calendar
+  const todoItems = useMemo(() => {
+    const personal = todoTasks.filter((t) => isTodo(t));
+    const group = groupTasks.filter((t) => !t.isCompleted && isTodo(t));
+    return [...personal, ...group];
+  }, [todoTasks, groupTasks]);
+
+  // DUE tasks due today (for sub-text)
+  const dueTodayCount = useMemo(() => {
+    const p = todoTasks.filter((t) => t.dateType === 'DUE' && t.date && toISODate(new Date(t.date)) === todayStr && !t.isCompleted).length;
+    const g = groupTasks.filter((t) => t.dateType === 'DUE' && t.date && toISODate(new Date(t.date)) === todayStr && !t.isCompleted).length;
+    return p + g;
+  }, [todoTasks, groupTasks, todayStr]);
 
   const completionRate = useMemo(
-    () => (weekTasks.length > 0 ? Math.round((weekCompleted / weekTasks.length) * 100) : 0),
-    [weekTasks, weekCompleted],
+    () => (allWeekCount > 0 ? Math.round((allWeekCompleted / allWeekCount) * 100) : 0),
+    [allWeekCount, allWeekCompleted],
   );
 
   const metrics = useMemo(
     () => [
       {
         label: "Today's Tasks",
-        value: String(todayTasks.length),
-        sub: `${todayCompleted} completed`,
+        value: String(allTodayCount),
+        sub: `${allTodayCompleted} completed` + (eventsToday.length > 0 ? ` · ${eventsToday.length} event${eventsToday.length > 1 ? 's' : ''}` : ''),
         subColor: '#10b981',
       },
       {
         label: 'Overdue',
-        value: String(overdueTasks.length),
-        sub: overdueTasks.length > 0 ? 'needs attention' : 'all clear',
+        value: String(allOverdue.length),
+        sub: allOverdue.length > 0 ? 'needs attention' : 'all clear',
         subColor: '#6b7280',
-        valueColor: overdueTasks.length > 0 ? '#ef4444' : undefined,
+        valueColor: allOverdue.length > 0 ? '#ef4444' : undefined,
       },
       {
         label: 'To-do',
-        value: String(todoTasks.length),
-        sub: `${todayTasks.filter((t) => !t.isCompleted).length} due today`,
+        value: String(todoItems.length),
+        sub: dueTodayCount > 0 ? `${dueTodayCount} due today` : 'no deadlines today',
         subColor: '#f59e0b',
       },
       {
         label: 'This Week',
-        value: String(weekTasks.length),
-        sub: `${weekCompleted} completed`,
+        value: String(allWeekCount),
+        sub: `${allWeekCompleted} completed`,
         subColor: '#3b82f6',
       },
       {
@@ -173,46 +327,101 @@ export function HomePage() {
         subColor: '#10b981',
       },
     ],
-    [todayTasks, todayCompleted, overdueTasks, todoTasks, weekTasks, weekCompleted, completionRate],
+    [allTodayCount, allTodayCompleted, allOverdue, todoItems, dueTodayCount, allWeekCount, allWeekCompleted, completionRate],
   );
 
-  // ── Upcoming tasks (sorted by date, limit 5) ──
+  // ── PANELS (dateType matters here: schedule = SCHEDULED, to-do = DUE/no-date) ──
 
-  const upcomingTasks = useMemo(() => {
-    return [...upcomingRaw]
+  // ── PANEL DATA ──
+
+  // Helper: enrich item with group name + current user's participation status
+  const enrichItem = (item: DashboardItem, task?: { participantInstances?: Array<{ participantUserId: string; status: string }> }): DashboardItem => {
+    let enriched = item;
+    if (item.groupId) {
+      enriched = { ...enriched, groupName: groupNameMap[item.groupId] };
+    }
+    if (task?.participantInstances && user) {
+      const pi = task.participantInstances.find((p) => p.participantUserId === user.id);
+      enriched = { ...enriched, participantInstanceStatus: pi?.status };
+    }
+    return enriched;
+  };
+
+  const todayItems = useMemo((): DashboardItem[] => {
+    const items: DashboardItem[] = [];
+    for (const t of todayTasks) {
+      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+    }
+    for (const t of groupTasksToday) {
+      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+    }
+    for (const e of eventsToday) {
+      items.push({ id: `event-${e.id}`, title: e.title, date: e.date, hasTime: e.hasTime, isCompleted: false, priority: e.priority ?? undefined, itemType: 'EVENT', groupId: e.groupId ?? undefined, groupName: e.groupId ? groupNameMap[e.groupId] : undefined });
+    }
+    return items.sort((a, b) => {
+      if (a.hasTime && !b.hasTime) return -1;
+      if (!a.hasTime && b.hasTime) return 1;
+      if (a.hasTime && b.hasTime && a.date && b.date) return new Date(a.date).getTime() - new Date(b.date).getTime();
+      return 0;
+    });
+  }, [todayTasks, groupTasksToday, eventsToday, groupNameMap]);
+
+  // Overdue panel: past incomplete tasks (personal + group)
+  const overdueItems = useMemo((): DashboardItem[] => {
+    return allOverdue
+      .map((t) => enrichItem({ ...t, itemType: 'TASK' as const }, t))
+      .sort((a, b) => {
+        const da = a.date ? new Date(a.date).getTime() : 0;
+        const db = b.date ? new Date(b.date).getTime() : 0;
+        return db - da; // most recent overdue first
+      });
+  }, [allOverdue, groupNameMap]);
+
+  // Upcoming: tomorrow+ only (exclude today), scheduled + events
+  const tomorrowStr = useMemo(() => {
+    const d = startOfDay(now);
+    d.setDate(d.getDate() + 1);
+    return toISODate(d);
+  }, [now]);
+
+  const upcomingTasks = useMemo((): DashboardItem[] => {
+    const items: DashboardItem[] = [];
+    for (const t of upcomingPersonal) {
+      if (!isScheduleItem(t)) continue;
+      if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
+      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+    }
+    for (const t of groupTasksUpcoming) {
+      if (!isScheduleItem(t)) continue;
+      if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
+      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+    }
+    for (const e of allEvents) {
+      if (!e.date || toISODate(new Date(e.date)) < tomorrowStr) continue;
+      items.push({ id: `event-${e.id}`, title: e.title, date: e.date, hasTime: e.hasTime, isCompleted: false, priority: e.priority ?? undefined, itemType: 'EVENT', groupId: e.groupId ?? undefined, groupName: e.groupId ? groupNameMap[e.groupId] : undefined });
+    }
+    return items
       .sort((a, b) => {
         const da = a.date ? new Date(a.date).getTime() : Infinity;
         const db = b.date ? new Date(b.date).getTime() : Infinity;
         return da - db;
       })
       .slice(0, 5);
-  }, [upcomingRaw]);
+  }, [upcomingPersonal, groupTasksUpcoming, allEvents, tomorrowStr]);
 
-  // ── Today's schedule (tasks with time, sorted by time) ──
+  // To-do panel: no-date + DUE tasks
+  const todoListItems = todoItems;
 
-  const schedule = useMemo(() => {
-    return todayTasks
-      .filter((t) => t.hasTime && t.date)
-      .sort((a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime())
-      .map((t) => {
-        const colors = (t.categoryId && CATEGORY_COLORS[t.categoryId]) || DEFAULT_SCHEDULE_COLOR;
-        return {
-          id: t.id,
-          time: formatTime(t.date!),
-          title: t.title,
-          bg: colors.bg,
-          text: colors.text,
-          isCompleted: t.isCompleted,
-        };
-      });
-  }, [todayTasks]);
-
-  // ── Unplanned tasks (no date, from todoTasks) ──
-
-  const unplannedTasks = useMemo(
-    () => todoTasks.filter((t) => !t.date),
-    [todoTasks],
-  );
+  // Toggle handler
+  const queryClient = useQueryClient();
+  const handleToggle = async (item: DashboardItem) => {
+    if (item.itemType === 'EVENT') return;
+    await toggleTask(item.id);
+    queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-week'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-assigned-group-tasks'] });
+  };
 
   // ── Render ──
 
@@ -255,48 +464,44 @@ export function HomePage() {
         ))}
       </div>
 
-      {/* Body: Today's Schedule | To-do | Upcoming */}
+      {/* Body: Today | Overdue | To-do | Upcoming */}
       <div className="flex min-h-0 flex-1 gap-4">
-        {/* 1. Today's Schedule */}
-        <div data-testid="schedule-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        {/* 1. Today */}
+        <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">Today's Schedule</span>
+            <span className="text-base font-semibold text-foreground">Today</span>
             <Link to="/calendar" className="text-[13px] font-medium text-[#360EFF] hover:underline">
               Open calendar
             </Link>
           </div>
-          <div className="flex flex-1 flex-col overflow-y-auto px-4 py-2">
+          <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
-            ) : schedule.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No scheduled items today</div>
+            ) : todayItems.length === 0 ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Nothing for today</div>
             ) : (
-              schedule.map((item, i) => (
-                <div
-                  key={item.id}
-                  className={`flex items-center gap-4 py-3 ${i < schedule.length - 1 ? 'border-b border-border' : ''}`}
-                >
-                  <span className="w-10 text-xs font-medium" style={{ color: '#6b7280' }}>
-                    {item.time}
-                  </span>
-                  <div
-                    className="flex flex-1 items-center rounded-md px-2.5 py-1.5"
-                    style={{ backgroundColor: item.bg }}
-                  >
-                    <span
-                      className={`text-[13px] font-medium ${item.isCompleted ? 'line-through opacity-60' : ''}`}
-                      style={{ color: item.text }}
-                    >
-                      {item.title}
-                    </span>
-                  </div>
-                </div>
+              todayItems.map((item) => (
+                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} currentUserId={user?.id} />
               ))
             )}
           </div>
         </div>
 
-        {/* 2. To-do */}
+        {/* 2. Overdue */}
+        {overdueItems.length > 0 && (
+          <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <span className="text-base font-semibold text-destructive">Overdue</span>
+            </div>
+            <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
+              {overdueItems.map((item) => (
+                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} showDate currentUserId={user?.id} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 3. To-do */}
         <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">To-do</span>
@@ -307,30 +512,17 @@ export function HomePage() {
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
-            ) : unplannedTasks.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No unplanned tasks</div>
+            ) : todoListItems.length === 0 ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No to-do items</div>
             ) : (
-              unplannedTasks.map((task) => (
-                <div key={task.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-                  <div className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-[#360EFF]" />
-                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className="text-sm font-medium text-foreground">{task.title}</span>
-                    {task.categoryId && CATEGORY_NAMES[task.categoryId] && (
-                      <span className="text-xs text-muted-foreground">
-                        {CATEGORY_NAMES[task.categoryId]}
-                      </span>
-                    )}
-                  </div>
-                  {task.priority === 'high' && (
-                    <Flag size={16} className="flex-shrink-0 text-[#ef4444]" />
-                  )}
-                </div>
+              todoListItems.map((item) => (
+                <DashboardRow key={item.id} item={{ ...item, itemType: 'TASK' }} now={now} onToggle={handleToggle} currentUserId={user?.id} />
               ))
             )}
           </div>
         </div>
 
-        {/* 3. Upcoming */}
+        {/* 4. Upcoming */}
         <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">Upcoming</span>
@@ -341,19 +533,8 @@ export function HomePage() {
             ) : upcomingTasks.length === 0 ? (
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No upcoming tasks</div>
             ) : (
-              upcomingTasks.map((task) => (
-                <div key={task.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-                  <div className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-[#360EFF]" />
-                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className="text-sm font-medium text-foreground">{task.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatUpcomingMeta(task, now)}
-                    </span>
-                  </div>
-                  {task.priority === 'high' && (
-                    <Flag size={16} className="flex-shrink-0 text-[#ef4444]" />
-                  )}
-                </div>
+              upcomingTasks.map((item) => (
+                <DashboardRow key={item.id} item={item} now={now} showDate currentUserId={user?.id} />
               ))
             )}
           </div>
@@ -363,44 +544,3 @@ export function HomePage() {
   );
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────
-
-const CATEGORY_NAMES: Record<string, string> = {
-  cme63mc0q0005f2ui0dfg1tqg: 'Work',
-  cme63mc0q0006f2ui0dfg1tqh: 'Personal',
-  cme63mc0q000af2ui0dfg1tql: 'Home',
-  cme63mc0q000bf2ui0dfg1tqm: 'Travel',
-  cme63mc0q0007f2ui0dfg1tqi: 'Shopping',
-  cme63mc0q0008f2ui0dfg1tqj: 'Health',
-  cme63mc0q0009f2ui0dfg1tqk: 'Learning',
-};
-
-function formatUpcomingMeta(task: Task, now: Date): string {
-  const parts: string[] = [];
-
-  if (task.date) {
-    const d = new Date(task.date);
-    const today = startOfDay(now);
-    const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-
-    if (d >= today && d < new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
-      parts.push('Today');
-    } else if (d >= tomorrow && d < new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000)) {
-      parts.push('Tomorrow');
-    } else {
-      parts.push(d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
-    }
-
-    if (task.hasTime) {
-      parts.push(formatTime(task.date));
-    } else if (task.timeOfDay) {
-      parts.push(task.timeOfDay.charAt(0) + task.timeOfDay.slice(1).toLowerCase());
-    }
-  }
-
-  if (task.categoryId && CATEGORY_NAMES[task.categoryId]) {
-    parts.push(CATEGORY_NAMES[task.categoryId]);
-  }
-
-  return parts.join(' · ');
-}

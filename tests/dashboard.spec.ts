@@ -4,13 +4,15 @@ import {
   COMPLETED_TODAY,
   INCOMPLETE_TODAY,
   OVERDUE_TASKS,
-  ALL_INCOMPLETE,
+  TODO_ITEMS,
   UNPLANNED_INCOMPLETE,
-  TIMED_TASKS_TODAY,
+  SEED_TASKS,
+  SEED_GROUP_TASKS,
+  SEED_EVENTS,
+  EVENTS_TODAY,
   computeExpectedMetrics,
   getExpectedUpcomingTasks,
   getExpectedUnplannedTasks,
-  getExpectedSchedule,
   waitForDashboardLoad,
 } from './seed-data';
 
@@ -39,13 +41,17 @@ test.describe('Dashboard', () => {
     expect(expected.todaysTasks).toBe(TOTAL_TASKS_TODAY);
     expect(expected.todayCompleted).toBe(COMPLETED_TODAY);
     expect(expected.overdue).toBe(OVERDUE_TASKS);
-    expect(expected.todo).toBe(ALL_INCOMPLETE);
+    expect(expected.todo).toBe(TODO_ITEMS);
     expect(expected.todayIncomplete).toBe(INCOMPLETE_TODAY);
 
     // Today's Tasks
     const todaysCard = page.locator('div').filter({ hasText: /^Today's Tasks/ }).first();
     await expect(todaysCard.locator('[data-testid="metric-value-Today\'s Tasks"]')).toHaveText(String(TOTAL_TASKS_TODAY));
     await expect(todaysCard.getByText(`${COMPLETED_TODAY} completed`)).toBeVisible();
+    // Event count shown in sub-text (e.g. "2 completed · 1 event")
+    if (EVENTS_TODAY > 0) {
+      await expect(todaysCard).toContainText(`${EVENTS_TODAY} event`);
+    }
 
     // Overdue
     const overdueCard = page.locator('div').filter({ hasText: /^Overdue/ }).first();
@@ -53,8 +59,8 @@ test.describe('Dashboard', () => {
 
     // To-do
     const todoCard = page.locator('div').filter({ hasText: /^To-do/ }).first();
-    await expect(todoCard.locator('[data-testid="metric-value-To-do"]')).toHaveText(String(ALL_INCOMPLETE));
-    await expect(todoCard.getByText(`${INCOMPLETE_TODAY} due today`)).toBeVisible();
+    await expect(todoCard.locator('[data-testid="metric-value-To-do"]')).toHaveText(String(TODO_ITEMS));
+    await expect(todoCard.getByText(expected.dueToday > 0 ? `${expected.dueToday} due today` : 'no deadlines today')).toBeVisible();
 
     // This Week (dynamic — depends on day of week)
     const weekCard = page.locator('div').filter({ hasText: /^This Week/ }).first();
@@ -70,21 +76,41 @@ test.describe('Dashboard', () => {
     await expect(rateCard.getByText('this week')).toBeVisible();
   });
 
-  test("shows today's schedule with correct times", async ({ page }) => {
+  test('Today panel shows all items for today', async ({ page }) => {
     await waitForDashboardLoad(page);
 
-    const expectedSchedule = getExpectedSchedule();
-    const scheduleSection = page.locator('[data-testid="schedule-section"]');
+    const todaySection = page.locator('[data-testid="today-section"]');
 
-    expect(expectedSchedule.length).toBe(TIMED_TASKS_TODAY);
+    // All today items: personal tasks + group tasks + events
+    const personalToday = SEED_TASKS.filter((t) => t.dateOffset === 0);
+    const groupToday = SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0);
+    const eventsToday = SEED_EVENTS.filter((t) => t.dateOffset === 0);
 
-    for (const item of expectedSchedule) {
-      await expect(scheduleSection.getByText(item.title, { exact: true }).first()).toBeVisible();
-      await expect(scheduleSection.getByText(item.displayTime).first()).toBeVisible();
+    // Verify expected count of items rendered in the panel
+    const todayExpectedCount = personalToday.length + groupToday.length + eventsToday.length;
+    expect(todayExpectedCount).toBe(TOTAL_TASKS_TODAY + EVENTS_TODAY);
+
+    // Check each item exists in DOM (some may be scrolled out of view in the overflow panel)
+    for (const item of [...personalToday, ...groupToday, ...eventsToday]) {
+      await expect(todaySection.getByText(item.title, { exact: true }).first()).toBeAttached();
     }
 
-    const timeSlots = scheduleSection.locator('.w-10');
-    await expect(timeSlots).toHaveCount(TIMED_TASKS_TODAY);
+    await expect(todaySection.getByText('Nothing for today')).not.toBeVisible();
+  });
+
+  test('Overdue panel shows past incomplete tasks', async ({ page }) => {
+    await waitForDashboardLoad(page);
+
+    const overdueSection = page.locator('[data-testid="overdue-section"]');
+    await expect(overdueSection).toBeVisible();
+
+    // Overdue personal tasks from seed
+    const overduePersonal = SEED_TASKS.filter((t) => t.dateOffset !== null && t.dateOffset < 0 && !t.isCompleted);
+    expect(overduePersonal.length).toBe(OVERDUE_TASKS);
+
+    for (const task of overduePersonal) {
+      await expect(overdueSection.getByText(task.title, { exact: true }).first()).toBeVisible();
+    }
   });
 
   test('shows to-do section with unplanned tasks', async ({ page }) => {
@@ -99,13 +125,15 @@ test.describe('Dashboard', () => {
       await expect(todoSection.getByText(task.title, { exact: true }).first()).toBeVisible();
     }
 
-    await expect(todoSection.getByText('No unplanned tasks')).not.toBeVisible();
+    await expect(todoSection.getByText('No to-do items')).not.toBeVisible();
   });
 
-  test('shows upcoming tasks from seeded data', async ({ page }) => {
+  test('shows upcoming tasks excluding today', async ({ page }) => {
     await waitForDashboardLoad(page);
 
-    const expectedUpcoming = getExpectedUpcomingTasks().slice(0, 5);
+    const expectedUpcoming = getExpectedUpcomingTasks()
+      .filter((t) => t.dateOffset > 0) // tomorrow+ only
+      .slice(0, 5);
     const upcomingSection = page.locator('[data-testid="upcoming-tasks-section"]');
 
     expect(expectedUpcoming.length).toBeGreaterThan(0);
@@ -114,7 +142,41 @@ test.describe('Dashboard', () => {
       await expect(upcomingSection.getByText(task.title, { exact: true }).first()).toBeVisible();
     }
 
-    await expect(upcomingSection.getByText('No upcoming tasks')).not.toBeVisible();
+    // Today's items should NOT appear in upcoming
+    const todayItems = [...SEED_TASKS.filter((t) => t.dateOffset === 0), ...SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0), ...SEED_EVENTS.filter((t) => t.dateOffset === 0)];
+    for (const item of todayItems) {
+      await expect(upcomingSection.getByText(item.title, { exact: true })).not.toBeVisible();
+    }
+  });
+
+  test('organizer-only group activity has no toggle checkbox', async ({ page }) => {
+    await waitForDashboardLoad(page);
+
+    // "Standup rotation" (gt05) — web user is organizer but NOT a participant
+    // It's on tomorrow, so find it in Upcoming section
+    const upcomingSection = page.locator('[data-testid="upcoming-tasks-section"]');
+    const row = upcomingSection.getByText('Standup rotation', { exact: true }).first();
+    await expect(row).toBeAttached();
+
+    // The row should NOT have a toggle button (circle checkbox)
+    // Organizer-only items get an empty spacer div, not a button
+    const rowContainer = row.locator('..');  // parent flex-col
+    const grandParent = rowContainer.locator('..'); // parent flex-row with toggle
+    await expect(grandParent.locator('button').first()).not.toBeAttached();
+  });
+
+  test('participant group activity has toggle checkbox', async ({ page }) => {
+    await waitForDashboardLoad(page);
+
+    // "Code review session" (gt02) — web user is CONFIRMED participant, on today
+    const todaySection = page.locator('[data-testid="today-section"]');
+    const row = todaySection.getByText('Code review session', { exact: true }).first();
+    await row.scrollIntoViewIfNeeded();
+
+    // The row SHOULD have a toggle button
+    const rowContainer = row.locator('..');
+    const grandParent = rowContainer.locator('..');
+    await expect(grandParent.locator('button').first()).toBeAttached();
   });
 
   test('"View all" navigates to todo page', async ({ page }) => {

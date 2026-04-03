@@ -1,0 +1,49 @@
+import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { Category } from '@/types/api';
+import { getCategoryColor } from '@/utils/category';
+import { formatTime } from '@/utils/date';
+import { useDisplay } from '@/lib/contexts/display-context';
+import type { TimeFormat } from '@/utils/date';
+import { CalendarDays } from 'lucide-react';
+
+interface TaskCardProps {
+  item: CalendarItem;
+  categories?: Category[];
+}
+
+export function TaskCard({ item, categories }: TaskCardProps) {
+  const { timeFormat } = useDisplay();
+  const colors = item.itemType === 'EVENT'
+    ? { bg: '#ede9fe', text: '#5b21b6' } // purple tint for events
+    : getCategoryColor(item.categoryId, categories);
+
+  return (
+    <div
+      data-testid={`task-card-${item.id}`}
+      className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''}`}
+      style={{ backgroundColor: colors.bg, padding: '6px 8px' }}
+    >
+      <div className="flex items-center gap-1">
+        {item.itemType === 'EVENT' && (
+          <CalendarDays size={10} style={{ color: colors.text, flexShrink: 0 }} />
+        )}
+        <span
+          className={`text-[11px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+          style={{ color: colors.text }}
+        >
+          {item.title}
+        </span>
+      </div>
+      {item.hasTime && (
+        <span className="text-[10px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
+          {formatTime(item.date, timeFormat as TimeFormat)}
+        </span>
+      )}
+      {item.isForAllMembers && item.participantSummary && item.participantSummary.goingCount > 0 && (
+        <span className="text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.7 }}>
+          {item.participantSummary.goingCount} going
+        </span>
+      )}
+    </div>
+  );
+}

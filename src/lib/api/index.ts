@@ -129,6 +129,13 @@ export async function toggleTask(id: string): Promise<Task> {
   return res.data.data;
 }
 
+// ===== Assigned Group Tasks =====
+
+export async function getAssignedGroupTasks(): Promise<Task[]> {
+  const res = await apiClient.get<{ success: boolean; data: Task[] }>('/api/tasks/assigned');
+  return res.data.data;
+}
+
 // ===== Task Instances =====
 
 export async function getTaskInstances(): Promise<TaskInstancesResponse> {
@@ -205,6 +212,16 @@ export async function deleteEvent(id: string): Promise<void> {
 
 export async function rsvpEvent(eventId: string, data: RsvpRequest): Promise<EventAttendee> {
   const res = await apiClient.post<{ success: boolean; data: EventAttendee }>(`/api/events/${eventId}/rsvp`, data);
+  return res.data.data;
+}
+
+export async function getAttendingEvents(params?: { from?: string; to?: string }): Promise<Event[]> {
+  const res = await apiClient.get<{ success: boolean; data: Event[] }>('/api/events/attending', { params });
+  return res.data.data;
+}
+
+export async function getUserEventInstances(params: { from: string; to: string }): Promise<EventInstance[]> {
+  const res = await apiClient.get<{ success: boolean; data: EventInstance[] }>('/api/event-instances', { params });
   return res.data.data;
 }
 
