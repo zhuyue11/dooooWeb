@@ -10,8 +10,8 @@ setup('authenticate', async ({ page }) => {
   await page.click('a[href="/login/email"]');
   await expect(page).toHaveURL('/login/email');
 
-  // Fill in credentials (seed user from dooooBackend)
-  await page.fill('input[type="email"]', 'test@doooo.co');
+  // Fill in credentials (web test user from dooooBackend seed)
+  await page.fill('input[type="email"]', 'web@doooo.co');
   await page.fill('input[type="password"]', 'TestPassword123!');
 
   // Submit
