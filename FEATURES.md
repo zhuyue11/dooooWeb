@@ -22,10 +22,6 @@
 
 - [ ] Email/password login
 - [ ] Email/password registration
-- [ ] Password reset flow
-- [ ] OAuth: Google sign-in
-- [ ] OAuth: Apple sign-in
-- [ ] OAuth: WeChat sign-in
 - [ ] JWT session management (token storage, refresh, Axios interceptors)
 - [ ] Protected route middleware (redirect unauthenticated users)
 - [ ] Logout
@@ -330,6 +326,13 @@ Events are a separate concept from tasks — they have no completion tracking, u
 - [ ] Feedback submission form
 - [ ] Bug report form
 - [ ] About page with app info and version
+
+### 4.7 Additional Authentication
+
+- [ ] Password reset flow
+- [ ] OAuth: Google sign-in
+- [ ] OAuth: Apple sign-in
+- [ ] OAuth: WeChat sign-in
 
 ---
 
