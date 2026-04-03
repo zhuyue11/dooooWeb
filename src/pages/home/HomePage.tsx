@@ -207,6 +207,13 @@ export function HomePage() {
       });
   }, [todayTasks]);
 
+  // ── Unplanned tasks (no date, from todoTasks) ──
+
+  const unplannedTasks = useMemo(
+    () => todoTasks.filter((t) => !t.date),
+    [todoTasks],
+  );
+
   // ── Render ──
 
   return (
@@ -248,41 +255,9 @@ export function HomePage() {
         ))}
       </div>
 
-      {/* Body: Upcoming Tasks + Today's Schedule */}
+      {/* Body: Today's Schedule | To-do | Upcoming */}
       <div className="flex min-h-0 flex-1 gap-4">
-        {/* Upcoming Tasks */}
-        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">Upcoming Tasks</span>
-            <Link to="/todo" className="text-[13px] font-medium text-[#360EFF] hover:underline">
-              View all
-            </Link>
-          </div>
-          <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
-            {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
-            ) : upcomingTasks.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No upcoming tasks</div>
-            ) : (
-              upcomingTasks.map((task) => (
-                <div key={task.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-                  <div className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-[#360EFF]" />
-                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className="text-sm font-medium text-foreground">{task.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatUpcomingMeta(task, now)}
-                    </span>
-                  </div>
-                  {task.priority === 'high' && (
-                    <Flag size={16} className="flex-shrink-0 text-[#ef4444]" />
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Today's Schedule */}
+        {/* 1. Today's Schedule */}
         <div data-testid="schedule-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">Today's Schedule</span>
@@ -315,6 +290,69 @@ export function HomePage() {
                       {item.title}
                     </span>
                   </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* 2. To-do */}
+        <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center justify-between border-b border-border px-5 py-4">
+            <span className="text-base font-semibold text-foreground">To-do</span>
+            <Link to="/todo" className="text-[13px] font-medium text-[#360EFF] hover:underline">
+              View all
+            </Link>
+          </div>
+          <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
+            ) : unplannedTasks.length === 0 ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No unplanned tasks</div>
+            ) : (
+              unplannedTasks.map((task) => (
+                <div key={task.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+                  <div className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-[#360EFF]" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="text-sm font-medium text-foreground">{task.title}</span>
+                    {task.categoryId && CATEGORY_NAMES[task.categoryId] && (
+                      <span className="text-xs text-muted-foreground">
+                        {CATEGORY_NAMES[task.categoryId]}
+                      </span>
+                    )}
+                  </div>
+                  {task.priority === 'high' && (
+                    <Flag size={16} className="flex-shrink-0 text-[#ef4444]" />
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* 3. Upcoming */}
+        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center justify-between border-b border-border px-5 py-4">
+            <span className="text-base font-semibold text-foreground">Upcoming</span>
+          </div>
+          <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
+            ) : upcomingTasks.length === 0 ? (
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No upcoming tasks</div>
+            ) : (
+              upcomingTasks.map((task) => (
+                <div key={task.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+                  <div className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-[#360EFF]" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="text-sm font-medium text-foreground">{task.title}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {formatUpcomingMeta(task, now)}
+                    </span>
+                  </div>
+                  {task.priority === 'high' && (
+                    <Flag size={16} className="flex-shrink-0 text-[#ef4444]" />
+                  )}
                 </div>
               ))
             )}
