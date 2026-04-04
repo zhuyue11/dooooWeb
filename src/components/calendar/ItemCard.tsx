@@ -6,12 +6,12 @@ import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
 import { CalendarDays } from 'lucide-react';
 
-interface TaskCardProps {
+interface ItemCardProps {
   item: CalendarItem;
   categories?: Category[];
 }
 
-export function TaskCard({ item, categories }: TaskCardProps) {
+export function ItemCard({ item, categories }: ItemCardProps) {
   const { timeFormat } = useDisplay();
   const colors = item.itemType === 'EVENT'
     ? { bg: '#ede9fe', text: '#5b21b6' } // purple tint for events

@@ -1,11 +1,11 @@
 import { Plus } from 'lucide-react';
 import { isSameDay, formatMonthYear } from '@/utils/date';
-import { TaskRow } from './TaskRow';
+import { ItemRow } from './ItemRow';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 import type { Category } from '@/types/api';
 
-interface TaskPanelProps {
+interface ItemPanelProps {
   selectedDate: Date | null;
   today: Date;
   visibleDates: Date[];
@@ -41,7 +41,7 @@ function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], v
   }
 }
 
-export function TaskPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId }: TaskPanelProps) {
+export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId }: ItemPanelProps) {
   return (
     <div
       data-testid="task-panel"
@@ -68,7 +68,7 @@ export function TaskPanel({ selectedDate, today, visibleDates, viewMode, items, 
           </div>
         ) : (
           items.map((item) => (
-            <TaskRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} />
+            <ItemRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} />
           ))
         )}
       </div>

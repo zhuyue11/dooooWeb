@@ -1,5 +1,5 @@
 import { isSameDay, toISODate } from '@/utils/date';
-import { TaskCard } from './TaskCard';
+import { ItemCard } from './ItemCard';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 
@@ -84,7 +84,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                 <div className="flex items-center justify-center py-4 text-xs text-muted-foreground">…</div>
               ) : items.length === 0 ? null : (
                 items.map((item) => (
-                  <TaskCard key={item.id} item={item} categories={categories} />
+                  <ItemCard key={item.id} item={item} categories={categories} />
                 ))
               )}
             </div>

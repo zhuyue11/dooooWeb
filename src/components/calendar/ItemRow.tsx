@@ -6,14 +6,14 @@ import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
 
-interface TaskRowProps {
+interface ItemRowProps {
   item: CalendarItem;
   categories?: Category[];
   showDate?: boolean;
   currentUserId?: string;
 }
 
-export function TaskRow({ item, categories, showDate, currentUserId }: TaskRowProps) {
+export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowProps) {
   const { timeFormat } = useDisplay();
 
   // ── Toggle logic (matching dooooApp's shouldShowToggle) ──

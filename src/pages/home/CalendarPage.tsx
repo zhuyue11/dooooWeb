@@ -8,7 +8,7 @@ import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { WeekGrid } from '@/components/calendar/WeekGrid';
 import { MonthGrid } from '@/components/calendar/MonthGrid';
 import { DayTimeline } from '@/components/calendar/DayTimeline';
-import { TaskPanel } from '@/components/calendar/TaskPanel';
+import { ItemPanel } from '@/components/calendar/ItemPanel';
 import { toISODate } from '@/utils/date';
 
 export function CalendarPage() {
@@ -86,7 +86,7 @@ export function CalendarPage() {
         )}
 
         {/* Task panel */}
-        <TaskPanel
+        <ItemPanel
           selectedDate={selectedDate}
           today={today}
           visibleDates={visibleDates}
