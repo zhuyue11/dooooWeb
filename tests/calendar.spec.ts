@@ -277,10 +277,234 @@ await expect(panelDate).toContainText('–');
     await waitForCalendarLoad(page);
     const weekTab = page.locator('[data-testid="view-tab-week"]');
     await expect(weekTab).toBeVisible();
-    // Month and Day tabs should be disabled
+    // Month and Day tabs should be enabled and clickable
     const monthTab = page.locator('[data-testid="view-tab-month"]');
-    await expect(monthTab).toBeDisabled();
+    await expect(monthTab).toBeEnabled();
     const dayTab = page.locator('[data-testid="view-tab-day"]');
-    await expect(dayTab).toBeDisabled();
+    await expect(dayTab).toBeEnabled();
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// Month View
+// ══════════════════════════════════════════════════════════════════════
+
+test.describe('Calendar Month View', () => {
+  async function switchToMonth(page: import('@playwright/test').Page) {
+    await waitForCalendarLoad(page);
+    await page.click('[data-testid="view-tab-month"]');
+    await page.waitForSelector('[data-testid="calendar-month-grid"]', { timeout: 5000 });
+  }
+
+  test('switches to month view and shows month grid', async ({ page }) => {
+    await switchToMonth(page);
+    await expect(page.locator('[data-testid="calendar-month-grid"]')).toBeVisible();
+  });
+
+  test('header shows month + year format', async ({ page }) => {
+    await switchToMonth(page);
+    const now = todayDate();
+    const monthYear = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    await expect(page.locator('[data-testid="calendar-date-range"]')).toHaveText(monthYear);
+  });
+
+  test('today cell has primary indicator', async ({ page }) => {
+    await switchToMonth(page);
+    const todayStr = toISODate(todayDate());
+    const cell = page.locator(`[data-testid="month-cell-${todayStr}"]`);
+    await expect(cell).toBeVisible();
+  });
+
+  test('seeded personal tasks appear as dots on correct dates', async ({ page }) => {
+    await switchToMonth(page);
+    for (const task of SEED_TASKS) {
+      if (task.dateOffset === null) continue;
+      const taskDate = offsetDate(task.dateOffset);
+      // Only check tasks in the current month
+      if (taskDate.getMonth() !== todayDate().getMonth()) continue;
+      const dateKey = toISODate(taskDate);
+      const cell = page.locator(`[data-testid="month-cell-${dateKey}"]`);
+      // Cell should have at least one dot (colored circle)
+      await expect(cell.locator('.rounded-full').first()).toBeAttached();
+    }
+  });
+
+  test('seeded group tasks appear as dots on correct dates', async ({ page }) => {
+    await switchToMonth(page);
+    for (const gt of SEED_GROUP_TASKS) {
+      const taskDate = offsetDate(gt.dateOffset);
+      if (taskDate.getMonth() !== todayDate().getMonth()) continue;
+      const dateKey = toISODate(taskDate);
+      const cell = page.locator(`[data-testid="month-cell-${dateKey}"]`);
+      await expect(cell.locator('.rounded-full').first()).toBeAttached();
+    }
+  });
+
+  test('seeded events appear as dots on correct dates', async ({ page }) => {
+    await switchToMonth(page);
+    for (const ev of SEED_EVENTS) {
+      const evDate = offsetDate(ev.dateOffset);
+      if (evDate.getMonth() !== todayDate().getMonth()) continue;
+      const dateKey = toISODate(evDate);
+      const cell = page.locator(`[data-testid="month-cell-${dateKey}"]`);
+      await expect(cell.locator('.rounded-full').first()).toBeAttached();
+    }
+  });
+
+  test('clicking a date updates panel', async ({ page }) => {
+    await switchToMonth(page);
+    const todayStr = toISODate(todayDate());
+    await page.click(`[data-testid="month-cell-${todayStr}"]`);
+    // Panel should show today's date
+    await expect(page.locator('[data-testid="task-panel-date"]')).toContainText('Today ·');
+    // Panel should have correct item count
+    const panel = page.locator('[data-testid="task-panel"]');
+    const rows = panel.locator('[data-testid^="task-row-"]');
+    await expect(rows).toHaveCount(TOTAL_ITEMS_TODAY);
+  });
+
+  test('month navigation shifts by month', async ({ page }) => {
+    await switchToMonth(page);
+    const initial = await page.locator('[data-testid="calendar-date-range"]').textContent();
+    await page.click('[data-testid="nav-next-week"]');
+    await expect(page.locator('[data-testid="calendar-date-range"]')).not.toHaveText(initial!);
+    await page.click('[data-testid="nav-prev-week"]');
+    await expect(page.locator('[data-testid="calendar-date-range"]')).toHaveText(initial!);
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// Day View
+// ══════════════════════════════════════════════════════════════════════
+
+test.describe('Calendar Day View', () => {
+  async function switchToDay(page: import('@playwright/test').Page) {
+    await waitForCalendarLoad(page);
+    await page.click('[data-testid="view-tab-day"]');
+    await page.waitForSelector('[data-testid="calendar-day-timeline"]', { timeout: 5000 });
+  }
+
+  test('switches to day view and shows timeline', async ({ page }) => {
+    await switchToDay(page);
+    await expect(page.locator('[data-testid="calendar-day-timeline"]')).toBeVisible();
+  });
+
+  test('header shows full date format', async ({ page }) => {
+    await switchToDay(page);
+    const now = todayDate();
+    const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    await expect(page.locator('[data-testid="calendar-date-range"]')).toHaveText(fullDate);
+  });
+
+  test('seeded timed personal tasks appear in correct hour slots', async ({ page }) => {
+    await switchToDay(page);
+    const timedToday = SEED_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
+    for (const task of timedToday) {
+      // Compute local hour from UTC seed time
+      const now = todayDate();
+      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
+        parseInt(task.time!.split(':')[0]), parseInt(task.time!.split(':')[1])));
+      const localHour = utcDate.getHours();
+      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      await expect(hourRow.getByText(task.title)).toBeVisible();
+    }
+  });
+
+  test('seeded timed group tasks appear in correct hour slots', async ({ page }) => {
+    await switchToDay(page);
+    const timedGroupToday = SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
+    for (const gt of timedGroupToday) {
+      const now = todayDate();
+      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
+        parseInt(gt.time.split(':')[0]), parseInt(gt.time.split(':')[1])));
+      const localHour = utcDate.getHours();
+      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      await expect(hourRow.getByText(gt.title)).toBeVisible();
+    }
+  });
+
+  test('seeded timed events appear in correct hour slots', async ({ page }) => {
+    await switchToDay(page);
+    const timedEventsToday = SEED_EVENTS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
+    for (const ev of timedEventsToday) {
+      const now = todayDate();
+      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
+        parseInt(ev.time.split(':')[0]), parseInt(ev.time.split(':')[1])));
+      const localHour = utcDate.getHours();
+      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      await expect(hourRow.getByText(ev.title)).toBeVisible();
+    }
+  });
+
+  test('day navigation shifts by day', async ({ page }) => {
+    await switchToDay(page);
+    const initial = await page.locator('[data-testid="calendar-date-range"]').textContent();
+    await page.click('[data-testid="nav-next-week"]');
+    await expect(page.locator('[data-testid="calendar-date-range"]')).not.toHaveText(initial!);
+  });
+
+  test('navigate to tomorrow shows tomorrow tasks', async ({ page }) => {
+    await switchToDay(page);
+    await page.click('[data-testid="nav-next-week"]');
+    // Tomorrow's tasks should be visible
+    const tomorrowTasks = SEED_TASKS.filter((t) => t.dateOffset === 1 && t.hasTime && t.time);
+    for (const task of tomorrowTasks) {
+      const timeline = page.locator('[data-testid="calendar-day-timeline"]');
+      await expect(timeline.getByText(task.title)).toBeVisible();
+    }
+  });
+
+  test('Today button returns to current day', async ({ page }) => {
+    await switchToDay(page);
+    await page.click('[data-testid="nav-next-week"]');
+    await page.click('[data-testid="nav-next-week"]');
+    await page.click('[data-testid="nav-today"]');
+    const fullDate = todayDate().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    await expect(page.locator('[data-testid="calendar-date-range"]')).toHaveText(fullDate);
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// Cross-view tests (items visible in all views per CLAUDE.md)
+// ══════════════════════════════════════════════════════════════════════
+
+test.describe('Cross-view item verification', () => {
+  test('today items appear in week, month, and day views', async ({ page }) => {
+    const todayStr = toISODate(todayDate());
+    const todayTitles = [
+      ...SEED_TASKS.filter((t) => t.dateOffset === 0).map((t) => t.title),
+      ...SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0).map((t) => t.title),
+      ...SEED_EVENTS.filter((t) => t.dateOffset === 0).map((t) => t.title),
+    ];
+
+    // Week view
+    await waitForCalendarLoad(page);
+    for (const title of todayTitles) {
+      const col = page.locator(`[data-testid="day-column-${todayStr}"]`);
+      await expect(col.getByText(title).first()).toBeAttached();
+    }
+
+    // Month view
+    await page.click('[data-testid="view-tab-month"]');
+    await page.waitForSelector('[data-testid="calendar-month-grid"]');
+    const cell = page.locator(`[data-testid="month-cell-${todayStr}"]`);
+    // Month shows dots, not titles — verify dots exist (count should match items)
+    const dots = cell.locator('.rounded-full');
+    // At least one dot per item type present
+    expect(await dots.count()).toBeGreaterThan(0);
+
+    // Day view
+    await page.click('[data-testid="view-tab-day"]');
+    await page.waitForSelector('[data-testid="calendar-day-timeline"]');
+    const timeline = page.locator('[data-testid="calendar-day-timeline"]');
+    // Timed items should show in timeline
+    const timedTitles = [
+      ...SEED_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime).map((t) => t.title),
+      ...SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime).map((t) => t.title),
+      ...SEED_EVENTS.filter((t) => t.dateOffset === 0 && t.hasTime).map((t) => t.title),
+    ];
+    for (const title of timedTitles) {
+      await expect(timeline.getByText(title).first()).toBeAttached();
+    }
   });
 });

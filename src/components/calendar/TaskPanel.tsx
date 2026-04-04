@@ -1,38 +1,47 @@
 import { Plus } from 'lucide-react';
-import { isSameDay } from '@/utils/date';
+import { isSameDay, formatMonthYear } from '@/utils/date';
 import { TaskRow } from './TaskRow';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarViewMode } from '@/hooks/useCalendar';
 import type { Category } from '@/types/api';
 
 interface TaskPanelProps {
   selectedDate: Date | null;
   today: Date;
-  weekDates: Date[]; // 7 dates of current week (for range label)
+  visibleDates: Date[];
+  viewMode: CalendarViewMode;
   items: CalendarItem[];
   categories?: Category[];
   isLoading: boolean;
   currentUserId?: string;
 }
 
-/** Matches dooooApp's DateRangeBar: selected date → "Today · Apr 3", no selection → "Mar 30 - Apr 5" */
-function formatPanelDate(date: Date | null, today: Date, weekDates: Date[]): string {
-  if (!date) {
-    // No selection → show week date range (matching dooooApp's DateRangeBar)
-    const start = weekDates[0];
-    const end = weekDates[6];
-    if (!start || !end) return '';
-    const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    return `${startStr} – ${endStr}`;
+/** Panel header label — adapts to view mode and selection state */
+function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], viewMode: CalendarViewMode): string {
+  if (date) {
+    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    if (isSameDay(date, today)) return `Today · ${dateStr}`;
+    return dateStr;
   }
-  const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  if (isSameDay(date, today)) {
-    return `Today · ${dateStr}`;
+  // No selection — label depends on view mode
+  switch (viewMode) {
+    case 'month':
+      return formatMonthYear(visibleDates[Math.floor(visibleDates.length / 2)]); // mid-point is always in the active month
+    case 'day':
+      return visibleDates[0]?.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || '';
+    case 'week':
+    default: {
+      const start = visibleDates[0];
+      const end = visibleDates[visibleDates.length - 1];
+      if (!start || !end) return '';
+      const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return `${startStr} – ${endStr}`;
+    }
   }
-  return dateStr;
 }
 
-export function TaskPanel({ selectedDate, today, weekDates, items, categories, isLoading, currentUserId }: TaskPanelProps) {
+export function TaskPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId }: TaskPanelProps) {
   return (
     <div
       data-testid="task-panel"
@@ -41,7 +50,7 @@ export function TaskPanel({ selectedDate, today, weekDates, items, categories, i
       {/* Panel header */}
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <span data-testid="task-panel-date" className="text-base font-semibold text-foreground">
-          {formatPanelDate(selectedDate, today, weekDates)}
+          {formatPanelDate(selectedDate, today, visibleDates, viewMode)}
         </span>
         <button className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90">
           <Plus size={16} />

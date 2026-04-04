@@ -153,13 +153,13 @@ test.describe('Dashboard', () => {
     await waitForDashboardLoad(page);
 
     // "Standup rotation" (gt05) — web user is organizer but NOT a participant
-    // It's on tomorrow, so find it in Upcoming section
-    const upcomingSection = page.locator('[data-testid="upcoming-tasks-section"]');
-    const row = upcomingSection.getByText('Standup rotation', { exact: true }).first();
+    // Find it anywhere on the dashboard (could be Today or Upcoming depending on date)
+    const row = page.getByText('Standup rotation', { exact: true }).first();
+    await row.scrollIntoViewIfNeeded();
     await expect(row).toBeAttached();
 
     // The row should NOT have a toggle button (circle checkbox)
-    // Organizer-only items get an empty spacer div, not a button
+    // Organizer-only items show a crown icon, not a button
     const rowContainer = row.locator('..');  // parent flex-col
     const grandParent = rowContainer.locator('..'); // parent flex-row with toggle
     await expect(grandParent.locator('button').first()).not.toBeAttached();
@@ -168,10 +168,10 @@ test.describe('Dashboard', () => {
   test('participant group activity has toggle checkbox', async ({ page }) => {
     await waitForDashboardLoad(page);
 
-    // "Code review session" (gt02) — web user is CONFIRMED participant, on today
-    const todaySection = page.locator('[data-testid="today-section"]');
-    const row = todaySection.getByText('Code review session', { exact: true }).first();
+    // "Code review session" (gt02) — web user is CONFIRMED participant
+    const row = page.getByText('Code review session', { exact: true }).first();
     await row.scrollIntoViewIfNeeded();
+    await expect(row).toBeAttached();
 
     // The row SHOULD have a toggle button
     const rowContainer = row.locator('..');

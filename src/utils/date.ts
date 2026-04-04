@@ -58,6 +58,50 @@ export function formatTime(dateStr: string, timeFormat: TimeFormat = '24h'): str
   return `${h}:${m}`;
 }
 
+// ── Month helpers ────────────────────────────────────────────────────
+
+/** First day of the month containing `d`. */
+export function startOfMonth(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+/** All dates for a month grid (35 or 42 cells, includes prev/next month padding). */
+export function getMonthGridDates(d: Date, weekStartDay: WeekStartDay = 'monday'): Date[] {
+  const first = startOfMonth(d);
+  const gridStart = startOfWeek(first, weekStartDay);
+  // Always generate 6 rows (42 cells) to keep layout consistent
+  return Array.from({ length: 42 }, (_, i) =>
+    new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + i),
+  );
+}
+
+/** "April 2026" */
+export function formatMonthYear(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+/** "Thursday, April 2, 2026" */
+export function formatFullDate(d: Date): string {
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+// ── Day timeline helpers ─────────────────────────────────────────────
+
+/** Returns array of hours [0, 1, 2, ..., 23]. */
+export function getHoursArray(): number[] {
+  return Array.from({ length: 24 }, (_, i) => i);
+}
+
+/** "8 AM", "12 PM", "1 PM" */
+export function formatHourLabel(hour: number): string {
+  if (hour === 0) return '12 AM';
+  if (hour < 12) return `${hour} AM`;
+  if (hour === 12) return '12 PM';
+  return `${hour - 12} PM`;
+}
+
+// ── Range label ──────────────────────────────────────────────────────
+
 /** "March 30 — April 5, 2026" style date range label. */
 export function formatDateRange(start: Date, end: Date): string {
   const startMonth = start.toLocaleDateString('en-US', { month: 'long' });

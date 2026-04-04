@@ -20,7 +20,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
   return (
     <div
       data-testid="calendar-week-grid"
-      className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:min-h-0"
     >
       {/* Day labels row */}
       <div className="grid grid-cols-7 px-4 pt-3">

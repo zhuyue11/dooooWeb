@@ -327,7 +327,7 @@ export function HomePage() {
         subColor: '#10b981',
       },
     ],
-    [allTodayCount, allTodayCompleted, allOverdue, todoItems, dueTodayCount, allWeekCount, allWeekCompleted, completionRate],
+    [allTodayCount, allTodayCompleted, allOverdue, todoItems, dueTodayCount, allWeekCount, allWeekCompleted, completionRate, eventsToday],
   );
 
   // ── PANELS (dateType matters here: schedule = SCHEDULED, to-do = DUE/no-date) ──
