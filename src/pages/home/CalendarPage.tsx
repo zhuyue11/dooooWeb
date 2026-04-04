@@ -11,6 +11,9 @@ import { DayTimeline } from '@/components/calendar/DayTimeline';
 import { ItemPanel } from '@/components/calendar/ItemPanel';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 import { toISODate } from '@/utils/date';
+import { toggleTask } from '@/lib/api';
+import { useQueryClient } from '@tanstack/react-query';
+import type { CalendarItem } from '@/hooks/useWeekCalendar';
 
 export function CalendarPage() {
   const { user } = useAuth();
@@ -19,9 +22,20 @@ export function CalendarPage() {
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const queryClient = useQueryClient();
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => setShowCreateModal(false), []);
+  const handleToggle = useCallback(async (item: CalendarItem) => {
+    if (item.itemType === 'EVENT') return;
+    await toggleTask(item.id);
+    queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-attending-events'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+  }, [queryClient]);
 
   const {
     currentDate,
@@ -103,6 +117,7 @@ export function CalendarPage() {
           isLoading={isLoading}
           currentUserId={user?.id}
           onAddClick={handleAddClick}
+          onToggle={handleToggle}
         />
       </div>
 

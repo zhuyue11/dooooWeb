@@ -1386,5 +1386,22 @@
       "saveEvent": "Termin speichern",
       "cancel": "Abbrechen"
     }
+  },
+  "todoPage": {
+    "title": "Aufgaben",
+    "taskCount": "{{count}} Aufgaben",
+    "taskCountOne": "1 Aufgabe",
+    "searchPlaceholder": "Aufgaben suchen...",
+    "addTask": "Aufgabe hinzufügen",
+    "noTasks": "Noch keine Aufgaben",
+    "noResults": "Keine passenden Aufgaben",
+    "filterCategory": "Kategorie",
+    "filterPriority": "Priorität",
+    "filterAll": "Alle",
+    "clearFilters": "Filter löschen",
+    "priorityUrgent": "Dringend",
+    "priorityHigh": "Hoch",
+    "priorityMedium": "Mittel",
+    "priorityLow": "Niedrig"
   }
 }

@@ -1386,5 +1386,22 @@
       "saveEvent": "حفظ الحدث",
       "cancel": "إلغاء"
     }
+  },
+  "todoPage": {
+    "title": "المهام",
+    "taskCount": "{{count}} مهام",
+    "taskCountOne": "مهمة واحدة",
+    "searchPlaceholder": "البحث في المهام...",
+    "addTask": "إضافة مهمة",
+    "noTasks": "لا توجد مهام بعد",
+    "noResults": "لا توجد مهام مطابقة",
+    "filterCategory": "الفئة",
+    "filterPriority": "الأولوية",
+    "filterAll": "الكل",
+    "clearFilters": "مسح الفلاتر",
+    "priorityUrgent": "عاجل",
+    "priorityHigh": "عالي",
+    "priorityMedium": "متوسط",
+    "priorityLow": "منخفض"
   }
 }

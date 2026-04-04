@@ -1392,5 +1392,22 @@
       "saveEvent": "イベントを保存",
       "cancel": "キャンセル"
     }
+  },
+  "todoPage": {
+    "title": "やること",
+    "taskCount": "{{count}} 件のタスク",
+    "taskCountOne": "1 件のタスク",
+    "searchPlaceholder": "タスクを検索...",
+    "addTask": "タスクを追加",
+    "noTasks": "タスクはまだありません",
+    "noResults": "一致するタスクがありません",
+    "filterCategory": "カテゴリ",
+    "filterPriority": "優先度",
+    "filterAll": "すべて",
+    "clearFilters": "フィルターをクリア",
+    "priorityUrgent": "緊急",
+    "priorityHigh": "高",
+    "priorityMedium": "中",
+    "priorityLow": "低"
   }
 }

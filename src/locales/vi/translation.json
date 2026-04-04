@@ -1386,5 +1386,22 @@
       "saveEvent": "Lưu sự kiện",
       "cancel": "Hủy"
     }
+  },
+  "todoPage": {
+    "title": "Việc cần làm",
+    "taskCount": "{{count}} nhiệm vụ",
+    "taskCountOne": "1 nhiệm vụ",
+    "searchPlaceholder": "Tìm kiếm nhiệm vụ...",
+    "addTask": "Thêm nhiệm vụ",
+    "noTasks": "Chưa có nhiệm vụ nào",
+    "noResults": "Không tìm thấy nhiệm vụ phù hợp",
+    "filterCategory": "Danh mục",
+    "filterPriority": "Mức ưu tiên",
+    "filterAll": "Tất cả",
+    "clearFilters": "Xóa bộ lọc",
+    "priorityUrgent": "Khẩn cấp",
+    "priorityHigh": "Cao",
+    "priorityMedium": "Trung bình",
+    "priorityLow": "Thấp"
   }
 }

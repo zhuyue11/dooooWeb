@@ -1386,5 +1386,22 @@
       "saveEvent": "ذخیره رویداد",
       "cancel": "لغو"
     }
+  },
+  "todoPage": {
+    "title": "کارها",
+    "taskCount": "{{count}} کار",
+    "taskCountOne": "۱ کار",
+    "searchPlaceholder": "جستجوی کارها...",
+    "addTask": "افزودن کار",
+    "noTasks": "هنوز کاری نیست",
+    "noResults": "کار مطابقی یافت نشد",
+    "filterCategory": "دسته‌بندی",
+    "filterPriority": "اولویت",
+    "filterAll": "همه",
+    "clearFilters": "پاک کردن فیلترها",
+    "priorityUrgent": "فوری",
+    "priorityHigh": "بالا",
+    "priorityMedium": "متوسط",
+    "priorityLow": "پایین"
   }
 }

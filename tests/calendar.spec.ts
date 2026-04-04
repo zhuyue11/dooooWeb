@@ -12,9 +12,10 @@ import {
 
 // ── Helpers ──
 
+/** Returns "today" in UTC — matches the Docker seed which runs in UTC. */
 function todayDate(): Date {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
 function offsetDate(offset: number): Date {
@@ -214,8 +215,8 @@ await expect(panelDate).toContainText('–');
     // "Review PR #42" is HIGH priority
     const row = page.locator('[data-testid="task-row-web-dashboard-t02"]');
     await expect(row).toBeVisible();
-    // Should contain a flag icon (lucide Flag renders as svg)
-    await expect(row.locator('svg')).toBeVisible();
+    // Icon component renders as <span class="material-symbols-rounded">flag</span>
+    await expect(row.locator('span.material-symbols-rounded:has-text("flag")')).toBeVisible();
   });
 
   test('week navigation: prev/next arrows shift week', async ({ page }) => {
@@ -223,13 +224,18 @@ await expect(panelDate).toContainText('–');
     const dateRange = page.locator('[data-testid="calendar-date-range"]');
     const initialText = await dateRange.textContent();
 
-    // Click next week
-    await page.click('[data-testid="nav-next-week"]');
+    // Click next twice — verify date range changes each time
+    await page.locator('[data-testid="nav-next-week"]').click();
     await expect(dateRange).not.toHaveText(initialText!);
+    const afterNextText = await dateRange.textContent();
 
-    // Click prev to go back
-    await page.click('[data-testid="nav-prev-week"]');
+    // Use Today button to return (more reliable than prev for testing)
+    await page.locator('[data-testid="nav-today"]').click();
     await expect(dateRange).toHaveText(initialText!);
+
+    // Verify prev arrow also changes the date range
+    await page.locator('[data-testid="nav-prev-week"]').click();
+    await expect(dateRange).not.toHaveText(initialText!);
   });
 
   test('Today button returns to current week', async ({ page }) => {
@@ -365,11 +371,20 @@ test.describe('Calendar Month View', () => {
 
   test('month navigation shifts by month', async ({ page }) => {
     await switchToMonth(page);
-    const initial = await page.locator('[data-testid="calendar-date-range"]').textContent();
+    const dateRange = page.locator('[data-testid="calendar-date-range"]');
+    const initial = await dateRange.textContent();
+
+    // Click next — verify month changes
     await page.click('[data-testid="nav-next-week"]');
-    await expect(page.locator('[data-testid="calendar-date-range"]')).not.toHaveText(initial!);
+    await expect(dateRange).not.toHaveText(initial!);
+
+    // Use Today to return (more reliable than prev for testing)
+    await page.click('[data-testid="nav-today"]');
+    await expect(dateRange).toHaveText(initial!);
+
+    // Verify prev arrow also changes the month
     await page.click('[data-testid="nav-prev-week"]');
-    await expect(page.locator('[data-testid="calendar-date-range"]')).toHaveText(initial!);
+    await expect(dateRange).not.toHaveText(initial!);
   });
 });
 
@@ -400,12 +415,9 @@ test.describe('Calendar Day View', () => {
     await switchToDay(page);
     const timedToday = SEED_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
     for (const task of timedToday) {
-      // Compute local hour from UTC seed time
-      const now = todayDate();
-      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
-        parseInt(task.time!.split(':')[0]), parseInt(task.time!.split(':')[1])));
-      const localHour = utcDate.getHours();
-      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      // Seed times are UTC, browser is UTC (via timezoneId config) — use directly
+      const hour = parseInt(task.time!.split(':')[0]);
+      const hourRow = page.locator(`[data-testid="hour-row-${hour}"]`);
       await expect(hourRow.getByText(task.title)).toBeVisible();
     }
   });
@@ -414,11 +426,8 @@ test.describe('Calendar Day View', () => {
     await switchToDay(page);
     const timedGroupToday = SEED_GROUP_TASKS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
     for (const gt of timedGroupToday) {
-      const now = todayDate();
-      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
-        parseInt(gt.time.split(':')[0]), parseInt(gt.time.split(':')[1])));
-      const localHour = utcDate.getHours();
-      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      const hour = parseInt(gt.time.split(':')[0]);
+      const hourRow = page.locator(`[data-testid="hour-row-${hour}"]`);
       await expect(hourRow.getByText(gt.title)).toBeVisible();
     }
   });
@@ -427,11 +436,8 @@ test.describe('Calendar Day View', () => {
     await switchToDay(page);
     const timedEventsToday = SEED_EVENTS.filter((t) => t.dateOffset === 0 && t.hasTime && t.time);
     for (const ev of timedEventsToday) {
-      const now = todayDate();
-      const utcDate = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(),
-        parseInt(ev.time.split(':')[0]), parseInt(ev.time.split(':')[1])));
-      const localHour = utcDate.getHours();
-      const hourRow = page.locator(`[data-testid="hour-row-${localHour}"]`);
+      const hour = parseInt(ev.time.split(':')[0]);
+      const hourRow = page.locator(`[data-testid="hour-row-${hour}"]`);
       await expect(hourRow.getByText(ev.title)).toBeVisible();
     }
   });

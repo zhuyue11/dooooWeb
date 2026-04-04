@@ -1465,5 +1465,22 @@
       "saveEvent": "Save Event",
       "cancel": "Cancel"
     }
+  },
+  "todoPage": {
+    "title": "To-do",
+    "taskCount": "{{count}} tasks",
+    "taskCountOne": "1 task",
+    "searchPlaceholder": "Search tasks...",
+    "addTask": "Add task",
+    "noTasks": "No tasks yet",
+    "noResults": "No matching tasks",
+    "filterCategory": "Category",
+    "filterPriority": "Priority",
+    "filterAll": "All",
+    "clearFilters": "Clear filters",
+    "priorityUrgent": "Urgent",
+    "priorityHigh": "High",
+    "priorityMedium": "Medium",
+    "priorityLow": "Low"
   }
 }

@@ -1389,5 +1389,22 @@
       "saveEvent": "Evenement opslaan",
       "cancel": "Annuleren"
     }
+  },
+  "todoPage": {
+    "title": "Te doen",
+    "taskCount": "{{count}} taken",
+    "taskCountOne": "1 taak",
+    "searchPlaceholder": "Taken zoeken...",
+    "addTask": "Taak toevoegen",
+    "noTasks": "Nog geen taken",
+    "noResults": "Geen overeenkomende taken",
+    "filterCategory": "Categorie",
+    "filterPriority": "Prioriteit",
+    "filterAll": "Alle",
+    "clearFilters": "Filters wissen",
+    "priorityUrgent": "Urgent",
+    "priorityHigh": "Hoog",
+    "priorityMedium": "Gemiddeld",
+    "priorityLow": "Laag"
   }
 }

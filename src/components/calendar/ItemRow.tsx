@@ -12,9 +12,10 @@ interface ItemRowProps {
   categories?: Category[];
   showDate?: boolean;
   currentUserId?: string;
+  onToggle?: (item: CalendarItem) => void;
 }
 
-export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowProps) {
+export function ItemRow({ item, categories, showDate, currentUserId, onToggle }: ItemRowProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
 
@@ -61,11 +62,17 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
             <div className="h-[18px] w-[18px]" />
           )
         ) : isChecked ? (
-          <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-primary">
+          <button
+            onClick={() => onToggle?.(item)}
+            className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-primary"
+          >
             <Icon name="check" size={12} color="var(--color-primary-foreground)" weight={700} />
-          </div>
+          </button>
         ) : (
-          <div className="h-[18px] w-[18px] rounded-full border-2 border-primary" />
+          <button
+            onClick={() => onToggle?.(item)}
+            className="h-[18px] w-[18px] rounded-full border-2 border-primary"
+          />
         )}
       </div>
 

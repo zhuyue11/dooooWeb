@@ -1386,5 +1386,22 @@
       "saveEvent": "บันทึกกิจกรรม",
       "cancel": "ยกเลิก"
     }
+  },
+  "todoPage": {
+    "title": "สิ่งที่ต้องทำ",
+    "taskCount": "{{count}} งาน",
+    "taskCountOne": "1 งาน",
+    "searchPlaceholder": "ค้นหางาน...",
+    "addTask": "เพิ่มงาน",
+    "noTasks": "ยังไม่มีงาน",
+    "noResults": "ไม่พบงานที่ตรงกัน",
+    "filterCategory": "หมวดหมู่",
+    "filterPriority": "ความสำคัญ",
+    "filterAll": "ทั้งหมด",
+    "clearFilters": "ล้างตัวกรอง",
+    "priorityUrgent": "เร่งด่วน",
+    "priorityHigh": "สูง",
+    "priorityMedium": "ปานกลาง",
+    "priorityLow": "ต่ำ"
   }
 }

@@ -1386,5 +1386,22 @@
       "saveEvent": "Simpan Acara",
       "cancel": "Batal"
     }
+  },
+  "todoPage": {
+    "title": "Tugas",
+    "taskCount": "{{count}} tugas",
+    "taskCountOne": "1 tugas",
+    "searchPlaceholder": "Cari tugas...",
+    "addTask": "Tambah tugas",
+    "noTasks": "Belum ada tugas",
+    "noResults": "Tidak ada tugas yang cocok",
+    "filterCategory": "Kategori",
+    "filterPriority": "Prioritas",
+    "filterAll": "Semua",
+    "clearFilters": "Hapus filter",
+    "priorityUrgent": "Mendesak",
+    "priorityHigh": "Tinggi",
+    "priorityMedium": "Sedang",
+    "priorityLow": "Rendah"
   }
 }

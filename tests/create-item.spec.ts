@@ -86,10 +86,9 @@ test.describe('Create Item Modal — Dashboard', () => {
     await waitForDashboardLoad(page);
 
     // Click the + button in the dashboard header
-    const addButton = page.locator('button:has(svg)').filter({ has: page.locator('svg') }).first();
-    // More specific: the + button is in the header row next to greeting
-    const headerAddBtn = page.locator('.flex.items-center.justify-between button').first();
-    await headerAddBtn.click();
+    const addButton = page.locator('[data-testid="dashboard-add-button"]');
+    await expect(addButton).toBeVisible();
+    await addButton.click();
 
     // Modal should appear
     await expect(page.getByPlaceholder('What needs to be done?')).toBeVisible({ timeout: 3000 });

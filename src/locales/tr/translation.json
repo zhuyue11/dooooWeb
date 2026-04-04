@@ -1386,5 +1386,22 @@
       "saveEvent": "Etkinliği Kaydet",
       "cancel": "İptal"
     }
+  },
+  "todoPage": {
+    "title": "Yapılacaklar",
+    "taskCount": "{{count}} görev",
+    "taskCountOne": "1 görev",
+    "searchPlaceholder": "Görev ara...",
+    "addTask": "Görev ekle",
+    "noTasks": "Henüz görev yok",
+    "noResults": "Eşleşen görev yok",
+    "filterCategory": "Kategori",
+    "filterPriority": "Öncelik",
+    "filterAll": "Tümü",
+    "clearFilters": "Filtreleri temizle",
+    "priorityUrgent": "Acil",
+    "priorityHigh": "Yüksek",
+    "priorityMedium": "Orta",
+    "priorityLow": "Düşük"
   }
 }

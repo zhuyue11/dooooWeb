@@ -1386,5 +1386,22 @@
       "saveEvent": "Salva evento",
       "cancel": "Annulla"
     }
+  },
+  "todoPage": {
+    "title": "Da fare",
+    "taskCount": "{{count}} attività",
+    "taskCountOne": "1 attività",
+    "searchPlaceholder": "Cerca attività...",
+    "addTask": "Aggiungi attività",
+    "noTasks": "Nessuna attività ancora",
+    "noResults": "Nessuna attività corrispondente",
+    "filterCategory": "Categoria",
+    "filterPriority": "Priorità",
+    "filterAll": "Tutte",
+    "clearFilters": "Cancella filtri",
+    "priorityUrgent": "Urgente",
+    "priorityHigh": "Alta",
+    "priorityMedium": "Media",
+    "priorityLow": "Bassa"
   }
 }

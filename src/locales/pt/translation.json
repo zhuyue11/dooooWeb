@@ -1392,5 +1392,22 @@
       "saveEvent": "Salvar evento",
       "cancel": "Cancelar"
     }
+  },
+  "todoPage": {
+    "title": "A fazer",
+    "taskCount": "{{count}} tarefas",
+    "taskCountOne": "1 tarefa",
+    "searchPlaceholder": "Pesquisar tarefas...",
+    "addTask": "Adicionar tarefa",
+    "noTasks": "Nenhuma tarefa ainda",
+    "noResults": "Nenhuma tarefa encontrada",
+    "filterCategory": "Categoria",
+    "filterPriority": "Prioridade",
+    "filterAll": "Todas",
+    "clearFilters": "Limpar filtros",
+    "priorityUrgent": "Urgente",
+    "priorityHigh": "Alta",
+    "priorityMedium": "Média",
+    "priorityLow": "Baixa"
   }
 }

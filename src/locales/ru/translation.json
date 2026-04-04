@@ -1386,5 +1386,22 @@
       "saveEvent": "Сохранить событие",
       "cancel": "Отмена"
     }
+  },
+  "todoPage": {
+    "title": "Задачи",
+    "taskCount": "{{count}} задач",
+    "taskCountOne": "1 задача",
+    "searchPlaceholder": "Поиск задач...",
+    "addTask": "Добавить задачу",
+    "noTasks": "Пока нет задач",
+    "noResults": "Нет подходящих задач",
+    "filterCategory": "Категория",
+    "filterPriority": "Приоритет",
+    "filterAll": "Все",
+    "clearFilters": "Сбросить фильтры",
+    "priorityUrgent": "Срочный",
+    "priorityHigh": "Высокий",
+    "priorityMedium": "Средний",
+    "priorityLow": "Низкий"
   }
 }

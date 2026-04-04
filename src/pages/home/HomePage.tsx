@@ -456,6 +456,7 @@ export function HomePage() {
           <p className="text-sm font-medium text-muted-foreground">{formatDate()}</p>
         </div>
         <button
+          data-testid="dashboard-add-button"
           onClick={handleAddClick}
           className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#360EFF] text-white transition-opacity hover:opacity-90"
         >

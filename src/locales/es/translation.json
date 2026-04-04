@@ -1386,5 +1386,22 @@
       "saveEvent": "Guardar evento",
       "cancel": "Cancelar"
     }
+  },
+  "todoPage": {
+    "title": "Pendientes",
+    "taskCount": "{{count}} tareas",
+    "taskCountOne": "1 tarea",
+    "searchPlaceholder": "Buscar tareas...",
+    "addTask": "Añadir tarea",
+    "noTasks": "Sin tareas aún",
+    "noResults": "No hay tareas coincidentes",
+    "filterCategory": "Categoría",
+    "filterPriority": "Prioridad",
+    "filterAll": "Todas",
+    "clearFilters": "Limpiar filtros",
+    "priorityUrgent": "Urgente",
+    "priorityHigh": "Alta",
+    "priorityMedium": "Media",
+    "priorityLow": "Baja"
   }
 }
