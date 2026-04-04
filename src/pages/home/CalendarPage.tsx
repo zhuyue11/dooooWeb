@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useCalendar } from '@/hooks/useCalendar';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 import { useCategories } from '@/hooks/useCategories';
@@ -9,6 +9,7 @@ import { WeekGrid } from '@/components/calendar/WeekGrid';
 import { MonthGrid } from '@/components/calendar/MonthGrid';
 import { DayTimeline } from '@/components/calendar/DayTimeline';
 import { ItemPanel } from '@/components/calendar/ItemPanel';
+import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 import { toISODate } from '@/utils/date';
 
 export function CalendarPage() {
@@ -16,6 +17,11 @@ export function CalendarPage() {
   const { data: categories } = useCategories();
   const { groupNameMap } = useGroups();
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleAddClick = useCallback(() => setShowCreateModal(true), []);
+  const handleModalClose = useCallback(() => setShowCreateModal(false), []);
+  const handleSaved = useCallback(() => setShowCreateModal(false), []);
 
   const {
     currentDate,
@@ -48,6 +54,7 @@ export function CalendarPage() {
         onPrev={goToPrev}
         onNext={goToNext}
         onToday={goToToday}
+        onAddClick={handleAddClick}
       />
 
       {/* Desktop: side-by-side | Mobile: stacked (scrollable) */}
@@ -95,8 +102,18 @@ export function CalendarPage() {
           categories={categories}
           isLoading={isLoading}
           currentUserId={user?.id}
+          onAddClick={handleAddClick}
         />
       </div>
+
+      {/* Create modal */}
+      {showCreateModal && (
+        <ItemFormModal
+          defaultDate={selectedDate ?? undefined}
+          onClose={handleModalClose}
+          onSaved={handleSaved}
+        />
+      )}
     </div>
   );
 }

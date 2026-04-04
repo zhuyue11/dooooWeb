@@ -41,6 +41,7 @@
 
 /* Dark mode overrides via .dark class on <html> */
 .dark {
+  color-scheme: dark;
   --color-background: #0f0f0f;
   --color-foreground: #f3f4f6;
   --color-surface: #1a1a1a;

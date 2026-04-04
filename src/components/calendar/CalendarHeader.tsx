@@ -11,6 +11,7 @@ interface CalendarHeaderProps {
   onPrev: () => void;
   onNext: () => void;
   onToday: () => void;
+  onAddClick?: () => void;
 }
 
 const VIEWS: CalendarViewMode[] = ['week', 'month', 'day'];
@@ -27,7 +28,7 @@ function getDateLabel(viewMode: CalendarViewMode, visibleDates: Date[], currentM
   }
 }
 
-export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMonth, currentDate, onPrev, onNext, onToday }: CalendarHeaderProps) {
+export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMonth, currentDate, onPrev, onNext, onToday, onAddClick }: CalendarHeaderProps) {
   return (
     <div data-testid="calendar-header" className="flex items-center justify-between">
       {/* Left: title + date label */}
@@ -84,7 +85,10 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
         </button>
 
         {/* Add button — hidden on mobile */}
-        <button className="hidden h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90 lg:flex">
+        <button
+          onClick={onAddClick}
+          className="hidden h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90 lg:flex"
+        >
           <Plus size={20} />
         </button>
       </div>

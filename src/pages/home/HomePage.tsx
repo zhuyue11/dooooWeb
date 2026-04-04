@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Flag, Check, CalendarDays, Users, Crown } from 'lucide-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -25,6 +25,7 @@ function formatDate(): string {
 }
 
 import { CATEGORY_NAMES } from '@/utils/category';
+import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 
 // ── Dashboard row (shared across Today, Overdue, To-do, Upcoming panels) ──
 
@@ -140,6 +141,9 @@ function formatRelativeDate(dateStr: string, now: Date): string {
 export function HomePage() {
   const { user } = useAuth();
   const firstName = user?.name?.split(' ')[0] || 'there';
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const handleAddClick = useCallback(() => setShowCreateModal(true), []);
+  const handleModalClose = useCallback(() => setShowCreateModal(false), []);
 
   const now = useMemo(() => new Date(), []);
   const todayStr = useMemo(() => toISODate(now), [now]);
@@ -414,14 +418,25 @@ export function HomePage() {
 
   // Toggle handler
   const queryClient = useQueryClient();
-  const handleToggle = async (item: DashboardItem) => {
-    if (item.itemType === 'EVENT') return;
-    await toggleTask(item.id);
+  const invalidateDashboard = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-week'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-upcoming'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-assigned-group-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-events'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-attending-events'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-past'] });
+  }, [queryClient]);
+  const handleToggle = async (item: DashboardItem) => {
+    if (item.itemType === 'EVENT') return;
+    await toggleTask(item.id);
+    invalidateDashboard();
   };
+  const handleSaved = useCallback(() => {
+    setShowCreateModal(false);
+    invalidateDashboard();
+  }, [invalidateDashboard]);
 
   // ── Render ──
 
@@ -435,7 +450,10 @@ export function HomePage() {
           </h1>
           <p className="text-sm font-medium text-muted-foreground">{formatDate()}</p>
         </div>
-        <button className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#360EFF] text-white transition-opacity hover:opacity-90">
+        <button
+          onClick={handleAddClick}
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#360EFF] text-white transition-opacity hover:opacity-90"
+        >
           <Plus size={20} />
         </button>
       </div>
@@ -540,7 +558,13 @@ export function HomePage() {
           </div>
         </div>
       </div>
+
+      {showCreateModal && (
+        <ItemFormModal
+          onClose={handleModalClose}
+          onSaved={handleSaved}
+        />
+      )}
     </div>
   );
 }
-

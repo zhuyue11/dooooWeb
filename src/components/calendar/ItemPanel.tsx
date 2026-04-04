@@ -14,6 +14,7 @@ interface ItemPanelProps {
   categories?: Category[];
   isLoading: boolean;
   currentUserId?: string;
+  onAddClick?: () => void;
 }
 
 /** Panel header label — adapts to view mode and selection state */
@@ -41,7 +42,7 @@ function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], v
   }
 }
 
-export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId }: ItemPanelProps) {
+export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId, onAddClick }: ItemPanelProps) {
   return (
     <div
       data-testid="task-panel"
@@ -52,7 +53,10 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
         <span data-testid="task-panel-date" className="text-base font-semibold text-foreground">
           {formatPanelDate(selectedDate, today, visibleDates, viewMode)}
         </span>
-        <button className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90">
+        <button
+          onClick={onAddClick}
+          className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        >
           <Plus size={16} />
           <span>Add</span>
         </button>
