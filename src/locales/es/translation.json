@@ -36,7 +36,14 @@
     "calendar": "Calendario",
     "tasks": "Tareas",
     "profile": "Perfil",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "dashboard": "Panel",
+    "todo": "Pendientes",
+    "groups": "Grupos",
+    "plans": "Planes",
+    "targets": "Objetivos",
+    "statistics": "Estadísticas",
+    "notifications": "Notificaciones"
   },
   "auth": {
     "login": "Iniciar Sesión",

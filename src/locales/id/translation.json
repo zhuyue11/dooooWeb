@@ -36,7 +36,14 @@
     "calendar": "Kalender",
     "tasks": "Tugas",
     "profile": "Profil",
-    "settings": "Pengaturan"
+    "settings": "Pengaturan",
+    "dashboard": "Dasbor",
+    "todo": "Tugas",
+    "groups": "Grup",
+    "plans": "Rencana",
+    "targets": "Target",
+    "statistics": "Statistik",
+    "notifications": "Notifikasi"
   },
   "auth": {
     "login": "Masuk",

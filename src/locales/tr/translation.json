@@ -36,7 +36,14 @@
     "calendar": "Takvim",
     "tasks": "Görevler",
     "profile": "Profil",
-    "settings": "Ayarlar"
+    "settings": "Ayarlar",
+    "dashboard": "Panel",
+    "todo": "Yapılacaklar",
+    "groups": "Gruplar",
+    "plans": "Planlar",
+    "targets": "Hedefler",
+    "statistics": "İstatistikler",
+    "notifications": "Bildirimler"
   },
   "auth": {
     "login": "Giriş Yap",

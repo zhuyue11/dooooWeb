@@ -36,7 +36,14 @@
     "calendar": "日历",
     "tasks": "任务",
     "profile": "个人",
-    "settings": "设置"
+    "settings": "设置",
+    "dashboard": "概览",
+    "todo": "待办",
+    "groups": "群组",
+    "plans": "计划",
+    "targets": "目标",
+    "statistics": "统计",
+    "notifications": "通知"
   },
   "auth": {
     "login": "登录",

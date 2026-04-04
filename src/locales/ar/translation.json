@@ -36,7 +36,14 @@
     "calendar": "التقويم",
     "tasks": "المهام",
     "profile": "الملف الشخصي",
-    "settings": "الإعدادات"
+    "settings": "الإعدادات",
+    "dashboard": "لوحة التحكم",
+    "todo": "المهام",
+    "groups": "المجموعات",
+    "plans": "الخطط",
+    "targets": "الأهداف",
+    "statistics": "الإحصائيات",
+    "notifications": "الإشعارات"
   },
   "auth": {
     "login": "تسجيل الدخول",

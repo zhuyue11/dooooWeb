@@ -36,7 +36,14 @@
     "calendar": "Kalender",
     "tasks": "Aufgaben",
     "profile": "Profil",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "dashboard": "Dashboard",
+    "todo": "Aufgaben",
+    "groups": "Gruppen",
+    "plans": "Pläne",
+    "targets": "Ziele",
+    "statistics": "Statistiken",
+    "notifications": "Benachrichtigungen"
   },
   "auth": {
     "login": "Anmelden",

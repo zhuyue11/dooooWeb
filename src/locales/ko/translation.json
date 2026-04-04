@@ -36,7 +36,14 @@
     "calendar": "캘린더",
     "tasks": "할 일",
     "profile": "프로필",
-    "settings": "설정"
+    "settings": "설정",
+    "dashboard": "대시보드",
+    "todo": "할 일",
+    "groups": "그룹",
+    "plans": "플랜",
+    "targets": "목표",
+    "statistics": "통계",
+    "notifications": "알림"
   },
   "auth": {
     "login": "로그인",

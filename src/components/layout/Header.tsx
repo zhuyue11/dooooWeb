@@ -1,5 +1,5 @@
-import { Menu, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@/components/ui/Icon';
 import logo from '@/assets/logo-36.svg';
 
 interface HeaderProps {
@@ -15,7 +15,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         onClick={onMenuToggle}
         className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
       >
-        <Menu size={20} />
+        <Icon name="menu" size={20} />
       </button>
 
       <div className="flex flex-1 items-center gap-2">
@@ -27,7 +27,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         onClick={() => navigate('/notifications')}
         className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
       >
-        <Bell size={20} />
+        <Icon name="notifications" size={20} />
       </button>
     </header>
   );

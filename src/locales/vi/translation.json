@@ -36,7 +36,14 @@
     "calendar": "Lịch",
     "tasks": "Công việc",
     "profile": "Hồ sơ",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "dashboard": "Bảng điều khiển",
+    "todo": "Việc cần làm",
+    "groups": "Nhóm",
+    "plans": "Kế hoạch",
+    "targets": "Mục tiêu",
+    "statistics": "Thống kê",
+    "notifications": "Thông báo"
   },
   "auth": {
     "login": "Đăng nhập",

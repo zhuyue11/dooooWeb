@@ -35,7 +35,7 @@
   --radius-lg: 12px;
 
   /* Sidebar */
-  --sidebar-width: 220px;
+  --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
 }
 
@@ -63,6 +63,12 @@
   --color-info: #3b82f6;
 
   --color-border: #333333;
+}
+
+/* Material Symbols Rounded base style */
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
 }
 
 /* Base styles */

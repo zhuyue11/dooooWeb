@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Mail } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import logo from '@/assets/logo.svg';
 
 export function LoginPage() {
@@ -55,7 +55,7 @@ export function LoginPage() {
             className="flex h-12 items-center justify-center gap-2.5 rounded-lg bg-[#360EFF] text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            <Mail size={20} />
+            <Icon name="mail" size={20} color="#ffffff" />
             Continue with Email
           </Link>
         </div>

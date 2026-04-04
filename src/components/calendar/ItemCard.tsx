@@ -4,7 +4,7 @@ import { getCategoryColor } from '@/utils/category';
 import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
-import { CalendarDays } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 interface ItemCardProps {
   item: CalendarItem;
@@ -25,7 +25,7 @@ export function ItemCard({ item, categories }: ItemCardProps) {
     >
       <div className="flex items-center gap-1">
         {item.itemType === 'EVENT' && (
-          <CalendarDays size={10} style={{ color: colors.text, flexShrink: 0 }} />
+          <Icon name="calendar_today" size={10} color={colors.text} />
         )}
         <span
           className={`text-[11px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}

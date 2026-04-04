@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { isSameDay, formatMonthYear } from '@/utils/date';
 import { ItemRow } from './ItemRow';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
@@ -57,7 +57,7 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
           onClick={onAddClick}
           className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
-          <Plus size={16} />
+          <Icon name="add" size={16} />
           <span>Add</span>
         </button>
       </div>

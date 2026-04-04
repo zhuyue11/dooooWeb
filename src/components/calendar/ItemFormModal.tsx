@@ -1,9 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  X, CheckCircle, CalendarIcon, Clock, Settings2, ChevronDown,
-  ChevronLeft, ChevronRight, UserPlus, Video, MapPin,
-} from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { toNoonUTC, combineDateAndTime, formatDateDisplay } from '@/utils/dateForm';
 import type { CreateTaskRequest, CreateEventRequest } from '@/types/api';
@@ -77,7 +74,7 @@ function CalendarPopover({ selectedDate, onSelect, onClose }: {
           onClick={() => setViewMonth(new Date(year, month - 1, 1))}
           className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
         >
-          <ChevronLeft size={18} />
+          <Icon name="chevron_left" size={18} />
         </button>
         <span className="text-sm font-semibold text-foreground">
           {viewMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
@@ -87,7 +84,7 @@ function CalendarPopover({ selectedDate, onSelect, onClose }: {
           onClick={() => setViewMonth(new Date(year, month + 1, 1))}
           className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
         >
-          <ChevronRight size={18} />
+          <Icon name="chevron_right" size={18} />
         </button>
       </div>
 
@@ -133,7 +130,7 @@ function InlineTimePicker({ value, onChange, onClear }: {
 }) {
   return (
     <div className="flex items-center gap-2.5">
-      <Clock size={20} className="shrink-0 text-primary" />
+      <Icon name="schedule" size={20} color="var(--color-primary)" className="shrink-0" />
       <input
         type="time"
         value={value}
@@ -141,7 +138,7 @@ function InlineTimePicker({ value, onChange, onClear }: {
         className="h-9 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
       />
       <button type="button" onClick={onClear} className="ml-auto text-muted-foreground hover:text-foreground">
-        <X size={16} />
+        <Icon name="close" size={16} />
       </button>
     </div>
   );
@@ -313,7 +310,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                   : 'border border-border text-muted-foreground hover:bg-muted'
               }`}
             >
-              <CheckCircle size={16} />
+              <Icon name="check_circle" size={16} />
               Task
             </button>
             <button
@@ -325,7 +322,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                   : 'border border-border text-muted-foreground hover:bg-muted'
               }`}
             >
-              <CalendarIcon size={16} />
+              <Icon name="calendar_today" size={16} />
               Event
             </button>
           </div>
@@ -334,7 +331,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
           >
-            <X size={20} />
+            <Icon name="close" size={20} />
           </button>
         </div>
 
@@ -362,7 +359,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
               onClick={() => setShowCalendar(!showCalendar)}
               className="flex w-full items-center gap-3.5 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors"
             >
-              <CalendarIcon size={20} className={selectedDate ? 'text-primary' : 'text-muted-foreground'} />
+              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
               {selectedDate ? (
                 <>
                   <span className="text-sm font-medium text-foreground">{formatDateDisplay(selectedDate)}</span>
@@ -371,7 +368,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                     onClick={(e) => { e.stopPropagation(); handleClearDate(); }}
                     className="ml-auto text-muted-foreground hover:text-foreground"
                   >
-                    <X size={16} />
+                    <Icon name="close" size={16} />
                   </button>
                 </>
               ) : (
@@ -404,7 +401,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                     onClick={handleTimeClick}
                     className="flex w-full items-center gap-3.5 text-left"
                   >
-                    <Clock size={20} className="text-muted-foreground" />
+                    <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
                     <span className="text-sm text-muted-foreground">Add time</span>
                   </button>
                 )}
@@ -427,7 +424,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                       onClick={() => setHasStartTime(true)}
                       className="flex w-full items-center gap-3.5 text-left"
                     >
-                      <Clock size={20} className="text-muted-foreground" />
+                      <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
                       <span className="text-sm text-muted-foreground">Start time</span>
                     </button>
                   )}
@@ -445,7 +442,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                       onClick={() => setHasEndTime(true)}
                       className="flex w-full items-center gap-3.5 text-left"
                     >
-                      <Clock size={20} className="text-muted-foreground" />
+                      <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
                       <span className="text-sm text-muted-foreground">End time</span>
                     </button>
                   )}
@@ -457,15 +454,15 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             {!isTask && (
               <>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
-                  <UserPlus size={20} />
+                  <Icon name="person_add" size={20} />
                   <span className="text-sm">Add guests</span>
                 </div>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
-                  <Video size={20} />
+                  <Icon name="videocam" size={20} />
                   <span className="text-sm">Add meeting link</span>
                 </div>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
-                  <MapPin size={20} />
+                  <Icon name="location_on" size={20} />
                   <span className="text-sm">Add location</span>
                 </div>
               </>
@@ -473,9 +470,9 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
 
             {/* More options */}
             <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground">
-              <Settings2 size={20} />
+              <Icon name="tune" size={20} />
               <span className="text-sm font-medium">More options</span>
-              <ChevronDown size={18} />
+              <Icon name="expand_more" size={18} />
             </div>
 
           </div>

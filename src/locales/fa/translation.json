@@ -36,7 +36,14 @@
     "calendar": "تقویم",
     "tasks": "وظایف",
     "profile": "پروفایل",
-    "settings": "تنظیمات"
+    "settings": "تنظیمات",
+    "dashboard": "داشبورد",
+    "todo": "کارها",
+    "groups": "گروه‌ها",
+    "plans": "برنامه‌ها",
+    "targets": "اهداف",
+    "statistics": "آمار",
+    "notifications": "اعلان‌ها"
   },
   "auth": {
     "login": "ورود",

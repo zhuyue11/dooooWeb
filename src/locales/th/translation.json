@@ -36,7 +36,14 @@
     "calendar": "ปฏิทิน",
     "tasks": "งาน",
     "profile": "โปรไฟล์",
-    "settings": "ตั้งค่า"
+    "settings": "ตั้งค่า",
+    "dashboard": "แดชบอร์ด",
+    "todo": "สิ่งที่ต้องทำ",
+    "groups": "กลุ่ม",
+    "plans": "แผน",
+    "targets": "เป้าหมาย",
+    "statistics": "สถิติ",
+    "notifications": "การแจ้งเตือน"
   },
   "auth": {
     "login": "เข้าสู่ระบบ",

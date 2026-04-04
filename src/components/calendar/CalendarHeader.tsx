@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { formatDateRange, formatMonthYear, formatFullDate } from '@/utils/date';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 
@@ -47,14 +47,14 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
           onClick={onPrev}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
         >
-          <ChevronLeft size={18} />
+          <Icon name="chevron_left" size={18} />
         </button>
         <button
           data-testid="nav-next-week"
           onClick={onNext}
           className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
         >
-          <ChevronRight size={18} />
+          <Icon name="chevron_right" size={18} />
         </button>
 
         {/* View switcher — hidden on mobile */}
@@ -89,7 +89,7 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
           onClick={onAddClick}
           className="hidden h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90 lg:flex"
         >
-          <Plus size={20} />
+          <Icon name="add" size={20} />
         </button>
       </div>
     </div>

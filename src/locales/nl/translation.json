@@ -36,7 +36,14 @@
     "calendar": "Agenda",
     "tasks": "Taken",
     "profile": "Profiel",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "dashboard": "Dashboard",
+    "todo": "Te doen",
+    "groups": "Groepen",
+    "plans": "Plannen",
+    "targets": "Doelen",
+    "statistics": "Statistieken",
+    "notifications": "Meldingen"
   },
   "auth": {
     "login": "Inloggen",

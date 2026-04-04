@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useAuth } from '@/lib/contexts/auth-context';
 import logo from '@/assets/logo.svg';
 
@@ -39,7 +39,7 @@ export function ForgotPasswordPage() {
               {t('auth.resetEmailSent', 'Check your email for a reset link.')}
             </p>
             <Link to="/login" className="flex items-center gap-1 text-[13px] text-[#360EFF] hover:underline" style={{ fontFamily: 'Inter, sans-serif' }}>
-              <ArrowLeft size={14} />
+              <Icon name="arrow_back" size={14} />
               Back to login
             </Link>
           </div>
@@ -74,7 +74,7 @@ export function ForgotPasswordPage() {
             </form>
 
             <Link to="/login" className="flex items-center justify-center gap-1 text-[13px] text-muted-foreground hover:text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
-              <ArrowLeft size={14} />
+              <Icon name="arrow_back" size={14} />
               Back to login
             </Link>
           </>

@@ -36,7 +36,14 @@
     "calendar": "カレンダー",
     "tasks": "タスク",
     "profile": "プロフィール",
-    "settings": "設定"
+    "settings": "設定",
+    "dashboard": "ダッシュボード",
+    "todo": "やること",
+    "groups": "グループ",
+    "plans": "プラン",
+    "targets": "目標",
+    "statistics": "統計",
+    "notifications": "通知"
   },
   "auth": {
     "login": "ログイン",

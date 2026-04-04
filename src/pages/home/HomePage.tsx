@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Flag, Check, CalendarDays, Users, Crown } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { getTasks, getAssignedGroupTasks, getEvents, getAttendingEvents, toggleTask } from '@/lib/api';
@@ -80,10 +80,10 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
     <div className={`flex items-center gap-3 rounded-lg px-3 py-2.5 ${item.isCompleted ? 'bg-muted' : ''}`}>
       {/* Toggle / icon */}
       {item.itemType === 'EVENT' ? (
-        <CalendarDays size={18} className="flex-shrink-0 text-[#5b21b6]" />
+        <Icon name="calendar_today" size={18} color="#5b21b6" className="flex-shrink-0" />
       ) : !shouldShowToggle ? (
         item.isForAllMembers && item.userId === currentUserId ? (
-          <Crown size={16} className="flex-shrink-0 text-[#f59e0b]" />
+          <Icon name="star" size={16} color="#f59e0b" className="flex-shrink-0" />
         ) : (
           <div className="h-[18px] w-[18px] flex-shrink-0" />
         )
@@ -92,7 +92,7 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
           onClick={() => onToggle?.(item)}
           className="flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-primary"
         >
-          <Check size={12} className="text-primary-foreground" strokeWidth={3} />
+          <Icon name="check" size={12} color="var(--color-primary-foreground)" weight={700} />
         </button>
       ) : (
         <button
@@ -112,7 +112,7 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
       {/* Group name badge */}
       {item.groupId && (
         <span className="flex flex-shrink-0 items-center gap-1 rounded-full border border-[#3b82f6] px-2 py-0.5 text-[10px] font-medium text-[#3b82f6]">
-          <Users size={10} />
+          <Icon name="group" size={10} />
           {item.groupName || 'Group'}
         </span>
       )}
@@ -122,7 +122,7 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
           Activity
         </span>
       )}
-      {isHighPriority && <Flag size={16} className="flex-shrink-0 text-destructive" />}
+      {isHighPriority && <Icon name="flag" size={16} color="var(--color-destructive)" className="flex-shrink-0" />}
     </div>
   );
 }
@@ -454,7 +454,7 @@ export function HomePage() {
           onClick={handleAddClick}
           className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#360EFF] text-white transition-opacity hover:opacity-90"
         >
-          <Plus size={20} />
+          <Icon name="add" size={20} />
         </button>
       </div>
 

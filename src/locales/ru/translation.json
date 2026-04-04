@@ -36,7 +36,14 @@
     "calendar": "Календарь",
     "tasks": "Задачи",
     "profile": "Профиль",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "dashboard": "Панель",
+    "todo": "Задачи",
+    "groups": "Группы",
+    "plans": "Планы",
+    "targets": "Цели",
+    "statistics": "Статистика",
+    "notifications": "Уведомления"
   },
   "auth": {
     "login": "Войти",

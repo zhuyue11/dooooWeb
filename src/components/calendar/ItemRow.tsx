@@ -1,4 +1,4 @@
-import { Flag, Check, CalendarDays, Users, Crown, Repeat, Bell, User } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryName, getCategoryColor } from '@/utils/category';
@@ -51,16 +51,16 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
       {/* ── Toggle / Icon column ── */}
       <div className="flex h-5 flex-shrink-0 items-center pt-0.5">
         {item.itemType === 'EVENT' ? (
-          <CalendarDays size={18} className="text-[#5b21b6]" />
+          <Icon name="calendar_today" size={18} color="#5b21b6" />
         ) : !shouldShowToggle ? (
           isOrganizer ? (
-            <Crown size={16} className="text-[#f59e0b]" />
+            <Icon name="star" size={16} color="#f59e0b" />
           ) : (
             <div className="h-[18px] w-[18px]" />
           )
         ) : isChecked ? (
           <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-primary">
-            <Check size={12} className="text-primary-foreground" strokeWidth={3} />
+            <Icon name="check" size={12} color="var(--color-primary-foreground)" weight={700} />
           </div>
         ) : (
           <div className="h-[18px] w-[18px] rounded-full border-2 border-primary" />
@@ -102,13 +102,13 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
           {/* Event tag */}
           {item.itemType === 'EVENT' && (
             <span className="flex items-center gap-0.5 text-[10px] font-medium text-primary">
-              <CalendarDays size={10} /> Event
+              <Icon name="calendar_today" size={10} /> Event
             </span>
           )}
           {/* Group name tag */}
           {item.groupId && (
             <span className="flex items-center gap-0.5 rounded-full border border-[#3b82f6] px-1.5 text-[10px] font-medium text-[#3b82f6]">
-              <Users size={9} /> {item.groupName || 'Group'}
+              <Icon name="group" size={9} /> {item.groupName || 'Group'}
             </span>
           )}
           {/* Plan tag */}
@@ -120,7 +120,7 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
           {/* Assignee tag */}
           {item.assigneeName && (
             <span className="flex items-center gap-0.5 text-[10px] text-foreground">
-              <User size={10} /> {item.assigneeName}
+              <Icon name="person" size={10} /> {item.assigneeName}
             </span>
           )}
           {/* Category tag */}
@@ -138,9 +138,9 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
             </span>
           )}
           {/* Meta icons: recurring, reminders */}
-          {!!item.repeat && <Repeat size={12} className="text-muted-foreground" />}
+          {!!item.repeat && <Icon name="repeat" size={12} color="var(--color-muted-foreground)" />}
           {(item.firstReminderMinutes != null || item.secondReminderMinutes != null) && (
-            <Bell size={12} className="text-muted-foreground" />
+            <Icon name="notifications" size={12} color="var(--color-muted-foreground)" />
           )}
         </div>
 
@@ -152,7 +152,7 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
               <div className="flex items-center gap-2">
                 {item.participantSummary.goingCount > 0 && (
                   <span className="flex items-center gap-0.5 text-[10px] font-medium text-primary">
-                    <Check size={10} />
+                    <Icon name="check" size={10} />
                     {item.trackCompletion !== false
                       ? `${item.participantSummary.completedCount}/${item.participantSummary.goingCount}`
                       : item.participantSummary.goingCount}
@@ -185,7 +185,7 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
 
       {/* ── Right column: priority flag ── */}
       {isHighPriority && (
-        <Flag size={16} className="mt-0.5 flex-shrink-0 text-destructive" />
+        <Icon name="flag" size={16} color="var(--color-destructive)" className="mt-0.5 flex-shrink-0" />
       )}
     </div>
   );
