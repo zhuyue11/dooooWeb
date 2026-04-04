@@ -1282,5 +1282,115 @@
     "noSessions": "まだ会話がありません",
     "generalPlanning": "一般",
     "planReady": "プラン準備完了"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "おはようございます",
+      "afternoon": "こんにちは",
+      "evening": "こんばんは"
+    },
+    "metrics": {
+      "todaysTasks": "今日のタスク",
+      "overdue": "期限超過",
+      "todo": "To-do",
+      "thisWeek": "今週",
+      "completionRate": "完了率",
+      "completed": "{{count}}件完了",
+      "completedWithEvents": "{{count}}件完了 · {{eventCount}}件のイベント",
+      "completedWithEventsPlural": "{{count}}件完了 · {{eventCount}}件のイベント",
+      "needsAttention": "要対応",
+      "allClear": "すべて完了",
+      "dueToday": "本日期限 {{count}}件",
+      "noDeadlinesToday": "本日の期限なし",
+      "thisWeekSub": "今週"
+    },
+    "panels": {
+      "today": "今日",
+      "overdue": "期限超過",
+      "todo": "To-do",
+      "upcoming": "今後の予定",
+      "openCalendar": "カレンダーを開く",
+      "viewAll": "すべて表示",
+      "nothingForToday": "今日の予定はありません",
+      "noTodoItems": "To-do項目はありません",
+      "noUpcomingTasks": "今後のタスクはありません"
+    },
+    "badges": {
+      "group": "グループ",
+      "activity": "アクティビティ"
+    },
+    "dates": {
+      "today": "今日",
+      "tomorrow": "明日"
+    }
+  },
+  "calendarPage": {
+    "title": "カレンダー",
+    "views": {
+      "week": "週",
+      "month": "月",
+      "day": "日"
+    },
+    "today": "今日",
+    "weekdaysShort": {
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土",
+      "sun": "日"
+    },
+    "weekdaysNarrow": {
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土",
+      "sun": "日"
+    },
+    "weekdaysTwoChar": {
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土",
+      "sun": "日"
+    },
+    "panel": {
+      "add": "追加",
+      "noItemsForDay": "この日の項目はありません",
+      "noItemsInRange": "この期間の項目はありません",
+      "todayDot": "今日 · {{date}}"
+    },
+    "itemRow": {
+      "event": "イベント",
+      "group": "グループ",
+      "invited": "招待済み",
+      "notGoing": "不参加",
+      "going": "参加",
+      "organizer": "主催者",
+      "activity": "アクティビティ",
+      "goingCount": "{{count}}人参加"
+    },
+    "form": {
+      "titlePlaceholder": "何をしますか？",
+      "task": "タスク",
+      "event": "イベント",
+      "addDate": "日付を追加",
+      "addTime": "時間を追加",
+      "startTime": "開始時間",
+      "endTime": "終了時間",
+      "addGuests": "ゲストを追加",
+      "addMeetingLink": "会議リンクを追加",
+      "addLocation": "場所を追加",
+      "moreOptions": "その他のオプション",
+      "saveTask": "タスクを保存",
+      "addToTodo": "To-doに追加",
+      "saveEvent": "イベントを保存",
+      "cancel": "キャンセル"
+    }
   }
 }

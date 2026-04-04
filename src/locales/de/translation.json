@@ -1276,5 +1276,115 @@
     "noSessions": "Noch keine Unterhaltungen",
     "generalPlanning": "Allgemein",
     "planReady": "Plan bereit"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Nachmittag",
+      "evening": "Guten Abend"
+    },
+    "metrics": {
+      "todaysTasks": "Heutige Aufgaben",
+      "overdue": "Überfällig",
+      "todo": "Zu erledigen",
+      "thisWeek": "Diese Woche",
+      "completionRate": "Abschlussrate",
+      "completed": "{{count}} erledigt",
+      "completedWithEvents": "{{count}} erledigt · {{eventCount}} Termin",
+      "completedWithEventsPlural": "{{count}} erledigt · {{eventCount}} Termine",
+      "needsAttention": "erfordert Aufmerksamkeit",
+      "allClear": "alles erledigt",
+      "dueToday": "{{count}} fällig heute",
+      "noDeadlinesToday": "keine Fristen heute",
+      "thisWeekSub": "diese Woche"
+    },
+    "panels": {
+      "today": "Heute",
+      "overdue": "Überfällig",
+      "todo": "Zu erledigen",
+      "upcoming": "Anstehend",
+      "openCalendar": "Kalender öffnen",
+      "viewAll": "Alle anzeigen",
+      "nothingForToday": "Nichts für heute",
+      "noTodoItems": "Keine offenen Aufgaben",
+      "noUpcomingTasks": "Keine anstehenden Aufgaben"
+    },
+    "badges": {
+      "group": "Gruppe",
+      "activity": "Aktivität"
+    },
+    "dates": {
+      "today": "Heute",
+      "tomorrow": "Morgen"
+    }
+  },
+  "calendarPage": {
+    "title": "Kalender",
+    "views": {
+      "week": "Woche",
+      "month": "Monat",
+      "day": "Tag"
+    },
+    "today": "Heute",
+    "weekdaysShort": {
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "So"
+    },
+    "weekdaysNarrow": {
+      "mon": "M",
+      "tue": "D",
+      "wed": "M",
+      "thu": "D",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "So"
+    },
+    "panel": {
+      "add": "Hinzufügen",
+      "noItemsForDay": "Keine Einträge für diesen Tag",
+      "noItemsInRange": "Keine Einträge in diesem Zeitraum",
+      "todayDot": "Heute · {{date}}"
+    },
+    "itemRow": {
+      "event": "Termin",
+      "group": "Gruppe",
+      "invited": "Eingeladen",
+      "notGoing": "Nimmt nicht teil",
+      "going": "Nimmt teil",
+      "organizer": "Organisator",
+      "activity": "Aktivität",
+      "goingCount": "{{count}} nehmen teil"
+    },
+    "form": {
+      "titlePlaceholder": "Was muss erledigt werden?",
+      "task": "Aufgabe",
+      "event": "Termin",
+      "addDate": "Datum hinzufügen",
+      "addTime": "Uhrzeit hinzufügen",
+      "startTime": "Startzeit",
+      "endTime": "Endzeit",
+      "addGuests": "Gäste hinzufügen",
+      "addMeetingLink": "Meeting-Link hinzufügen",
+      "addLocation": "Ort hinzufügen",
+      "moreOptions": "Weitere Optionen",
+      "saveTask": "Aufgabe speichern",
+      "addToTodo": "Zu Aufgaben hinzufügen",
+      "saveEvent": "Termin speichern",
+      "cancel": "Abbrechen"
+    }
   }
 }

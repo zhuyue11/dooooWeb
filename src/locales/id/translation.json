@@ -1276,5 +1276,115 @@
     "noSessions": "Belum ada percakapan",
     "generalPlanning": "Umum",
     "planReady": "Rencana Siap"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Selamat pagi",
+      "afternoon": "Selamat siang",
+      "evening": "Selamat malam"
+    },
+    "metrics": {
+      "todaysTasks": "Tugas Hari Ini",
+      "overdue": "Terlambat",
+      "todo": "Harus dilakukan",
+      "thisWeek": "Minggu Ini",
+      "completionRate": "Tingkat Penyelesaian",
+      "completed": "{{count}} selesai",
+      "completedWithEvents": "{{count}} selesai · {{eventCount}} acara",
+      "completedWithEventsPlural": "{{count}} selesai · {{eventCount}} acara",
+      "needsAttention": "perlu perhatian",
+      "allClear": "semua beres",
+      "dueToday": "{{count}} jatuh tempo hari ini",
+      "noDeadlinesToday": "tidak ada tenggat hari ini",
+      "thisWeekSub": "minggu ini"
+    },
+    "panels": {
+      "today": "Hari Ini",
+      "overdue": "Terlambat",
+      "todo": "Harus dilakukan",
+      "upcoming": "Mendatang",
+      "openCalendar": "Buka kalender",
+      "viewAll": "Lihat semua",
+      "nothingForToday": "Tidak ada untuk hari ini",
+      "noTodoItems": "Tidak ada item yang harus dilakukan",
+      "noUpcomingTasks": "Tidak ada tugas mendatang"
+    },
+    "badges": {
+      "group": "Grup",
+      "activity": "Aktivitas"
+    },
+    "dates": {
+      "today": "Hari Ini",
+      "tomorrow": "Besok"
+    }
+  },
+  "calendarPage": {
+    "title": "Kalender",
+    "views": {
+      "week": "Minggu",
+      "month": "Bulan",
+      "day": "Hari"
+    },
+    "today": "Hari Ini",
+    "weekdaysShort": {
+      "mon": "Sen",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kam",
+      "fri": "Jum",
+      "sat": "Sab",
+      "sun": "Min"
+    },
+    "weekdaysNarrow": {
+      "mon": "S",
+      "tue": "S",
+      "wed": "R",
+      "thu": "K",
+      "fri": "J",
+      "sat": "S",
+      "sun": "M"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Se",
+      "tue": "Se",
+      "wed": "Ra",
+      "thu": "Ka",
+      "fri": "Ju",
+      "sat": "Sa",
+      "sun": "Mi"
+    },
+    "panel": {
+      "add": "Tambah",
+      "noItemsForDay": "Tidak ada item untuk hari ini",
+      "noItemsInRange": "Tidak ada item dalam rentang ini",
+      "todayDot": "Hari Ini · {{date}}"
+    },
+    "itemRow": {
+      "event": "Acara",
+      "group": "Grup",
+      "invited": "Diundang",
+      "notGoing": "Tidak Hadir",
+      "going": "Hadir",
+      "organizer": "Penyelenggara",
+      "activity": "Aktivitas",
+      "goingCount": "{{count}} hadir"
+    },
+    "form": {
+      "titlePlaceholder": "Apa yang perlu dilakukan?",
+      "task": "Tugas",
+      "event": "Acara",
+      "addDate": "Tambah tanggal",
+      "addTime": "Tambah waktu",
+      "startTime": "Waktu mulai",
+      "endTime": "Waktu selesai",
+      "addGuests": "Tambah tamu",
+      "addMeetingLink": "Tambah tautan rapat",
+      "addLocation": "Tambah lokasi",
+      "moreOptions": "Opsi lainnya",
+      "saveTask": "Simpan Tugas",
+      "addToTodo": "Tambah ke harus dilakukan",
+      "saveEvent": "Simpan Acara",
+      "cancel": "Batal"
+    }
   }
 }

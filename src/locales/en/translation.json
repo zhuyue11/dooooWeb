@@ -1355,5 +1355,115 @@
     "plans": "Plans",
     "targets": "Targets",
     "clearAll": "Clear"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "metrics": {
+      "todaysTasks": "Today's Tasks",
+      "overdue": "Overdue",
+      "todo": "To-do",
+      "thisWeek": "This Week",
+      "completionRate": "Completion Rate",
+      "completed": "{{count}} completed",
+      "completedWithEvents": "{{count}} completed · {{eventCount}} event",
+      "completedWithEventsPlural": "{{count}} completed · {{eventCount}} events",
+      "needsAttention": "needs attention",
+      "allClear": "all clear",
+      "dueToday": "{{count}} due today",
+      "noDeadlinesToday": "no deadlines today",
+      "thisWeekSub": "this week"
+    },
+    "panels": {
+      "today": "Today",
+      "overdue": "Overdue",
+      "todo": "To-do",
+      "upcoming": "Upcoming",
+      "openCalendar": "Open calendar",
+      "viewAll": "View all",
+      "nothingForToday": "Nothing for today",
+      "noTodoItems": "No to-do items",
+      "noUpcomingTasks": "No upcoming tasks"
+    },
+    "badges": {
+      "group": "Group",
+      "activity": "Activity"
+    },
+    "dates": {
+      "today": "Today",
+      "tomorrow": "Tomorrow"
+    }
+  },
+  "calendarPage": {
+    "title": "Calendar",
+    "views": {
+      "week": "Week",
+      "month": "Month",
+      "day": "Day"
+    },
+    "today": "Today",
+    "weekdaysShort": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "weekdaysNarrow": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Mo",
+      "tue": "Tu",
+      "wed": "We",
+      "thu": "Th",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "Su"
+    },
+    "panel": {
+      "add": "Add",
+      "noItemsForDay": "No items for this day",
+      "noItemsInRange": "No items in this range",
+      "todayDot": "Today · {{date}}"
+    },
+    "itemRow": {
+      "event": "Event",
+      "group": "Group",
+      "invited": "Invited",
+      "notGoing": "Not Going",
+      "going": "Going",
+      "organizer": "Organizer",
+      "activity": "Activity",
+      "goingCount": "{{count}} going"
+    },
+    "form": {
+      "titlePlaceholder": "What needs to be done?",
+      "task": "Task",
+      "event": "Event",
+      "addDate": "Add date",
+      "addTime": "Add time",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "addGuests": "Add guests",
+      "addMeetingLink": "Add meeting link",
+      "addLocation": "Add location",
+      "moreOptions": "More options",
+      "saveTask": "Save Task",
+      "addToTodo": "Add to to-do",
+      "saveEvent": "Save Event",
+      "cancel": "Cancel"
+    }
   }
 }

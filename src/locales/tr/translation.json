@@ -1276,5 +1276,115 @@
     "noSessions": "Henüz görüşme yok",
     "generalPlanning": "Genel",
     "planReady": "Plan Hazır"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Günaydın",
+      "afternoon": "İyi öğleden sonralar",
+      "evening": "İyi akşamlar"
+    },
+    "metrics": {
+      "todaysTasks": "Bugünkü Görevler",
+      "overdue": "Gecikmiş",
+      "todo": "Yapılacaklar",
+      "thisWeek": "Bu Hafta",
+      "completionRate": "Tamamlanma Oranı",
+      "completed": "{{count}} tamamlandı",
+      "completedWithEvents": "{{count}} tamamlandı · {{eventCount}} etkinlik",
+      "completedWithEventsPlural": "{{count}} tamamlandı · {{eventCount}} etkinlik",
+      "needsAttention": "ilgilenilmesi gerekiyor",
+      "allClear": "her şey yolunda",
+      "dueToday": "bugün {{count}} teslim edilecek",
+      "noDeadlinesToday": "bugün son tarih yok",
+      "thisWeekSub": "bu hafta"
+    },
+    "panels": {
+      "today": "Bugün",
+      "overdue": "Gecikmiş",
+      "todo": "Yapılacaklar",
+      "upcoming": "Yaklaşan",
+      "openCalendar": "Takvimi aç",
+      "viewAll": "Tümünü gör",
+      "nothingForToday": "Bugün için bir şey yok",
+      "noTodoItems": "Yapılacak öğe yok",
+      "noUpcomingTasks": "Yaklaşan görev yok"
+    },
+    "badges": {
+      "group": "Grup",
+      "activity": "Etkinlik"
+    },
+    "dates": {
+      "today": "Bugün",
+      "tomorrow": "Yarın"
+    }
+  },
+  "calendarPage": {
+    "title": "Takvim",
+    "views": {
+      "week": "Hafta",
+      "month": "Ay",
+      "day": "Gün"
+    },
+    "today": "Bugün",
+    "weekdaysShort": {
+      "mon": "Pzt",
+      "tue": "Sal",
+      "wed": "Çar",
+      "thu": "Per",
+      "fri": "Cum",
+      "sat": "Cmt",
+      "sun": "Paz"
+    },
+    "weekdaysNarrow": {
+      "mon": "P",
+      "tue": "S",
+      "wed": "Ç",
+      "thu": "P",
+      "fri": "C",
+      "sat": "C",
+      "sun": "P"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Pt",
+      "tue": "Sa",
+      "wed": "Ça",
+      "thu": "Pe",
+      "fri": "Cu",
+      "sat": "Ct",
+      "sun": "Pa"
+    },
+    "panel": {
+      "add": "Ekle",
+      "noItemsForDay": "Bu gün için öğe yok",
+      "noItemsInRange": "Bu aralıkta öğe yok",
+      "todayDot": "Bugün · {{date}}"
+    },
+    "itemRow": {
+      "event": "Etkinlik",
+      "group": "Grup",
+      "invited": "Davet edildi",
+      "notGoing": "Katılmıyorum",
+      "going": "Katılıyorum",
+      "organizer": "Organizatör",
+      "activity": "Etkinlik",
+      "goingCount": "{{count}} katılıyor"
+    },
+    "form": {
+      "titlePlaceholder": "Ne yapılması gerekiyor?",
+      "task": "Görev",
+      "event": "Etkinlik",
+      "addDate": "Tarih ekle",
+      "addTime": "Saat ekle",
+      "startTime": "Başlangıç saati",
+      "endTime": "Bitiş saati",
+      "addGuests": "Davetli ekle",
+      "addMeetingLink": "Toplantı bağlantısı ekle",
+      "addLocation": "Konum ekle",
+      "moreOptions": "Daha fazla seçenek",
+      "saveTask": "Görevi Kaydet",
+      "addToTodo": "Yapılacaklara ekle",
+      "saveEvent": "Etkinliği Kaydet",
+      "cancel": "İptal"
+    }
   }
 }

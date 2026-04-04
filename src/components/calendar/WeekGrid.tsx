@@ -2,6 +2,7 @@ import { isSameDay, toISODate } from '@/utils/date';
 import { ItemCard } from './ItemCard';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
+import { useTranslation } from 'react-i18next';
 
 interface WeekGridProps {
   weekDates: Date[];
@@ -13,10 +14,10 @@ interface WeekGridProps {
   isLoading: boolean;
 }
 
-const SHORT_DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const SINGLE_DAY_NAMES = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
 export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, isLoading }: WeekGridProps) {
+  const { t } = useTranslation();
   return (
     <div
       data-testid="calendar-week-grid"
@@ -29,10 +30,10 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
           return (
             <div key={i} className="text-center">
               <span className={`hidden text-xs font-semibold md:inline ${isToday ? 'text-primary' : 'text-muted-foreground'}`}>
-                {SHORT_DAY_NAMES[i]}
+                {t(`calendarPage.weekdaysShort.${SHORT_DAY_KEYS[i]}`)}
               </span>
               <span className={`text-xs font-semibold md:hidden ${isToday ? 'text-primary' : 'text-muted-foreground'}`}>
-                {SINGLE_DAY_NAMES[i]}
+                {t(`calendarPage.weekdaysNarrow.${SHORT_DAY_KEYS[i]}`)}
               </span>
             </div>
           );

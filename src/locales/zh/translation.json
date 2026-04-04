@@ -1281,5 +1281,115 @@
     "noSessions": "暂无对话",
     "generalPlanning": "通用",
     "planReady": "计划就绪"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "早上好",
+      "afternoon": "下午好",
+      "evening": "晚上好"
+    },
+    "metrics": {
+      "todaysTasks": "今日任务",
+      "overdue": "已逾期",
+      "todo": "待办",
+      "thisWeek": "本周",
+      "completionRate": "完成率",
+      "completed": "已完成 {{count}} 项",
+      "completedWithEvents": "已完成 {{count}} 项 · {{eventCount}} 个事件",
+      "completedWithEventsPlural": "已完成 {{count}} 项 · {{eventCount}} 个事件",
+      "needsAttention": "需要关注",
+      "allClear": "全部完成",
+      "dueToday": "今日到期 {{count}} 项",
+      "noDeadlinesToday": "今日无截止任务",
+      "thisWeekSub": "本周"
+    },
+    "panels": {
+      "today": "今天",
+      "overdue": "已逾期",
+      "todo": "待办",
+      "upcoming": "即将到来",
+      "openCalendar": "打开日历",
+      "viewAll": "查看全部",
+      "nothingForToday": "今天没有任务",
+      "noTodoItems": "没有待办事项",
+      "noUpcomingTasks": "没有即将到来的任务"
+    },
+    "badges": {
+      "group": "群组",
+      "activity": "活动"
+    },
+    "dates": {
+      "today": "今天",
+      "tomorrow": "明天"
+    }
+  },
+  "calendarPage": {
+    "title": "日历",
+    "views": {
+      "week": "周",
+      "month": "月",
+      "day": "日"
+    },
+    "today": "今天",
+    "weekdaysShort": {
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六",
+      "sun": "周日"
+    },
+    "weekdaysNarrow": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "weekdaysTwoChar": {
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六",
+      "sun": "周日"
+    },
+    "panel": {
+      "add": "添加",
+      "noItemsForDay": "当天没有项目",
+      "noItemsInRange": "该范围内没有项目",
+      "todayDot": "今天 · {{date}}"
+    },
+    "itemRow": {
+      "event": "事件",
+      "group": "群组",
+      "invited": "已邀请",
+      "notGoing": "不参加",
+      "going": "参加",
+      "organizer": "组织者",
+      "activity": "活动",
+      "goingCount": "{{count}} 人参加"
+    },
+    "form": {
+      "titlePlaceholder": "需要做什么？",
+      "task": "任务",
+      "event": "事件",
+      "addDate": "添加日期",
+      "addTime": "添加时间",
+      "startTime": "开始时间",
+      "endTime": "结束时间",
+      "addGuests": "添加参与者",
+      "addMeetingLink": "添加会议链接",
+      "addLocation": "添加地点",
+      "moreOptions": "更多选项",
+      "saveTask": "保存任务",
+      "addToTodo": "添加到待办",
+      "saveEvent": "保存事件",
+      "cancel": "取消"
+    }
   }
 }

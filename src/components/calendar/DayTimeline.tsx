@@ -5,6 +5,7 @@ import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
+import { useTranslation } from 'react-i18next';
 
 interface DayTimelineProps {
   date: Date;
@@ -16,6 +17,7 @@ interface DayTimelineProps {
 const HOUR_HEIGHT = 60; // px per hour row
 
 export function DayTimeline({ date, items, categories, isLoading }: DayTimelineProps) {
+  const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentHour = new Date().getHours();
@@ -72,7 +74,7 @@ export function DayTimeline({ date, items, categories, isLoading }: DayTimelineP
       {/* Hour grid */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">Loading…</div>
+          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">{t('common.loading')}</div>
         ) : (
           hours.map((hour) => {
             const isCurrentHour = hour === currentHour;

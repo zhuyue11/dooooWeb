@@ -1276,5 +1276,115 @@
     "noSessions": "هنوز گفتگویی وجود ندارد",
     "generalPlanning": "عمومی",
     "planReady": "برنامه آماده است"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "صبح بخیر",
+      "afternoon": "عصر بخیر",
+      "evening": "شب بخیر"
+    },
+    "metrics": {
+      "todaysTasks": "کارهای امروز",
+      "overdue": "عقب‌افتاده",
+      "todo": "لیست کارها",
+      "thisWeek": "این هفته",
+      "completionRate": "نرخ تکمیل",
+      "completed": "{{count}} تکمیل‌شده",
+      "completedWithEvents": "{{count}} تکمیل‌شده · {{eventCount}} رویداد",
+      "completedWithEventsPlural": "{{count}} تکمیل‌شده · {{eventCount}} رویداد",
+      "needsAttention": "نیاز به توجه دارد",
+      "allClear": "همه چیز مرتب است",
+      "dueToday": "{{count}} مهلت امروز",
+      "noDeadlinesToday": "بدون مهلت امروز",
+      "thisWeekSub": "این هفته"
+    },
+    "panels": {
+      "today": "امروز",
+      "overdue": "عقب‌افتاده",
+      "todo": "لیست کارها",
+      "upcoming": "آینده",
+      "openCalendar": "باز کردن تقویم",
+      "viewAll": "مشاهده همه",
+      "nothingForToday": "چیزی برای امروز نیست",
+      "noTodoItems": "کاری در لیست نیست",
+      "noUpcomingTasks": "کار آینده‌ای نیست"
+    },
+    "badges": {
+      "group": "گروه",
+      "activity": "فعالیت"
+    },
+    "dates": {
+      "today": "امروز",
+      "tomorrow": "فردا"
+    }
+  },
+  "calendarPage": {
+    "title": "تقویم",
+    "views": {
+      "week": "هفته",
+      "month": "ماه",
+      "day": "روز"
+    },
+    "today": "امروز",
+    "weekdaysShort": {
+      "mon": "دوش",
+      "tue": "سه‌ش",
+      "wed": "چهار",
+      "thu": "پنج",
+      "fri": "جمعه",
+      "sat": "شنبه",
+      "sun": "یکش"
+    },
+    "weekdaysNarrow": {
+      "mon": "د",
+      "tue": "س",
+      "wed": "چ",
+      "thu": "پ",
+      "fri": "ج",
+      "sat": "ش",
+      "sun": "ی"
+    },
+    "weekdaysTwoChar": {
+      "mon": "دو",
+      "tue": "سه",
+      "wed": "چه",
+      "thu": "پن",
+      "fri": "جم",
+      "sat": "شن",
+      "sun": "یک"
+    },
+    "panel": {
+      "add": "افزودن",
+      "noItemsForDay": "موردی برای این روز نیست",
+      "noItemsInRange": "موردی در این بازه نیست",
+      "todayDot": "امروز · {{date}}"
+    },
+    "itemRow": {
+      "event": "رویداد",
+      "group": "گروه",
+      "invited": "دعوت‌شده",
+      "notGoing": "نمی‌روم",
+      "going": "می‌روم",
+      "organizer": "برگزارکننده",
+      "activity": "فعالیت",
+      "goingCount": "{{count}} نفر می‌روند"
+    },
+    "form": {
+      "titlePlaceholder": "چه کاری باید انجام شود؟",
+      "task": "کار",
+      "event": "رویداد",
+      "addDate": "افزودن تاریخ",
+      "addTime": "افزودن زمان",
+      "startTime": "زمان شروع",
+      "endTime": "زمان پایان",
+      "addGuests": "افزودن مهمان",
+      "addMeetingLink": "افزودن لینک جلسه",
+      "addLocation": "افزودن مکان",
+      "moreOptions": "گزینه‌های بیشتر",
+      "saveTask": "ذخیره کار",
+      "addToTodo": "افزودن به لیست کارها",
+      "saveEvent": "ذخیره رویداد",
+      "cancel": "لغو"
+    }
   }
 }

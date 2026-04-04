@@ -5,6 +5,7 @@ import { getCategoryName, getCategoryColor } from '@/utils/category';
 import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
+import { useTranslation } from 'react-i18next';
 
 interface ItemRowProps {
   item: CalendarItem;
@@ -14,6 +15,7 @@ interface ItemRowProps {
 }
 
 export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowProps) {
+  const { t } = useTranslation();
   const { timeFormat } = useDisplay();
 
   // ── Toggle logic (matching dooooApp's shouldShowToggle) ──
@@ -102,13 +104,13 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
           {/* Event tag */}
           {item.itemType === 'EVENT' && (
             <span className="flex items-center gap-0.5 text-[10px] font-medium text-primary">
-              <Icon name="calendar_today" size={10} /> Event
+              <Icon name="calendar_today" size={10} /> {t('calendarPage.itemRow.event')}
             </span>
           )}
           {/* Group name tag */}
           {item.groupId && (
             <span className="flex items-center gap-0.5 rounded-full border border-[#3b82f6] px-1.5 text-[10px] font-medium text-[#3b82f6]">
-              <Icon name="group" size={9} /> {item.groupName || 'Group'}
+              <Icon name="group" size={9} /> {item.groupName || t('calendarPage.itemRow.group')}
             </span>
           )}
           {/* Plan tag */}
@@ -167,18 +169,18 @@ export function ItemRow({ item, categories, showDate, currentUserId }: ItemRowPr
             )}
             {/* Status tags */}
             {item.participantInstanceStatus === 'INVITED' && (
-              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">Invited</span>
+              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">{t('calendarPage.itemRow.invited')}</span>
             )}
             {(item.participantInstanceStatus === 'DECLINED' || item.participantInstanceStatus === 'LEFT') && (
-              <span className="rounded-full bg-[#fee2e2] px-1.5 text-[10px] font-medium text-[#991b1b]">Not Going</span>
+              <span className="rounded-full bg-[#fee2e2] px-1.5 text-[10px] font-medium text-[#991b1b]">{t('calendarPage.itemRow.notGoing')}</span>
             )}
             {item.participantInstanceStatus === 'CONFIRMED' && (
-              <span className="rounded-full bg-[#d1fae5] px-1.5 text-[10px] font-medium text-[#065f46]">Going</span>
+              <span className="rounded-full bg-[#d1fae5] px-1.5 text-[10px] font-medium text-[#065f46]">{t('calendarPage.itemRow.going')}</span>
             )}
             {isOrganizer && (
-              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">Organizer</span>
+              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">{t('calendarPage.itemRow.organizer')}</span>
             )}
-            <span className="rounded-full bg-[#f0fdf4] px-1.5 text-[10px] font-medium text-[#15803d]">Activity</span>
+            <span className="rounded-full bg-[#f0fdf4] px-1.5 text-[10px] font-medium text-[#15803d]">{t('calendarPage.itemRow.activity')}</span>
           </div>
         )}
       </div>

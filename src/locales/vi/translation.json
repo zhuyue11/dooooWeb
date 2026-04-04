@@ -1276,5 +1276,115 @@
     "noSessions": "Chưa có cuộc trò chuyện nào",
     "generalPlanning": "Chung",
     "planReady": "Kế hoạch đã sẵn sàng"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Chào buổi sáng",
+      "afternoon": "Chào buổi chiều",
+      "evening": "Chào buổi tối"
+    },
+    "metrics": {
+      "todaysTasks": "Nhiệm vụ hôm nay",
+      "overdue": "Quá hạn",
+      "todo": "Cần làm",
+      "thisWeek": "Tuần này",
+      "completionRate": "Tỷ lệ hoàn thành",
+      "completed": "{{count}} đã hoàn thành",
+      "completedWithEvents": "{{count}} đã hoàn thành · {{eventCount}} sự kiện",
+      "completedWithEventsPlural": "{{count}} đã hoàn thành · {{eventCount}} sự kiện",
+      "needsAttention": "cần chú ý",
+      "allClear": "đã xong hết",
+      "dueToday": "{{count}} đến hạn hôm nay",
+      "noDeadlinesToday": "không có hạn chót hôm nay",
+      "thisWeekSub": "tuần này"
+    },
+    "panels": {
+      "today": "Hôm nay",
+      "overdue": "Quá hạn",
+      "todo": "Cần làm",
+      "upcoming": "Sắp tới",
+      "openCalendar": "Mở lịch",
+      "viewAll": "Xem tất cả",
+      "nothingForToday": "Không có gì cho hôm nay",
+      "noTodoItems": "Không có mục cần làm",
+      "noUpcomingTasks": "Không có nhiệm vụ sắp tới"
+    },
+    "badges": {
+      "group": "Nhóm",
+      "activity": "Hoạt động"
+    },
+    "dates": {
+      "today": "Hôm nay",
+      "tomorrow": "Ngày mai"
+    }
+  },
+  "calendarPage": {
+    "title": "Lịch",
+    "views": {
+      "week": "Tuần",
+      "month": "Tháng",
+      "day": "Ngày"
+    },
+    "today": "Hôm nay",
+    "weekdaysShort": {
+      "mon": "T2",
+      "tue": "T3",
+      "wed": "T4",
+      "thu": "T5",
+      "fri": "T6",
+      "sat": "T7",
+      "sun": "CN"
+    },
+    "weekdaysNarrow": {
+      "mon": "2",
+      "tue": "3",
+      "wed": "4",
+      "thu": "5",
+      "fri": "6",
+      "sat": "7",
+      "sun": "C"
+    },
+    "weekdaysTwoChar": {
+      "mon": "T2",
+      "tue": "T3",
+      "wed": "T4",
+      "thu": "T5",
+      "fri": "T6",
+      "sat": "T7",
+      "sun": "CN"
+    },
+    "panel": {
+      "add": "Thêm",
+      "noItemsForDay": "Không có mục nào cho ngày này",
+      "noItemsInRange": "Không có mục nào trong khoảng này",
+      "todayDot": "Hôm nay · {{date}}"
+    },
+    "itemRow": {
+      "event": "Sự kiện",
+      "group": "Nhóm",
+      "invited": "Được mời",
+      "notGoing": "Không đi",
+      "going": "Sẽ đi",
+      "organizer": "Người tổ chức",
+      "activity": "Hoạt động",
+      "goingCount": "{{count}} người tham gia"
+    },
+    "form": {
+      "titlePlaceholder": "Bạn cần làm gì?",
+      "task": "Nhiệm vụ",
+      "event": "Sự kiện",
+      "addDate": "Thêm ngày",
+      "addTime": "Thêm giờ",
+      "startTime": "Giờ bắt đầu",
+      "endTime": "Giờ kết thúc",
+      "addGuests": "Thêm khách mời",
+      "addMeetingLink": "Thêm liên kết họp",
+      "addLocation": "Thêm địa điểm",
+      "moreOptions": "Tùy chọn khác",
+      "saveTask": "Lưu nhiệm vụ",
+      "addToTodo": "Thêm vào cần làm",
+      "saveEvent": "Lưu sự kiện",
+      "cancel": "Hủy"
+    }
   }
 }

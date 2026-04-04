@@ -1276,5 +1276,115 @@
     "noSessions": "Brak rozmów",
     "generalPlanning": "Ogólne",
     "planReady": "Plan gotowy"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Dzień dobry",
+      "afternoon": "Dzień dobry",
+      "evening": "Dobry wieczór"
+    },
+    "metrics": {
+      "todaysTasks": "Dzisiejsze zadania",
+      "overdue": "Zaległe",
+      "todo": "Do zrobienia",
+      "thisWeek": "Ten tydzień",
+      "completionRate": "Wskaźnik realizacji",
+      "completed": "{{count}} ukończonych",
+      "completedWithEvents": "{{count}} ukończonych · {{eventCount}} wydarzenie",
+      "completedWithEventsPlural": "{{count}} ukończonych · {{eventCount}} wydarzeń",
+      "needsAttention": "wymaga uwagi",
+      "allClear": "wszystko w porządku",
+      "dueToday": "{{count}} na dziś",
+      "noDeadlinesToday": "brak terminów na dziś",
+      "thisWeekSub": "ten tydzień"
+    },
+    "panels": {
+      "today": "Dziś",
+      "overdue": "Zaległe",
+      "todo": "Do zrobienia",
+      "upcoming": "Nadchodzące",
+      "openCalendar": "Otwórz kalendarz",
+      "viewAll": "Pokaż wszystko",
+      "nothingForToday": "Nic na dziś",
+      "noTodoItems": "Brak zadań do zrobienia",
+      "noUpcomingTasks": "Brak nadchodzących zadań"
+    },
+    "badges": {
+      "group": "Grupa",
+      "activity": "Aktywność"
+    },
+    "dates": {
+      "today": "Dziś",
+      "tomorrow": "Jutro"
+    }
+  },
+  "calendarPage": {
+    "title": "Kalendarz",
+    "views": {
+      "week": "Tydzień",
+      "month": "Miesiąc",
+      "day": "Dzień"
+    },
+    "today": "Dziś",
+    "weekdaysShort": {
+      "mon": "Pon",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Czw",
+      "fri": "Pt",
+      "sat": "Sob",
+      "sun": "Ndz"
+    },
+    "weekdaysNarrow": {
+      "mon": "P",
+      "tue": "W",
+      "wed": "Ś",
+      "thu": "C",
+      "fri": "P",
+      "sat": "S",
+      "sun": "N"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Pn",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Cz",
+      "fri": "Pt",
+      "sat": "So",
+      "sun": "Nd"
+    },
+    "panel": {
+      "add": "Dodaj",
+      "noItemsForDay": "Brak elementów na ten dzień",
+      "noItemsInRange": "Brak elementów w tym zakresie",
+      "todayDot": "Dziś · {{date}}"
+    },
+    "itemRow": {
+      "event": "Wydarzenie",
+      "group": "Grupa",
+      "invited": "Zaproszony",
+      "notGoing": "Nie idę",
+      "going": "Idę",
+      "organizer": "Organizator",
+      "activity": "Aktywność",
+      "goingCount": "{{count}} uczestników"
+    },
+    "form": {
+      "titlePlaceholder": "Co trzeba zrobić?",
+      "task": "Zadanie",
+      "event": "Wydarzenie",
+      "addDate": "Dodaj datę",
+      "addTime": "Dodaj godzinę",
+      "startTime": "Godzina rozpoczęcia",
+      "endTime": "Godzina zakończenia",
+      "addGuests": "Dodaj gości",
+      "addMeetingLink": "Dodaj link do spotkania",
+      "addLocation": "Dodaj lokalizację",
+      "moreOptions": "Więcej opcji",
+      "saveTask": "Zapisz zadanie",
+      "addToTodo": "Dodaj do listy",
+      "saveEvent": "Zapisz wydarzenie",
+      "cancel": "Anuluj"
+    }
   }
 }

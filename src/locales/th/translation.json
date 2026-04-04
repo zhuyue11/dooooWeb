@@ -1276,5 +1276,115 @@
     "noSessions": "ยังไม่มีการสนทนา",
     "generalPlanning": "ทั่วไป",
     "planReady": "แผนพร้อมแล้ว"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "สวัสดีตอนเช้า",
+      "afternoon": "สวัสดีตอนบ่าย",
+      "evening": "สวัสดีตอนเย็น"
+    },
+    "metrics": {
+      "todaysTasks": "งานวันนี้",
+      "overdue": "เกินกำหนด",
+      "todo": "สิ่งที่ต้องทำ",
+      "thisWeek": "สัปดาห์นี้",
+      "completionRate": "อัตราการทำสำเร็จ",
+      "completed": "ทำสำเร็จ {{count}} รายการ",
+      "completedWithEvents": "ทำสำเร็จ {{count}} รายการ · {{eventCount}} กิจกรรม",
+      "completedWithEventsPlural": "ทำสำเร็จ {{count}} รายการ · {{eventCount}} กิจกรรม",
+      "needsAttention": "ต้องดูแล",
+      "allClear": "เรียบร้อยทั้งหมด",
+      "dueToday": "ครบกำหนดวันนี้ {{count}} รายการ",
+      "noDeadlinesToday": "ไม่มีกำหนดส่งวันนี้",
+      "thisWeekSub": "สัปดาห์นี้"
+    },
+    "panels": {
+      "today": "วันนี้",
+      "overdue": "เกินกำหนด",
+      "todo": "สิ่งที่ต้องทำ",
+      "upcoming": "กำลังจะมาถึง",
+      "openCalendar": "เปิดปฏิทิน",
+      "viewAll": "ดูทั้งหมด",
+      "nothingForToday": "ไม่มีอะไรสำหรับวันนี้",
+      "noTodoItems": "ไม่มีรายการที่ต้องทำ",
+      "noUpcomingTasks": "ไม่มีงานที่กำลังจะมาถึง"
+    },
+    "badges": {
+      "group": "กลุ่ม",
+      "activity": "กิจกรรม"
+    },
+    "dates": {
+      "today": "วันนี้",
+      "tomorrow": "พรุ่งนี้"
+    }
+  },
+  "calendarPage": {
+    "title": "ปฏิทิน",
+    "views": {
+      "week": "สัปดาห์",
+      "month": "เดือน",
+      "day": "วัน"
+    },
+    "today": "วันนี้",
+    "weekdaysShort": {
+      "mon": "จ.",
+      "tue": "อ.",
+      "wed": "พ.",
+      "thu": "พฤ.",
+      "fri": "ศ.",
+      "sat": "ส.",
+      "sun": "อา."
+    },
+    "weekdaysNarrow": {
+      "mon": "จ",
+      "tue": "อ",
+      "wed": "พ",
+      "thu": "พ",
+      "fri": "ศ",
+      "sat": "ส",
+      "sun": "อ"
+    },
+    "weekdaysTwoChar": {
+      "mon": "จ.",
+      "tue": "อ.",
+      "wed": "พ.",
+      "thu": "พฤ",
+      "fri": "ศ.",
+      "sat": "ส.",
+      "sun": "อา"
+    },
+    "panel": {
+      "add": "เพิ่ม",
+      "noItemsForDay": "ไม่มีรายการสำหรับวันนี้",
+      "noItemsInRange": "ไม่มีรายการในช่วงนี้",
+      "todayDot": "วันนี้ · {{date}}"
+    },
+    "itemRow": {
+      "event": "กิจกรรม",
+      "group": "กลุ่ม",
+      "invited": "ได้รับเชิญ",
+      "notGoing": "ไม่ไป",
+      "going": "ไป",
+      "organizer": "ผู้จัด",
+      "activity": "กิจกรรม",
+      "goingCount": "{{count}} คนไป"
+    },
+    "form": {
+      "titlePlaceholder": "มีอะไรต้องทำ?",
+      "task": "งาน",
+      "event": "กิจกรรม",
+      "addDate": "เพิ่มวันที่",
+      "addTime": "เพิ่มเวลา",
+      "startTime": "เวลาเริ่ม",
+      "endTime": "เวลาสิ้นสุด",
+      "addGuests": "เพิ่มผู้เข้าร่วม",
+      "addMeetingLink": "เพิ่มลิงก์ประชุม",
+      "addLocation": "เพิ่มสถานที่",
+      "moreOptions": "ตัวเลือกเพิ่มเติม",
+      "saveTask": "บันทึกงาน",
+      "addToTodo": "เพิ่มในสิ่งที่ต้องทำ",
+      "saveEvent": "บันทึกกิจกรรม",
+      "cancel": "ยกเลิก"
+    }
   }
 }

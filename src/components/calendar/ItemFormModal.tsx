@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { toNoonUTC, combineDateAndTime, formatDateDisplay } from '@/utils/dateForm';
 import type { CreateTaskRequest, CreateEventRequest } from '@/types/api';
+import { useTranslation } from 'react-i18next';
 
 // ── Types ──
 
@@ -18,11 +19,14 @@ interface ItemFormModalProps {
 
 // ── Calendar Popover ──
 
+const WEEKDAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+
 function CalendarPopover({ selectedDate, onSelect, onClose }: {
   selectedDate: Date | null;
   onSelect: (date: Date) => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const [viewMonth, setViewMonth] = useState(() => {
     const d = selectedDate || new Date();
     return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -90,8 +94,8 @@ function CalendarPopover({ selectedDate, onSelect, onClose }: {
 
       {/* Weekday headers */}
       <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium text-muted-foreground">
-        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((d) => (
-          <span key={d}>{d}</span>
+        {WEEKDAY_KEYS.map((key) => (
+          <span key={key}>{t(`calendarPage.weekdaysTwoChar.${key}`)}</span>
         ))}
       </div>
 
@@ -147,6 +151,7 @@ function InlineTimePicker({ value, onChange, onClear }: {
 // ── Main Modal ──
 
 export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalProps) {
+  const { t } = useTranslation();
   const { createTaskMutation, createEventMutation } = useItemMutations();
 
   // Form state
@@ -189,8 +194,8 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
   const taskReady = isTask && isTitleValid;
   const saveDisabled = isPending || (isTask ? !taskReady : !eventReady);
   const saveText = isTask
-    ? selectedDate ? 'Save Task' : 'Add to to-do'
-    : 'Save Event';
+    ? selectedDate ? t('calendarPage.form.saveTask') : t('calendarPage.form.addToTodo')
+    : t('calendarPage.form.saveEvent');
 
   const handleItemTypeChange = useCallback((type: ItemType) => {
     setItemType(type);
@@ -311,7 +316,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
               }`}
             >
               <Icon name="check_circle" size={16} />
-              Task
+              {t('calendarPage.form.task')}
             </button>
             <button
               type="button"
@@ -323,7 +328,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
               }`}
             >
               <Icon name="calendar_today" size={16} />
-              Event
+              {t('calendarPage.form.event')}
             </button>
           </div>
           <button
@@ -343,7 +348,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="What needs to be done?"
+            placeholder={t('calendarPage.form.titlePlaceholder')}
             className="bg-transparent text-xl font-semibold text-foreground placeholder:text-muted-foreground focus:outline-none"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !saveDisabled) handleSubmit();
@@ -372,7 +377,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                   </button>
                 </>
               ) : (
-                <span className="text-sm text-muted-foreground">Add date</span>
+                <span className="text-sm text-muted-foreground">{t('calendarPage.form.addDate')}</span>
               )}
             </button>
 
@@ -402,7 +407,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                     className="flex w-full items-center gap-3.5 text-left"
                   >
                     <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                    <span className="text-sm text-muted-foreground">Add time</span>
+                    <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
                   </button>
                 )}
               </div>
@@ -425,7 +430,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                       className="flex w-full items-center gap-3.5 text-left"
                     >
                       <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                      <span className="text-sm text-muted-foreground">Start time</span>
+                      <span className="text-sm text-muted-foreground">{t('calendarPage.form.startTime')}</span>
                     </button>
                   )}
                 </div>
@@ -443,7 +448,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                       className="flex w-full items-center gap-3.5 text-left"
                     >
                       <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                      <span className="text-sm text-muted-foreground">End time</span>
+                      <span className="text-sm text-muted-foreground">{t('calendarPage.form.endTime')}</span>
                     </button>
                   )}
                 </div>
@@ -455,15 +460,15 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
               <>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
                   <Icon name="person_add" size={20} />
-                  <span className="text-sm">Add guests</span>
+                  <span className="text-sm">{t('calendarPage.form.addGuests')}</span>
                 </div>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
                   <Icon name="videocam" size={20} />
-                  <span className="text-sm">Add meeting link</span>
+                  <span className="text-sm">{t('calendarPage.form.addMeetingLink')}</span>
                 </div>
                 <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
                   <Icon name="location_on" size={20} />
-                  <span className="text-sm">Add location</span>
+                  <span className="text-sm">{t('calendarPage.form.addLocation')}</span>
                 </div>
               </>
             )}
@@ -471,7 +476,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             {/* More options */}
             <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground">
               <Icon name="tune" size={20} />
-              <span className="text-sm font-medium">More options</span>
+              <span className="text-sm font-medium">{t('calendarPage.form.moreOptions')}</span>
               <Icon name="expand_more" size={18} />
             </div>
 
@@ -485,7 +490,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             onClick={onClose}
             className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            Cancel
+            {t('calendarPage.form.cancel')}
           </button>
           <button
             type="button"

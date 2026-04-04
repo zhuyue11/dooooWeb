@@ -1,6 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { formatDateRange, formatMonthYear, formatFullDate } from '@/utils/date';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
+import { useTranslation } from 'react-i18next';
 
 interface CalendarHeaderProps {
   viewMode: CalendarViewMode;
@@ -15,7 +16,7 @@ interface CalendarHeaderProps {
 }
 
 const VIEWS: CalendarViewMode[] = ['week', 'month', 'day'];
-const VIEW_LABELS: Record<CalendarViewMode, string> = { week: 'Week', month: 'Month', day: 'Day' };
+const VIEW_LABEL_KEYS: Record<CalendarViewMode, string> = { week: 'calendarPage.views.week', month: 'calendarPage.views.month', day: 'calendarPage.views.day' };
 
 function getDateLabel(viewMode: CalendarViewMode, visibleDates: Date[], currentMonth: Date, currentDate: Date): string {
   switch (viewMode) {
@@ -29,11 +30,12 @@ function getDateLabel(viewMode: CalendarViewMode, visibleDates: Date[], currentM
 }
 
 export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMonth, currentDate, onPrev, onNext, onToday, onAddClick }: CalendarHeaderProps) {
+  const { t } = useTranslation();
   return (
     <div data-testid="calendar-header" className="flex items-center justify-between">
       {/* Left: title + date label */}
       <div className="flex items-center gap-4">
-        <h1 className="text-2xl font-bold text-foreground">Calendar</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('calendarPage.title')}</h1>
         <span data-testid="calendar-date-range" className="text-sm font-medium text-muted-foreground">
           {visibleDates.length > 0 ? getDateLabel(viewMode, visibleDates, currentMonth, currentDate) : ''}
         </span>
@@ -70,7 +72,7 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
                   : 'font-medium text-muted-foreground hover:text-foreground'
               }`}
             >
-              {VIEW_LABELS[v]}
+              {t(VIEW_LABEL_KEYS[v])}
             </button>
           ))}
         </div>
@@ -81,7 +83,7 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
           onClick={onToday}
           className="flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
         >
-          Today
+          {t('calendarPage.today')}
         </button>
 
         {/* Add button — hidden on mobile */}

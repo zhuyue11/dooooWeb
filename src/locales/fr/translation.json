@@ -1276,5 +1276,115 @@
     "noSessions": "Aucune conversation pour le moment",
     "generalPlanning": "Général",
     "planReady": "Plan prêt"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Bonjour",
+      "afternoon": "Bon après-midi",
+      "evening": "Bonsoir"
+    },
+    "metrics": {
+      "todaysTasks": "Tâches du jour",
+      "overdue": "En retard",
+      "todo": "À faire",
+      "thisWeek": "Cette semaine",
+      "completionRate": "Taux de réalisation",
+      "completed": "{{count}} terminées",
+      "completedWithEvents": "{{count}} terminées · {{eventCount}} événement",
+      "completedWithEventsPlural": "{{count}} terminées · {{eventCount}} événements",
+      "needsAttention": "nécessite attention",
+      "allClear": "tout est en ordre",
+      "dueToday": "{{count}} pour aujourd'hui",
+      "noDeadlinesToday": "aucune échéance aujourd'hui",
+      "thisWeekSub": "cette semaine"
+    },
+    "panels": {
+      "today": "Aujourd'hui",
+      "overdue": "En retard",
+      "todo": "À faire",
+      "upcoming": "À venir",
+      "openCalendar": "Ouvrir le calendrier",
+      "viewAll": "Tout voir",
+      "nothingForToday": "Rien pour aujourd'hui",
+      "noTodoItems": "Aucune tâche à faire",
+      "noUpcomingTasks": "Aucune tâche à venir"
+    },
+    "badges": {
+      "group": "Groupe",
+      "activity": "Activité"
+    },
+    "dates": {
+      "today": "Aujourd'hui",
+      "tomorrow": "Demain"
+    }
+  },
+  "calendarPage": {
+    "title": "Calendrier",
+    "views": {
+      "week": "Semaine",
+      "month": "Mois",
+      "day": "Jour"
+    },
+    "today": "Aujourd'hui",
+    "weekdaysShort": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven",
+      "sat": "Sam",
+      "sun": "Dim"
+    },
+    "weekdaysNarrow": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Lu",
+      "tue": "Ma",
+      "wed": "Me",
+      "thu": "Je",
+      "fri": "Ve",
+      "sat": "Sa",
+      "sun": "Di"
+    },
+    "panel": {
+      "add": "Ajouter",
+      "noItemsForDay": "Aucun élément pour ce jour",
+      "noItemsInRange": "Aucun élément dans cette période",
+      "todayDot": "Aujourd'hui · {{date}}"
+    },
+    "itemRow": {
+      "event": "Événement",
+      "group": "Groupe",
+      "invited": "Invité",
+      "notGoing": "N'ira pas",
+      "going": "Participera",
+      "organizer": "Organisateur",
+      "activity": "Activité",
+      "goingCount": "{{count}} participent"
+    },
+    "form": {
+      "titlePlaceholder": "Qu'avez-vous à faire ?",
+      "task": "Tâche",
+      "event": "Événement",
+      "addDate": "Ajouter une date",
+      "addTime": "Ajouter une heure",
+      "startTime": "Heure de début",
+      "endTime": "Heure de fin",
+      "addGuests": "Ajouter des invités",
+      "addMeetingLink": "Ajouter un lien de réunion",
+      "addLocation": "Ajouter un lieu",
+      "moreOptions": "Plus d'options",
+      "saveTask": "Enregistrer la tâche",
+      "addToTodo": "Ajouter aux tâches",
+      "saveEvent": "Enregistrer l'événement",
+      "cancel": "Annuler"
+    }
   }
 }

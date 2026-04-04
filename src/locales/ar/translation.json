@@ -1276,5 +1276,115 @@
     "noSessions": "لا توجد محادثات بعد",
     "generalPlanning": "عام",
     "planReady": "الخطة جاهزة"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "صباح الخير",
+      "afternoon": "مساء الخير",
+      "evening": "مساء الخير"
+    },
+    "metrics": {
+      "todaysTasks": "مهام اليوم",
+      "overdue": "متأخرة",
+      "todo": "قائمة المهام",
+      "thisWeek": "هذا الأسبوع",
+      "completionRate": "نسبة الإنجاز",
+      "completed": "{{count}} مكتملة",
+      "completedWithEvents": "{{count}} مكتملة · {{eventCount}} حدث",
+      "completedWithEventsPlural": "{{count}} مكتملة · {{eventCount}} أحداث",
+      "needsAttention": "تحتاج انتباه",
+      "allClear": "لا شيء معلّق",
+      "dueToday": "{{count}} مستحقة اليوم",
+      "noDeadlinesToday": "لا مواعيد نهائية اليوم",
+      "thisWeekSub": "هذا الأسبوع"
+    },
+    "panels": {
+      "today": "اليوم",
+      "overdue": "متأخرة",
+      "todo": "قائمة المهام",
+      "upcoming": "القادمة",
+      "openCalendar": "فتح التقويم",
+      "viewAll": "عرض الكل",
+      "nothingForToday": "لا شيء لليوم",
+      "noTodoItems": "لا توجد مهام",
+      "noUpcomingTasks": "لا توجد مهام قادمة"
+    },
+    "badges": {
+      "group": "مجموعة",
+      "activity": "نشاط"
+    },
+    "dates": {
+      "today": "اليوم",
+      "tomorrow": "غداً"
+    }
+  },
+  "calendarPage": {
+    "title": "التقويم",
+    "views": {
+      "week": "أسبوع",
+      "month": "شهر",
+      "day": "يوم"
+    },
+    "today": "اليوم",
+    "weekdaysShort": {
+      "mon": "إثن",
+      "tue": "ثلا",
+      "wed": "أرب",
+      "thu": "خمي",
+      "fri": "جمع",
+      "sat": "سبت",
+      "sun": "أحد"
+    },
+    "weekdaysNarrow": {
+      "mon": "ن",
+      "tue": "ث",
+      "wed": "ر",
+      "thu": "خ",
+      "fri": "ج",
+      "sat": "س",
+      "sun": "ح"
+    },
+    "weekdaysTwoChar": {
+      "mon": "إث",
+      "tue": "ثل",
+      "wed": "أر",
+      "thu": "خم",
+      "fri": "جم",
+      "sat": "سب",
+      "sun": "أح"
+    },
+    "panel": {
+      "add": "إضافة",
+      "noItemsForDay": "لا عناصر لهذا اليوم",
+      "noItemsInRange": "لا عناصر في هذه الفترة",
+      "todayDot": "اليوم · {{date}}"
+    },
+    "itemRow": {
+      "event": "حدث",
+      "group": "مجموعة",
+      "invited": "مدعو",
+      "notGoing": "لن أحضر",
+      "going": "سأحضر",
+      "organizer": "المنظّم",
+      "activity": "نشاط",
+      "goingCount": "{{count}} سيحضرون"
+    },
+    "form": {
+      "titlePlaceholder": "ما الذي يجب إنجازه؟",
+      "task": "مهمة",
+      "event": "حدث",
+      "addDate": "إضافة تاريخ",
+      "addTime": "إضافة وقت",
+      "startTime": "وقت البدء",
+      "endTime": "وقت الانتهاء",
+      "addGuests": "إضافة ضيوف",
+      "addMeetingLink": "إضافة رابط اجتماع",
+      "addLocation": "إضافة موقع",
+      "moreOptions": "خيارات إضافية",
+      "saveTask": "حفظ المهمة",
+      "addToTodo": "إضافة إلى قائمة المهام",
+      "saveEvent": "حفظ الحدث",
+      "cancel": "إلغاء"
+    }
   }
 }

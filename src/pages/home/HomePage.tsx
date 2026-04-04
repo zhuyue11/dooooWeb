@@ -7,12 +7,13 @@ import { getTasks, getAssignedGroupTasks, getEvents, getAttendingEvents, toggleT
 import { useGroups } from '@/hooks/useGroups';
 import type { Event } from '@/types/api';
 import { startOfDay, toISODate, startOfWeek, endOfWeek, formatTime } from '@/utils/date';
+import { useTranslation } from 'react-i18next';
 
-function getGreeting(): string {
+function getGreeting(t: (key: string) => string): string {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 18) return 'Good afternoon';
-  return 'Good evening';
+  if (hour < 12) return t('dashboard.greeting.morning');
+  if (hour < 18) return t('dashboard.greeting.afternoon');
+  return t('dashboard.greeting.evening');
 }
 
 function formatDate(): string {
@@ -40,12 +41,13 @@ type DashboardItem = {
   assigneeId?: string; userId?: string;
 };
 
-function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
+function DashboardRow({ item, now, onToggle, showDate, currentUserId, t }: {
   item: DashboardItem;
   now: Date;
   onToggle?: (item: DashboardItem) => void;
   showDate?: boolean;
   currentUserId?: string;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }) {
   const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
 
@@ -65,7 +67,7 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
   })();
   const metaParts: string[] = [];
   if (showDate && item.date) {
-    metaParts.push(formatRelativeDate(item.date, now));
+    metaParts.push(formatRelativeDate(item.date, now, t));
   }
   if (item.hasTime && item.date) {
     metaParts.push(formatTime(item.date));
@@ -113,13 +115,13 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
       {item.groupId && (
         <span className="flex flex-shrink-0 items-center gap-1 rounded-full border border-[#3b82f6] px-2 py-0.5 text-[10px] font-medium text-[#3b82f6]">
           <Icon name="group" size={10} />
-          {item.groupName || 'Group'}
+          {item.groupName || t('dashboard.badges.group')}
         </span>
       )}
       {/* Activity badge (additional tag for isForAllMembers group activities) */}
       {item.isForAllMembers && (
         <span className="flex-shrink-0 rounded-full bg-[#f0fdf4] px-2 py-0.5 text-[10px] font-medium text-[#15803d]">
-          Activity
+          {t('dashboard.badges.activity')}
         </span>
       )}
       {isHighPriority && <Icon name="flag" size={16} color="var(--color-destructive)" className="flex-shrink-0" />}
@@ -127,12 +129,12 @@ function DashboardRow({ item, now, onToggle, showDate, currentUserId }: {
   );
 }
 
-function formatRelativeDate(dateStr: string, now: Date): string {
+function formatRelativeDate(dateStr: string, now: Date, t: (key: string) => string): string {
   const d = new Date(dateStr);
   const today = startOfDay(now);
   const tomorrow = new Date(today.getTime() + 86400000);
-  if (d >= today && d < tomorrow) return 'Today';
-  if (d >= tomorrow && d < new Date(tomorrow.getTime() + 86400000)) return 'Tomorrow';
+  if (d >= today && d < tomorrow) return t('dashboard.dates.today');
+  if (d >= tomorrow && d < new Date(tomorrow.getTime() + 86400000)) return t('dashboard.dates.tomorrow');
   return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
@@ -140,6 +142,7 @@ function formatRelativeDate(dateStr: string, now: Date): string {
 
 export function HomePage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const firstName = user?.name?.split(' ')[0] || 'there';
   const [showCreateModal, setShowCreateModal] = useState(false);
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
@@ -300,38 +303,40 @@ export function HomePage() {
   const metrics = useMemo(
     () => [
       {
-        label: "Today's Tasks",
+        label: t('dashboard.metrics.todaysTasks'),
         value: String(allTodayCount),
-        sub: `${allTodayCompleted} completed` + (eventsToday.length > 0 ? ` · ${eventsToday.length} event${eventsToday.length > 1 ? 's' : ''}` : ''),
+        sub: eventsToday.length > 0
+          ? t(eventsToday.length > 1 ? 'dashboard.metrics.completedWithEventsPlural' : 'dashboard.metrics.completedWithEvents', { count: allTodayCompleted, eventCount: eventsToday.length })
+          : t('dashboard.metrics.completed', { count: allTodayCompleted }),
         subColor: '#10b981',
       },
       {
-        label: 'Overdue',
+        label: t('dashboard.metrics.overdue'),
         value: String(allOverdue.length),
-        sub: allOverdue.length > 0 ? 'needs attention' : 'all clear',
+        sub: allOverdue.length > 0 ? t('dashboard.metrics.needsAttention') : t('dashboard.metrics.allClear'),
         subColor: '#6b7280',
         valueColor: allOverdue.length > 0 ? '#ef4444' : undefined,
       },
       {
-        label: 'To-do',
+        label: t('dashboard.metrics.todo'),
         value: String(todoItems.length),
-        sub: dueTodayCount > 0 ? `${dueTodayCount} due today` : 'no deadlines today',
+        sub: dueTodayCount > 0 ? t('dashboard.metrics.dueToday', { count: dueTodayCount }) : t('dashboard.metrics.noDeadlinesToday'),
         subColor: '#f59e0b',
       },
       {
-        label: 'This Week',
+        label: t('dashboard.metrics.thisWeek'),
         value: String(allWeekCount),
-        sub: `${allWeekCompleted} completed`,
+        sub: t('dashboard.metrics.completed', { count: allWeekCompleted }),
         subColor: '#3b82f6',
       },
       {
-        label: 'Completion Rate',
+        label: t('dashboard.metrics.completionRate'),
         value: `${completionRate}%`,
-        sub: 'this week',
+        sub: t('dashboard.metrics.thisWeekSub'),
         subColor: '#10b981',
       },
     ],
-    [allTodayCount, allTodayCompleted, allOverdue, todoItems, dueTodayCount, allWeekCount, allWeekCompleted, completionRate, eventsToday],
+    [allTodayCount, allTodayCompleted, allOverdue, todoItems, dueTodayCount, allWeekCount, allWeekCompleted, completionRate, eventsToday, t],
   );
 
   // ── PANELS (dateType matters here: schedule = SCHEDULED, to-do = DUE/no-date) ──
@@ -446,7 +451,7 @@ export function HomePage() {
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold text-foreground">
-            {getGreeting()}, {firstName}
+            {getGreeting(t)}, {firstName}
           </h1>
           <p className="text-sm font-medium text-muted-foreground">{formatDate()}</p>
         </div>
@@ -487,19 +492,19 @@ export function HomePage() {
         {/* 1. Today */}
         <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">Today</span>
+            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.today')}</span>
             <Link to="/calendar" className="text-[13px] font-medium text-[#360EFF] hover:underline">
-              Open calendar
+              {t('dashboard.panels.openCalendar')}
             </Link>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
             ) : todayItems.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Nothing for today</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.nothingForToday')}</div>
             ) : (
               todayItems.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} currentUserId={user?.id} />
+                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} currentUserId={user?.id} t={t} />
               ))
             )}
           </div>
@@ -509,11 +514,11 @@ export function HomePage() {
         {overdueItems.length > 0 && (
           <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <span className="text-base font-semibold text-destructive">Overdue</span>
+              <span className="text-base font-semibold text-destructive">{t('dashboard.panels.overdue')}</span>
             </div>
             <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
               {overdueItems.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} showDate currentUserId={user?.id} />
+                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} showDate currentUserId={user?.id} t={t} />
               ))}
             </div>
           </div>
@@ -522,19 +527,19 @@ export function HomePage() {
         {/* 3. To-do */}
         <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">To-do</span>
+            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.todo')}</span>
             <Link to="/todo" className="text-[13px] font-medium text-[#360EFF] hover:underline">
-              View all
+              {t('dashboard.panels.viewAll')}
             </Link>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
             ) : todoListItems.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No to-do items</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noTodoItems')}</div>
             ) : (
               todoListItems.map((item) => (
-                <DashboardRow key={item.id} item={{ ...item, itemType: 'TASK' }} now={now} onToggle={handleToggle} currentUserId={user?.id} />
+                <DashboardRow key={item.id} item={{ ...item, itemType: 'TASK' }} now={now} onToggle={handleToggle} currentUserId={user?.id} t={t} />
               ))
             )}
           </div>
@@ -543,16 +548,16 @@ export function HomePage() {
         {/* 4. Upcoming */}
         <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">Upcoming</span>
+            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.upcoming')}</span>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">Loading…</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
             ) : upcomingTasks.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">No upcoming tasks</div>
+              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noUpcomingTasks')}</div>
             ) : (
               upcomingTasks.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} showDate currentUserId={user?.id} />
+                <DashboardRow key={item.id} item={item} now={now} showDate currentUserId={user?.id} t={t} />
               ))
             )}
           </div>

@@ -2,6 +2,7 @@ import { isSameDay, toISODate } from '@/utils/date';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
+import { useTranslation } from 'react-i18next';
 
 interface MonthGridProps {
   visibleDates: Date[]; // 35 or 42 dates from getMonthGridDates
@@ -14,9 +15,10 @@ interface MonthGridProps {
   isLoading: boolean;
 }
 
-const SHORT_DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
 export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDate, today, categories, onSelectDate, isLoading }: MonthGridProps) {
+  const { t } = useTranslation();
   const activeMonth = currentMonth.getMonth();
   const weeks: Date[][] = [];
   for (let i = 0; i < visibleDates.length; i += 7) {
@@ -30,9 +32,9 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
     >
       {/* Day headers */}
       <div className="grid grid-cols-7 border-b border-border px-2">
-        {SHORT_DAY_NAMES.map((name) => (
-          <div key={name} className="py-3 text-center text-xs font-semibold text-muted-foreground">
-            {name}
+        {SHORT_DAY_KEYS.map((key) => (
+          <div key={key} className="py-3 text-center text-xs font-semibold text-muted-foreground">
+            {t(`calendarPage.weekdaysShort.${key}`)}
           </div>
         ))}
       </div>

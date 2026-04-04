@@ -5,6 +5,7 @@ import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
 import { Icon } from '@/components/ui/Icon';
+import { useTranslation } from 'react-i18next';
 
 interface ItemCardProps {
   item: CalendarItem;
@@ -12,6 +13,7 @@ interface ItemCardProps {
 }
 
 export function ItemCard({ item, categories }: ItemCardProps) {
+  const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const colors = item.itemType === 'EVENT'
     ? { bg: '#ede9fe', text: '#5b21b6' } // purple tint for events
@@ -41,7 +43,7 @@ export function ItemCard({ item, categories }: ItemCardProps) {
       )}
       {item.isForAllMembers && item.participantSummary && item.participantSummary.goingCount > 0 && (
         <span className="text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.7 }}>
-          {item.participantSummary.goingCount} going
+          {t('calendarPage.itemRow.goingCount', { count: item.participantSummary.goingCount })}
         </span>
       )}
     </div>

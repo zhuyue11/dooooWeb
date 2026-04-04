@@ -1279,5 +1279,115 @@
     "noSessions": "Nog geen gesprekken",
     "generalPlanning": "Algemeen",
     "planReady": "Plan klaar"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Goedemorgen",
+      "afternoon": "Goedemiddag",
+      "evening": "Goedenavond"
+    },
+    "metrics": {
+      "todaysTasks": "Taken van vandaag",
+      "overdue": "Achterstallig",
+      "todo": "Te doen",
+      "thisWeek": "Deze week",
+      "completionRate": "Voltooiingspercentage",
+      "completed": "{{count}} voltooid",
+      "completedWithEvents": "{{count}} voltooid · {{eventCount}} evenement",
+      "completedWithEventsPlural": "{{count}} voltooid · {{eventCount}} evenementen",
+      "needsAttention": "aandacht nodig",
+      "allClear": "alles in orde",
+      "dueToday": "{{count}} vandaag te doen",
+      "noDeadlinesToday": "geen deadlines vandaag",
+      "thisWeekSub": "deze week"
+    },
+    "panels": {
+      "today": "Vandaag",
+      "overdue": "Achterstallig",
+      "todo": "Te doen",
+      "upcoming": "Aankomend",
+      "openCalendar": "Agenda openen",
+      "viewAll": "Alles bekijken",
+      "nothingForToday": "Niets voor vandaag",
+      "noTodoItems": "Geen te doen items",
+      "noUpcomingTasks": "Geen aankomende taken"
+    },
+    "badges": {
+      "group": "Groep",
+      "activity": "Activiteit"
+    },
+    "dates": {
+      "today": "Vandaag",
+      "tomorrow": "Morgen"
+    }
+  },
+  "calendarPage": {
+    "title": "Agenda",
+    "views": {
+      "week": "Week",
+      "month": "Maand",
+      "day": "Dag"
+    },
+    "today": "Vandaag",
+    "weekdaysShort": {
+      "mon": "Ma",
+      "tue": "Di",
+      "wed": "Wo",
+      "thu": "Do",
+      "fri": "Vr",
+      "sat": "Za",
+      "sun": "Zo"
+    },
+    "weekdaysNarrow": {
+      "mon": "M",
+      "tue": "D",
+      "wed": "W",
+      "thu": "D",
+      "fri": "V",
+      "sat": "Z",
+      "sun": "Z"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Ma",
+      "tue": "Di",
+      "wed": "Wo",
+      "thu": "Do",
+      "fri": "Vr",
+      "sat": "Za",
+      "sun": "Zo"
+    },
+    "panel": {
+      "add": "Toevoegen",
+      "noItemsForDay": "Geen items voor deze dag",
+      "noItemsInRange": "Geen items in dit bereik",
+      "todayDot": "Vandaag · {{date}}"
+    },
+    "itemRow": {
+      "event": "Evenement",
+      "group": "Groep",
+      "invited": "Uitgenodigd",
+      "notGoing": "Niet aanwezig",
+      "going": "Aanwezig",
+      "organizer": "Organisator",
+      "activity": "Activiteit",
+      "goingCount": "{{count}} aanwezig"
+    },
+    "form": {
+      "titlePlaceholder": "Wat moet er gedaan worden?",
+      "task": "Taak",
+      "event": "Evenement",
+      "addDate": "Datum toevoegen",
+      "addTime": "Tijd toevoegen",
+      "startTime": "Starttijd",
+      "endTime": "Eindtijd",
+      "addGuests": "Gasten toevoegen",
+      "addMeetingLink": "Vergaderlink toevoegen",
+      "addLocation": "Locatie toevoegen",
+      "moreOptions": "Meer opties",
+      "saveTask": "Taak opslaan",
+      "addToTodo": "Toevoegen aan lijst",
+      "saveEvent": "Evenement opslaan",
+      "cancel": "Annuleren"
+    }
   }
 }

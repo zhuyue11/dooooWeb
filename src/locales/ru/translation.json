@@ -1276,5 +1276,115 @@
     "noSessions": "Пока нет разговоров",
     "generalPlanning": "Общее",
     "planReady": "План готов"
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Доброе утро",
+      "afternoon": "Добрый день",
+      "evening": "Добрый вечер"
+    },
+    "metrics": {
+      "todaysTasks": "Задачи на сегодня",
+      "overdue": "Просрочено",
+      "todo": "Список дел",
+      "thisWeek": "Эта неделя",
+      "completionRate": "Процент выполнения",
+      "completed": "{{count}} выполнено",
+      "completedWithEvents": "{{count}} выполнено · {{eventCount}} событие",
+      "completedWithEventsPlural": "{{count}} выполнено · {{eventCount}} событий",
+      "needsAttention": "требует внимания",
+      "allClear": "всё в порядке",
+      "dueToday": "{{count}} на сегодня",
+      "noDeadlinesToday": "нет сроков на сегодня",
+      "thisWeekSub": "на этой неделе"
+    },
+    "panels": {
+      "today": "Сегодня",
+      "overdue": "Просрочено",
+      "todo": "Список дел",
+      "upcoming": "Предстоящие",
+      "openCalendar": "Открыть календарь",
+      "viewAll": "Показать все",
+      "nothingForToday": "На сегодня ничего нет",
+      "noTodoItems": "Нет дел в списке",
+      "noUpcomingTasks": "Нет предстоящих задач"
+    },
+    "badges": {
+      "group": "Группа",
+      "activity": "Активность"
+    },
+    "dates": {
+      "today": "Сегодня",
+      "tomorrow": "Завтра"
+    }
+  },
+  "calendarPage": {
+    "title": "Календарь",
+    "views": {
+      "week": "Неделя",
+      "month": "Месяц",
+      "day": "День"
+    },
+    "today": "Сегодня",
+    "weekdaysShort": {
+      "mon": "Пн",
+      "tue": "Вт",
+      "wed": "Ср",
+      "thu": "Чт",
+      "fri": "Пт",
+      "sat": "Сб",
+      "sun": "Вс"
+    },
+    "weekdaysNarrow": {
+      "mon": "П",
+      "tue": "В",
+      "wed": "С",
+      "thu": "Ч",
+      "fri": "П",
+      "sat": "С",
+      "sun": "В"
+    },
+    "weekdaysTwoChar": {
+      "mon": "Пн",
+      "tue": "Вт",
+      "wed": "Ср",
+      "thu": "Чт",
+      "fri": "Пт",
+      "sat": "Сб",
+      "sun": "Вс"
+    },
+    "panel": {
+      "add": "Добавить",
+      "noItemsForDay": "Нет элементов на этот день",
+      "noItemsInRange": "Нет элементов за этот период",
+      "todayDot": "Сегодня · {{date}}"
+    },
+    "itemRow": {
+      "event": "Событие",
+      "group": "Группа",
+      "invited": "Приглашён",
+      "notGoing": "Не пойду",
+      "going": "Пойду",
+      "organizer": "Организатор",
+      "activity": "Активность",
+      "goingCount": "{{count}} пойдут"
+    },
+    "form": {
+      "titlePlaceholder": "Что нужно сделать?",
+      "task": "Задача",
+      "event": "Событие",
+      "addDate": "Добавить дату",
+      "addTime": "Добавить время",
+      "startTime": "Начало",
+      "endTime": "Конец",
+      "addGuests": "Добавить гостей",
+      "addMeetingLink": "Добавить ссылку на встречу",
+      "addLocation": "Добавить место",
+      "moreOptions": "Дополнительно",
+      "saveTask": "Сохранить задачу",
+      "addToTodo": "Добавить в список дел",
+      "saveEvent": "Сохранить событие",
+      "cancel": "Отмена"
+    }
   }
 }
