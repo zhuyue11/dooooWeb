@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForDashboardLoad, waitForCalendarLoad } from './seed-data';
 
 // Force serial execution — toggle test mutates data
 test.describe.configure({ mode: 'serial' });
@@ -77,6 +78,65 @@ test.describe('To-do Page', () => {
 
     // Modal title input has "What needs to be done?" placeholder
     await expect(page.getByPlaceholder('What needs to be done?')).toBeVisible({ timeout: 5000 });
+  });
+
+  test('creating a task updates the list', async ({ page }) => {
+    await waitForTodoLoad(page);
+
+    // Count tasks before adding
+    const taskRows = page.locator('[data-testid^="task-row-"]');
+    const countBefore = await taskRows.count();
+
+    // Open modal and create a task without a date (goes to to-do)
+    await page.getByRole('button', { name: /Add task/ }).click();
+    await expect(page.getByPlaceholder('What needs to be done?')).toBeVisible({ timeout: 5000 });
+    await page.getByPlaceholder('What needs to be done?').fill('New todo from E2E');
+    await page.getByRole('button', { name: 'Add to to-do' }).click();
+
+    // Modal should close
+    await expect(page.getByPlaceholder('What needs to be done?')).not.toBeVisible({ timeout: 5000 });
+
+    // The new task should appear in the list — count increases by 1
+    await expect(taskRows).toHaveCount(countBefore + 1, { timeout: 5000 });
+
+    // The new task title should be visible
+    await expect(page.getByText('New todo from E2E', { exact: true }).first()).toBeVisible();
+  });
+
+  test('task added from dashboard appears in to-do list', async ({ page }) => {
+    // Go to dashboard and create a no-date task
+    await waitForDashboardLoad(page);
+    await page.locator('[data-testid="dashboard-add-button"]').click();
+    await expect(page.getByPlaceholder('What needs to be done?')).toBeVisible({ timeout: 5000 });
+    await page.getByPlaceholder('What needs to be done?').fill('Dashboard todo task');
+    await page.getByRole('button', { name: 'Add to to-do' }).click();
+    await expect(page.getByPlaceholder('What needs to be done?')).not.toBeVisible({ timeout: 5000 });
+
+    // Navigate to to-do page via sidebar (SPA navigation, no full reload)
+    await page.click('a[href="/todo"]');
+    await expect(page).toHaveURL('/todo');
+    await expect(page.getByRole('heading', { name: 'To-do' })).toBeVisible();
+
+    // The task created from dashboard should appear
+    await expect(page.getByText('Dashboard todo task', { exact: true }).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test('task added from calendar appears in to-do list', async ({ page }) => {
+    // Go to calendar and create a no-date task via the panel's Add button
+    await waitForCalendarLoad(page);
+    await page.locator('[data-testid="task-panel"] button:has-text("Add")').click();
+    await expect(page.getByPlaceholder('What needs to be done?')).toBeVisible({ timeout: 5000 });
+    await page.getByPlaceholder('What needs to be done?').fill('Calendar todo task');
+    await page.getByRole('button', { name: 'Add to to-do' }).click();
+    await expect(page.getByPlaceholder('What needs to be done?')).not.toBeVisible({ timeout: 5000 });
+
+    // Navigate to to-do page via sidebar (SPA navigation, no full reload)
+    await page.click('a[href="/todo"]');
+    await expect(page).toHaveURL('/todo');
+    await expect(page.getByRole('heading', { name: 'To-do' })).toBeVisible();
+
+    // The task created from calendar should appear
+    await expect(page.getByText('Calendar todo task', { exact: true }).first()).toBeVisible({ timeout: 5000 });
   });
 
   // Toggle test runs last since it mutates data
