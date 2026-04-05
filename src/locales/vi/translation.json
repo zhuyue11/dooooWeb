@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Không thể tạo công việc lặp lại trong quá khứ. Ngày đã được đặt thành hôm nay.",
       "cannotAddRecurrencePastTask": "Không thể chuyển công việc đã qua thành lặp lại.",
       "cannotEditPastInstanceRepeat": "Đây là một mục của công việc lặp lại. Không thể thay đổi mẫu lặp lại cho các mục trong quá khứ.",
-      "cannotEditPastInstanceDate": "Đây là một mục của công việc lặp lại. Không thể thay đổi ngày cho các mục trong quá khứ."
+      "cannotEditPastInstanceDate": "Đây là một mục của công việc lặp lại. Không thể thay đổi ngày cho các mục trong quá khứ.",
+      "endTimeBeforeStart": "Thời gian kết thúc phải sau thời gian bắt đầu"
     },
     "panel": {
       "discardChanges": "Hủy thay đổi?",
@@ -191,6 +192,7 @@
       "showMore": "Tùy chọn khác",
       "showLess": "Ẩn tùy chọn",
       "timezone": "Múi giờ",
+      "separateTimeZones": "Sử dụng múi giờ khác nhau cho bắt đầu và kết thúc",
       "markComplete": "Đánh Dấu Hoàn Thành",
       "noDate": "Không có ngày",
       "at": "lúc",

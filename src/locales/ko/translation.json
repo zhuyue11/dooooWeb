@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "반복 작업은 과거에 생성할 수 없습니다. 날짜가 오늘로 설정되었습니다.",
       "cannotAddRecurrencePastTask": "과거 작업은 반복으로 변경할 수 없습니다.",
       "cannotEditPastInstanceRepeat": "이것은 반복 작업의 항목입니다. 과거 항목의 반복 패턴은 변경할 수 없습니다.",
-      "cannotEditPastInstanceDate": "이것은 반복 작업의 항목입니다. 과거 항목의 날짜는 변경할 수 없습니다."
+      "cannotEditPastInstanceDate": "이것은 반복 작업의 항목입니다. 과거 항목의 날짜는 변경할 수 없습니다.",
+      "endTimeBeforeStart": "종료 시간은 시작 시간 이후여야 합니다"
     },
     "panel": {
       "discardChanges": "변경사항을 취소하시겠습니까?",
@@ -191,6 +192,7 @@
       "showMore": "추가 옵션",
       "showLess": "옵션 닫기",
       "timezone": "시간대",
+      "separateTimeZones": "시작과 종료에 다른 시간대 사용",
       "markComplete": "완료로 표시",
       "noDate": "날짜 없음",
       "at": "",

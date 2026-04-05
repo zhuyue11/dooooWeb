@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Zadania cykliczne nie mogą być tworzone w przeszłości. Data ustawiona na dziś.",
       "cannotAddRecurrencePastTask": "Zadania z przeszłości nie mogą stać się cykliczne.",
       "cannotEditPastInstanceRepeat": "To jest wystąpienie zadania cyklicznego. Wzorzec powtarzania nie może być zmieniony dla przeszłych wystąpień.",
-      "cannotEditPastInstanceDate": "To jest wystąpienie zadania cyklicznego. Data nie może być zmieniona dla przeszłych wystąpień."
+      "cannotEditPastInstanceDate": "To jest wystąpienie zadania cyklicznego. Data nie może być zmieniona dla przeszłych wystąpień.",
+      "endTimeBeforeStart": "Czas zakończenia musi być późniejszy niż czas rozpoczęcia"
     },
     "panel": {
       "discardChanges": "Odrzucić zmiany?",
@@ -191,6 +192,7 @@
       "showMore": "Więcej opcji",
       "showLess": "Mniej opcji",
       "timezone": "Strefa czasowa",
+      "separateTimeZones": "Użyj różnych stref czasowych dla początku i końca",
       "markComplete": "Oznacz jako Ukończone",
       "noDate": "Bez daty",
       "at": "o",

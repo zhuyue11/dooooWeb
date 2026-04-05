@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Tugas berulang tidak dapat dibuat di masa lalu. Tanggal diatur ke hari ini.",
       "cannotAddRecurrencePastTask": "Tugas yang sudah lewat tidak dapat dijadikan berulang.",
       "cannotEditPastInstanceRepeat": "Ini adalah kejadian dari tugas berulang. Pola pengulangan tidak dapat diubah untuk kejadian yang sudah lewat.",
-      "cannotEditPastInstanceDate": "Ini adalah kejadian dari tugas berulang. Tanggal tidak dapat diubah untuk kejadian yang sudah lewat."
+      "cannotEditPastInstanceDate": "Ini adalah kejadian dari tugas berulang. Tanggal tidak dapat diubah untuk kejadian yang sudah lewat.",
+      "endTimeBeforeStart": "Waktu selesai harus setelah waktu mulai"
     },
     "panel": {
       "discardChanges": "Buang perubahan?",
@@ -191,6 +192,7 @@
       "showMore": "Opsi lainnya",
       "showLess": "Sembunyikan opsi",
       "timezone": "Zona waktu",
+      "separateTimeZones": "Gunakan zona waktu berbeda untuk mulai dan selesai",
       "markComplete": "Tandai Selesai",
       "noDate": "Tanpa tanggal",
       "at": "pada",

@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Tekrarlanan görevler geçmişte oluşturulamaz. Tarih bugüne ayarlandı.",
       "cannotAddRecurrencePastTask": "Geçmiş görevler tekrarlanan yapılamaz.",
       "cannotEditPastInstanceRepeat": "Bu, tekrarlanan bir görevin olayıdır. Geçmiş olayların tekrar düzeni değiştirilemez.",
-      "cannotEditPastInstanceDate": "Bu, tekrarlanan bir görevin olayıdır. Geçmiş olayların tarihi değiştirilemez."
+      "cannotEditPastInstanceDate": "Bu, tekrarlanan bir görevin olayıdır. Geçmiş olayların tarihi değiştirilemez.",
+      "endTimeBeforeStart": "Bitiş zamanı başlangıç zamanından sonra olmalıdır"
     },
     "panel": {
       "discardChanges": "Değişiklikler atılsın mı?",
@@ -191,6 +192,7 @@
       "showMore": "Diğer seçenekler",
       "showLess": "Seçenekleri gizle",
       "timezone": "Saat dilimi",
+      "separateTimeZones": "Başlangıç ve bitiş için farklı saat dilimleri kullan",
       "markComplete": "Tamamlandı Olarak İşaretle",
       "noDate": "Tarih yok",
       "at": "saat",

@@ -176,7 +176,8 @@
       "recurringTaskPastDate": "重复任务不能创建在过去的日期。日期已设置为今天。",
       "cannotAddRecurrencePastTask": "过去的任务不能设为重复任务。",
       "cannotEditPastInstanceRepeat": "这是一个重复任务的事项。无法更改过去事项的重复模式。",
-      "cannotEditPastInstanceDate": "这是一个重复任务的事项。无法更改过去事项的日期。"
+      "cannotEditPastInstanceDate": "这是一个重复任务的事项。无法更改过去事项的日期。",
+      "endTimeBeforeStart": "结束时间必须晚于开始时间"
     },
     "panel": {
       "discardChanges": "放弃更改？",
@@ -195,6 +196,7 @@
       "showMore": "更多选项",
       "showLess": "收起选项",
       "timezone": "时区",
+      "separateTimeZones": "使用不同的开始和结束时区",
       "markComplete": "标记为已完成",
       "noDate": "无日期",
       "at": "",

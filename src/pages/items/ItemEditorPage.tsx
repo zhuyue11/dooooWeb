@@ -17,11 +17,20 @@ import { getRepeatDisplayText } from '@/utils/repeatDisplay';
 import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 
+// ── Helpers ──
+
+/** Get UTC offset in minutes for a given IANA timezone at a given instant. */
+function getTimezoneOffsetMinutes(tz: string, date: Date): number {
+  const utcStr = date.toLocaleString('en-US', { timeZone: 'UTC', hour12: false });
+  const tzStr = date.toLocaleString('en-US', { timeZone: tz, hour12: false });
+  return Math.round((new Date(tzStr).getTime() - new Date(utcStr).getTime()) / 60000);
+}
+
 // ── Types ──
 
 type ItemType = 'TASK' | 'EVENT';
 type TimeOfDay = 'MORNING' | 'AFTERNOON' | 'EVENING' | null;
-type ActivePopover = 'date' | 'priority' | 'category' | 'repeat' | 'duration' | 'reminder1' | 'reminder2' | null;
+type ActivePopover = 'date' | 'endDate' | 'priority' | 'category' | 'repeat' | 'duration' | 'reminder1' | 'reminder2' | null;
 
 export interface ItemFormDraft {
   itemType: ItemType;
@@ -214,6 +223,7 @@ export function ItemEditorPage() {
   const browserTimeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
   const [selectedTimeZone, setSelectedTimeZone] = useState(browserTimeZone);
   const [eventEndTimeZone, setEventEndTimeZone] = useState<string | null>(null);
+  const [eventEndDate, setEventEndDate] = useState<Date | null>(null);
   const [showTimeZonePicker, setShowTimeZonePicker] = useState(false);
   const [timeZonePickerTarget, setTimeZonePickerTarget] = useState<'start' | 'end'>('start');
 
@@ -232,6 +242,17 @@ export function ItemEditorPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
 
+  // Duration / end time mode
+  const [useEndTime, setUseEndTime] = useState(false);
+  const [endDate, setEndDate] = useState<Date | null>(null); // End date for timed end-time mode (defaults to start date)
+  const [useSeparateTimeZones, setUseSeparateTimeZones] = useState(false);
+
+  // Event-specific fields
+  const [guests, setGuests] = useState<Array<{email: string; name?: string}>>([]);
+  const [guestInput, setGuestInput] = useState('');
+  const [meetingLink, setMeetingLink] = useState('');
+  const [editingMeetingLink, setEditingMeetingLink] = useState(false);
+
   // Task advanced options (More Options)
   const [dateType, setDateType] = useState<'SCHEDULED' | 'DUE'>('SCHEDULED');
   const [showInTodoWhenOverdue, setShowInTodoWhenOverdue] = useState(true);
@@ -247,6 +268,7 @@ export function ItemEditorPage() {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
+  const meetingLinkRef = useRef<HTMLInputElement>(null);
 
   // ── Load existing item for edit mode ──
   const { data: existingItem } = useQuery({
@@ -297,12 +319,32 @@ export function ItemEditorPage() {
     } else {
       const event = existingItem as ApiEvent;
       setLocationValue(event.location || '');
-      if (event.endTimeZone) setEventEndTimeZone(event.endTimeZone);
+      setPriority(event.priority?.toUpperCase() || '');
       if (event.endDate) {
-        setHasEndTime(true);
         const ed = new Date(event.endDate);
-        setEndTimeValue(`${String(ed.getHours()).padStart(2, '0')}:${String(ed.getMinutes()).padStart(2, '0')}`);
+        if (event.hasTime) {
+          setUseEndTime(true);
+          setHasEndTime(true);
+          setEndTimeValue(`${String(ed.getHours()).padStart(2, '0')}:${String(ed.getMinutes()).padStart(2, '0')}`);
+          // Check if end date is a different day from start
+          if (event.date) {
+            const sd = new Date(event.date);
+            if (ed.toDateString() !== sd.toDateString()) {
+              setEndDate(ed);
+            }
+          }
+        } else {
+          setEventEndDate(ed);
+        }
       }
+      if (event.endTimeZone) {
+        setEventEndTimeZone(event.endTimeZone);
+        if (event.endTimeZone !== (event.timeZone || browserTimeZone)) {
+          setUseSeparateTimeZones(true);
+        }
+      }
+      if (event.guests) setGuests(event.guests);
+      if (event.meetingLink) setMeetingLink(event.meetingLink);
     }
   }, [existingItem, typeParam]);
 
@@ -316,13 +358,42 @@ export function ItemEditorPage() {
     if (editingLocation) locationRef.current?.focus();
   }, [editingLocation]);
 
+  useEffect(() => {
+    if (editingMeetingLink) meetingLinkRef.current?.focus();
+  }, [editingMeetingLink]);
 
   // ── Computed ──
   const isTask = itemType === 'TASK';
   const isTitleValid = title.trim().length > 0;
+  const hasExactTime = isTask ? hasTime : hasStartTime;
+
+  // When in end-time mode, compute duration from start and end date/times (timezone-aware)
+  const effectiveDuration = useMemo(() => {
+    if (!useEndTime || !hasExactTime || !hasEndTime || !selectedDate) return duration;
+    const startTime = isTask ? timeValue : startTimeValue;
+    const [sh, sm] = startTime.split(':').map(Number);
+    const [eh, em] = endTimeValue.split(':').map(Number);
+    const sd = selectedDate;
+    const ed = endDate || selectedDate;
+    // Wall-clock milliseconds (no timezone)
+    const startWallMs = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate(), sh, sm).getTime();
+    const endWallMs = new Date(ed.getFullYear(), ed.getMonth(), ed.getDate(), eh, em).getTime();
+    let diffMs = endWallMs - startWallMs;
+    // Adjust for timezone difference when using separate timezones
+    if (useSeparateTimeZones && eventEndTimeZone && eventEndTimeZone !== selectedTimeZone) {
+      try {
+        const now = new Date();
+        const startOffset = getTimezoneOffsetMinutes(selectedTimeZone, now);
+        const endOffset = getTimezoneOffsetMinutes(eventEndTimeZone, now);
+        diffMs += (startOffset - endOffset) * 60000;
+      } catch { /* fallback to wall-clock diff */ }
+    }
+    return Math.round(diffMs / 60000);
+  }, [useEndTime, hasExactTime, hasEndTime, isTask, timeValue, startTimeValue, endTimeValue, duration, selectedDate, endDate, selectedTimeZone, eventEndTimeZone, useSeparateTimeZones]);
   const isPending = createTaskMutation.isPending || createEventMutation.isPending ||
     updateTaskMutation.isPending || updateEventMutation.isPending;
-  const saveDisabled = isPending || !isTitleValid;
+  const isEndTimeInvalid = useEndTime && hasExactTime && hasEndTime && effectiveDuration != null && effectiveDuration <= 0;
+  const saveDisabled = isPending || !isTitleValid || isEndTimeInvalid;
 
   const isDateInPast = useMemo(() => {
     if (!selectedDate) return false;
@@ -392,6 +463,10 @@ export function ItemEditorPage() {
     setTimeOfDay(null);
     setHasStartTime(false);
     setHasEndTime(false);
+    setEventEndDate(null);
+    setEndDate(null);
+    setUseEndTime(false);
+    setUseSeparateTimeZones(false);
     setSelectedRepeat(null);
     setDuration(null);
     setFirstReminder(undefined);
@@ -409,6 +484,37 @@ export function ItemEditorPage() {
   const handleRemoveTag = useCallback((tag: string) => {
     setTags((prev) => prev.filter((t) => t !== tag));
   }, []);
+
+  const handleSwitchToEndTime = useCallback(() => {
+    setUseEndTime(true);
+    if (!endDate) setEndDate(selectedDate);
+    if (!hasEndTime) {
+      // Initialize end time from start + duration (or +1h default)
+      const [h, m] = (isTask ? timeValue : startTimeValue).split(':').map(Number);
+      const dur = duration || 60;
+      const totalMins = h * 60 + m + dur;
+      const endH = Math.min(23, Math.floor(totalMins / 60));
+      const endM = totalMins % 60;
+      setEndTimeValue(`${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`);
+      setHasEndTime(true);
+    }
+  }, [isTask, timeValue, startTimeValue, duration, hasEndTime, selectedDate, endDate]);
+
+  const handleSwitchToDuration = useCallback(() => {
+    setUseEndTime(false);
+    setHasEndTime(false);
+    setEndDate(null);
+    setUseSeparateTimeZones(false);
+    setEventEndTimeZone(null);
+  }, []);
+
+  const handleAddGuest = useCallback(() => {
+    const trimmed = guestInput.trim();
+    if (trimmed && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) && !guests.some((g) => g.email === trimmed)) {
+      setGuests((prev) => [...prev, { email: trimmed }]);
+    }
+    setGuestInput('');
+  }, [guestInput, guests]);
 
   const handleSubmit = useCallback(async () => {
     if (!isTitleValid) return;
@@ -442,7 +548,7 @@ export function ItemEditorPage() {
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? null,
-          duration: duration ?? null,
+          duration: effectiveDuration ?? null,
           firstReminderMinutes: firstReminder ?? null,
           secondReminderMinutes: secondReminder ?? null,
         };
@@ -463,7 +569,7 @@ export function ItemEditorPage() {
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? undefined,
-          duration: duration ?? undefined,
+          duration: effectiveDuration ?? undefined,
           firstReminderMinutes: firstReminder,
           secondReminderMinutes: secondReminder,
         };
@@ -476,8 +582,13 @@ export function ItemEditorPage() {
         dateStr = hasStartTime
           ? combineDateAndTime(dateOnly!, startTimeValue).toISOString()
           : toNoonUTC(selectedDate).toISOString();
-        if (hasEndTime) {
-          endDateStr = combineDateAndTime(dateOnly!, endTimeValue).toISOString();
+        if (hasStartTime && hasEndTime) {
+          const endDateOnly = endDate
+            ? `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`
+            : dateOnly!;
+          endDateStr = combineDateAndTime(endDateOnly, endTimeValue).toISOString();
+        } else if (!hasStartTime && eventEndDate) {
+          endDateStr = toNoonUTC(eventEndDate).toISOString();
         }
       }
 
@@ -490,17 +601,27 @@ export function ItemEditorPage() {
           timeZone: hasStartTime ? tz : undefined,
           endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr ?? null,
+          duration: effectiveDuration ?? null,
+          priority: priority || undefined,
           location: locationValue || undefined,
+          guests: guests.length > 0 ? guests : null,
+          meetingLink: meetingLink || null,
         };
         await updateEventMutation.mutateAsync({ id: id!, data: req });
       } else {
         const req: CreateEventRequest = {
           title: trimmedTitle,
+          description: description || undefined,
           date: dateStr,
           hasTime: hasStartTime,
           timeZone: hasStartTime ? tz : undefined,
           endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr,
+          duration: effectiveDuration ?? undefined,
+          priority: priority || undefined,
+          location: locationValue || undefined,
+          guests: guests.length > 0 ? guests : undefined,
+          meetingLink: meetingLink || undefined,
         };
         await createEventMutation.mutateAsync(req);
       }
@@ -510,8 +631,9 @@ export function ItemEditorPage() {
   }, [
     isTitleValid, title, description, isTask, selectedDate, hasTime, timeValue,
     timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue,
-    priority, categoryId, locationValue, selectedRepeat, duration, firstReminder, secondReminder,
+    priority, categoryId, locationValue, selectedRepeat, effectiveDuration, firstReminder, secondReminder,
     dateType, showInTodoWhenOverdue, setToDoneAutomatically,
+    guests, meetingLink, eventEndDate, useEndTime, endDate,
     isEditMode, id, createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
     navigate, selectedTimeZone, eventEndTimeZone,
   ]);
@@ -694,128 +816,69 @@ export function ItemEditorPage() {
             </div>
           )}
 
-          {/* Start/end time (event) */}
+          {/* Time (event) */}
           {!isTask && selectedDate && (
-            <>
-              <div className="px-4 py-2.5">
-                {hasStartTime ? (
-                  <TimePicker
-                    value={startTimeValue}
-                    onChange={setStartTimeValue}
-                    onClear={() => setHasStartTime(false)}
-                  />
-                ) : (
-                  <button type="button" onClick={() => setHasStartTime(true)} className="flex w-full items-center gap-3.5 text-left">
-                    <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                    <span className="text-sm text-muted-foreground">{t('calendarPage.form.startTime')}</span>
-                  </button>
-                )}
-              </div>
-              <div className="px-4 py-2.5">
-                {hasEndTime ? (
-                  <TimePicker
-                    value={endTimeValue}
-                    onChange={setEndTimeValue}
-                    onClear={() => setHasEndTime(false)}
-                  />
-                ) : (
-                  <button type="button" onClick={() => setHasEndTime(true)} className="flex w-full items-center gap-3.5 text-left">
-                    <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                    <span className="text-sm text-muted-foreground">{t('calendarPage.form.endTime')}</span>
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-
-          {/* Timezone — inline for events only (task timezone moved to More Options) */}
-          {selectedDate && !isTask && hasStartTime && (
-            <>
-              <div className="relative px-4 py-2.5">
-                <button
-                  type="button"
-                  onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
-                  className="flex w-full items-center gap-3.5 text-left"
-                >
-                  <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-                  <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
-                    {eventEndTimeZone ? `${t('itemEditor.startTimeZone')}: ` : ''}
-                    {(() => {
-                      try {
-                        const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
-                        return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
-                      } catch { return selectedTimeZone; }
-                    })()}
-                  </span>
-                  {selectedTimeZone !== browserTimeZone && (
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); setEventEndTimeZone(null); }}
-                      className="ml-auto text-muted-foreground hover:text-foreground"
-                    >
-                      <Icon name="close" size={16} />
-                    </button>
-                  )}
-                </button>
-                {showTimeZonePicker && timeZonePickerTarget === 'start' && (
-                  <TimeZonePicker
-                    selectedTimeZone={selectedTimeZone}
-                    onSelect={setSelectedTimeZone}
-                    onClose={() => setShowTimeZonePicker(false)}
-                  />
-                )}
-              </div>
-
-              {/* End timezone (events with end time) */}
-              {hasEndTime && (
-                <div className="relative px-4 py-2.5">
-                  {eventEndTimeZone ? (
-                    <button
-                      type="button"
-                      onClick={() => { setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
-                      className="flex w-full items-center gap-3.5 text-left"
-                    >
-                      <Icon name="public" size={20} color="var(--color-primary)" />
-                      <span className="text-sm font-medium text-foreground">
-                        {t('itemEditor.endTimeZone')}: {(() => {
-                          try {
-                            const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: eventEndTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
-                            return parts.find(p => p.type === 'timeZoneName')?.value || eventEndTimeZone;
-                          } catch { return eventEndTimeZone; }
-                        })()}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); setEventEndTimeZone(null); }}
-                        className="ml-auto text-muted-foreground hover:text-foreground"
-                      >
-                        <Icon name="close" size={16} />
-                      </button>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => { setEventEndTimeZone(selectedTimeZone); setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
-                      className="flex w-full items-center gap-3.5 text-left"
-                    >
-                      <Icon name="public" size={20} color="var(--color-muted-foreground)" />
-                      <span className="text-sm text-muted-foreground">{t('itemEditor.addEndTimeZone')}</span>
-                    </button>
-                  )}
-                  {showTimeZonePicker && timeZonePickerTarget === 'end' && (
-                    <TimeZonePicker
-                      selectedTimeZone={eventEndTimeZone || selectedTimeZone}
-                      onSelect={(tz) => setEventEndTimeZone(tz)}
-                      onClose={() => setShowTimeZonePicker(false)}
-                    />
-                  )}
+            <div className="relative px-4 py-2.5">
+              {/* Start time label when in end-time mode */}
+              {hasStartTime && useEndTime && (
+                <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('calendarPage.form.startTime')}
                 </div>
               )}
-            </>
+              {hasStartTime ? (
+                <TimePicker
+                  value={startTimeValue}
+                  onChange={setStartTimeValue}
+                  onClear={() => { setHasStartTime(false); setHasEndTime(false); setUseEndTime(false); }}
+                />
+              ) : (
+                <button type="button" onClick={() => setHasStartTime(true)} className="flex w-full items-center gap-3.5 text-left">
+                  <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
+                  <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
+                </button>
+              )}
+            </div>
           )}
 
-          {/* Duration (tasks with time or time-of-day) */}
-          {isTask && selectedDate && (hasTime || timeOfDay) && (
+          {/* Timezone — inline for events (when not in end-time mode, which handles its own tz) */}
+          {selectedDate && !isTask && hasStartTime && !useEndTime && (
+            <div className="relative px-4 py-2.5">
+              <button
+                type="button"
+                onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
+                className="flex w-full items-center gap-3.5 text-left"
+              >
+                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                  {(() => {
+                    try {
+                      const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                      return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
+                    } catch { return selectedTimeZone; }
+                  })()}
+                </span>
+                {selectedTimeZone !== browserTimeZone && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); }}
+                    className="ml-auto text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                )}
+              </button>
+              {showTimeZonePicker && timeZonePickerTarget === 'start' && (
+                <TimeZonePicker
+                  selectedTimeZone={selectedTimeZone}
+                  onSelect={setSelectedTimeZone}
+                  onClose={() => setShowTimeZonePicker(false)}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Duration (tasks/events with time, not in end-time mode) */}
+          {selectedDate && (hasExactTime || (isTask && timeOfDay)) && !useEndTime && (
             <div className="relative">
               <FieldRow
                 icon="timer"
@@ -840,7 +903,254 @@ export function ItemEditorPage() {
                   onClose={closePopover}
                 />
               )}
+              {/* Switch to end time (only when exact time is set) */}
+              {hasExactTime && (
+                <button
+                  type="button"
+                  onClick={handleSwitchToEndTime}
+                  className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-muted-foreground hover:text-primary"
+                >
+                  <span>{t('tasks.input.durationPicker.switchToEndTime')}</span>
+                </button>
+              )}
             </div>
+          )}
+
+          {/* Start timezone (events in end-time mode — inline tz section hidden) */}
+          {selectedDate && !isTask && hasStartTime && useEndTime && (
+            <div className="relative px-4 py-2.5">
+              <button
+                type="button"
+                onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
+                className="flex w-full items-center gap-3.5 text-left"
+              >
+                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                  {(() => {
+                    try {
+                      const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                      return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
+                    } catch { return selectedTimeZone; }
+                  })()}
+                </span>
+              </button>
+              {showTimeZonePicker && timeZonePickerTarget === 'start' && (
+                <TimeZonePicker
+                  selectedTimeZone={selectedTimeZone}
+                  onSelect={setSelectedTimeZone}
+                  onClose={() => setShowTimeZonePicker(false)}
+                />
+              )}
+            </div>
+          )}
+
+          {/* End date + time (tasks/events in end-time mode) */}
+          {selectedDate && hasExactTime && useEndTime && (
+            <>
+              {/* "Ends" section label */}
+              <div className="mx-4 mt-1 border-t border-border pt-2.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('calendarPage.form.endTime')}
+                </span>
+              </div>
+              {/* End date */}
+              <div className="relative">
+                <FieldRow
+                  icon="event"
+                  text={(endDate || selectedDate).toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric' })}
+                  active
+                  onClick={() => togglePopover('endDate')}
+                />
+                {activePopover === 'endDate' && (
+                  <CalendarPopover
+                    selectedDate={endDate || selectedDate}
+                    minDate={selectedDate}
+                    onSelect={(date) => { setEndDate(date); setActivePopover(null); }}
+                    onClose={closePopover}
+                  />
+                )}
+              </div>
+              {/* End time */}
+              <div className="px-4 py-2.5">
+                <TimePicker
+                  value={endTimeValue}
+                  onChange={setEndTimeValue}
+                  onClear={() => { setHasEndTime(false); setUseEndTime(false); setEndDate(null); }}
+                />
+              </div>
+              {/* Separate timezones toggle */}
+              <div className="px-4 py-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">
+                    {t('tasks.panel.separateTimeZones', 'Use separate start and end time zones')}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUseSeparateTimeZones((v) => {
+                        if (!v && !eventEndTimeZone) setEventEndTimeZone(selectedTimeZone);
+                        if (v) setEventEndTimeZone(null);
+                        return !v;
+                      });
+                    }}
+                    className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${useSeparateTimeZones ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                  >
+                    <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${useSeparateTimeZones ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                  </button>
+                </div>
+              </div>
+              {/* End timezone picker (when separate timezones enabled) */}
+              {useSeparateTimeZones && (
+                <div className="relative px-4 py-2.5">
+                  <button
+                    type="button"
+                    onClick={() => { setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
+                    className="flex w-full items-center gap-3.5 text-left"
+                  >
+                    <Icon name="public" size={20} color="var(--color-primary)" />
+                    <span className="text-sm font-medium text-foreground">
+                      {t('itemEditor.endTimeZone')}: {(() => {
+                        try {
+                          const tz = eventEndTimeZone || selectedTimeZone;
+                          const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: tz, timeZoneName: 'long' }).formatToParts(new Date());
+                          return parts.find(p => p.type === 'timeZoneName')?.value || tz;
+                        } catch { return eventEndTimeZone || selectedTimeZone; }
+                      })()}
+                    </span>
+                  </button>
+                  {showTimeZonePicker && timeZonePickerTarget === 'end' && (
+                    <TimeZonePicker
+                      selectedTimeZone={eventEndTimeZone || selectedTimeZone}
+                      onSelect={(tz) => { setEventEndTimeZone(tz); setShowTimeZonePicker(false); }}
+                      onClose={() => setShowTimeZonePicker(false)}
+                    />
+                  )}
+                </div>
+              )}
+              {/* Validation: end can't be before start */}
+              {effectiveDuration != null && effectiveDuration <= 0 && (
+                <div className="flex items-center gap-2 px-4 py-1.5 text-xs text-red-500">
+                  <Icon name="error" size={14} color="var(--color-destructive, #ef4444)" />
+                  <span>{t('tasks.validation.endTimeBeforeStart', 'End time must be after start time')}</span>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={handleSwitchToDuration}
+                className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-muted-foreground hover:text-primary"
+              >
+                <span>{t('tasks.input.endTimePicker.switchToDuration')}</span>
+              </button>
+            </>
+          )}
+
+          {/* End date (all-day events only — multi-day event support) */}
+          {!isTask && selectedDate && !hasStartTime && (
+            <div className="relative">
+              <FieldRow
+                icon="event"
+                text={eventEndDate
+                  ? `${t('tasks.input.endDate')}: ${eventEndDate.toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric' })}`
+                  : t('tasks.input.endDate')
+                }
+                active={!!eventEndDate}
+                onClick={() => togglePopover('endDate')}
+                suffix={eventEndDate ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setEventEndDate(null); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+              {activePopover === 'endDate' && (
+                <CalendarPopover
+                  selectedDate={eventEndDate}
+                  minDate={selectedDate}
+                  onSelect={(date) => { setEventEndDate(date); setActivePopover(null); }}
+                  onClose={closePopover}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Guests (events only) */}
+          {!isTask && (
+            <div className="px-4 py-2.5">
+              <div className="flex items-center gap-3.5">
+                <Icon name="group" size={20} color={guests.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <div className="flex flex-1 flex-wrap items-center gap-1.5">
+                  {guests.map((guest, idx) => (
+                    <span key={guest.email} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                      {guest.email}
+                      <button type="button" onClick={() => setGuests((prev) => prev.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-foreground">
+                        <Icon name="close" size={12} />
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="email"
+                    value={guestInput}
+                    onChange={(e) => setGuestInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') { e.preventDefault(); handleAddGuest(); }
+                      if (e.key === 'Backspace' && !guestInput && guests.length > 0) {
+                        setGuests((prev) => prev.slice(0, -1));
+                      }
+                    }}
+                    onBlur={handleAddGuest}
+                    placeholder={guests.length === 0 ? t('calendarPage.form.addGuests') : ''}
+                    className="min-w-[120px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Meeting link (events only) */}
+          {!isTask && (
+            editingMeetingLink ? (
+              <div className="flex items-center gap-3.5 px-4 py-2.5">
+                <Icon name="link" size={20} color="var(--color-primary)" />
+                <input
+                  ref={meetingLinkRef}
+                  type="url"
+                  value={meetingLink}
+                  onChange={(e) => setMeetingLink(e.target.value)}
+                  onBlur={() => setEditingMeetingLink(false)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setEditingMeetingLink(false); if (e.key === 'Escape') { setMeetingLink(''); setEditingMeetingLink(false); } }}
+                  placeholder="https://meet.google.com/..."
+                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                />
+                {meetingLink && (
+                  <button
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); setMeetingLink(''); setEditingMeetingLink(false); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <FieldRow
+                icon="link"
+                text={meetingLink || t('calendarPage.form.addMeetingLink')}
+                active={!!meetingLink}
+                onClick={() => setEditingMeetingLink(true)}
+                suffix={meetingLink ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setMeetingLink(''); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+            )
           )}
 
           {/* Reminder 1 (tasks with exact time, not in past) */}

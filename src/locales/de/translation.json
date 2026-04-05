@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Wiederkehrende Aufgaben können nicht in der Vergangenheit erstellt werden. Datum auf heute gesetzt.",
       "cannotAddRecurrencePastTask": "Vergangene Aufgaben können nicht wiederkehrend gemacht werden.",
       "cannotEditPastInstanceRepeat": "Dies ist ein Vorkommnis einer wiederkehrenden Aufgabe. Das Wiederholungsmuster kann für vergangene Vorkommnisse nicht geändert werden.",
-      "cannotEditPastInstanceDate": "Dies ist ein Vorkommnis einer wiederkehrenden Aufgabe. Das Datum kann für vergangene Vorkommnisse nicht geändert werden."
+      "cannotEditPastInstanceDate": "Dies ist ein Vorkommnis einer wiederkehrenden Aufgabe. Das Datum kann für vergangene Vorkommnisse nicht geändert werden.",
+      "endTimeBeforeStart": "Die Endzeit muss nach der Startzeit liegen"
     },
     "panel": {
       "discardChanges": "Änderungen verwerfen?",
@@ -191,6 +192,7 @@
       "showMore": "Weitere Optionen",
       "showLess": "Weniger Optionen",
       "timezone": "Zeitzone",
+      "separateTimeZones": "Unterschiedliche Zeitzonen für Start und Ende verwenden",
       "markComplete": "Als Erledigt Markieren",
       "noDate": "Kein Datum",
       "at": "um",

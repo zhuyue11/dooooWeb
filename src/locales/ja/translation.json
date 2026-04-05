@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "繰り返しタスクは過去の日付に作成できません。日付を今日に設定しました。",
       "cannotAddRecurrencePastTask": "過去のタスクを繰り返しに変更できません。",
       "cannotEditPastInstanceRepeat": "これは繰り返しタスクの予定です。過去の予定の繰り返しパターンは変更できません。",
-      "cannotEditPastInstanceDate": "これは繰り返しタスクの予定です。過去の予定の日付は変更できません。"
+      "cannotEditPastInstanceDate": "これは繰り返しタスクの予定です。過去の予定の日付は変更できません。",
+      "endTimeBeforeStart": "終了時刻は開始時刻より後にしてください"
     },
     "panel": {
       "discardChanges": "変更を破棄しますか?",
@@ -191,6 +192,7 @@
       "showMore": "その他のオプション",
       "showLess": "オプションを閉じる",
       "timezone": "タイムゾーン",
+      "separateTimeZones": "開始と終了に別のタイムゾーンを使用",
       "markComplete": "完了にする",
       "noDate": "日付なし",
       "at": "",

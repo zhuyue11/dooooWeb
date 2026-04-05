@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "No se pueden crear tareas recurrentes en el pasado. Fecha establecida a hoy.",
       "cannotAddRecurrencePastTask": "Las tareas pasadas no pueden hacerse recurrentes.",
       "cannotEditPastInstanceRepeat": "Esta es una ocurrencia de una tarea recurrente. No se puede cambiar el patrón de repetición de ocurrencias pasadas.",
-      "cannotEditPastInstanceDate": "Esta es una ocurrencia de una tarea recurrente. No se puede cambiar la fecha de ocurrencias pasadas."
+      "cannotEditPastInstanceDate": "Esta es una ocurrencia de una tarea recurrente. No se puede cambiar la fecha de ocurrencias pasadas.",
+      "endTimeBeforeStart": "La hora de fin debe ser posterior a la hora de inicio"
     },
     "panel": {
       "discardChanges": "¿Descartar cambios?",
@@ -191,6 +192,7 @@
       "showMore": "Más opciones",
       "showLess": "Menos opciones",
       "timezone": "Zona horaria",
+      "separateTimeZones": "Usar zonas horarias diferentes para inicio y fin",
       "markComplete": "Marcar como Completada",
       "noDate": "Sin fecha",
       "at": "a las",

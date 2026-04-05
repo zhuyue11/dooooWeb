@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Terugkerende taken kunnen niet in het verleden worden aangemaakt. Datum ingesteld op vandaag.",
       "cannotAddRecurrencePastTask": "Taken in het verleden kunnen niet terugkerend worden gemaakt.",
       "cannotEditPastInstanceRepeat": "Dit is een voorkomen van een terugkerende taak. Het herhalingspatroon kan niet worden gewijzigd voor eerdere voorkomens.",
-      "cannotEditPastInstanceDate": "Dit is een voorkomen van een terugkerende taak. De datum kan niet worden gewijzigd voor eerdere voorkomens."
+      "cannotEditPastInstanceDate": "Dit is een voorkomen van een terugkerende taak. De datum kan niet worden gewijzigd voor eerdere voorkomens.",
+      "endTimeBeforeStart": "De eindtijd moet na de starttijd liggen"
     },
     "panel": {
       "discardChanges": "Wijzigingen negeren?",
@@ -191,6 +192,7 @@
       "showMore": "Meer opties",
       "showLess": "Minder opties",
       "timezone": "Tijdzone",
+      "separateTimeZones": "Gebruik verschillende tijdzones voor begin en einde",
       "markComplete": "Markeren als Voltooid",
       "noDate": "Geen datum",
       "at": "om",

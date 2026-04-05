@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Les tâches récurrentes ne peuvent pas être créées dans le passé. Date définie à aujourd'hui.",
       "cannotAddRecurrencePastTask": "Les tâches passées ne peuvent pas devenir récurrentes.",
       "cannotEditPastInstanceRepeat": "Ceci est une occurrence d'une tâche récurrente. Le modèle de répétition ne peut pas être modifié pour les occurrences passées.",
-      "cannotEditPastInstanceDate": "Ceci est une occurrence d'une tâche récurrente. La date ne peut pas être modifiée pour les occurrences passées."
+      "cannotEditPastInstanceDate": "Ceci est une occurrence d'une tâche récurrente. La date ne peut pas être modifiée pour les occurrences passées.",
+      "endTimeBeforeStart": "L'heure de fin doit être postérieure à l'heure de début"
     },
     "panel": {
       "discardChanges": "Annuler les modifications ?",
@@ -191,6 +192,7 @@
       "showMore": "Plus d'options",
       "showLess": "Moins d'options",
       "timezone": "Fuseau horaire",
+      "separateTimeZones": "Utiliser des fuseaux horaires différents pour le début et la fin",
       "markComplete": "Marquer comme Terminée",
       "noDate": "Aucune date",
       "at": "à",

@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Tarefas recorrentes não podem ser criadas no passado. Data definida para hoje.",
       "cannotAddRecurrencePastTask": "Tarefas passadas não podem se tornar recorrentes.",
       "cannotEditPastInstanceRepeat": "Esta é uma ocorrência de uma tarefa recorrente. O padrão de repetição não pode ser alterado para ocorrências passadas.",
-      "cannotEditPastInstanceDate": "Esta é uma ocorrência de uma tarefa recorrente. A data não pode ser alterada para ocorrências passadas."
+      "cannotEditPastInstanceDate": "Esta é uma ocorrência de uma tarefa recorrente. A data não pode ser alterada para ocorrências passadas.",
+      "endTimeBeforeStart": "O horário de término deve ser posterior ao horário de início"
     },
     "panel": {
       "discardChanges": "Descartar alterações?",
@@ -191,6 +192,7 @@
       "showMore": "Mais opções",
       "showLess": "Menos opções",
       "timezone": "Fuso horário",
+      "separateTimeZones": "Usar fusos horários diferentes para início e fim",
       "markComplete": "Marcar como Concluída",
       "noDate": "Sem data",
       "at": "às",

@@ -176,7 +176,8 @@
       "recurringTaskPastDate": "Recurring tasks can't be created in the past. Date set to today.",
       "cannotAddRecurrencePastTask": "Past tasks can't be made recurring.",
       "cannotEditPastInstanceRepeat": "This is an occurrence of a recurring task. Repeat pattern can't be changed for past occurrences.",
-      "cannotEditPastInstanceDate": "This is an occurrence of a recurring task. Date can't be changed for past occurrences."
+      "cannotEditPastInstanceDate": "This is an occurrence of a recurring task. Date can't be changed for past occurrences.",
+      "endTimeBeforeStart": "End time must be after start time"
     },
     "panel": {
       "discardChanges": "Discard changes?",
@@ -195,6 +196,7 @@
       "showMore": "More options",
       "showLess": "Less options",
       "timezone": "Time zone",
+      "separateTimeZones": "Use separate start and end time zones",
       "markComplete": "Mark as Complete",
       "noDate": "No date",
       "at": "at",

@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "Le attività ricorrenti non possono essere create nel passato. Data impostata a oggi.",
       "cannotAddRecurrencePastTask": "Le attività passate non possono diventare ricorrenti.",
       "cannotEditPastInstanceRepeat": "Questa è un'occorrenza di un'attività ricorrente. Il modello di ripetizione non può essere modificato per le occorrenze passate.",
-      "cannotEditPastInstanceDate": "Questa è un'occorrenza di un'attività ricorrente. La data non può essere modificata per le occorrenze passate."
+      "cannotEditPastInstanceDate": "Questa è un'occorrenza di un'attività ricorrente. La data non può essere modificata per le occorrenze passate.",
+      "endTimeBeforeStart": "L'orario di fine deve essere successivo all'orario di inizio"
     },
     "panel": {
       "discardChanges": "Scartare le modifiche?",
@@ -191,6 +192,7 @@
       "showMore": "Altre opzioni",
       "showLess": "Meno opzioni",
       "timezone": "Fuso orario",
+      "separateTimeZones": "Usa fusi orari diversi per inizio e fine",
       "markComplete": "Segna come Completata",
       "noDate": "Nessuna data",
       "at": "alle",

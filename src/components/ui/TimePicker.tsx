@@ -37,11 +37,6 @@ export function TimePicker({ value, onChange, onClear }: TimePickerProps) {
   const { timeFormat, setTimeFormat } = useDisplay();
   const is12h = timeFormat === '12h';
 
-  const minuteOptions = useMemo(
-    () => Array.from({ length: 60 }, (_, i) => i),
-    [],
-  );
-
   const toggleFormat = useCallback(() => {
     setTimeFormat(is12h ? '24h' : '12h');
   }, [is12h, setTimeFormat]);
@@ -52,9 +47,9 @@ export function TimePicker({ value, onChange, onClear }: TimePickerProps) {
         <Icon name="schedule" size={20} color="var(--color-primary)" className="shrink-0" />
 
         {is12h ? (
-          <TimePicker12hRow value={value} onChange={onChange} minuteOptions={minuteOptions} />
+          <TimePicker12hRow value={value} onChange={onChange} />
         ) : (
-          <TimePicker24hRow value={value} onChange={onChange} minuteOptions={minuteOptions} />
+          <TimePicker24hRow value={value} onChange={onChange} />
         )}
 
         <button type="button" onClick={onClear} className="ml-auto text-muted-foreground hover:text-foreground">
@@ -78,10 +73,9 @@ export function TimePicker({ value, onChange, onClear }: TimePickerProps) {
 
 // ── 12h row: hour (1-12) + minute + AM/PM ──
 
-function TimePicker12hRow({ value, onChange, minuteOptions }: {
+function TimePicker12hRow({ value, onChange }: {
   value: string;
   onChange: (v: string) => void;
-  minuteOptions: number[];
 }) {
   const { hour, minute, period } = useMemo(() => to12h(value), [value]);
   const { t } = useTranslation();
@@ -89,25 +83,29 @@ function TimePicker12hRow({ value, onChange, minuteOptions }: {
   return (
     <>
       <div className="flex items-center gap-0.5">
-        <select
+        <input
+          type="number"
+          min={1}
+          max={12}
           value={hour}
-          onChange={(e) => onChange(to24hFromAmPm(Number(e.target.value), minute, period))}
-          className="h-9 w-14 appearance-none rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-        >
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
-            <option key={h} value={h}>{h}</option>
-          ))}
-        </select>
+          onChange={(e) => {
+            const v = Math.max(1, Math.min(12, parseInt(e.target.value) || 1));
+            onChange(to24hFromAmPm(v, minute, period));
+          }}
+          className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+        />
         <span className="text-sm font-medium text-muted-foreground">:</span>
-        <select
-          value={minute}
-          onChange={(e) => onChange(to24hFromAmPm(hour, Number(e.target.value), period))}
-          className="h-9 w-14 appearance-none rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-        >
-          {minuteOptions.map((m) => (
-            <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
-          ))}
-        </select>
+        <input
+          type="number"
+          min={0}
+          max={59}
+          value={String(minute).padStart(2, '0')}
+          onChange={(e) => {
+            const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
+            onChange(to24hFromAmPm(hour, v, period));
+          }}
+          className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+        />
       </div>
       {/* AM/PM toggle */}
       <div className="flex rounded-md border border-border">
@@ -140,34 +138,37 @@ function TimePicker12hRow({ value, onChange, minuteOptions }: {
 
 // ── 24h row: hour (00-23) + minute ──
 
-function TimePicker24hRow({ value, onChange, minuteOptions }: {
+function TimePicker24hRow({ value, onChange }: {
   value: string;
   onChange: (v: string) => void;
-  minuteOptions: number[];
 }) {
   const { hour, minute } = useMemo(() => parse24h(value), [value]);
 
   return (
     <div className="flex items-center gap-0.5">
-      <select
-        value={hour}
-        onChange={(e) => onChange(format24h(Number(e.target.value), minute))}
-        className="h-9 w-14 appearance-none rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-      >
-        {Array.from({ length: 24 }, (_, i) => i).map((h) => (
-          <option key={h} value={h}>{String(h).padStart(2, '0')}</option>
-        ))}
-      </select>
+      <input
+        type="number"
+        min={0}
+        max={23}
+        value={String(hour).padStart(2, '0')}
+        onChange={(e) => {
+          const v = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
+          onChange(format24h(v, minute));
+        }}
+        className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      />
       <span className="text-sm font-medium text-muted-foreground">:</span>
-      <select
-        value={minute}
-        onChange={(e) => onChange(format24h(hour, Number(e.target.value)))}
-        className="h-9 w-14 appearance-none rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-      >
-        {minuteOptions.map((m) => (
-          <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
-        ))}
-      </select>
+      <input
+        type="number"
+        min={0}
+        max={59}
+        value={String(minute).padStart(2, '0')}
+        onChange={(e) => {
+          const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
+          onChange(format24h(hour, v));
+        }}
+        className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      />
     </div>
   );
 }

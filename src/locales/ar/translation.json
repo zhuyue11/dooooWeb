@@ -172,7 +172,8 @@
       "recurringTaskPastDate": "لا يمكن إنشاء المهام المتكررة في الماضي. تم تعيين التاريخ إلى اليوم.",
       "cannotAddRecurrencePastTask": "لا يمكن جعل المهام السابقة متكررة.",
       "cannotEditPastInstanceRepeat": "هذا حدث من مهمة متكررة. لا يمكن تغيير نمط التكرار للأحداث الماضية.",
-      "cannotEditPastInstanceDate": "هذا حدث من مهمة متكررة. لا يمكن تغيير التاريخ للأحداث الماضية."
+      "cannotEditPastInstanceDate": "هذا حدث من مهمة متكررة. لا يمكن تغيير التاريخ للأحداث الماضية.",
+      "endTimeBeforeStart": "يجب أن يكون وقت الانتهاء بعد وقت البدء"
     },
     "panel": {
       "discardChanges": "تجاهل التغييرات؟",
@@ -191,6 +192,7 @@
       "showMore": "خيارات إضافية",
       "showLess": "إخفاء الخيارات",
       "timezone": "المنطقة الزمنية",
+      "separateTimeZones": "استخدام مناطق زمنية مختلفة للبداية والنهاية",
       "markComplete": "وضع علامة مكتمل",
       "noDate": "بدون تاريخ",
       "at": "في",
