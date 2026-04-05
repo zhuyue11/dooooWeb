@@ -196,6 +196,11 @@ export async function getEvents(params?: { from?: string; to?: string }): Promis
   return res.data.data;
 }
 
+export async function getEvent(id: string): Promise<Event> {
+  const res = await apiClient.get<{ success: boolean; data: Event }>(`/api/events/${id}`);
+  return res.data.data;
+}
+
 export async function createEvent(data: CreateEventRequest): Promise<Event> {
   const res = await apiClient.post<{ success: boolean; data: Event }>('/api/events', data);
   return res.data.data;

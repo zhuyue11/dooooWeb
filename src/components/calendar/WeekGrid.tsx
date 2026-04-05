@@ -11,12 +11,13 @@ interface WeekGridProps {
   today: Date;
   categories?: Category[];
   onSelectDate: (date: Date) => void;
+  onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
 }
 
 const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
-export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, isLoading }: WeekGridProps) {
+export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading }: WeekGridProps) {
   const { t } = useTranslation();
   return (
     <div
@@ -85,7 +86,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                 <div className="flex items-center justify-center py-4 text-xs text-muted-foreground">…</div>
               ) : items.length === 0 ? null : (
                 items.map((item) => (
-                  <ItemCard key={item.id} item={item} categories={categories} />
+                  <ItemCard key={item.id} item={item} categories={categories} onClick={onItemClick} />
                 ))
               )}
             </div>

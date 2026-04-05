@@ -13,9 +13,10 @@ interface ItemRowProps {
   showDate?: boolean;
   currentUserId?: string;
   onToggle?: (item: CalendarItem) => void;
+  onClick?: (item: CalendarItem) => void;
 }
 
-export function ItemRow({ item, categories, showDate, currentUserId, onToggle }: ItemRowProps) {
+export function ItemRow({ item, categories, showDate, currentUserId, onToggle, onClick }: ItemRowProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
 
@@ -49,7 +50,8 @@ export function ItemRow({ item, categories, showDate, currentUserId, onToggle }:
   return (
     <div
       data-testid={`task-row-${item.id}`}
-      className={`flex items-start gap-3 rounded-lg px-3 py-2.5 ${isChecked ? 'bg-muted' : ''}`}
+      className={`flex items-start gap-3 rounded-lg px-3 py-2.5 ${isChecked ? 'bg-muted' : ''} ${onClick ? 'cursor-pointer hover:bg-muted/50 transition-colors' : ''}`}
+      onClick={() => onClick?.(item)}
     >
       {/* ── Toggle / Icon column ── */}
       <div className="flex h-5 flex-shrink-0 items-center pt-0.5">
@@ -63,14 +65,14 @@ export function ItemRow({ item, categories, showDate, currentUserId, onToggle }:
           )
         ) : isChecked ? (
           <button
-            onClick={() => onToggle?.(item)}
+            onClick={(e) => { e.stopPropagation(); onToggle?.(item); }}
             className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-primary"
           >
             <Icon name="check" size={12} color="var(--color-primary-foreground)" weight={700} />
           </button>
         ) : (
           <button
-            onClick={() => onToggle?.(item)}
+            onClick={(e) => { e.stopPropagation(); onToggle?.(item); }}
             className="h-[18px] w-[18px] rounded-full border-2 border-primary"
           />
         )}

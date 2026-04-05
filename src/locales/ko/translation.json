@@ -29,7 +29,8 @@
     "none": "없음",
     "showMore": "더 보기",
     "showLess": "접기",
-    "yesterday": "어제"
+    "yesterday": "어제",
+    "deleting": "삭제 중..."
   },
   "navigation": {
     "home": "홈",
@@ -1409,5 +1410,36 @@
     "priorityHigh": "높음",
     "priorityMedium": "보통",
     "priorityLow": "낮음"
+  },
+  "itemView": {
+    "edit": "편집",
+    "delete": "삭제",
+    "expand": "전체 페이지 열기",
+    "date": "날짜",
+    "time": "시간",
+    "duration": "소요 시간",
+    "reminder": "알림",
+    "location": "위치",
+    "repeat": "반복",
+    "createdAt": "{{date}}에 생성됨",
+    "confirmDelete": "이 항목을 삭제하시겠습니까?",
+    "deleteDescription": "이 작업은 되돌릴 수 없습니다. 항목이 영구적으로 삭제됩니다.",
+    "backToCalendar": "캘린더로 돌아가기"
+  },
+  "itemEditor": {
+    "newTask": "새 작업",
+    "editTask": "작업 편집",
+    "newEvent": "새 이벤트",
+    "editEvent": "이벤트 편집",
+    "addTitle": "제목 추가",
+    "addDescription": "설명 추가",
+    "addDate": "날짜 추가",
+    "setRecurrence": "반복 설정",
+    "addLocation": "위치 추가",
+    "addPriority": "우선순위 추가",
+    "addCategory": "카테고리 추가",
+    "addTags": "태그 추가",
+    "infoText": "날짜를 선택하면 시간, 소요 시간, 알림 및 고급 설정이 표시됩니다.",
+    "save": "저장"
   }
 }

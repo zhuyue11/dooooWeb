@@ -29,7 +29,8 @@
     "none": "Không",
     "showMore": "Xem thêm",
     "showLess": "Thu gọn",
-    "yesterday": "Hôm qua"
+    "yesterday": "Hôm qua",
+    "deleting": "Đang xóa..."
   },
   "navigation": {
     "home": "Trang chủ",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Cao",
     "priorityMedium": "Trung bình",
     "priorityLow": "Thấp"
+  },
+  "itemView": {
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "expand": "Mở trang đầy đủ",
+    "date": "Ngày",
+    "time": "Thời gian",
+    "duration": "Thời lượng",
+    "reminder": "Nhắc nhở",
+    "location": "Địa điểm",
+    "repeat": "Lặp lại",
+    "createdAt": "Tạo ngày {{date}}",
+    "confirmDelete": "Xóa mục này?",
+    "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
+    "backToCalendar": "Quay lại lịch"
+  },
+  "itemEditor": {
+    "newTask": "Công việc mới",
+    "editTask": "Sửa công việc",
+    "newEvent": "Sự kiện mới",
+    "editEvent": "Sửa sự kiện",
+    "addTitle": "Thêm tiêu đề",
+    "addDescription": "Thêm mô tả",
+    "addDate": "Thêm ngày",
+    "setRecurrence": "Đặt lặp lại",
+    "addLocation": "Thêm địa điểm",
+    "addPriority": "Thêm mức ưu tiên",
+    "addCategory": "Thêm danh mục",
+    "addTags": "Thêm thẻ",
+    "infoText": "Thời gian, thời lượng, nhắc nhở và cài đặt nâng cao sẽ xuất hiện sau khi chọn ngày.",
+    "save": "Lưu"
   }
 }

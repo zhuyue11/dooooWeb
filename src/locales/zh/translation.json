@@ -29,7 +29,8 @@
     "none": "无",
     "showMore": "展开更多",
     "showLess": "收起",
-    "yesterday": "昨天"
+    "yesterday": "昨天",
+    "deleting": "删除中..."
   },
   "navigation": {
     "home": "首页",
@@ -1408,5 +1409,36 @@
     "priorityHigh": "高",
     "priorityMedium": "中",
     "priorityLow": "低"
+  },
+  "itemView": {
+    "edit": "编辑",
+    "delete": "删除",
+    "expand": "打开完整页面",
+    "date": "日期",
+    "time": "时间",
+    "duration": "时长",
+    "reminder": "提醒",
+    "location": "地点",
+    "repeat": "重复",
+    "createdAt": "创建于 {{date}}",
+    "confirmDelete": "删除此项目？",
+    "deleteDescription": "此操作无法撤销。该项目将被永久删除。",
+    "backToCalendar": "返回日历"
+  },
+  "itemEditor": {
+    "newTask": "新建任务",
+    "editTask": "编辑任务",
+    "newEvent": "新建事件",
+    "editEvent": "编辑事件",
+    "addTitle": "添加标题",
+    "addDescription": "添加描述",
+    "addDate": "添加日期",
+    "setRecurrence": "设置重复",
+    "addLocation": "添加地点",
+    "addPriority": "添加优先级",
+    "addCategory": "添加分类",
+    "addTags": "添加标签",
+    "infoText": "选择日期后将显示时间、时长、提醒及高级设置。",
+    "save": "保存"
   }
 }

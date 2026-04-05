@@ -29,7 +29,8 @@
     "none": "هیچ‌کدام",
     "showMore": "نمایش بیشتر",
     "showLess": "نمایش کمتر",
-    "yesterday": "دیروز"
+    "yesterday": "دیروز",
+    "deleting": "در حال حذف..."
   },
   "navigation": {
     "home": "خانه",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "بالا",
     "priorityMedium": "متوسط",
     "priorityLow": "پایین"
+  },
+  "itemView": {
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "expand": "باز کردن صفحه کامل",
+    "date": "تاریخ",
+    "time": "زمان",
+    "duration": "مدت",
+    "reminder": "یادآوری",
+    "location": "مکان",
+    "repeat": "تکرار",
+    "createdAt": "ایجاد شده در {{date}}",
+    "confirmDelete": "این مورد حذف شود؟",
+    "deleteDescription": "این عمل قابل بازگشت نیست. مورد به طور دائم حذف خواهد شد.",
+    "backToCalendar": "بازگشت به تقویم"
+  },
+  "itemEditor": {
+    "newTask": "وظیفه جدید",
+    "editTask": "ویرایش وظیفه",
+    "newEvent": "رویداد جدید",
+    "editEvent": "ویرایش رویداد",
+    "addTitle": "افزودن عنوان",
+    "addDescription": "افزودن توضیحات",
+    "addDate": "افزودن تاریخ",
+    "setRecurrence": "تنظیم تکرار",
+    "addLocation": "افزودن مکان",
+    "addPriority": "افزودن اولویت",
+    "addCategory": "افزودن دسته‌بندی",
+    "addTags": "افزودن برچسب‌ها",
+    "infoText": "زمان، مدت، یادآوری‌ها و تنظیمات پیشرفته پس از انتخاب تاریخ نمایش داده می‌شوند.",
+    "save": "ذخیره"
   }
 }

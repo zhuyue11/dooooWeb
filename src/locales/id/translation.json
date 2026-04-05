@@ -29,7 +29,8 @@
     "none": "Tidak ada",
     "showMore": "Lihat selengkapnya",
     "showLess": "Lihat lebih sedikit",
-    "yesterday": "Kemarin"
+    "yesterday": "Kemarin",
+    "deleting": "Menghapus..."
   },
   "navigation": {
     "home": "Beranda",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Tinggi",
     "priorityMedium": "Sedang",
     "priorityLow": "Rendah"
+  },
+  "itemView": {
+    "edit": "Edit",
+    "delete": "Hapus",
+    "expand": "Buka halaman penuh",
+    "date": "Tanggal",
+    "time": "Waktu",
+    "duration": "Durasi",
+    "reminder": "Pengingat",
+    "location": "Lokasi",
+    "repeat": "Ulangi",
+    "createdAt": "Dibuat {{date}}",
+    "confirmDelete": "Hapus item ini?",
+    "deleteDescription": "Tindakan ini tidak dapat dibatalkan. Item akan dihapus secara permanen.",
+    "backToCalendar": "Kembali ke Kalender"
+  },
+  "itemEditor": {
+    "newTask": "Tugas Baru",
+    "editTask": "Edit Tugas",
+    "newEvent": "Acara Baru",
+    "editEvent": "Edit Acara",
+    "addTitle": "Tambah judul",
+    "addDescription": "Tambah deskripsi",
+    "addDate": "Tambah tanggal",
+    "setRecurrence": "Atur pengulangan",
+    "addLocation": "Tambah lokasi",
+    "addPriority": "Tambah prioritas",
+    "addCategory": "Tambah kategori",
+    "addTags": "Tambah tag",
+    "infoText": "Waktu, durasi, pengingat, dan pengaturan lanjutan akan muncul setelah memilih tanggal.",
+    "save": "Simpan"
   }
 }

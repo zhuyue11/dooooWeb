@@ -10,6 +10,7 @@ import { MonthGrid } from '@/components/calendar/MonthGrid';
 import { DayTimeline } from '@/components/calendar/DayTimeline';
 import { ItemPanel } from '@/components/calendar/ItemPanel';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
+import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { toISODate } from '@/utils/date';
 import { toggleTask } from '@/lib/api';
 import { useQueryClient } from '@tanstack/react-query';
@@ -21,11 +22,14 @@ export function CalendarPage() {
   const { groupNameMap } = useGroups();
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
 
   const queryClient = useQueryClient();
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => setShowCreateModal(false), []);
+  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
     await toggleTask(item.id);
@@ -82,6 +86,7 @@ export function CalendarPage() {
             today={today}
             categories={categories}
             onSelectDate={handleSelectDate}
+            onItemClick={handleItemClick}
             isLoading={isLoading}
           />
         )}
@@ -118,6 +123,7 @@ export function CalendarPage() {
           currentUserId={user?.id}
           onAddClick={handleAddClick}
           onToggle={handleToggle}
+          onItemClick={handleItemClick}
         />
       </div>
 
@@ -127,6 +133,16 @@ export function CalendarPage() {
           defaultDate={selectedDate ?? undefined}
           onClose={handleModalClose}
           onSaved={handleSaved}
+        />
+      )}
+
+      {/* Item side panel */}
+      {sidePanelItem && (
+        <ItemSidePanel
+          item={sidePanelItem}
+          currentUserId={user?.id}
+          onClose={handleSidePanelClose}
+          onToggle={handleToggle}
         />
       )}
     </div>

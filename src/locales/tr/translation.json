@@ -29,7 +29,8 @@
     "none": "Hiçbiri",
     "showMore": "Daha fazla göster",
     "showLess": "Daha az göster",
-    "yesterday": "Dün"
+    "yesterday": "Dün",
+    "deleting": "Siliniyor..."
   },
   "navigation": {
     "home": "Ana Sayfa",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Yüksek",
     "priorityMedium": "Orta",
     "priorityLow": "Düşük"
+  },
+  "itemView": {
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "expand": "Tam sayfayı aç",
+    "date": "Tarih",
+    "time": "Saat",
+    "duration": "Süre",
+    "reminder": "Hatırlatıcı",
+    "location": "Konum",
+    "repeat": "Tekrarla",
+    "createdAt": "{{date}} tarihinde oluşturuldu",
+    "confirmDelete": "Bu öğe silinsin mi?",
+    "deleteDescription": "Bu işlem geri alınamaz. Öğe kalıcı olarak silinecektir.",
+    "backToCalendar": "Takvime dön"
+  },
+  "itemEditor": {
+    "newTask": "Yeni Görev",
+    "editTask": "Görevi Düzenle",
+    "newEvent": "Yeni Etkinlik",
+    "editEvent": "Etkinliği Düzenle",
+    "addTitle": "Başlık ekle",
+    "addDescription": "Açıklama ekle",
+    "addDate": "Tarih ekle",
+    "setRecurrence": "Tekrarlama ayarla",
+    "addLocation": "Konum ekle",
+    "addPriority": "Öncelik ekle",
+    "addCategory": "Kategori ekle",
+    "addTags": "Etiket ekle",
+    "infoText": "Saat, süre, hatırlatıcılar ve gelişmiş ayarlar tarih seçildikten sonra görünecektir.",
+    "save": "Kaydet"
   }
 }

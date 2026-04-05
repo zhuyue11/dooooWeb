@@ -29,7 +29,8 @@
     "none": "なし",
     "showMore": "もっと見る",
     "showLess": "閉じる",
-    "yesterday": "昨日"
+    "yesterday": "昨日",
+    "deleting": "削除中..."
   },
   "navigation": {
     "home": "ホーム",
@@ -1409,5 +1410,36 @@
     "priorityHigh": "高",
     "priorityMedium": "中",
     "priorityLow": "低"
+  },
+  "itemView": {
+    "edit": "編集",
+    "delete": "削除",
+    "expand": "フルページで開く",
+    "date": "日付",
+    "time": "時間",
+    "duration": "所要時間",
+    "reminder": "リマインダー",
+    "location": "場所",
+    "repeat": "繰り返し",
+    "createdAt": "{{date}}に作成",
+    "confirmDelete": "このアイテムを削除しますか？",
+    "deleteDescription": "この操作は取り消せません。アイテムは完全に削除されます。",
+    "backToCalendar": "カレンダーに戻る"
+  },
+  "itemEditor": {
+    "newTask": "新しいタスク",
+    "editTask": "タスクを編集",
+    "newEvent": "新しいイベント",
+    "editEvent": "イベントを編集",
+    "addTitle": "タイトルを追加",
+    "addDescription": "説明を追加",
+    "addDate": "日付を追加",
+    "setRecurrence": "繰り返しを設定",
+    "addLocation": "場所を追加",
+    "addPriority": "優先度を追加",
+    "addCategory": "カテゴリーを追加",
+    "addTags": "タグを追加",
+    "infoText": "日付を選択すると、時間、所要時間、リマインダー、詳細設定が表示されます。",
+    "save": "保存"
   }
 }

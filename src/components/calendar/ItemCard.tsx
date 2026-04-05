@@ -10,9 +10,10 @@ import { useTranslation } from 'react-i18next';
 interface ItemCardProps {
   item: CalendarItem;
   categories?: Category[];
+  onClick?: (item: CalendarItem) => void;
 }
 
-export function ItemCard({ item, categories }: ItemCardProps) {
+export function ItemCard({ item, categories, onClick }: ItemCardProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const colors = item.itemType === 'EVENT'
@@ -22,8 +23,9 @@ export function ItemCard({ item, categories }: ItemCardProps) {
   return (
     <div
       data-testid={`task-card-${item.id}`}
-      className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''}`}
+      className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''} ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
       style={{ backgroundColor: colors.bg, padding: '6px 8px' }}
+      onClick={() => onClick?.(item)}
     >
       <div className="flex items-center gap-1">
         {item.itemType === 'EVENT' && (

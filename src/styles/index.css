@@ -83,3 +83,46 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* ── Side panel slide ── */
+@keyframes panel-slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes panel-slide-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+.animate-panel-in { animation: panel-slide-in 0.25s ease-out forwards; }
+.animate-panel-out { animation: panel-slide-out 0.2s ease-in forwards; }
+
+/* ── Modal animations ── */
+@keyframes modal-enter {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modal-exit {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95) translateY(-8px); }
+}
+.animate-modal-enter { animation: modal-enter 0.2s ease-out; }
+.animate-modal-exit { animation: modal-exit 0.15s ease-in forwards; }
+
+/* ── Page entrance ── */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-page-enter { animation: page-enter 0.25s ease-out; }
+
+/* ── Backdrop fade ── */
+@keyframes backdrop-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes backdrop-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+.animate-backdrop-in { animation: backdrop-fade-in 0.2s ease-out; }
+.animate-backdrop-out { animation: backdrop-fade-out 0.15s ease-in forwards; }

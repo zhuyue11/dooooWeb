@@ -29,7 +29,8 @@
     "none": "Keine",
     "showMore": "Mehr anzeigen",
     "showLess": "Weniger anzeigen",
-    "yesterday": "Gestern"
+    "yesterday": "Gestern",
+    "deleting": "Wird gelöscht..."
   },
   "navigation": {
     "home": "Startseite",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Hoch",
     "priorityMedium": "Mittel",
     "priorityLow": "Niedrig"
+  },
+  "itemView": {
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "expand": "Ganze Seite öffnen",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "duration": "Dauer",
+    "reminder": "Erinnerung",
+    "location": "Ort",
+    "repeat": "Wiederholen",
+    "createdAt": "Erstellt am {{date}}",
+    "confirmDelete": "Dieses Element löschen?",
+    "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Das Element wird dauerhaft gelöscht.",
+    "backToCalendar": "Zurück zum Kalender"
+  },
+  "itemEditor": {
+    "newTask": "Neue Aufgabe",
+    "editTask": "Aufgabe bearbeiten",
+    "newEvent": "Neues Ereignis",
+    "editEvent": "Ereignis bearbeiten",
+    "addTitle": "Titel hinzufügen",
+    "addDescription": "Beschreibung hinzufügen",
+    "addDate": "Datum hinzufügen",
+    "setRecurrence": "Wiederholung festlegen",
+    "addLocation": "Ort hinzufügen",
+    "addPriority": "Priorität hinzufügen",
+    "addCategory": "Kategorie hinzufügen",
+    "addTags": "Tags hinzufügen",
+    "infoText": "Uhrzeit, Dauer, Erinnerungen und erweiterte Einstellungen werden nach Auswahl eines Datums angezeigt.",
+    "save": "Speichern"
   }
 }

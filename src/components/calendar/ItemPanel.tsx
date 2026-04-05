@@ -17,6 +17,7 @@ interface ItemPanelProps {
   currentUserId?: string;
   onAddClick?: () => void;
   onToggle?: (item: CalendarItem) => void;
+  onItemClick?: (item: CalendarItem) => void;
 }
 
 /** Panel header label — adapts to view mode and selection state */
@@ -44,7 +45,7 @@ function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], v
   }
 }
 
-export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId, onAddClick, onToggle }: ItemPanelProps) {
+export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId, onAddClick, onToggle, onItemClick }: ItemPanelProps) {
   const { t } = useTranslation();
   return (
     <div
@@ -75,7 +76,7 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
           </div>
         ) : (
           items.map((item) => (
-            <ItemRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} onToggle={onToggle} />
+            <ItemRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} onToggle={onToggle} onClick={onItemClick} />
           ))
         )}
       </div>

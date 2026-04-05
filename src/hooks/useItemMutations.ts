@@ -6,6 +6,7 @@ import {
   toggleTask,
   createEvent,
   updateEvent,
+  deleteEvent,
 } from '@/lib/api';
 import type { CreateTaskRequest, UpdateTaskRequest, CreateEventRequest, UpdateEventRequest } from '@/types/api';
 
@@ -63,6 +64,11 @@ export function useItemMutations() {
     onSuccess: invalidate,
   });
 
+  const deleteEventMutation = useMutation({
+    mutationFn: (id: string) => deleteEvent(id),
+    onSuccess: invalidate,
+  });
+
   return {
     createTaskMutation,
     updateTaskMutation,
@@ -70,5 +76,6 @@ export function useItemMutations() {
     toggleTaskMutation,
     createEventMutation,
     updateEventMutation,
+    deleteEventMutation,
   };
 }

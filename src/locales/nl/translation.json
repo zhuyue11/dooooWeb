@@ -29,7 +29,8 @@
     "none": "Geen",
     "showMore": "Meer tonen",
     "showLess": "Minder tonen",
-    "yesterday": "Gisteren"
+    "yesterday": "Gisteren",
+    "deleting": "Verwijderen..."
   },
   "navigation": {
     "home": "Home",
@@ -1406,5 +1407,36 @@
     "priorityHigh": "Hoog",
     "priorityMedium": "Gemiddeld",
     "priorityLow": "Laag"
+  },
+  "itemView": {
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "expand": "Volledige pagina openen",
+    "date": "Datum",
+    "time": "Tijd",
+    "duration": "Duur",
+    "reminder": "Herinnering",
+    "location": "Locatie",
+    "repeat": "Herhalen",
+    "createdAt": "Aangemaakt op {{date}}",
+    "confirmDelete": "Dit item verwijderen?",
+    "deleteDescription": "Deze actie kan niet ongedaan worden gemaakt. Het item wordt permanent verwijderd.",
+    "backToCalendar": "Terug naar agenda"
+  },
+  "itemEditor": {
+    "newTask": "Nieuwe taak",
+    "editTask": "Taak bewerken",
+    "newEvent": "Nieuw evenement",
+    "editEvent": "Evenement bewerken",
+    "addTitle": "Titel toevoegen",
+    "addDescription": "Beschrijving toevoegen",
+    "addDate": "Datum toevoegen",
+    "setRecurrence": "Herhaling instellen",
+    "addLocation": "Locatie toevoegen",
+    "addPriority": "Prioriteit toevoegen",
+    "addCategory": "Categorie toevoegen",
+    "addTags": "Tags toevoegen",
+    "infoText": "Tijd, duur, herinneringen en geavanceerde instellingen verschijnen na het selecteren van een datum.",
+    "save": "Opslaan"
   }
 }

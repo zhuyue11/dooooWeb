@@ -1,7 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
+import type { ItemFormDraft } from '@/pages/items/ItemEditorPage';
 import { toNoonUTC, combineDateAndTime, formatDateDisplay } from '@/utils/dateForm';
 import type { CreateTaskRequest, CreateEventRequest } from '@/types/api';
 import { useTranslation } from 'react-i18next';
@@ -152,7 +154,9 @@ function InlineTimePicker({ value, onChange, onClear }: {
 
 export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { createTaskMutation, createEventMutation } = useItemMutations();
+  const [isClosing, setIsClosing] = useState(false);
 
   // Form state
   const [itemType, setItemType] = useState<ItemType>('TASK');
@@ -234,6 +238,26 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
     setTimeOfDay(null);
   }, []);
 
+  const handleMoreOptions = useCallback(() => {
+    setIsClosing(true);
+    const draft: ItemFormDraft = {
+      itemType,
+      title,
+      selectedDate: selectedDate?.toISOString() ?? null,
+      hasTime,
+      timeValue,
+      timeOfDay,
+      hasStartTime,
+      startTimeValue,
+      hasEndTime,
+      endTimeValue,
+    };
+    setTimeout(() => {
+      onClose();
+      navigate('/items/new', { state: { draft } });
+    }, 150);
+  }, [itemType, title, selectedDate, hasTime, timeValue, timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue, onClose, navigate]);
+
   const handleSubmit = useCallback(async () => {
     if (!isTitleValid) return;
 
@@ -298,9 +322,9 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
   ]);
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${isClosing ? 'animate-backdrop-out' : ''}`} onClick={onClose}>
       <div
-        className="relative w-full max-w-[560px] rounded-xl bg-surface shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
+        className={`relative w-full max-w-[560px] rounded-xl bg-surface shadow-[0_8px_32px_rgba(0,0,0,0.25)] ${isClosing ? 'animate-modal-exit' : 'animate-modal-enter'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header: type toggle + close */}
@@ -474,11 +498,15 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             )}
 
             {/* More options */}
-            <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground">
+            <button
+              type="button"
+              onClick={handleMoreOptions}
+              className="flex w-full items-center gap-3.5 px-4 py-2.5 text-muted-foreground transition-colors hover:bg-muted/50"
+            >
               <Icon name="tune" size={20} />
               <span className="text-sm font-medium">{t('calendarPage.form.moreOptions')}</span>
               <Icon name="expand_more" size={18} />
-            </div>
+            </button>
 
           </div>
         </div>

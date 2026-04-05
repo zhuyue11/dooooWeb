@@ -29,7 +29,8 @@
     "none": "Aucun",
     "showMore": "Voir plus",
     "showLess": "Voir moins",
-    "yesterday": "Hier"
+    "yesterday": "Hier",
+    "deleting": "Suppression..."
   },
   "navigation": {
     "home": "Accueil",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Haute",
     "priorityMedium": "Moyenne",
     "priorityLow": "Basse"
+  },
+  "itemView": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "expand": "Ouvrir en pleine page",
+    "date": "Date",
+    "time": "Heure",
+    "duration": "Durée",
+    "reminder": "Rappel",
+    "location": "Lieu",
+    "repeat": "Répéter",
+    "createdAt": "Créé le {{date}}",
+    "confirmDelete": "Supprimer cet élément ?",
+    "deleteDescription": "Cette action est irréversible. L'élément sera définitivement supprimé.",
+    "backToCalendar": "Retour au calendrier"
+  },
+  "itemEditor": {
+    "newTask": "Nouvelle tâche",
+    "editTask": "Modifier la tâche",
+    "newEvent": "Nouvel événement",
+    "editEvent": "Modifier l'événement",
+    "addTitle": "Ajouter un titre",
+    "addDescription": "Ajouter une description",
+    "addDate": "Ajouter une date",
+    "setRecurrence": "Définir la récurrence",
+    "addLocation": "Ajouter un lieu",
+    "addPriority": "Ajouter une priorité",
+    "addCategory": "Ajouter une catégorie",
+    "addTags": "Ajouter des tags",
+    "infoText": "L'heure, la durée, les rappels et les paramètres avancés apparaîtront après la sélection d'une date.",
+    "save": "Enregistrer"
   }
 }

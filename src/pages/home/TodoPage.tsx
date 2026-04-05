@@ -7,6 +7,7 @@ import { useCategories } from '@/hooks/useCategories';
 import { Icon } from '@/components/ui/Icon';
 import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
+import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { taskToCalendarItem } from '@/hooks/calendarHelpers';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Task } from '@/types/api';
@@ -58,6 +59,7 @@ export function TodoPage() {
   const [filterPriority, setFilterPriority] = useState<string>('');
   const [showFilter, setShowFilter] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
   const filterRef = useRef<HTMLDivElement>(null);
 
   // Close filter dropdown on outside click
@@ -159,6 +161,8 @@ export function TodoPage() {
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
   }, [queryClient]);
 
+  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => {
@@ -305,6 +309,7 @@ export function TodoPage() {
                 categories={categories}
                 currentUserId={user?.id}
                 onToggle={handleToggle}
+                onClick={handleItemClick}
               />
             </div>
           ))
@@ -316,6 +321,16 @@ export function TodoPage() {
         <ItemFormModal
           onClose={handleModalClose}
           onSaved={handleSaved}
+        />
+      )}
+
+      {/* Item side panel */}
+      {sidePanelItem && (
+        <ItemSidePanel
+          item={sidePanelItem}
+          currentUserId={user?.id}
+          onClose={handleSidePanelClose}
+          onToggle={handleToggle}
         />
       )}
     </div>

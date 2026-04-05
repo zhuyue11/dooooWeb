@@ -29,7 +29,8 @@
     "none": "ไม่มี",
     "showMore": "แสดงเพิ่มเติม",
     "showLess": "แสดงน้อยลง",
-    "yesterday": "เมื่อวาน"
+    "yesterday": "เมื่อวาน",
+    "deleting": "กำลังลบ..."
   },
   "navigation": {
     "home": "หน้าแรก",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "สูง",
     "priorityMedium": "ปานกลาง",
     "priorityLow": "ต่ำ"
+  },
+  "itemView": {
+    "edit": "แก้ไข",
+    "delete": "ลบ",
+    "expand": "เปิดหน้าเต็ม",
+    "date": "วันที่",
+    "time": "เวลา",
+    "duration": "ระยะเวลา",
+    "reminder": "การแจ้งเตือน",
+    "location": "สถานที่",
+    "repeat": "ทำซ้ำ",
+    "createdAt": "สร้างเมื่อ {{date}}",
+    "confirmDelete": "ลบรายการนี้หรือไม่?",
+    "deleteDescription": "การดำเนินการนี้ไม่สามารถยกเลิกได้ รายการจะถูกลบอย่างถาวร",
+    "backToCalendar": "กลับไปที่ปฏิทิน"
+  },
+  "itemEditor": {
+    "newTask": "งานใหม่",
+    "editTask": "แก้ไขงาน",
+    "newEvent": "กิจกรรมใหม่",
+    "editEvent": "แก้ไขกิจกรรม",
+    "addTitle": "เพิ่มชื่อ",
+    "addDescription": "เพิ่มคำอธิบาย",
+    "addDate": "เพิ่มวันที่",
+    "setRecurrence": "ตั้งค่าการทำซ้ำ",
+    "addLocation": "เพิ่มสถานที่",
+    "addPriority": "เพิ่มลำดับความสำคัญ",
+    "addCategory": "เพิ่มหมวดหมู่",
+    "addTags": "เพิ่มแท็ก",
+    "infoText": "เวลา ระยะเวลา การแจ้งเตือน และการตั้งค่าขั้นสูงจะปรากฏหลังจากเลือกวันที่",
+    "save": "บันทึก"
   }
 }

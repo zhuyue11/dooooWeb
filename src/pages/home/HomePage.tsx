@@ -5,8 +5,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { getTasks, getAssignedGroupTasks, getEvents, getAttendingEvents, toggleTask } from '@/lib/api';
 import { useGroups } from '@/hooks/useGroups';
+import { useCategories } from '@/hooks/useCategories';
 import type { Event } from '@/types/api';
-import { startOfDay, toISODate, startOfWeek, endOfWeek, formatTime } from '@/utils/date';
+import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import { taskToCalendarItem, eventToCalendarItem } from '@/hooks/calendarHelpers';
+import { ItemRow } from '@/components/calendar/ItemRow';
+import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
+import { startOfDay, toISODate, startOfWeek, endOfWeek } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 
 function getGreeting(t: (key: string) => string): string {
@@ -25,118 +30,7 @@ function formatDate(): string {
   });
 }
 
-import { CATEGORY_NAMES } from '@/utils/category';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
-
-// ── Dashboard row (shared across Today, Overdue, To-do, Upcoming panels) ──
-
-type DashboardItem = {
-  id: string; title: string; date?: string | null; hasTime?: boolean;
-  isCompleted: boolean; categoryId?: string; priority?: string;
-  timeOfDay?: string | null; itemType: 'TASK' | 'EVENT';
-  groupId?: string; isForAllMembers?: boolean; groupName?: string;
-  trackCompletion?: boolean;
-  /** Current user's participation status for group activities */
-  participantInstanceStatus?: string;
-  assigneeId?: string; userId?: string;
-};
-
-function DashboardRow({ item, now, onToggle, showDate, currentUserId, t }: {
-  item: DashboardItem;
-  now: Date;
-  onToggle?: (item: DashboardItem) => void;
-  showDate?: boolean;
-  currentUserId?: string;
-  t: (key: string, options?: Record<string, unknown>) => string;
-}) {
-  const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
-
-  // Matching dooooApp's shouldShowToggle logic
-  const shouldShowToggle = (() => {
-    if (item.itemType === 'EVENT') return false;
-    if (!item.groupId) return true; // Personal tasks always show toggle
-    if (item.isForAllMembers) {
-      if (item.trackCompletion === false) return false;
-      // Only CONFIRMED or COMPLETED participants see the toggle
-      return item.participantInstanceStatus === 'CONFIRMED' ||
-             item.participantInstanceStatus === 'COMPLETED';
-    }
-    // Regular group task: assignee or creator sees toggle
-    if (item.assigneeId) return currentUserId === item.assigneeId;
-    return currentUserId === item.userId;
-  })();
-  const metaParts: string[] = [];
-  if (showDate && item.date) {
-    metaParts.push(formatRelativeDate(item.date, now, t));
-  }
-  if (item.hasTime && item.date) {
-    metaParts.push(formatTime(item.date));
-  } else if (item.timeOfDay) {
-    metaParts.push(item.timeOfDay.charAt(0) + item.timeOfDay.slice(1).toLowerCase());
-  }
-  if (item.categoryId && CATEGORY_NAMES[item.categoryId]) {
-    metaParts.push(CATEGORY_NAMES[item.categoryId]);
-  }
-
-  return (
-    <div className={`flex items-center gap-3 rounded-lg px-3 py-2.5 ${item.isCompleted ? 'bg-muted' : ''}`}>
-      {/* Toggle / icon */}
-      {item.itemType === 'EVENT' ? (
-        <Icon name="calendar_today" size={18} color="#5b21b6" className="flex-shrink-0" />
-      ) : !shouldShowToggle ? (
-        item.isForAllMembers && item.userId === currentUserId ? (
-          <Icon name="star" size={16} color="#f59e0b" className="flex-shrink-0" />
-        ) : (
-          <div className="h-[18px] w-[18px] flex-shrink-0" />
-        )
-      ) : item.isCompleted ? (
-        <button
-          onClick={() => onToggle?.(item)}
-          className="flex h-[18px] w-[18px] flex-shrink-0 items-center justify-center rounded-full bg-primary"
-        >
-          <Icon name="check" size={12} color="var(--color-primary-foreground)" weight={700} />
-        </button>
-      ) : (
-        <button
-          onClick={() => onToggle?.(item)}
-          className="h-[18px] w-[18px] flex-shrink-0 rounded-full border-2 border-primary"
-        />
-      )}
-      {/* Content */}
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className={`text-sm font-medium ${item.isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
-          {item.title}
-        </span>
-        {metaParts.length > 0 && (
-          <span className="text-xs text-muted-foreground">{metaParts.join(' · ')}</span>
-        )}
-      </div>
-      {/* Group name badge */}
-      {item.groupId && (
-        <span className="flex flex-shrink-0 items-center gap-1 rounded-full border border-[#3b82f6] px-2 py-0.5 text-[10px] font-medium text-[#3b82f6]">
-          <Icon name="group" size={10} />
-          {item.groupName || t('dashboard.badges.group')}
-        </span>
-      )}
-      {/* Activity badge (additional tag for isForAllMembers group activities) */}
-      {item.isForAllMembers && (
-        <span className="flex-shrink-0 rounded-full bg-[#f0fdf4] px-2 py-0.5 text-[10px] font-medium text-[#15803d]">
-          {t('dashboard.badges.activity')}
-        </span>
-      )}
-      {isHighPriority && <Icon name="flag" size={16} color="var(--color-destructive)" className="flex-shrink-0" />}
-    </div>
-  );
-}
-
-function formatRelativeDate(dateStr: string, now: Date, t: (key: string) => string): string {
-  const d = new Date(dateStr);
-  const today = startOfDay(now);
-  const tomorrow = new Date(today.getTime() + 86400000);
-  if (d >= today && d < tomorrow) return t('dashboard.dates.today');
-  if (d >= tomorrow && d < new Date(tomorrow.getTime() + 86400000)) return t('dashboard.dates.tomorrow');
-  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-}
 
 // ── Component ─────────────────────────────────────────────────────────
 
@@ -157,10 +51,10 @@ export function HomePage() {
   }, [now]);
   const weekStartStr = useMemo(() => toISODate(startOfWeek(now)), [now]);
   const weekEndStr = useMemo(() => toISODate(endOfWeek(now)), [now]);
-  // Events use datetime comparison — extend end by 1 day to cover full last day
-  const weekEndNextStr = useMemo(() => {
-    const d = endOfWeek(now);
-    d.setDate(d.getDate() + 1);
+  // Events use datetime comparison — extend range to capture upcoming events beyond current week
+  const eventEndStr = useMemo(() => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + 14); // 2 weeks ahead for upcoming events
     return toISODate(d);
   }, [now]);
   // ── Personal tasks ──
@@ -197,12 +91,12 @@ export function HomePage() {
 
   // ── Events (owned + attending) ──
   const { data: ownedEvents = [], isLoading: loadingEvents } = useQuery({
-    queryKey: ['dashboard-events', todayStr, weekEndNextStr],
-    queryFn: () => getEvents({ from: todayStr, to: weekEndNextStr }),
+    queryKey: ['dashboard-events', todayStr, eventEndStr],
+    queryFn: () => getEvents({ from: todayStr, to: eventEndStr }),
   });
   const { data: attendingEvents = [], isLoading: loadingAttending } = useQuery({
-    queryKey: ['dashboard-attending-events', todayStr, weekEndNextStr],
-    queryFn: () => getAttendingEvents({ from: todayStr, to: weekEndNextStr }),
+    queryKey: ['dashboard-attending-events', todayStr, eventEndStr],
+    queryFn: () => getAttendingEvents({ from: todayStr, to: eventEndStr }),
   });
 
   const isLoading = loadingToday || loadingWeek || loadingPast || loadingTodo || loadingUpcoming || loadingGroup || loadingEvents || loadingAttending;
@@ -343,29 +237,26 @@ export function HomePage() {
 
   // ── PANEL DATA ──
 
-  // Helper: enrich item with group name + current user's participation status
-  const enrichItem = (item: DashboardItem, task?: { participantInstances?: Array<{ participantUserId: string; status: string }> }): DashboardItem => {
-    let enriched = item;
-    if (item.groupId) {
-      enriched = { ...enriched, groupName: groupNameMap[item.groupId] };
-    }
-    if (task?.participantInstances && user) {
+  // Enrich CalendarItem with group name + participant status (mirrors useWeekCalendar's enrich)
+  const enrichCalendarItem = useCallback((ci: CalendarItem, task: { groupId?: string | null; participantInstances?: Array<{ participantUserId: string; status: string }> }): CalendarItem => {
+    if (task.groupId && groupNameMap[task.groupId]) ci.groupName = groupNameMap[task.groupId];
+    if (task.participantInstances && user) {
       const pi = task.participantInstances.find((p) => p.participantUserId === user.id);
-      enriched = { ...enriched, participantInstanceStatus: pi?.status };
+      if (pi) ci.participantInstanceStatus = pi.status;
     }
-    return enriched;
-  };
+    return ci;
+  }, [groupNameMap, user]);
 
-  const todayItems = useMemo((): DashboardItem[] => {
-    const items: DashboardItem[] = [];
+  const todayItems = useMemo((): CalendarItem[] => {
+    const items: CalendarItem[] = [];
     for (const t of todayTasks) {
-      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
     }
     for (const t of groupTasksToday) {
-      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
     }
     for (const e of eventsToday) {
-      items.push({ id: `event-${e.id}`, title: e.title, date: e.date, hasTime: e.hasTime, isCompleted: false, priority: e.priority ?? undefined, itemType: 'EVENT', groupId: e.groupId ?? undefined, groupName: e.groupId ? groupNameMap[e.groupId] : undefined });
+      items.push(enrichCalendarItem(eventToCalendarItem(e), e));
     }
     return items.sort((a, b) => {
       if (a.hasTime && !b.hasTime) return -1;
@@ -376,13 +267,13 @@ export function HomePage() {
   }, [todayTasks, groupTasksToday, eventsToday, groupNameMap]);
 
   // Overdue panel: past incomplete tasks (personal + group)
-  const overdueItems = useMemo((): DashboardItem[] => {
+  const overdueItems = useMemo((): CalendarItem[] => {
     return allOverdue
-      .map((t) => enrichItem({ ...t, itemType: 'TASK' as const }, t))
+      .map((t) => enrichCalendarItem(taskToCalendarItem(t), t))
       .sort((a, b) => {
         const da = a.date ? new Date(a.date).getTime() : 0;
         const db = b.date ? new Date(b.date).getTime() : 0;
-        return db - da; // most recent overdue first
+        return db - da;
       });
   }, [allOverdue, groupNameMap]);
 
@@ -393,21 +284,21 @@ export function HomePage() {
     return toISODate(d);
   }, [now]);
 
-  const upcomingTasks = useMemo((): DashboardItem[] => {
-    const items: DashboardItem[] = [];
+  const upcomingTasks = useMemo((): CalendarItem[] => {
+    const items: CalendarItem[] = [];
     for (const t of upcomingPersonal) {
       if (!isScheduleItem(t)) continue;
       if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
-      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
     }
     for (const t of groupTasksUpcoming) {
       if (!isScheduleItem(t)) continue;
       if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
-      items.push(enrichItem({ ...t, itemType: 'TASK' }, t));
+      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
     }
     for (const e of allEvents) {
       if (!e.date || toISODate(new Date(e.date)) < tomorrowStr) continue;
-      items.push({ id: `event-${e.id}`, title: e.title, date: e.date, hasTime: e.hasTime, isCompleted: false, priority: e.priority ?? undefined, itemType: 'EVENT', groupId: e.groupId ?? undefined, groupName: e.groupId ? groupNameMap[e.groupId] : undefined });
+      items.push(enrichCalendarItem(eventToCalendarItem(e), e));
     }
     return items
       .sort((a, b) => {
@@ -418,8 +309,10 @@ export function HomePage() {
       .slice(0, 5);
   }, [upcomingPersonal, groupTasksUpcoming, allEvents, tomorrowStr]);
 
-  // To-do panel: no-date + DUE tasks
-  const todoListItems = todoItems;
+  // To-do panel: no-date + DUE tasks (converted to CalendarItem[])
+  const todoListItems = useMemo((): CalendarItem[] => {
+    return todoItems.map((t) => enrichCalendarItem(taskToCalendarItem(t), t));
+  }, [todoItems, enrichCalendarItem]);
 
   // Toggle handler
   const queryClient = useQueryClient();
@@ -433,7 +326,7 @@ export function HomePage() {
     queryClient.invalidateQueries({ queryKey: ['dashboard-attending-events'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-past'] });
   }, [queryClient]);
-  const handleToggle = async (item: DashboardItem) => {
+  const handleToggle = async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
     await toggleTask(item.id);
     invalidateDashboard();
@@ -442,6 +335,12 @@ export function HomePage() {
     setShowCreateModal(false);
     invalidateDashboard();
   }, [invalidateDashboard]);
+
+  // Side panel state
+  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const { data: categories } = useCategories();
 
   // ── Render ──
 
@@ -505,7 +404,7 @@ export function HomePage() {
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.nothingForToday')}</div>
             ) : (
               todayItems.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} currentUserId={user?.id} t={t} />
+                <ItemRow key={item.id} item={item} categories={categories} currentUserId={user?.id} onToggle={handleToggle} onClick={handleItemClick} />
               ))
             )}
           </div>
@@ -519,7 +418,7 @@ export function HomePage() {
             </div>
             <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
               {overdueItems.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} onToggle={handleToggle} showDate currentUserId={user?.id} t={t} />
+                <ItemRow key={item.id} item={item} categories={categories} showDate currentUserId={user?.id} onToggle={handleToggle} onClick={handleItemClick} />
               ))}
             </div>
           </div>
@@ -540,7 +439,7 @@ export function HomePage() {
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noTodoItems')}</div>
             ) : (
               todoListItems.map((item) => (
-                <DashboardRow key={item.id} item={{ ...item, itemType: 'TASK' }} now={now} onToggle={handleToggle} currentUserId={user?.id} t={t} />
+                <ItemRow key={item.id} item={item} categories={categories} currentUserId={user?.id} onToggle={handleToggle} onClick={handleItemClick} />
               ))
             )}
           </div>
@@ -558,7 +457,7 @@ export function HomePage() {
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noUpcomingTasks')}</div>
             ) : (
               upcomingTasks.map((item) => (
-                <DashboardRow key={item.id} item={item} now={now} showDate currentUserId={user?.id} t={t} />
+                <ItemRow key={item.id} item={item} categories={categories} showDate currentUserId={user?.id} onClick={handleItemClick} />
               ))
             )}
           </div>
@@ -569,6 +468,15 @@ export function HomePage() {
         <ItemFormModal
           onClose={handleModalClose}
           onSaved={handleSaved}
+        />
+      )}
+
+      {sidePanelItem && (
+        <ItemSidePanel
+          item={sidePanelItem}
+          currentUserId={user?.id}
+          onClose={handleSidePanelClose}
+          onToggle={handleToggle}
         />
       )}
     </div>

@@ -29,7 +29,8 @@
     "none": "Żadne",
     "showMore": "Pokaż więcej",
     "showLess": "Pokaż mniej",
-    "yesterday": "Wczoraj"
+    "yesterday": "Wczoraj",
+    "deleting": "Usuwanie..."
   },
   "navigation": {
     "home": "Start",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Wysoki",
     "priorityMedium": "Średni",
     "priorityLow": "Niski"
+  },
+  "itemView": {
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "expand": "Otwórz pełną stronę",
+    "date": "Data",
+    "time": "Czas",
+    "duration": "Czas trwania",
+    "reminder": "Przypomnienie",
+    "location": "Lokalizacja",
+    "repeat": "Powtórz",
+    "createdAt": "Utworzono {{date}}",
+    "confirmDelete": "Usunąć ten element?",
+    "deleteDescription": "Tej czynności nie można cofnąć. Element zostanie trwale usunięty.",
+    "backToCalendar": "Powrót do kalendarza"
+  },
+  "itemEditor": {
+    "newTask": "Nowe zadanie",
+    "editTask": "Edytuj zadanie",
+    "newEvent": "Nowe wydarzenie",
+    "editEvent": "Edytuj wydarzenie",
+    "addTitle": "Dodaj tytuł",
+    "addDescription": "Dodaj opis",
+    "addDate": "Dodaj datę",
+    "setRecurrence": "Ustaw powtarzanie",
+    "addLocation": "Dodaj lokalizację",
+    "addPriority": "Dodaj priorytet",
+    "addCategory": "Dodaj kategorię",
+    "addTags": "Dodaj tagi",
+    "infoText": "Czas, czas trwania, przypomnienia i zaawansowane ustawienia pojawią się po wybraniu daty.",
+    "save": "Zapisz"
   }
 }

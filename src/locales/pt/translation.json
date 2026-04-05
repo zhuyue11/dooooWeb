@@ -29,7 +29,8 @@
     "none": "Nenhum",
     "showMore": "Ver mais",
     "showLess": "Ver menos",
-    "yesterday": "Ontem"
+    "yesterday": "Ontem",
+    "deleting": "Excluindo..."
   },
   "navigation": {
     "home": "Início",
@@ -1409,5 +1410,36 @@
     "priorityHigh": "Alta",
     "priorityMedium": "Média",
     "priorityLow": "Baixa"
+  },
+  "itemView": {
+    "edit": "Editar",
+    "delete": "Excluir",
+    "expand": "Abrir página inteira",
+    "date": "Data",
+    "time": "Hora",
+    "duration": "Duração",
+    "reminder": "Lembrete",
+    "location": "Local",
+    "repeat": "Repetir",
+    "createdAt": "Criado em {{date}}",
+    "confirmDelete": "Excluir este item?",
+    "deleteDescription": "Esta ação não pode ser desfeita. O item será excluído permanentemente.",
+    "backToCalendar": "Voltar ao calendário"
+  },
+  "itemEditor": {
+    "newTask": "Nova tarefa",
+    "editTask": "Editar tarefa",
+    "newEvent": "Novo evento",
+    "editEvent": "Editar evento",
+    "addTitle": "Adicionar título",
+    "addDescription": "Adicionar descrição",
+    "addDate": "Adicionar data",
+    "setRecurrence": "Definir recorrência",
+    "addLocation": "Adicionar local",
+    "addPriority": "Adicionar prioridade",
+    "addCategory": "Adicionar categoria",
+    "addTags": "Adicionar tags",
+    "infoText": "Hora, duração, lembretes e configurações avançadas aparecerão após selecionar uma data.",
+    "save": "Salvar"
   }
 }

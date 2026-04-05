@@ -152,30 +152,23 @@ test.describe('Dashboard', () => {
     await waitForDashboardLoad(page);
 
     // "Standup rotation" (gt05) — web user is organizer but NOT a participant
-    // Find it anywhere on the dashboard (could be Today or Upcoming depending on date)
-    const row = page.getByText('Standup rotation', { exact: true }).first();
-    await row.scrollIntoViewIfNeeded();
+    // ItemRow renders with data-testid="task-row-{id}"
+    const row = page.locator('[data-testid^="task-row-"]').filter({ hasText: 'Standup rotation' }).first();
     await expect(row).toBeAttached();
 
     // The row should NOT have a toggle button (circle checkbox)
-    // Organizer-only items show a crown icon, not a button
-    const rowContainer = row.locator('..');  // parent flex-col
-    const grandParent = rowContainer.locator('..'); // parent flex-row with toggle
-    await expect(grandParent.locator('button').first()).not.toBeAttached();
+    await expect(row.locator('button.rounded-full')).not.toBeAttached();
   });
 
   test('participant group activity has toggle checkbox', async ({ page }) => {
     await waitForDashboardLoad(page);
 
     // "Code review session" (gt02) — web user is CONFIRMED participant
-    const row = page.getByText('Code review session', { exact: true }).first();
-    await row.scrollIntoViewIfNeeded();
+    const row = page.locator('[data-testid^="task-row-"]').filter({ hasText: 'Code review session' }).first();
     await expect(row).toBeAttached();
 
-    // The row SHOULD have a toggle button
-    const rowContainer = row.locator('..');
-    const grandParent = rowContainer.locator('..');
-    await expect(grandParent.locator('button').first()).toBeAttached();
+    // The row SHOULD have a toggle button (circle checkbox)
+    await expect(row.locator('button.rounded-full')).toBeAttached();
   });
 
   test('"View all" navigates to todo page', async ({ page }) => {

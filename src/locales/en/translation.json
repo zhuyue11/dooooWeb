@@ -29,7 +29,8 @@
     "none": "None",
     "showMore": "Show more",
     "showLess": "Show less",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "deleting": "Deleting..."
   },
   "navigation": {
     "home": "Home",
@@ -1482,5 +1483,36 @@
     "priorityHigh": "High",
     "priorityMedium": "Medium",
     "priorityLow": "Low"
+  },
+  "itemView": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "expand": "Open full page",
+    "date": "Date",
+    "time": "Time",
+    "duration": "Duration",
+    "reminder": "Reminder",
+    "location": "Location",
+    "repeat": "Repeat",
+    "createdAt": "Created {{date}}",
+    "confirmDelete": "Delete this item?",
+    "deleteDescription": "This action cannot be undone. The item will be permanently deleted.",
+    "backToCalendar": "Back to Calendar"
+  },
+  "itemEditor": {
+    "newTask": "New Task",
+    "editTask": "Edit Task",
+    "newEvent": "New Event",
+    "editEvent": "Edit Event",
+    "addTitle": "Add title",
+    "addDescription": "Add description",
+    "addDate": "Add date",
+    "setRecurrence": "Set recurrence",
+    "addLocation": "Add location",
+    "addPriority": "Add priority",
+    "addCategory": "Add category",
+    "addTags": "Add tags",
+    "infoText": "Time, duration, reminders, and advanced settings will appear after selecting a date.",
+    "save": "Save"
   }
 }

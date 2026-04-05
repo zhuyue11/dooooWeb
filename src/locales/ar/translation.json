@@ -29,7 +29,8 @@
     "none": "لا شيء",
     "showMore": "عرض المزيد",
     "showLess": "عرض أقل",
-    "yesterday": "أمس"
+    "yesterday": "أمس",
+    "deleting": "جارٍ الحذف..."
   },
   "navigation": {
     "home": "الرئيسية",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "عالي",
     "priorityMedium": "متوسط",
     "priorityLow": "منخفض"
+  },
+  "itemView": {
+    "edit": "تعديل",
+    "delete": "حذف",
+    "expand": "فتح الصفحة الكاملة",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "duration": "المدة",
+    "reminder": "تذكير",
+    "location": "الموقع",
+    "repeat": "تكرار",
+    "createdAt": "تم الإنشاء {{date}}",
+    "confirmDelete": "حذف هذا العنصر؟",
+    "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف العنصر نهائيًا.",
+    "backToCalendar": "العودة إلى التقويم"
+  },
+  "itemEditor": {
+    "newTask": "مهمة جديدة",
+    "editTask": "تعديل المهمة",
+    "newEvent": "حدث جديد",
+    "editEvent": "تعديل الحدث",
+    "addTitle": "إضافة عنوان",
+    "addDescription": "إضافة وصف",
+    "addDate": "إضافة تاريخ",
+    "setRecurrence": "تعيين التكرار",
+    "addLocation": "إضافة موقع",
+    "addPriority": "إضافة أولوية",
+    "addCategory": "إضافة فئة",
+    "addTags": "إضافة وسوم",
+    "infoText": "ستظهر الوقت والمدة والتذكيرات والإعدادات المتقدمة بعد اختيار تاريخ.",
+    "save": "حفظ"
   }
 }

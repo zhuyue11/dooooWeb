@@ -25,6 +25,10 @@ import { TargetDetailPage } from '@/pages/targets/TargetDetailPage';
 import { PlanDetailPage } from '@/pages/targets/PlanDetailPage';
 import { AIChatPage } from '@/pages/targets/AIChatPage';
 
+// Items (view/edit)
+import { ItemViewPage } from '@/pages/items/ItemViewPage';
+import { ItemEditorPage } from '@/pages/items/ItemEditorPage';
+
 // Other
 import { StatisticsPage } from '@/pages/statistics/StatisticsPage';
 import { NotificationPage } from '@/pages/notifications/NotificationPage';
@@ -65,6 +69,11 @@ export const router = createBrowserRouter([
           { path: '/calendar', element: <CalendarPage /> },
           { path: '/todo', element: <TodoPage /> },
           { path: '/search', element: <SearchPage /> },
+
+          // Items (view/edit)
+          { path: '/items/new', element: <ItemEditorPage /> },
+          { path: '/items/:id/edit', element: <ItemEditorPage /> },
+          { path: '/items/:id', element: <ItemViewPage /> },
 
           // Groups
           { path: '/groups', element: <GroupListPage /> },

@@ -29,7 +29,8 @@
     "none": "Ninguno",
     "showMore": "Ver más",
     "showLess": "Ver menos",
-    "yesterday": "Ayer"
+    "yesterday": "Ayer",
+    "deleting": "Eliminando..."
   },
   "navigation": {
     "home": "Inicio",
@@ -1403,5 +1404,36 @@
     "priorityHigh": "Alta",
     "priorityMedium": "Media",
     "priorityLow": "Baja"
+  },
+  "itemView": {
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "expand": "Abrir página completa",
+    "date": "Fecha",
+    "time": "Hora",
+    "duration": "Duración",
+    "reminder": "Recordatorio",
+    "location": "Ubicación",
+    "repeat": "Repetir",
+    "createdAt": "Creado el {{date}}",
+    "confirmDelete": "¿Eliminar este elemento?",
+    "deleteDescription": "Esta acción no se puede deshacer. El elemento se eliminará permanentemente.",
+    "backToCalendar": "Volver al calendario"
+  },
+  "itemEditor": {
+    "newTask": "Nueva tarea",
+    "editTask": "Editar tarea",
+    "newEvent": "Nuevo evento",
+    "editEvent": "Editar evento",
+    "addTitle": "Agregar título",
+    "addDescription": "Agregar descripción",
+    "addDate": "Agregar fecha",
+    "setRecurrence": "Establecer recurrencia",
+    "addLocation": "Agregar ubicación",
+    "addPriority": "Agregar prioridad",
+    "addCategory": "Agregar categoría",
+    "addTags": "Agregar etiquetas",
+    "infoText": "La hora, duración, recordatorios y configuraciones avanzadas aparecerán después de seleccionar una fecha.",
+    "save": "Guardar"
   }
 }
