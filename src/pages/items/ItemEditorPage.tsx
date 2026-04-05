@@ -232,6 +232,13 @@ export function ItemEditorPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
 
+  // Task advanced options (More Options)
+  const [dateType, setDateType] = useState<'SCHEDULED' | 'DUE'>('SCHEDULED');
+  const [showInTodoWhenOverdue, setShowInTodoWhenOverdue] = useState(true);
+  const [setToDoneAutomatically, setSetToDoneAutomatically] = useState(false);
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [activeInfoPanel, setActiveInfoPanel] = useState<'dateType' | 'overdue' | 'autoDone' | null>(null);
+
   // UI state
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const [editingLocation, setEditingLocation] = useState(false);
@@ -281,6 +288,9 @@ export function ItemEditorPage() {
       setLocationValue(task.location || '');
       setSelectedRepeat(task.repeat || null);
       setTags(task.tags || []);
+      if (task.dateType) setDateType(task.dateType);
+      if (task.showInTodoWhenOverdue != null) setShowInTodoWhenOverdue(task.showInTodoWhenOverdue);
+      if (task.setToDoneAutomatically != null) setSetToDoneAutomatically(task.setToDoneAutomatically);
       setDuration(task.duration ?? null);
       setFirstReminder(task.firstReminderMinutes != null ? task.firstReminderMinutes : undefined);
       setSecondReminder(task.secondReminderMinutes != null ? task.secondReminderMinutes : undefined);
@@ -425,6 +435,9 @@ export function ItemEditorPage() {
           hasTime,
           timeOfDay: !hasTime ? timeOfDay ?? undefined : undefined,
           timeZone: hasTime ? tz : undefined,
+          dateType,
+          showInTodoWhenOverdue,
+          setToDoneAutomatically,
           priority: priority || undefined,
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
@@ -443,9 +456,9 @@ export function ItemEditorPage() {
           timeOfDay: !hasTime ? timeOfDay ?? undefined : undefined,
           timeMode: 'FIXED',
           timeZone: hasTime ? tz : undefined,
-          dateType: 'SCHEDULED',
-          showInTodoWhenOverdue: true,
-          setToDoneAutomatically: false,
+          dateType,
+          showInTodoWhenOverdue,
+          setToDoneAutomatically,
           priority: priority || undefined,
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
@@ -498,6 +511,7 @@ export function ItemEditorPage() {
     isTitleValid, title, description, isTask, selectedDate, hasTime, timeValue,
     timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue,
     priority, categoryId, locationValue, selectedRepeat, duration, firstReminder, secondReminder,
+    dateType, showInTodoWhenOverdue, setToDoneAutomatically,
     isEditMode, id, createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
     navigate, selectedTimeZone, eventEndTimeZone,
   ]);
@@ -714,8 +728,8 @@ export function ItemEditorPage() {
             </>
           )}
 
-          {/* Timezone (when exact time is set) */}
-          {selectedDate && ((isTask && hasTime) || (!isTask && hasStartTime)) && (
+          {/* Timezone — inline for events only (task timezone moved to More Options) */}
+          {selectedDate && !isTask && hasStartTime && (
             <>
               <div className="relative px-4 py-2.5">
                 <button
@@ -725,7 +739,7 @@ export function ItemEditorPage() {
                 >
                   <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
                   <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
-                    {!isTask && eventEndTimeZone ? `${t('itemEditor.startTimeZone')}: ` : ''}
+                    {eventEndTimeZone ? `${t('itemEditor.startTimeZone')}: ` : ''}
                     {(() => {
                       try {
                         const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
@@ -753,7 +767,7 @@ export function ItemEditorPage() {
               </div>
 
               {/* End timezone (events with end time) */}
-              {!isTask && hasEndTime && (
+              {hasEndTime && (
                 <div className="relative px-4 py-2.5">
                   {eventEndTimeZone ? (
                     <button
@@ -982,6 +996,158 @@ export function ItemEditorPage() {
               active={!!locationValue}
               onClick={() => setEditingLocation(true)}
             />
+          )}
+
+          {/* ── More Options (tasks only, when date selected & not in past) ── */}
+          {isTask && selectedDate && !isTaskTimeInPast && (
+            <>
+              {/* Toggle button */}
+              <button
+                type="button"
+                onClick={() => setShowMoreOptions((v) => !v)}
+                className="flex w-full items-center gap-3.5 px-4 py-2.5 text-muted-foreground transition-colors hover:bg-muted/50"
+              >
+                <Icon name={showMoreOptions ? 'expand_less' : 'expand_more'} size={20} />
+                <span className="text-sm font-medium">
+                  {showMoreOptions ? t('tasks.panel.showLess') : t('tasks.panel.showMore')}
+                </span>
+              </button>
+
+              {showMoreOptions && (
+                <>
+                  {/* Timezone (only when exact time is set) */}
+                  {hasTime && (
+                    <div className="relative px-4 py-2.5">
+                      <button
+                        type="button"
+                        onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
+                        className="flex w-full items-center gap-3.5 text-left"
+                      >
+                        <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                        <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                          {(() => {
+                            try {
+                              const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                              return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
+                            } catch { return selectedTimeZone; }
+                          })()}
+                        </span>
+                        {selectedTimeZone !== browserTimeZone && (
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); }}
+                            className="ml-auto text-muted-foreground hover:text-foreground"
+                          >
+                            <Icon name="close" size={16} />
+                          </button>
+                        )}
+                      </button>
+                      {showTimeZonePicker && timeZonePickerTarget === 'start' && (
+                        <TimeZonePicker
+                          selectedTimeZone={selectedTimeZone}
+                          onSelect={setSelectedTimeZone}
+                          onClose={() => setShowTimeZonePicker(false)}
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  {/* Date type toggle (Scheduled vs Due) — only when no repeat */}
+                  {!selectedRepeat && (
+                    <div className="relative px-4 py-2.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Icon name="event_available" size={20} color="var(--color-primary)" />
+                          <span className="text-sm text-foreground">
+                            {t(hasTime ? 'tasks.input.dueAtThisTime' : 'tasks.input.dueAtThisDate')}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setActiveInfoPanel((v) => v === 'dateType' ? null : 'dateType')}
+                            className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                          >
+                            <Icon name="info" size={14} />
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setDateType((v) => v === 'SCHEDULED' ? 'DUE' : 'SCHEDULED')}
+                          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${dateType === 'DUE' ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                        >
+                          <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${dateType === 'DUE' ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                        </button>
+                      </div>
+                      {activeInfoPanel === 'dateType' && (
+                        <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
+                          <p className="text-xs font-semibold text-foreground">{t('tasks.input.dueToggleInfoTitle')}</p>
+                          <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.input.dueToggleInfoContent')}</p>
+                        </PopoverWrapper>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Show in todo when overdue */}
+                  <div className="relative px-4 py-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Icon name="visibility" size={20} color="var(--color-primary)" />
+                        <span className="text-sm text-foreground">{t('tasks.panel.showInTodoWhenOverdue')}</span>
+                        <button
+                          type="button"
+                          onClick={() => setActiveInfoPanel((v) => v === 'overdue' ? null : 'overdue')}
+                          className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                        >
+                          <Icon name="info" size={14} />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowInTodoWhenOverdue((v) => !v)}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${showInTodoWhenOverdue ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                      >
+                        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${showInTodoWhenOverdue ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                      </button>
+                    </div>
+                    {activeInfoPanel === 'overdue' && (
+                      <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
+                        <p className="text-xs font-semibold text-foreground">{t('tasks.panel.overdueInfoTitle')}</p>
+                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.panel.overdueInfoContent')}</p>
+                      </PopoverWrapper>
+                    )}
+                  </div>
+
+                  {/* Set to done automatically */}
+                  <div className="relative px-4 py-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Icon name="done_all" size={20} color="var(--color-primary)" />
+                        <span className="text-sm text-foreground">{t('tasks.panel.setToDoneAutomatically')}</span>
+                        <button
+                          type="button"
+                          onClick={() => setActiveInfoPanel((v) => v === 'autoDone' ? null : 'autoDone')}
+                          className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                        >
+                          <Icon name="info" size={14} />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSetToDoneAutomatically((v) => !v)}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${setToDoneAutomatically ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                      >
+                        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${setToDoneAutomatically ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                      </button>
+                    </div>
+                    {activeInfoPanel === 'autoDone' && (
+                      <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
+                        <p className="text-xs font-semibold text-foreground">{t('tasks.panel.autoDoneInfoTitle')}</p>
+                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.panel.autoDoneInfoContent')}</p>
+                      </PopoverWrapper>
+                    )}
+                  </div>
+                </>
+              )}
+            </>
           )}
         </div>
 
