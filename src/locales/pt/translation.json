@@ -1424,7 +1424,8 @@
     "createdAt": "Criado em {{date}}",
     "confirmDelete": "Excluir este item?",
     "deleteDescription": "Esta ação não pode ser desfeita. O item será excluído permanentemente.",
-    "backToCalendar": "Voltar ao calendário"
+    "backToCalendar": "Voltar ao calendário",
+    "timeZone": "Fuso horário"
   },
   "itemEditor": {
     "newTask": "Nova tarefa",
@@ -1441,6 +1442,9 @@
     "addTags": "Adicionar tags",
     "infoText": "Hora, duração, lembretes e configurações avançadas aparecerão após selecionar uma data.",
     "save": "Salvar",
-    "clear": "Limpar"
+    "clear": "Limpar",
+    "startTimeZone": "Fuso horário inicial",
+    "endTimeZone": "Fuso horário final",
+    "addEndTimeZone": "Adicionar fuso horário final"
   }
 }

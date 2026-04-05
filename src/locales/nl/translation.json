@@ -1421,7 +1421,8 @@
     "createdAt": "Aangemaakt op {{date}}",
     "confirmDelete": "Dit item verwijderen?",
     "deleteDescription": "Deze actie kan niet ongedaan worden gemaakt. Het item wordt permanent verwijderd.",
-    "backToCalendar": "Terug naar agenda"
+    "backToCalendar": "Terug naar agenda",
+    "timeZone": "Tijdzone"
   },
   "itemEditor": {
     "newTask": "Nieuwe taak",
@@ -1438,6 +1439,9 @@
     "addTags": "Tags toevoegen",
     "infoText": "Tijd, duur, herinneringen en geavanceerde instellingen verschijnen na het selecteren van een datum.",
     "save": "Opslaan",
-    "clear": "Wissen"
+    "clear": "Wissen",
+    "startTimeZone": "Starttijdzone",
+    "endTimeZone": "Eindtijdzone",
+    "addEndTimeZone": "Eindtijdzone toevoegen"
   }
 }

@@ -1418,7 +1418,8 @@
     "createdAt": "Utworzono {{date}}",
     "confirmDelete": "Usunąć ten element?",
     "deleteDescription": "Tej czynności nie można cofnąć. Element zostanie trwale usunięty.",
-    "backToCalendar": "Powrót do kalendarza"
+    "backToCalendar": "Powrót do kalendarza",
+    "timeZone": "Strefa czasowa"
   },
   "itemEditor": {
     "newTask": "Nowe zadanie",
@@ -1435,6 +1436,9 @@
     "addTags": "Dodaj tagi",
     "infoText": "Czas, czas trwania, przypomnienia i zaawansowane ustawienia pojawią się po wybraniu daty.",
     "save": "Zapisz",
-    "clear": "Wyczyść"
+    "clear": "Wyczyść",
+    "startTimeZone": "Strefa czasowa początku",
+    "endTimeZone": "Strefa czasowa końca",
+    "addEndTimeZone": "Dodaj strefę czasową końca"
   }
 }

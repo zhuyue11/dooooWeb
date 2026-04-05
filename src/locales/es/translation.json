@@ -1418,7 +1418,8 @@
     "createdAt": "Creado el {{date}}",
     "confirmDelete": "¿Eliminar este elemento?",
     "deleteDescription": "Esta acción no se puede deshacer. El elemento se eliminará permanentemente.",
-    "backToCalendar": "Volver al calendario"
+    "backToCalendar": "Volver al calendario",
+    "timeZone": "Zona horaria"
   },
   "itemEditor": {
     "newTask": "Nueva tarea",
@@ -1435,6 +1436,9 @@
     "addTags": "Agregar etiquetas",
     "infoText": "La hora, duración, recordatorios y configuraciones avanzadas aparecerán después de seleccionar una fecha.",
     "save": "Guardar",
-    "clear": "Borrar"
+    "clear": "Borrar",
+    "startTimeZone": "Zona horaria de inicio",
+    "endTimeZone": "Zona horaria de fin",
+    "addEndTimeZone": "Añadir zona horaria de fin"
   }
 }

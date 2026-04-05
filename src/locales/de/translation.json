@@ -1418,7 +1418,8 @@
     "createdAt": "Erstellt am {{date}}",
     "confirmDelete": "Dieses Element löschen?",
     "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Das Element wird dauerhaft gelöscht.",
-    "backToCalendar": "Zurück zum Kalender"
+    "backToCalendar": "Zurück zum Kalender",
+    "timeZone": "Zeitzone"
   },
   "itemEditor": {
     "newTask": "Neue Aufgabe",
@@ -1435,6 +1436,9 @@
     "addTags": "Tags hinzufügen",
     "infoText": "Uhrzeit, Dauer, Erinnerungen und erweiterte Einstellungen werden nach Auswahl eines Datums angezeigt.",
     "save": "Speichern",
-    "clear": "Löschen"
+    "clear": "Löschen",
+    "startTimeZone": "Startzeitzone",
+    "endTimeZone": "Endzeitzone",
+    "addEndTimeZone": "Endzeitzone hinzufügen"
   }
 }

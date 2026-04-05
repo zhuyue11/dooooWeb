@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
 import { CalendarPopover } from '@/components/ui/CalendarPopover';
 import { TimePicker } from '@/components/ui/TimePicker';
+import { TimeOfDayPicker } from '@/components/ui/TimeOfDayPicker';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import type { ItemFormDraft } from '@/pages/items/ItemEditorPage';
 import { toNoonUTC, combineDateAndTime, formatDateDisplay } from '@/utils/dateForm';
@@ -45,6 +46,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
   const [endTimeValue, setEndTimeValue] = useState('11:00');
   const [hasStartTime, setHasStartTime] = useState(false);
   const [hasEndTime, setHasEndTime] = useState(false);
+  const [showTimeOfDayPicker, setShowTimeOfDayPicker] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
 
@@ -288,22 +290,52 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
 
             {/* Task: Time row */}
             {isTask && (
-              <div className="px-4 py-2.5">
+              <div className="relative px-4 py-2.5">
                 {hasTime ? (
                   <TimePicker
                     value={timeValue}
                     onChange={setTimeValue}
                     onClear={handleClearTime}
                   />
+                ) : timeOfDay ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowTimeOfDayPicker(true)}
+                    className="flex w-full items-center gap-3.5 text-left"
+                  >
+                    <Icon
+                      name={timeOfDay === 'MORNING' ? 'wb_sunny' : timeOfDay === 'AFTERNOON' ? 'wb_cloudy' : 'nightlight'}
+                      size={20}
+                      color="var(--color-primary)"
+                    />
+                    <span className="text-sm font-medium text-foreground">
+                      {t(`tasks.timeOfDay.${timeOfDay.toLowerCase()}`)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setTimeOfDay(null); }}
+                      className="ml-auto text-muted-foreground hover:text-foreground"
+                    >
+                      <Icon name="close" size={16} />
+                    </button>
+                  </button>
                 ) : (
                   <button
                     type="button"
-                    onClick={handleTimeClick}
+                    onClick={() => setShowTimeOfDayPicker(true)}
                     className="flex w-full items-center gap-3.5 text-left"
                   >
                     <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
                     <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
                   </button>
+                )}
+                {showTimeOfDayPicker && (
+                  <TimeOfDayPicker
+                    selectedTimeOfDay={timeOfDay}
+                    onSelect={(value) => { setTimeOfDay(value); setHasTime(false); }}
+                    onAtTimePress={() => { handleTimeClick(); }}
+                    onClose={() => setShowTimeOfDayPicker(false)}
+                  />
                 )}
               </div>
             )}

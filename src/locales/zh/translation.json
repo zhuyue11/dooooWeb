@@ -1423,7 +1423,8 @@
     "createdAt": "创建于 {{date}}",
     "confirmDelete": "删除此项目？",
     "deleteDescription": "此操作无法撤销。该项目将被永久删除。",
-    "backToCalendar": "返回日历"
+    "backToCalendar": "返回日历",
+    "timeZone": "时区"
   },
   "itemEditor": {
     "newTask": "新建任务",
@@ -1440,6 +1441,9 @@
     "addTags": "添加标签",
     "infoText": "选择日期后将显示时间、时长、提醒及高级设置。",
     "save": "保存",
-    "clear": "清除"
+    "clear": "清除",
+    "startTimeZone": "开始时区",
+    "endTimeZone": "结束时区",
+    "addEndTimeZone": "添加结束时区"
   }
 }

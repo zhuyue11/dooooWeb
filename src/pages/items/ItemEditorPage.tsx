@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getTask, getEvent } from '@/lib/api';
@@ -8,6 +8,8 @@ import { Icon } from '@/components/ui/Icon';
 import { CalendarPopover } from '@/components/ui/CalendarPopover';
 import { RepeatPopover } from '@/components/ui/RepeatPopover';
 import { TimePicker } from '@/components/ui/TimePicker';
+import { TimeOfDayPicker } from '@/components/ui/TimeOfDayPicker';
+import { TimeZonePicker } from '@/components/ui/TimeZonePicker';
 import { toNoonUTC, combineDateAndTime } from '@/utils/dateForm';
 import { getRepeatDisplayText } from '@/utils/repeatDisplay';
 import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
@@ -203,6 +205,13 @@ export function ItemEditorPage() {
   const [hasEndTime, setHasEndTime] = useState(draft?.hasEndTime ?? false);
   const [endTimeValue, setEndTimeValue] = useState(draft?.endTimeValue || '11:00');
 
+  // Timezone
+  const browserTimeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone, []);
+  const [selectedTimeZone, setSelectedTimeZone] = useState(browserTimeZone);
+  const [eventEndTimeZone, setEventEndTimeZone] = useState<string | null>(null);
+  const [showTimeZonePicker, setShowTimeZonePicker] = useState(false);
+  const [timeZonePickerTarget, setTimeZonePickerTarget] = useState<'start' | 'end'>('start');
+
   // Additional fields
   const [priority, setPriority] = useState<string>('');
   const [categoryId, setCategoryId] = useState<string>('');
@@ -214,6 +223,7 @@ export function ItemEditorPage() {
   // UI state
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const [editingLocation, setEditingLocation] = useState(false);
+  const [showTimeOfDayPicker, setShowTimeOfDayPicker] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
@@ -248,6 +258,8 @@ export function ItemEditorPage() {
         }
       }
     }
+    // Load timezone
+    if (existingItem.timeZone) setSelectedTimeZone(existingItem.timeZone);
     if (isTask) {
       const task = existingItem as Task;
       setPriority(task.priority?.toUpperCase() || '');
@@ -259,6 +271,7 @@ export function ItemEditorPage() {
     } else {
       const event = existingItem as ApiEvent;
       setLocationValue(event.location || '');
+      if (event.endTimeZone) setEventEndTimeZone(event.endTimeZone);
       if (event.endDate) {
         setHasEndTime(true);
         const ed = new Date(event.endDate);
@@ -339,7 +352,7 @@ export function ItemEditorPage() {
     if (!isTitleValid) return;
 
     const trimmedTitle = title.trim();
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const tz = selectedTimeZone;
     const dateOnly = selectedDate
       ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
       : undefined;
@@ -404,6 +417,7 @@ export function ItemEditorPage() {
           date: dateStr ?? null,
           hasTime: hasStartTime,
           timeZone: hasStartTime ? tz : undefined,
+          endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr ?? null,
           location: locationValue || undefined,
         };
@@ -414,6 +428,7 @@ export function ItemEditorPage() {
           date: dateStr,
           hasTime: hasStartTime,
           timeZone: hasStartTime ? tz : undefined,
+          endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr,
         };
         await createEventMutation.mutateAsync(req);
@@ -557,22 +572,52 @@ export function ItemEditorPage() {
 
           {/* Time (task) */}
           {isTask && selectedDate && (
-            <div className="px-4 py-2.5">
+            <div className="relative px-4 py-2.5">
               {hasTime ? (
                 <TimePicker
                   value={timeValue}
                   onChange={setTimeValue}
                   onClear={() => { setHasTime(false); setTimeOfDay(null); }}
                 />
+              ) : timeOfDay ? (
+                <button
+                  type="button"
+                  onClick={() => setShowTimeOfDayPicker(true)}
+                  className="flex w-full items-center gap-3.5 text-left"
+                >
+                  <Icon
+                    name={timeOfDay === 'MORNING' ? 'wb_sunny' : timeOfDay === 'AFTERNOON' ? 'wb_cloudy' : 'nightlight'}
+                    size={20}
+                    color="var(--color-primary)"
+                  />
+                  <span className="text-sm font-medium text-foreground">
+                    {t(`tasks.timeOfDay.${timeOfDay.toLowerCase()}`)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setTimeOfDay(null); }}
+                    className="ml-auto text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                </button>
               ) : (
                 <button
                   type="button"
-                  onClick={() => setHasTime(true)}
+                  onClick={() => setShowTimeOfDayPicker(true)}
                   className="flex w-full items-center gap-3.5 text-left"
                 >
                   <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
                   <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
                 </button>
+              )}
+              {showTimeOfDayPicker && (
+                <TimeOfDayPicker
+                  selectedTimeOfDay={timeOfDay}
+                  onSelect={(value) => { setTimeOfDay(value); setHasTime(false); }}
+                  onAtTimePress={() => { setHasTime(true); setTimeOfDay(null); }}
+                  onClose={() => setShowTimeOfDayPicker(false)}
+                />
               )}
             </div>
           )}
@@ -608,6 +653,92 @@ export function ItemEditorPage() {
                   </button>
                 )}
               </div>
+            </>
+          )}
+
+          {/* Timezone (when exact time is set) */}
+          {selectedDate && ((isTask && hasTime) || (!isTask && hasStartTime)) && (
+            <>
+              <div className="relative px-4 py-2.5">
+                <button
+                  type="button"
+                  onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
+                  className="flex w-full items-center gap-3.5 text-left"
+                >
+                  <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                  <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                    {!isTask && eventEndTimeZone ? `${t('itemEditor.startTimeZone')}: ` : ''}
+                    {(() => {
+                      try {
+                        const parts = new Intl.DateTimeFormat('en', { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                        return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
+                      } catch { return selectedTimeZone; }
+                    })()}
+                  </span>
+                  {selectedTimeZone !== browserTimeZone && (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); setEventEndTimeZone(null); }}
+                      className="ml-auto text-muted-foreground hover:text-foreground"
+                    >
+                      <Icon name="close" size={16} />
+                    </button>
+                  )}
+                </button>
+                {showTimeZonePicker && timeZonePickerTarget === 'start' && (
+                  <TimeZonePicker
+                    selectedTimeZone={selectedTimeZone}
+                    onSelect={setSelectedTimeZone}
+                    onClose={() => setShowTimeZonePicker(false)}
+                  />
+                )}
+              </div>
+
+              {/* End timezone (events with end time) */}
+              {!isTask && hasEndTime && (
+                <div className="relative px-4 py-2.5">
+                  {eventEndTimeZone ? (
+                    <button
+                      type="button"
+                      onClick={() => { setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
+                      className="flex w-full items-center gap-3.5 text-left"
+                    >
+                      <Icon name="public" size={20} color="var(--color-primary)" />
+                      <span className="text-sm font-medium text-foreground">
+                        {t('itemEditor.endTimeZone')}: {(() => {
+                          try {
+                            const parts = new Intl.DateTimeFormat('en', { timeZone: eventEndTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                            return parts.find(p => p.type === 'timeZoneName')?.value || eventEndTimeZone;
+                          } catch { return eventEndTimeZone; }
+                        })()}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setEventEndTimeZone(null); }}
+                        className="ml-auto text-muted-foreground hover:text-foreground"
+                      >
+                        <Icon name="close" size={16} />
+                      </button>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => { setEventEndTimeZone(selectedTimeZone); setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
+                      className="flex w-full items-center gap-3.5 text-left"
+                    >
+                      <Icon name="public" size={20} color="var(--color-muted-foreground)" />
+                      <span className="text-sm text-muted-foreground">{t('itemEditor.addEndTimeZone')}</span>
+                    </button>
+                  )}
+                  {showTimeZonePicker && timeZonePickerTarget === 'end' && (
+                    <TimeZonePicker
+                      selectedTimeZone={eventEndTimeZone || selectedTimeZone}
+                      onSelect={(tz) => setEventEndTimeZone(tz)}
+                      onClose={() => setShowTimeZonePicker(false)}
+                    />
+                  )}
+                </div>
+              )}
             </>
           )}
 

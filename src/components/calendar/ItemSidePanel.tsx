@@ -158,11 +158,41 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
 
   const dateDisplay = item.date ? formatFullDate(new Date(item.date)) : null;
   const timeDisplay = item.hasTime && item.date ? formatTime(item.date, timeFormat as TimeFormat) : null;
+  const timeOfDayDisplay = !item.hasTime && item.timeOfDay ? item.timeOfDay : null;
+  const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
+    MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
+    AFTERNOON: { icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
+    EVENING: { icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
+  };
+  // Timezone display — show abbreviation when task/event tz differs from device tz
+  const deviceTz = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
+  const itemTz = item.sourceTask?.timeZone || item.sourceEvent?.timeZone || null;
+  const tzDisplay = item.hasTime && itemTz && itemTz !== deviceTz
+    ? (() => {
+        try {
+          const parts = new Intl.DateTimeFormat('en', { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
+          return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
+        } catch { return itemTz; }
+      })()
+    : null;
+
+  // Repeat display
+  const repeatDisplay = item.repeat
+    ? (() => {
+        const r = item.repeat as { type?: string; interval?: number };
+        if (r.type === 'daily') return r.interval && r.interval > 1 ? `Every ${r.interval} days` : 'Daily';
+        if (r.type === 'weekly') return r.interval && r.interval > 1 ? `Every ${r.interval} weeks` : 'Weekly';
+        if (r.type === 'monthly') return r.interval && r.interval > 1 ? `Every ${r.interval} months` : 'Monthly';
+        if (r.type === 'yearly') return r.interval && r.interval > 1 ? `Every ${r.interval} years` : 'Yearly';
+        return 'Repeats';
+      })()
+    : null;
+
   const durationDisplay = item.duration ? `${item.duration} min` : null;
   const reminderDisplay = formatReminder(item.firstReminderMinutes);
   const locationDisplay = item.location || null;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || durationDisplay || reminderDisplay || locationDisplay;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay;
 
   return createPortal(
     <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
@@ -266,6 +296,16 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
                   <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                 </>
               )}
+              {timeOfDayDisplay && TIME_OF_DAY_META[timeOfDayDisplay] && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow
+                    icon={TIME_OF_DAY_META[timeOfDayDisplay].icon}
+                    label={t('itemView.time')}
+                    value={t(TIME_OF_DAY_META[timeOfDayDisplay].i18nKey)}
+                  />
+                </>
+              )}
               {durationDisplay && (
                 <>
                   <div className="mx-4 border-t border-border" />
@@ -282,6 +322,18 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
                 <>
                   <div className="mx-4 border-t border-border" />
                   <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
+                </>
+              )}
+              {tzDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
+                </>
+              )}
+              {repeatDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
                 </>
               )}
             </div>

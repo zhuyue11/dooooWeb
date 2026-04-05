@@ -1418,7 +1418,8 @@
     "createdAt": "Creato il {{date}}",
     "confirmDelete": "Eliminare questo elemento?",
     "deleteDescription": "Questa azione non può essere annullata. L'elemento verrà eliminato definitivamente.",
-    "backToCalendar": "Torna al calendario"
+    "backToCalendar": "Torna al calendario",
+    "timeZone": "Fuso orario"
   },
   "itemEditor": {
     "newTask": "Nuova attività",
@@ -1435,6 +1436,9 @@
     "addTags": "Aggiungi tag",
     "infoText": "Ora, durata, promemoria e impostazioni avanzate appariranno dopo aver selezionato una data.",
     "save": "Salva",
-    "clear": "Cancella"
+    "clear": "Cancella",
+    "startTimeZone": "Fuso orario di inizio",
+    "endTimeZone": "Fuso orario di fine",
+    "addEndTimeZone": "Aggiungi fuso orario di fine"
   }
 }

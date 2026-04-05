@@ -119,6 +119,24 @@ export function ItemViewPage() {
   const dateStr = item.date;
   const dateDisplay = dateStr ? formatFullDate(new Date(dateStr)) : null;
   const timeDisplay = item.hasTime && dateStr ? formatTime(dateStr, timeFormat as TimeFormat) : null;
+  const timeOfDayValue = isTask && !item.hasTime && taskItem?.timeOfDay ? taskItem.timeOfDay : null;
+  const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
+    MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
+    AFTERNOON: { icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
+    EVENING: { icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
+  };
+  // Timezone display
+  const deviceTz = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
+  const itemTz = item.timeZone || null;
+  const tzDisplay = item.hasTime && itemTz && itemTz !== deviceTz
+    ? (() => {
+        try {
+          const parts = new Intl.DateTimeFormat('en', { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
+          return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
+        } catch { return itemTz; }
+      })()
+    : null;
+
   const durationDisplay = item.duration ? `${item.duration} min` : null;
   const reminderDisplay = formatReminder(item.firstReminderMinutes);
   const repeatDisplay = item.repeat ? 'Yes' : 'None';
@@ -131,7 +149,7 @@ export function ItemViewPage() {
   const planName = isTask ? taskItem?.plan?.name : undefined;
   const createdAt = item.createdAt;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || durationDisplay || reminderDisplay || locationDisplay || item.repeat != null;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || item.repeat != null;
 
   // Permissions (matching dooooApp's canUserEditTask / canUserDeleteTask)
   const itemUserId = isTask ? taskItem?.userId : (eventItem as ApiEvent & { userId?: string })?.userId;
@@ -193,6 +211,7 @@ export function ItemViewPage() {
               <span className="text-[13px] text-muted-foreground">
                 {dateDisplay}
                 {timeDisplay && ` · ${timeDisplay}`}
+                {!timeDisplay && timeOfDayValue && ` · ${t(TIME_OF_DAY_META[timeOfDayValue].i18nKey)}`}
                 {durationDisplay && ` · ${durationDisplay}`}
               </span>
             )}
@@ -253,6 +272,16 @@ export function ItemViewPage() {
                   <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                 </>
               )}
+              {timeOfDayValue && TIME_OF_DAY_META[timeOfDayValue] && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow
+                    icon={TIME_OF_DAY_META[timeOfDayValue].icon}
+                    label={t('itemView.time')}
+                    value={t(TIME_OF_DAY_META[timeOfDayValue].i18nKey)}
+                  />
+                </>
+              )}
               {durationDisplay && (
                 <>
                   <div className="mx-4 border-t border-border" />
@@ -263,6 +292,12 @@ export function ItemViewPage() {
                 <>
                   <div className="mx-4 border-t border-border" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
+                </>
+              )}
+              {tzDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
                 </>
               )}
               <div className="mx-4 border-t border-border" />

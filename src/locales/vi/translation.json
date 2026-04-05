@@ -1418,7 +1418,8 @@
     "createdAt": "Tạo ngày {{date}}",
     "confirmDelete": "Xóa mục này?",
     "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
-    "backToCalendar": "Quay lại lịch"
+    "backToCalendar": "Quay lại lịch",
+    "timeZone": "Múi giờ"
   },
   "itemEditor": {
     "newTask": "Công việc mới",
@@ -1435,6 +1436,9 @@
     "addTags": "Thêm thẻ",
     "infoText": "Thời gian, thời lượng, nhắc nhở và cài đặt nâng cao sẽ xuất hiện sau khi chọn ngày.",
     "save": "Lưu",
-    "clear": "Xóa"
+    "clear": "Xóa",
+    "startTimeZone": "Múi giờ bắt đầu",
+    "endTimeZone": "Múi giờ kết thúc",
+    "addEndTimeZone": "Thêm múi giờ kết thúc"
   }
 }

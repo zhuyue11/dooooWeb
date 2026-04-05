@@ -1494,6 +1494,7 @@
     "reminder": "Reminder",
     "location": "Location",
     "repeat": "Repeat",
+    "timeZone": "Time zone",
     "createdAt": "Created {{date}}",
     "confirmDelete": "Delete this item?",
     "deleteDescription": "This action cannot be undone. The item will be permanently deleted.",
@@ -1514,6 +1515,9 @@
     "addTags": "Add tags",
     "infoText": "Time, duration, reminders, and advanced settings will appear after selecting a date.",
     "save": "Save",
-    "clear": "Clear"
+    "clear": "Clear",
+    "startTimeZone": "Start time zone",
+    "endTimeZone": "End time zone",
+    "addEndTimeZone": "Add end time zone"
   }
 }

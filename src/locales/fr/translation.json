@@ -1418,7 +1418,8 @@
     "createdAt": "Créé le {{date}}",
     "confirmDelete": "Supprimer cet élément ?",
     "deleteDescription": "Cette action est irréversible. L'élément sera définitivement supprimé.",
-    "backToCalendar": "Retour au calendrier"
+    "backToCalendar": "Retour au calendrier",
+    "timeZone": "Fuseau horaire"
   },
   "itemEditor": {
     "newTask": "Nouvelle tâche",
@@ -1435,6 +1436,9 @@
     "addTags": "Ajouter des tags",
     "infoText": "L'heure, la durée, les rappels et les paramètres avancés apparaîtront après la sélection d'une date.",
     "save": "Enregistrer",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "startTimeZone": "Fuseau horaire de début",
+    "endTimeZone": "Fuseau horaire de fin",
+    "addEndTimeZone": "Ajouter fuseau horaire de fin"
   }
 }

@@ -1424,7 +1424,8 @@
     "createdAt": "{{date}}に作成",
     "confirmDelete": "このアイテムを削除しますか？",
     "deleteDescription": "この操作は取り消せません。アイテムは完全に削除されます。",
-    "backToCalendar": "カレンダーに戻る"
+    "backToCalendar": "カレンダーに戻る",
+    "timeZone": "タイムゾーン"
   },
   "itemEditor": {
     "newTask": "新しいタスク",
@@ -1441,6 +1442,9 @@
     "addTags": "タグを追加",
     "infoText": "日付を選択すると、時間、所要時間、リマインダー、詳細設定が表示されます。",
     "save": "保存",
-    "clear": "クリア"
+    "clear": "クリア",
+    "startTimeZone": "開始タイムゾーン",
+    "endTimeZone": "終了タイムゾーン",
+    "addEndTimeZone": "終了タイムゾーンを追加"
   }
 }
