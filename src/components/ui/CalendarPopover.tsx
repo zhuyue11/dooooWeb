@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 const WEEKDAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
@@ -65,7 +66,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose }: CalendarPop
           <Icon name="chevron_left" size={18} />
         </button>
         <span className="text-sm font-semibold text-foreground">
-          {viewMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          {viewMonth.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' })}
         </span>
         <button
           type="button"

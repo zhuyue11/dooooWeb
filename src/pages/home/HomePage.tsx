@@ -13,6 +13,7 @@ import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { startOfDay, toISODate, startOfWeek, endOfWeek } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 function getGreeting(t: (key: string) => string): string {
   const hour = new Date().getHours();
@@ -22,7 +23,7 @@ function getGreeting(t: (key: string) => string): string {
 }
 
 function formatDate(): string {
-  return new Date().toLocaleDateString('en-US', {
+  return new Date().toLocaleDateString(i18n.language, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',

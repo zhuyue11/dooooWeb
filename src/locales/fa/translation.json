@@ -1439,6 +1439,12 @@
     "clear": "پاک کردن",
     "startTimeZone": "منطقه زمانی شروع",
     "endTimeZone": "منطقه زمانی پایان",
-    "addEndTimeZone": "افزودن منطقه زمانی پایان"
+    "addEndTimeZone": "افزودن منطقه زمانی پایان",
+    "addDuration": "مدت زمان",
+    "duration": "مدت زمان",
+    "addReminder": "یادآور",
+    "reminder": "یادآور",
+    "addSecondReminder": "یادآور دوم",
+    "secondReminder": "یادآور دوم"
   }
 }

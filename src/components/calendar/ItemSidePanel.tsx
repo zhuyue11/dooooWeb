@@ -10,6 +10,7 @@ import { useDisplay } from '@/lib/contexts/display-context';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 interface ItemSidePanelProps {
   item: CalendarItem;
@@ -170,7 +171,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
   const tzDisplay = item.hasTime && itemTz && itemTz !== deviceTz
     ? (() => {
         try {
-          const parts = new Intl.DateTimeFormat('en', { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
+          const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
           return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
         } catch { return itemTz; }
       })()
@@ -343,7 +344,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
           {(item.sourceTask?.createdAt || item.sourceEvent?.createdAt) && (
             <span className="text-xs text-muted-foreground">
               {t('itemView.createdAt', {
-                date: new Date((item.sourceTask?.createdAt || item.sourceEvent?.createdAt)!).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                date: new Date((item.sourceTask?.createdAt || item.sourceEvent?.createdAt)!).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
               })}
             </span>
           )}

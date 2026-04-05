@@ -10,6 +10,8 @@ import { RepeatPopover } from '@/components/ui/RepeatPopover';
 import { TimePicker } from '@/components/ui/TimePicker';
 import { TimeOfDayPicker } from '@/components/ui/TimeOfDayPicker';
 import { TimeZonePicker } from '@/components/ui/TimeZonePicker';
+import { DurationPopover, formatDurationDisplay } from '@/components/ui/DurationPicker';
+import { ReminderPopover, formatReminderDisplay } from '@/components/ui/ReminderPicker';
 import { toNoonUTC, combineDateAndTime } from '@/utils/dateForm';
 import { getRepeatDisplayText } from '@/utils/repeatDisplay';
 import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
@@ -19,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 
 type ItemType = 'TASK' | 'EVENT';
 type TimeOfDay = 'MORNING' | 'AFTERNOON' | 'EVENING' | null;
-type ActivePopover = 'date' | 'priority' | 'category' | 'repeat' | null;
+type ActivePopover = 'date' | 'priority' | 'category' | 'repeat' | 'duration' | 'reminder1' | 'reminder2' | null;
 
 export interface ItemFormDraft {
   itemType: ItemType;
@@ -33,6 +35,9 @@ export interface ItemFormDraft {
   hasEndTime: boolean;
   endTimeValue: string;
   repeat?: Repeat | null;
+  duration?: number | null;
+  firstReminderMinutes?: number | null;
+  secondReminderMinutes?: number | null;
 }
 
 // ── Popover wrapper (click-outside-to-close) ──
@@ -175,7 +180,7 @@ export function ItemEditorPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: categories } = useCategories();
   const {
     createTaskMutation, createEventMutation,
@@ -217,12 +222,20 @@ export function ItemEditorPage() {
   const [categoryId, setCategoryId] = useState<string>('');
   const [locationValue, setLocationValue] = useState('');
   const [selectedRepeat, setSelectedRepeat] = useState<Repeat | null>(draft?.repeat || null);
+  const [duration, setDuration] = useState<number | null>(draft?.duration ?? null);
+  const [firstReminder, setFirstReminder] = useState<number | undefined>(
+    draft?.firstReminderMinutes != null ? draft.firstReminderMinutes : undefined,
+  );
+  const [secondReminder, setSecondReminder] = useState<number | undefined>(
+    draft?.secondReminderMinutes != null ? draft.secondReminderMinutes : undefined,
+  );
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
 
   // UI state
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const [editingLocation, setEditingLocation] = useState(false);
+  const [repeatInfoMessage, setRepeatInfoMessage] = useState<string | null>(null);
   const [showTimeOfDayPicker, setShowTimeOfDayPicker] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -268,6 +281,9 @@ export function ItemEditorPage() {
       setLocationValue(task.location || '');
       setSelectedRepeat(task.repeat || null);
       setTags(task.tags || []);
+      setDuration(task.duration ?? null);
+      setFirstReminder(task.firstReminderMinutes != null ? task.firstReminderMinutes : undefined);
+      setSecondReminder(task.secondReminderMinutes != null ? task.secondReminderMinutes : undefined);
     } else {
       const event = existingItem as ApiEvent;
       setLocationValue(event.location || '');
@@ -290,12 +306,41 @@ export function ItemEditorPage() {
     if (editingLocation) locationRef.current?.focus();
   }, [editingLocation]);
 
+
   // ── Computed ──
   const isTask = itemType === 'TASK';
   const isTitleValid = title.trim().length > 0;
   const isPending = createTaskMutation.isPending || createEventMutation.isPending ||
     updateTaskMutation.isPending || updateEventMutation.isPending;
   const saveDisabled = isPending || !isTitleValid;
+
+  const isDateInPast = useMemo(() => {
+    if (!selectedDate) return false;
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+    const dateMidnight = new Date(selectedDate);
+    dateMidnight.setHours(0, 0, 0, 0);
+    return dateMidnight.getTime() < todayMidnight.getTime();
+  }, [selectedDate]);
+  const isTaskTimeInPast = (() => {
+    if (!selectedDate) return false;
+    if (hasTime) {
+      const [h, m] = timeValue.split(':').map(Number);
+      const taskTime = new Date(selectedDate);
+      taskTime.setHours(h, m, 0, 0);
+      return taskTime.getTime() < Date.now();
+    }
+    return isDateInPast;
+  })();
+  const isRepeatDisabled = isDateInPast && !selectedRepeat;
+
+  // Clear reminders when task time moves to the past
+  useEffect(() => {
+    if (isTaskTimeInPast) {
+      setFirstReminder(undefined);
+      setSecondReminder(undefined);
+    }
+  }, [isTaskTimeInPast]);
 
   const headerTitle = isEditMode
     ? (isTask ? t('itemEditor.editTask') : t('itemEditor.editEvent'))
@@ -309,6 +354,9 @@ export function ItemEditorPage() {
     if (type === 'EVENT') {
       setTimeOfDay(null);
       setHasTime(false);
+      setDuration(null);
+      setFirstReminder(undefined);
+      setSecondReminder(undefined);
     } else {
       setHasStartTime(false);
       setHasEndTime(false);
@@ -323,6 +371,7 @@ export function ItemEditorPage() {
 
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
+    setSelectedRepeat(null);
     setActivePopover(null);
   }, []);
 
@@ -334,6 +383,9 @@ export function ItemEditorPage() {
     setHasStartTime(false);
     setHasEndTime(false);
     setSelectedRepeat(null);
+    setDuration(null);
+    setFirstReminder(undefined);
+    setSecondReminder(undefined);
   }, []);
 
   const handleAddTag = useCallback(() => {
@@ -377,6 +429,9 @@ export function ItemEditorPage() {
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? null,
+          duration: duration ?? null,
+          firstReminderMinutes: firstReminder ?? null,
+          secondReminderMinutes: secondReminder ?? null,
         };
         await updateTaskMutation.mutateAsync({ id: id!, data: req });
       } else {
@@ -395,6 +450,9 @@ export function ItemEditorPage() {
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? undefined,
+          duration: duration ?? undefined,
+          firstReminderMinutes: firstReminder,
+          secondReminderMinutes: secondReminder,
         };
         await createTaskMutation.mutateAsync(req);
       }
@@ -439,14 +497,14 @@ export function ItemEditorPage() {
   }, [
     isTitleValid, title, description, isTask, selectedDate, hasTime, timeValue,
     timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue,
-    priority, categoryId, locationValue, selectedRepeat, isEditMode, id,
-    createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
-    navigate,
+    priority, categoryId, locationValue, selectedRepeat, duration, firstReminder, secondReminder,
+    isEditMode, id, createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
+    navigate, selectedTimeZone, eventEndTimeZone,
   ]);
 
   // ── Date display ─���
   const dateDisplay = selectedDate
-    ? selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+    ? selectedDate.toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric' })
     : null;
 
   // ── Repeat display ──
@@ -577,7 +635,7 @@ export function ItemEditorPage() {
                 <TimePicker
                   value={timeValue}
                   onChange={setTimeValue}
-                  onClear={() => { setHasTime(false); setTimeOfDay(null); }}
+                  onClear={() => { setHasTime(false); setTimeOfDay(null); setDuration(null); setFirstReminder(undefined); setSecondReminder(undefined); setActivePopover(null); }}
                 />
               ) : timeOfDay ? (
                 <button
@@ -670,7 +728,7 @@ export function ItemEditorPage() {
                     {!isTask && eventEndTimeZone ? `${t('itemEditor.startTimeZone')}: ` : ''}
                     {(() => {
                       try {
-                        const parts = new Intl.DateTimeFormat('en', { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                        const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
                         return parts.find(p => p.type === 'timeZoneName')?.value || selectedTimeZone;
                       } catch { return selectedTimeZone; }
                     })()}
@@ -707,7 +765,7 @@ export function ItemEditorPage() {
                       <span className="text-sm font-medium text-foreground">
                         {t('itemEditor.endTimeZone')}: {(() => {
                           try {
-                            const parts = new Intl.DateTimeFormat('en', { timeZone: eventEndTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
+                            const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: eventEndTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
                             return parts.find(p => p.type === 'timeZoneName')?.value || eventEndTimeZone;
                           } catch { return eventEndTimeZone; }
                         })()}
@@ -742,34 +800,156 @@ export function ItemEditorPage() {
             </>
           )}
 
-          {/* Recurrence (only when date is selected) */}
-          {selectedDate && (
+          {/* Duration (tasks with time or time-of-day) */}
+          {isTask && selectedDate && (hasTime || timeOfDay) && (
             <div className="relative">
               <FieldRow
-                icon="repeat"
-                text={repeatDisplay || t('itemEditor.setRecurrence')}
-                active={!!selectedRepeat}
-                onClick={() => togglePopover('repeat')}
-                suffix={selectedRepeat ? (
+                icon="timer"
+                text={duration != null ? formatDurationDisplay(duration, t) : t('itemEditor.addDuration')}
+                active={duration != null}
+                onClick={() => togglePopover('duration')}
+                suffix={duration != null ? (
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); setSelectedRepeat(null); }}
+                    onClick={(e) => { e.stopPropagation(); setDuration(null); }}
                     className="text-muted-foreground hover:text-foreground"
                   >
                     <Icon name="close" size={16} />
                   </button>
                 ) : undefined}
               />
-              {activePopover === 'repeat' && (
-                <RepeatPopover
-                  selectedRepeat={selectedRepeat}
-                  selectedDate={selectedDate}
-                  onSelect={(repeat) => { setSelectedRepeat(repeat); setActivePopover(null); }}
+              {activePopover === 'duration' && (
+                <DurationPopover
+                  value={duration}
+                  onSelect={(mins) => setDuration(mins)}
+                  onClear={() => setDuration(null)}
                   onClose={closePopover}
                 />
               )}
             </div>
           )}
+
+          {/* Reminder 1 (tasks with exact time, not in past) */}
+          {isTask && selectedDate && hasTime && !isTaskTimeInPast && (
+            <div className="relative">
+              <FieldRow
+                icon="notifications"
+                text={firstReminder !== undefined ? formatReminderDisplay(firstReminder, t) : t('itemEditor.addReminder')}
+                active={firstReminder !== undefined}
+                onClick={() => togglePopover('reminder1')}
+                suffix={firstReminder !== undefined ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setFirstReminder(undefined); setSecondReminder(undefined); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+              {activePopover === 'reminder1' && (
+                <ReminderPopover
+                  value={firstReminder}
+                  onSelect={(mins) => setFirstReminder(mins)}
+                  onClear={() => { setFirstReminder(undefined); setSecondReminder(undefined); }}
+                  onClose={closePopover}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Reminder 2 (only when first reminder is set, not in past) */}
+          {isTask && selectedDate && hasTime && !isTaskTimeInPast && firstReminder !== undefined && (
+            <div className="relative">
+              <FieldRow
+                icon="notifications"
+                text={secondReminder !== undefined ? `${t('itemEditor.secondReminder')}: ${formatReminderDisplay(secondReminder, t)}` : t('itemEditor.addSecondReminder')}
+                active={secondReminder !== undefined}
+                onClick={() => togglePopover('reminder2')}
+                suffix={secondReminder !== undefined ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setSecondReminder(undefined); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+              {activePopover === 'reminder2' && (
+                <ReminderPopover
+                  value={secondReminder}
+                  onSelect={(mins) => setSecondReminder(mins)}
+                  onClear={() => setSecondReminder(undefined)}
+                  onClose={closePopover}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Repeat (always visible — matches dooooApp) */}
+          <div className="relative">
+            <FieldRow
+              icon="repeat"
+              text={repeatDisplay || t('itemEditor.setRecurrence')}
+              active={!!selectedRepeat}
+              onClick={() => {
+                if (isRepeatDisabled) {
+                  setRepeatInfoMessage(t('tasks.validation.cannotAddRecurrencePastTask'));
+                  setTimeout(() => setRepeatInfoMessage(null), 4000);
+                  return;
+                }
+                togglePopover('repeat');
+              }}
+              suffix={selectedRepeat ? (
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setSelectedRepeat(null); }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Icon name="close" size={16} />
+                </button>
+              ) : undefined}
+            />
+            {activePopover === 'repeat' && (
+              <RepeatPopover
+                selectedRepeat={selectedRepeat}
+                selectedDate={selectedDate}
+                onSelect={(repeat) => {
+                  if (repeat) {
+                    if (!selectedDate) {
+                      setSelectedDate(new Date());
+                      setRepeatInfoMessage(t('tasks.validation.repeatDateAutoSet'));
+                      setTimeout(() => setRepeatInfoMessage(null), 4000);
+                    } else {
+                      const todayMidnight = new Date();
+                      todayMidnight.setHours(0, 0, 0, 0);
+                      const selectedMidnight = new Date(selectedDate);
+                      selectedMidnight.setHours(0, 0, 0, 0);
+                      if (selectedMidnight.getTime() < todayMidnight.getTime()) {
+                        const newDate = new Date();
+                        if (hasTime) {
+                          newDate.setHours(selectedDate.getHours(), selectedDate.getMinutes(), 0, 0);
+                        }
+                        setSelectedDate(newDate);
+                        setRepeatInfoMessage(t('tasks.validation.recurringTaskPastDate'));
+                        setTimeout(() => setRepeatInfoMessage(null), 4000);
+                      }
+                    }
+                  }
+                  setSelectedRepeat(repeat);
+                  setActivePopover(null);
+                }}
+                onClose={closePopover}
+              />
+            )}
+            {repeatInfoMessage && (
+              <div className="flex items-center gap-2 px-4 py-2 text-xs text-primary">
+                <Icon name="info" size={16} color="var(--color-primary)" className="shrink-0" />
+                <span>{repeatInfoMessage}</span>
+              </div>
+            )}
+          </div>
 
           {/* Location */}
           {editingLocation ? (

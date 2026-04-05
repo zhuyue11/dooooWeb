@@ -2,6 +2,7 @@
  * Date/time utilities for form handling.
  * Business logic matches dooooApp (source of truth).
  */
+import i18n from '@/lib/i18n';
 
 /**
  * Convert a local date to noon UTC — prevents timezone date-shifting for all-day items.
@@ -47,7 +48,7 @@ export function extractDateAndTime(isoStr: string): { date: string; time: string
  * Format a Date to a display string like "Apr 10, 2026".
  */
 export function formatDateDisplay(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 /**

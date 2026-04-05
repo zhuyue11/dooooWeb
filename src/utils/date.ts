@@ -1,4 +1,5 @@
 // ── Date utilities shared across pages ──────────────────────────────────
+import i18n from '@/lib/i18n';
 
 export type WeekStartDay = 'sunday' | 'monday';
 export type TimeFormat = '12h' | '24h';
@@ -77,12 +78,12 @@ export function getMonthGridDates(d: Date, weekStartDay: WeekStartDay = 'monday'
 
 /** "April 2026" */
 export function formatMonthYear(d: Date): string {
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  return d.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' });
 }
 
 /** "Thursday, April 2, 2026" */
 export function formatFullDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString(i18n.language, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 // ── Day timeline helpers ─────────────────────────────────────────────
@@ -104,8 +105,8 @@ export function formatHourLabel(hour: number): string {
 
 /** "March 30 — April 5, 2026" style date range label. */
 export function formatDateRange(start: Date, end: Date): string {
-  const startMonth = start.toLocaleDateString('en-US', { month: 'long' });
-  const endMonth = end.toLocaleDateString('en-US', { month: 'long' });
+  const startMonth = start.toLocaleDateString(i18n.language, { month: 'long' });
+  const endMonth = end.toLocaleDateString(i18n.language, { month: 'long' });
   const startDay = start.getDate();
   const endDay = end.getDate();
   const endYear = end.getFullYear();

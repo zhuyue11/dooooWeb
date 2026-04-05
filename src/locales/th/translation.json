@@ -1439,6 +1439,12 @@
     "clear": "ล้าง",
     "startTimeZone": "เขตเวลาเริ่มต้น",
     "endTimeZone": "เขตเวลาสิ้นสุด",
-    "addEndTimeZone": "เพิ่มเขตเวลาสิ้นสุด"
+    "addEndTimeZone": "เพิ่มเขตเวลาสิ้นสุด",
+    "addDuration": "ระยะเวลา",
+    "duration": "ระยะเวลา",
+    "addReminder": "การแจ้งเตือน",
+    "reminder": "การแจ้งเตือน",
+    "addSecondReminder": "การแจ้งเตือนที่สอง",
+    "secondReminder": "การแจ้งเตือนที่สอง"
   }
 }

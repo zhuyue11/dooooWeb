@@ -6,6 +6,7 @@ import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 interface ItemRowProps {
   item: CalendarItem;
@@ -95,7 +96,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, onToggle, o
             )}
             {showDate && item.date && (
               <span className="text-xs text-muted-foreground">
-                {new Date(item.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                {new Date(item.date).toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric' })}
               </span>
             )}
           </div>

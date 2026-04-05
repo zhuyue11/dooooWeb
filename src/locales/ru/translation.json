@@ -1439,6 +1439,12 @@
     "clear": "Очистить",
     "startTimeZone": "Часовой пояс начала",
     "endTimeZone": "Часовой пояс окончания",
-    "addEndTimeZone": "Добавить часовой пояс окончания"
+    "addEndTimeZone": "Добавить часовой пояс окончания",
+    "addDuration": "Длительность",
+    "duration": "Длительность",
+    "addReminder": "Напоминание",
+    "reminder": "Напоминание",
+    "addSecondReminder": "Второе напоминание",
+    "secondReminder": "Второе напоминание"
   }
 }

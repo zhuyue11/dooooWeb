@@ -11,6 +11,7 @@ import { getCategoryName, getCategoryColor } from '@/utils/category';
 import type { TimeFormat } from '@/utils/date';
 import type { Task, Event as ApiEvent } from '@/types/api';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useState } from 'react';
@@ -131,7 +132,7 @@ export function ItemViewPage() {
   const tzDisplay = item.hasTime && itemTz && itemTz !== deviceTz
     ? (() => {
         try {
-          const parts = new Intl.DateTimeFormat('en', { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
+          const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
           return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
         } catch { return itemTz; }
       })()
@@ -327,7 +328,7 @@ export function ItemViewPage() {
       {createdAt && (
         <div className="mt-8 text-xs text-muted-foreground">
           {t('itemView.createdAt', {
-            date: new Date(createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            date: new Date(createdAt).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
           })}
         </div>
       )}

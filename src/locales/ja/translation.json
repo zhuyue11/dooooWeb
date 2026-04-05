@@ -1445,6 +1445,12 @@
     "clear": "クリア",
     "startTimeZone": "開始タイムゾーン",
     "endTimeZone": "終了タイムゾーン",
-    "addEndTimeZone": "終了タイムゾーンを追加"
+    "addEndTimeZone": "終了タイムゾーンを追加",
+    "addDuration": "所要時間",
+    "duration": "所要時間",
+    "addReminder": "リマインダー",
+    "reminder": "リマインダー",
+    "addSecondReminder": "2つ目のリマインダー",
+    "secondReminder": "2つ目のリマインダー"
   }
 }

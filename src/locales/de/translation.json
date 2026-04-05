@@ -1439,6 +1439,12 @@
     "clear": "Löschen",
     "startTimeZone": "Startzeitzone",
     "endTimeZone": "Endzeitzone",
-    "addEndTimeZone": "Endzeitzone hinzufügen"
+    "addEndTimeZone": "Endzeitzone hinzufügen",
+    "addDuration": "Dauer",
+    "duration": "Dauer",
+    "addReminder": "Erinnerung",
+    "reminder": "Erinnerung",
+    "addSecondReminder": "Zweite Erinnerung",
+    "secondReminder": "Zweite Erinnerung"
   }
 }

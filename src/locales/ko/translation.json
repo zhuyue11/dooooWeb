@@ -1445,6 +1445,12 @@
     "clear": "지우기",
     "startTimeZone": "시작 시간대",
     "endTimeZone": "종료 시간대",
-    "addEndTimeZone": "종료 시간대 추가"
+    "addEndTimeZone": "종료 시간대 추가",
+    "addDuration": "소요 시간",
+    "duration": "소요 시간",
+    "addReminder": "알림",
+    "reminder": "알림",
+    "addSecondReminder": "두 번째 알림",
+    "secondReminder": "두 번째 알림"
   }
 }

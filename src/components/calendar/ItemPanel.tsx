@@ -5,6 +5,7 @@ import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 import type { Category } from '@/types/api';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 interface ItemPanelProps {
   selectedDate: Date | null;
@@ -23,7 +24,7 @@ interface ItemPanelProps {
 /** Panel header label — adapts to view mode and selection state */
 function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], viewMode: CalendarViewMode, t: (key: string, options?: Record<string, unknown>) => string): string {
   if (date) {
-    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const dateStr = date.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' });
     if (isSameDay(date, today)) return t('calendarPage.panel.todayDot', { date: dateStr });
     return dateStr;
   }
@@ -32,14 +33,14 @@ function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], v
     case 'month':
       return formatMonthYear(visibleDates[Math.floor(visibleDates.length / 2)]); // mid-point is always in the active month
     case 'day':
-      return visibleDates[0]?.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || '';
+      return visibleDates[0]?.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }) || '';
     case 'week':
     default: {
       const start = visibleDates[0];
       const end = visibleDates[visibleDates.length - 1];
       if (!start || !end) return '';
-      const startStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const endStr = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const startStr = start.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' });
+      const endStr = end.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' });
       return `${startStr} – ${endStr}`;
     }
   }

@@ -1429,7 +1429,7 @@
     "addTitle": "Agregar título",
     "addDescription": "Agregar descripción",
     "addDate": "Agregar fecha",
-    "setRecurrence": "Establecer recurrencia",
+    "setRecurrence": "Establecer repetición",
     "addLocation": "Agregar ubicación",
     "addPriority": "Agregar prioridad",
     "addCategory": "Agregar categoría",
@@ -1439,6 +1439,12 @@
     "clear": "Borrar",
     "startTimeZone": "Zona horaria de inicio",
     "endTimeZone": "Zona horaria de fin",
-    "addEndTimeZone": "Añadir zona horaria de fin"
+    "addEndTimeZone": "Añadir zona horaria de fin",
+    "addDuration": "Duración",
+    "duration": "Duración",
+    "addReminder": "Recordatorio",
+    "reminder": "Recordatorio",
+    "addSecondReminder": "Segundo recordatorio",
+    "secondReminder": "Segundo recordatorio"
   }
 }

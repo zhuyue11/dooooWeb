@@ -1442,6 +1442,12 @@
     "clear": "Wissen",
     "startTimeZone": "Starttijdzone",
     "endTimeZone": "Eindtijdzone",
-    "addEndTimeZone": "Eindtijdzone toevoegen"
+    "addEndTimeZone": "Eindtijdzone toevoegen",
+    "addDuration": "Duur",
+    "duration": "Duur",
+    "addReminder": "Herinnering",
+    "reminder": "Herinnering",
+    "addSecondReminder": "Tweede herinnering",
+    "secondReminder": "Tweede herinnering"
   }
 }

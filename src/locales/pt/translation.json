@@ -1435,7 +1435,7 @@
     "addTitle": "Adicionar título",
     "addDescription": "Adicionar descrição",
     "addDate": "Adicionar data",
-    "setRecurrence": "Definir recorrência",
+    "setRecurrence": "Definir repetição",
     "addLocation": "Adicionar local",
     "addPriority": "Adicionar prioridade",
     "addCategory": "Adicionar categoria",
@@ -1445,6 +1445,12 @@
     "clear": "Limpar",
     "startTimeZone": "Fuso horário inicial",
     "endTimeZone": "Fuso horário final",
-    "addEndTimeZone": "Adicionar fuso horário final"
+    "addEndTimeZone": "Adicionar fuso horário final",
+    "addDuration": "Duração",
+    "duration": "Duração",
+    "addReminder": "Lembrete",
+    "reminder": "Lembrete",
+    "addSecondReminder": "Segundo lembrete",
+    "secondReminder": "Segundo lembrete"
   }
 }

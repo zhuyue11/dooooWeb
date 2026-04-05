@@ -1444,6 +1444,12 @@
     "clear": "清除",
     "startTimeZone": "开始时区",
     "endTimeZone": "结束时区",
-    "addEndTimeZone": "添加结束时区"
+    "addEndTimeZone": "添加结束时区",
+    "addDuration": "时长",
+    "duration": "时长",
+    "addReminder": "提醒",
+    "reminder": "提醒",
+    "addSecondReminder": "第二个提醒",
+    "secondReminder": "第二个提醒"
   }
 }

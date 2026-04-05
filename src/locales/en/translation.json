@@ -1508,7 +1508,7 @@
     "addTitle": "Add title",
     "addDescription": "Add description",
     "addDate": "Add date",
-    "setRecurrence": "Set recurrence",
+    "setRecurrence": "Set repeat",
     "addLocation": "Add location",
     "addPriority": "Add priority",
     "addCategory": "Add category",
@@ -1518,6 +1518,12 @@
     "clear": "Clear",
     "startTimeZone": "Start time zone",
     "endTimeZone": "End time zone",
-    "addEndTimeZone": "Add end time zone"
+    "addEndTimeZone": "Add end time zone",
+    "addDuration": "Duration",
+    "duration": "Duration",
+    "addReminder": "Reminder",
+    "reminder": "Reminder",
+    "addSecondReminder": "Second reminder",
+    "secondReminder": "Second reminder"
   }
 }

@@ -1439,6 +1439,12 @@
     "clear": "Hapus",
     "startTimeZone": "Zona waktu mulai",
     "endTimeZone": "Zona waktu akhir",
-    "addEndTimeZone": "Tambah zona waktu akhir"
+    "addEndTimeZone": "Tambah zona waktu akhir",
+    "addDuration": "Durasi",
+    "duration": "Durasi",
+    "addReminder": "Pengingat",
+    "reminder": "Pengingat",
+    "addSecondReminder": "Pengingat kedua",
+    "secondReminder": "Pengingat kedua"
   }
 }

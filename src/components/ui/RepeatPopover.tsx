@@ -3,6 +3,7 @@ import { Icon } from '@/components/ui/Icon';
 import { CalendarPopover } from '@/components/ui/CalendarPopover';
 import type { Repeat } from '@/types/api';
 import { useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 // JS weekday: 0=Sun, 1=Mon, ..., 6=Sat
 // Display order: Mon=0, Tue=1, ..., Sun=6
@@ -299,7 +300,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
                 >
                   <Icon name="calendar_today" size={16} />
                   {endDate
-                    ? endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    ? endDate.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric', year: 'numeric' })
                     : t('tasks.input.addRepeatEndDate')
                   }
                 </button>

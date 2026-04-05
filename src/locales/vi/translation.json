@@ -1439,6 +1439,12 @@
     "clear": "Xóa",
     "startTimeZone": "Múi giờ bắt đầu",
     "endTimeZone": "Múi giờ kết thúc",
-    "addEndTimeZone": "Thêm múi giờ kết thúc"
+    "addEndTimeZone": "Thêm múi giờ kết thúc",
+    "addDuration": "Thời lượng",
+    "duration": "Thời lượng",
+    "addReminder": "Nhắc nhở",
+    "reminder": "Nhắc nhở",
+    "addSecondReminder": "Nhắc nhở thứ hai",
+    "secondReminder": "Nhắc nhở thứ hai"
   }
 }

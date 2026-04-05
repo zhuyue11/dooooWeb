@@ -1439,6 +1439,12 @@
     "clear": "Temizle",
     "startTimeZone": "Başlangıç saat dilimi",
     "endTimeZone": "Bitiş saat dilimi",
-    "addEndTimeZone": "Bitiş saat dilimi ekle"
+    "addEndTimeZone": "Bitiş saat dilimi ekle",
+    "addDuration": "Süre",
+    "duration": "Süre",
+    "addReminder": "Hatırlatıcı",
+    "reminder": "Hatırlatıcı",
+    "addSecondReminder": "İkinci hatırlatıcı",
+    "secondReminder": "İkinci hatırlatıcı"
   }
 }

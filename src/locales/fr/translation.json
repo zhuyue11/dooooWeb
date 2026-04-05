@@ -1429,7 +1429,7 @@
     "addTitle": "Ajouter un titre",
     "addDescription": "Ajouter une description",
     "addDate": "Ajouter une date",
-    "setRecurrence": "Définir la récurrence",
+    "setRecurrence": "Définir la répétition",
     "addLocation": "Ajouter un lieu",
     "addPriority": "Ajouter une priorité",
     "addCategory": "Ajouter une catégorie",
@@ -1439,6 +1439,12 @@
     "clear": "Effacer",
     "startTimeZone": "Fuseau horaire de début",
     "endTimeZone": "Fuseau horaire de fin",
-    "addEndTimeZone": "Ajouter fuseau horaire de fin"
+    "addEndTimeZone": "Ajouter fuseau horaire de fin",
+    "addDuration": "Durée",
+    "duration": "Durée",
+    "addReminder": "Rappel",
+    "reminder": "Rappel",
+    "addSecondReminder": "Deuxième rappel",
+    "secondReminder": "Deuxième rappel"
   }
 }

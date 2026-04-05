@@ -1439,6 +1439,12 @@
     "clear": "Wyczyść",
     "startTimeZone": "Strefa czasowa początku",
     "endTimeZone": "Strefa czasowa końca",
-    "addEndTimeZone": "Dodaj strefę czasową końca"
+    "addEndTimeZone": "Dodaj strefę czasową końca",
+    "addDuration": "Czas trwania",
+    "duration": "Czas trwania",
+    "addReminder": "Przypomnienie",
+    "reminder": "Przypomnienie",
+    "addSecondReminder": "Drugie przypomnienie",
+    "secondReminder": "Drugie przypomnienie"
   }
 }
