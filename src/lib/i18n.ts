@@ -51,7 +51,7 @@ i18n
       id: { translation: id },
       fa: { translation: fa },
     },
-    lng: browserLanguage, // Will be overridden by stored preference in LanguageProvider
+    lng: localStorage.getItem('@doooo_language') || browserLanguage,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // React already escapes

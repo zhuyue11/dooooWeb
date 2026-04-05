@@ -1434,6 +1434,7 @@
     "addCategory": "Agregar categoría",
     "addTags": "Agregar etiquetas",
     "infoText": "La hora, duración, recordatorios y configuraciones avanzadas aparecerán después de seleccionar una fecha.",
-    "save": "Guardar"
+    "save": "Guardar",
+    "clear": "Borrar"
   }
 }

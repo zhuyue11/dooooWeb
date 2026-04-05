@@ -1434,6 +1434,7 @@
     "addCategory": "Ajouter une catégorie",
     "addTags": "Ajouter des tags",
     "infoText": "L'heure, la durée, les rappels et les paramètres avancés apparaîtront après la sélection d'une date.",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "clear": "Effacer"
   }
 }

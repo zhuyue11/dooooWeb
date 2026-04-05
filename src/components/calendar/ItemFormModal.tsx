@@ -2,6 +2,8 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
+import { CalendarPopover } from '@/components/ui/CalendarPopover';
+import { TimePicker } from '@/components/ui/TimePicker';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import type { ItemFormDraft } from '@/pages/items/ItemEditorPage';
 import { toNoonUTC, combineDateAndTime, formatDateDisplay } from '@/utils/dateForm';
@@ -17,137 +19,6 @@ interface ItemFormModalProps {
   defaultDate?: Date;
   onClose: () => void;
   onSaved: () => void;
-}
-
-// ── Calendar Popover ──
-
-const WEEKDAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
-
-function CalendarPopover({ selectedDate, onSelect, onClose }: {
-  selectedDate: Date | null;
-  onSelect: (date: Date) => void;
-  onClose: () => void;
-}) {
-  const { t } = useTranslation();
-  const [viewMonth, setViewMonth] = useState(() => {
-    const d = selectedDate || new Date();
-    return new Date(d.getFullYear(), d.getMonth(), 1);
-  });
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [onClose]);
-
-  const year = viewMonth.getFullYear();
-  const month = viewMonth.getMonth();
-  const firstDay = new Date(year, month, 1);
-  // Monday=0 based offset
-  const startOffset = (firstDay.getDay() + 6) % 7;
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date();
-
-  const weeks: (number | null)[][] = [];
-  let day = 1 - startOffset;
-  for (let w = 0; w < 6; w++) {
-    const week: (number | null)[] = [];
-    for (let d = 0; d < 7; d++) {
-      week.push(day >= 1 && day <= daysInMonth ? day : null);
-      day++;
-    }
-    if (week.every((d) => d === null)) break;
-    weeks.push(week);
-  }
-
-  const isToday = (d: number) =>
-    today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
-  const isSelected = (d: number) =>
-    selectedDate && selectedDate.getFullYear() === year && selectedDate.getMonth() === month && selectedDate.getDate() === d;
-
-  return (
-    <div
-      ref={ref}
-      className="absolute left-6 right-6 top-full mt-2 z-50 rounded-xl border border-border bg-surface p-4 shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
-    >
-      {/* Header */}
-      <div className="mb-3 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => setViewMonth(new Date(year, month - 1, 1))}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
-        >
-          <Icon name="chevron_left" size={18} />
-        </button>
-        <span className="text-sm font-semibold text-foreground">
-          {viewMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-        </span>
-        <button
-          type="button"
-          onClick={() => setViewMonth(new Date(year, month + 1, 1))}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
-        >
-          <Icon name="chevron_right" size={18} />
-        </button>
-      </div>
-
-      {/* Weekday headers */}
-      <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium text-muted-foreground">
-        {WEEKDAY_KEYS.map((key) => (
-          <span key={key}>{t(`calendarPage.weekdaysTwoChar.${key}`)}</span>
-        ))}
-      </div>
-
-      {/* Day grid */}
-      <div className="grid grid-cols-7 gap-y-0.5">
-        {weeks.flat().map((d, i) => (
-          <button
-            key={i}
-            type="button"
-            disabled={d === null}
-            onClick={() => d && onSelect(new Date(year, month, d))}
-            className={`flex h-8 items-center justify-center rounded-full text-[13px] transition-colors ${
-              d === null
-                ? ''
-                : isSelected(d)
-                  ? 'bg-primary font-semibold text-primary-foreground'
-                  : isToday(d)
-                    ? 'font-semibold text-primary'
-                    : 'text-foreground hover:bg-muted'
-            }`}
-          >
-            {d}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Inline Time Picker ──
-
-function InlineTimePicker({ value, onChange, onClear }: {
-  value: string; // "HH:mm" 24h format
-  onChange: (value: string) => void;
-  onClear: () => void;
-}) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <Icon name="schedule" size={20} color="var(--color-primary)" className="shrink-0" />
-      <input
-        type="time"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-9 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-      />
-      <button type="button" onClick={onClear} className="ml-auto text-muted-foreground hover:text-foreground">
-        <Icon name="close" size={16} />
-      </button>
-    </div>
-  );
 }
 
 // ── Main Modal ──
@@ -419,7 +290,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
             {isTask && (
               <div className="px-4 py-2.5">
                 {hasTime ? (
-                  <InlineTimePicker
+                  <TimePicker
                     value={timeValue}
                     onChange={setTimeValue}
                     onClear={handleClearTime}
@@ -442,7 +313,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
               <>
                 <div className="px-4 py-2.5">
                   {hasStartTime ? (
-                    <InlineTimePicker
+                    <TimePicker
                       value={startTimeValue}
                       onChange={setStartTimeValue}
                       onClear={() => setHasStartTime(false)}
@@ -460,7 +331,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
                 </div>
                 <div className="px-4 py-2.5">
                   {hasEndTime ? (
-                    <InlineTimePicker
+                    <TimePicker
                       value={endTimeValue}
                       onChange={setEndTimeValue}
                       onClear={() => setHasEndTime(false)}

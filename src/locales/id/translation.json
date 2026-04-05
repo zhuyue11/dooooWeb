@@ -1434,6 +1434,7 @@
     "addCategory": "Tambah kategori",
     "addTags": "Tambah tag",
     "infoText": "Waktu, durasi, pengingat, dan pengaturan lanjutan akan muncul setelah memilih tanggal.",
-    "save": "Simpan"
+    "save": "Simpan",
+    "clear": "Hapus"
   }
 }

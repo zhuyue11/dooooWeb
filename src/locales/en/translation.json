@@ -1513,6 +1513,7 @@
     "addCategory": "Add category",
     "addTags": "Add tags",
     "infoText": "Time, duration, reminders, and advanced settings will appear after selecting a date.",
-    "save": "Save"
+    "save": "Save",
+    "clear": "Clear"
   }
 }

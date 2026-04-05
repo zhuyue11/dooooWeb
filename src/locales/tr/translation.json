@@ -1434,6 +1434,7 @@
     "addCategory": "Kategori ekle",
     "addTags": "Etiket ekle",
     "infoText": "Saat, süre, hatırlatıcılar ve gelişmiş ayarlar tarih seçildikten sonra görünecektir.",
-    "save": "Kaydet"
+    "save": "Kaydet",
+    "clear": "Temizle"
   }
 }

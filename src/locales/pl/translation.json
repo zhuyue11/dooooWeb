@@ -1434,6 +1434,7 @@
     "addCategory": "Dodaj kategorię",
     "addTags": "Dodaj tagi",
     "infoText": "Czas, czas trwania, przypomnienia i zaawansowane ustawienia pojawią się po wybraniu daty.",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "clear": "Wyczyść"
   }
 }

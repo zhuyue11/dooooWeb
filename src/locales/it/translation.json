@@ -1434,6 +1434,7 @@
     "addCategory": "Aggiungi categoria",
     "addTags": "Aggiungi tag",
     "infoText": "Ora, durata, promemoria e impostazioni avanzate appariranno dopo aver selezionato una data.",
-    "save": "Salva"
+    "save": "Salva",
+    "clear": "Cancella"
   }
 }

@@ -5,14 +5,19 @@ import { getTask, getEvent } from '@/lib/api';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { Icon } from '@/components/ui/Icon';
+import { CalendarPopover } from '@/components/ui/CalendarPopover';
+import { RepeatPopover } from '@/components/ui/RepeatPopover';
+import { TimePicker } from '@/components/ui/TimePicker';
 import { toNoonUTC, combineDateAndTime } from '@/utils/dateForm';
-import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent } from '@/types/api';
+import { getRepeatDisplayText } from '@/utils/repeatDisplay';
+import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 
 // ── Types ──
 
 type ItemType = 'TASK' | 'EVENT';
 type TimeOfDay = 'MORNING' | 'AFTERNOON' | 'EVENING' | null;
+type ActivePopover = 'date' | 'priority' | 'category' | 'repeat' | null;
 
 export interface ItemFormDraft {
   itemType: ItemType;
@@ -25,20 +30,139 @@ export interface ItemFormDraft {
   startTimeValue: string;
   hasEndTime: boolean;
   endTimeValue: string;
+  repeat?: Repeat | null;
+}
+
+// ── Popover wrapper (click-outside-to-close) ──
+
+function PopoverWrapper({ children, onClose, className }: {
+  children: React.ReactNode;
+  onClose: () => void;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} className={`absolute left-0 top-full mt-1 z-50 rounded-xl border border-border bg-surface shadow-[0_8px_24px_rgba(0,0,0,0.2)] ${className || ''}`}>
+      {children}
+    </div>
+  );
 }
 
 // ── Field row component ──
 
-function FieldRow({ icon, text, onClick, active }: { icon: string; text: string; onClick?: () => void; active?: boolean }) {
+function FieldRow({ icon, text, onClick, active, suffix }: {
+  icon: string;
+  text: string;
+  onClick?: () => void;
+  active?: boolean;
+  suffix?: React.ReactNode;
+}) {
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
-      className="flex w-full items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+      onKeyDown={(e) => { if (onClick && (e.key === 'Enter' || e.key === ' ')) onClick(); }}
+      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
     >
       <Icon name={icon} size={20} color={active ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-      <span className={`text-sm ${active ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>{text}</span>
-    </button>
+      <span className={`flex-1 text-sm ${active ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>{text}</span>
+      {suffix}
+    </div>
+  );
+}
+
+// ── Priority popover ──
+
+const PRIORITY_OPTIONS = [
+  { value: 'URGENT', key: 'todoPage.priorityUrgent', color: 'text-red-500' },
+  { value: 'HIGH', key: 'todoPage.priorityHigh', color: 'text-orange-500' },
+  { value: 'MEDIUM', key: 'todoPage.priorityMedium', color: 'text-yellow-500' },
+  { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-blue-500' },
+] as const;
+
+function PriorityPopover({ selected, onSelect, onClear, onClose }: {
+  selected: string;
+  onSelect: (value: string) => void;
+  onClear: () => void;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <PopoverWrapper onClose={onClose} className="w-[200px] p-1">
+      {PRIORITY_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onSelect(opt.value)}
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === opt.value ? 'bg-muted font-medium' : ''}`}
+        >
+          <Icon name="flag" size={16} className={opt.color} />
+          <span>{t(opt.key)}</span>
+        </button>
+      ))}
+      {selected && (
+        <>
+          <div className="mx-2 my-1 border-t border-border" />
+          <button
+            type="button"
+            onClick={onClear}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+          >
+            <Icon name="close" size={16} />
+            <span>{t('itemEditor.clear')}</span>
+          </button>
+        </>
+      )}
+    </PopoverWrapper>
+  );
+}
+
+// ── Category popover ──
+
+function CategoryPopover({ categories, selected, onSelect, onClear, onClose }: {
+  categories: { id: string; name: string; color: string }[];
+  selected: string;
+  onSelect: (id: string) => void;
+  onClear: () => void;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <PopoverWrapper onClose={onClose} className="w-[220px] max-h-[280px] overflow-y-auto p-1">
+      {categories.map((cat) => (
+        <button
+          key={cat.id}
+          type="button"
+          onClick={() => onSelect(cat.id)}
+          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === cat.id ? 'bg-muted font-medium' : ''}`}
+        >
+          <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: cat.color }} />
+          <span className="truncate">{cat.name}</span>
+        </button>
+      ))}
+      {selected && (
+        <>
+          <div className="mx-2 my-1 border-t border-border" />
+          <button
+            type="button"
+            onClick={onClear}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+          >
+            <Icon name="close" size={16} />
+            <span>{t('itemEditor.clear')}</span>
+          </button>
+        </>
+      )}
+    </PopoverWrapper>
   );
 }
 
@@ -83,11 +207,19 @@ export function ItemEditorPage() {
   const [priority, setPriority] = useState<string>('');
   const [categoryId, setCategoryId] = useState<string>('');
   const [locationValue, setLocationValue] = useState('');
+  const [selectedRepeat, setSelectedRepeat] = useState<Repeat | null>(draft?.repeat || null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
+
+  // UI state
+  const [activePopover, setActivePopover] = useState<ActivePopover>(null);
+  const [editingLocation, setEditingLocation] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
+  const locationRef = useRef<HTMLInputElement>(null);
 
   // ── Load existing item for edit mode ──
-  const { data: existingItem, isError: fetchError } = useQuery({
+  const { data: existingItem } = useQuery({
     queryKey: [typeParam === 'event' ? 'event' : 'task', id],
     queryFn: () => typeParam === 'event' ? getEvent(id!) : getTask(id!),
     enabled: isEditMode,
@@ -118,10 +250,12 @@ export function ItemEditorPage() {
     }
     if (isTask) {
       const task = existingItem as Task;
-      setPriority(task.priority || '');
+      setPriority(task.priority?.toUpperCase() || '');
       setCategoryId(task.categoryId || '');
       setTimeOfDay(task.timeOfDay || null);
       setLocationValue(task.location || '');
+      setSelectedRepeat(task.repeat || null);
+      setTags(task.tags || []);
     } else {
       const event = existingItem as ApiEvent;
       setLocationValue(event.location || '');
@@ -137,6 +271,11 @@ export function ItemEditorPage() {
   useEffect(() => {
     if (!isEditMode) titleRef.current?.focus();
   }, [isEditMode]);
+
+  // Focus location input when entering edit mode
+  useEffect(() => {
+    if (editingLocation) locationRef.current?.focus();
+  }, [editingLocation]);
 
   // ── Computed ──
   const isTask = itemType === 'TASK';
@@ -161,6 +300,39 @@ export function ItemEditorPage() {
       setHasStartTime(false);
       setHasEndTime(false);
     }
+  }, []);
+
+  const togglePopover = useCallback((popover: ActivePopover) => {
+    setActivePopover((prev) => prev === popover ? null : popover);
+  }, []);
+
+  const closePopover = useCallback(() => setActivePopover(null), []);
+
+  const handleDateSelect = useCallback((date: Date) => {
+    setSelectedDate(date);
+    setActivePopover(null);
+  }, []);
+
+  const handleClearDate = useCallback(() => {
+    setSelectedDate(null);
+    setActivePopover(null);
+    setHasTime(false);
+    setTimeOfDay(null);
+    setHasStartTime(false);
+    setHasEndTime(false);
+    setSelectedRepeat(null);
+  }, []);
+
+  const handleAddTag = useCallback(() => {
+    const trimmed = tagInput.trim();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags((prev) => [...prev, trimmed]);
+    }
+    setTagInput('');
+  }, [tagInput, tags]);
+
+  const handleRemoveTag = useCallback((tag: string) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
   }, []);
 
   const handleSubmit = useCallback(async () => {
@@ -191,6 +363,7 @@ export function ItemEditorPage() {
           priority: priority || undefined,
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
+          repeat: selectedRepeat ?? null,
         };
         await updateTaskMutation.mutateAsync({ id: id!, data: req });
       } else {
@@ -208,6 +381,7 @@ export function ItemEditorPage() {
           priority: priority || undefined,
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
+          repeat: selectedRepeat ?? undefined,
         };
         await createTaskMutation.mutateAsync(req);
       }
@@ -250,14 +424,22 @@ export function ItemEditorPage() {
   }, [
     isTitleValid, title, description, isTask, selectedDate, hasTime, timeValue,
     timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue,
-    priority, categoryId, locationValue, isEditMode, id,
+    priority, categoryId, locationValue, selectedRepeat, isEditMode, id,
     createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
     navigate,
   ]);
 
-  // ── Date display ──
+  // ── Date display ─���
   const dateDisplay = selectedDate
     ? selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+    : null;
+
+  // ── Repeat display ──
+  const repeatDisplay = selectedRepeat ? getRepeatDisplayText(selectedRepeat, selectedDate, t) : null;
+
+  // ── Priority display ──
+  const priorityDisplay = priority
+    ? t(`todoPage.priority${priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase()}`)
     : null;
 
   return (
@@ -340,27 +522,48 @@ export function ItemEditorPage() {
         {/* Left column: Schedule card */}
         <div className="rounded-xl bg-surface p-1 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
           {/* Date */}
-          <FieldRow
-            icon="calendar_today"
-            text={dateDisplay || t('itemEditor.addDate')}
-            active={!!selectedDate}
-          />
+          <div className="relative">
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => togglePopover('date')}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') togglePopover('date'); }}
+              className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+            >
+              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+              {selectedDate ? (
+                <>
+                  <span className="flex-1 text-sm font-medium text-foreground">{dateDisplay}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleClearDate(); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                </>
+              ) : (
+                <span className="text-sm text-muted-foreground">{t('itemEditor.addDate')}</span>
+              )}
+            </div>
+            {activePopover === 'date' && (
+              <CalendarPopover
+                selectedDate={selectedDate}
+                onSelect={handleDateSelect}
+                onClose={closePopover}
+              />
+            )}
+          </div>
+
           {/* Time (task) */}
           {isTask && selectedDate && (
             <div className="px-4 py-2.5">
               {hasTime ? (
-                <div className="flex items-center gap-2.5">
-                  <Icon name="schedule" size={20} color="var(--color-primary)" />
-                  <input
-                    type="time"
-                    value={timeValue}
-                    onChange={(e) => setTimeValue(e.target.value)}
-                    className="h-9 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                  <button type="button" onClick={() => { setHasTime(false); setTimeOfDay(null); }} className="ml-auto text-muted-foreground hover:text-foreground">
-                    <Icon name="close" size={16} />
-                  </button>
-                </div>
+                <TimePicker
+                  value={timeValue}
+                  onChange={setTimeValue}
+                  onClear={() => { setHasTime(false); setTimeOfDay(null); }}
+                />
               ) : (
                 <button
                   type="button"
@@ -373,23 +576,17 @@ export function ItemEditorPage() {
               )}
             </div>
           )}
+
           {/* Start/end time (event) */}
           {!isTask && selectedDate && (
             <>
               <div className="px-4 py-2.5">
                 {hasStartTime ? (
-                  <div className="flex items-center gap-2.5">
-                    <Icon name="schedule" size={20} color="var(--color-primary)" />
-                    <input
-                      type="time"
-                      value={startTimeValue}
-                      onChange={(e) => setStartTimeValue(e.target.value)}
-                      className="h-9 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <button type="button" onClick={() => setHasStartTime(false)} className="ml-auto text-muted-foreground hover:text-foreground">
-                      <Icon name="close" size={16} />
-                    </button>
-                  </div>
+                  <TimePicker
+                    value={startTimeValue}
+                    onChange={setStartTimeValue}
+                    onClear={() => setHasStartTime(false)}
+                  />
                 ) : (
                   <button type="button" onClick={() => setHasStartTime(true)} className="flex w-full items-center gap-3.5 text-left">
                     <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
@@ -399,18 +596,11 @@ export function ItemEditorPage() {
               </div>
               <div className="px-4 py-2.5">
                 {hasEndTime ? (
-                  <div className="flex items-center gap-2.5">
-                    <Icon name="schedule" size={20} color="var(--color-primary)" />
-                    <input
-                      type="time"
-                      value={endTimeValue}
-                      onChange={(e) => setEndTimeValue(e.target.value)}
-                      className="h-9 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <button type="button" onClick={() => setHasEndTime(false)} className="ml-auto text-muted-foreground hover:text-foreground">
-                      <Icon name="close" size={16} />
-                    </button>
-                  </div>
+                  <TimePicker
+                    value={endTimeValue}
+                    onChange={setEndTimeValue}
+                    onClear={() => setHasEndTime(false)}
+                  />
                 ) : (
                   <button type="button" onClick={() => setHasEndTime(true)} className="flex w-full items-center gap-3.5 text-left">
                     <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
@@ -420,14 +610,68 @@ export function ItemEditorPage() {
               </div>
             </>
           )}
-          {/* Recurrence */}
-          <FieldRow icon="repeat" text={t('itemEditor.setRecurrence')} />
+
+          {/* Recurrence (only when date is selected) */}
+          {selectedDate && (
+            <div className="relative">
+              <FieldRow
+                icon="repeat"
+                text={repeatDisplay || t('itemEditor.setRecurrence')}
+                active={!!selectedRepeat}
+                onClick={() => togglePopover('repeat')}
+                suffix={selectedRepeat ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setSelectedRepeat(null); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+              {activePopover === 'repeat' && (
+                <RepeatPopover
+                  selectedRepeat={selectedRepeat}
+                  selectedDate={selectedDate}
+                  onSelect={(repeat) => { setSelectedRepeat(repeat); setActivePopover(null); }}
+                  onClose={closePopover}
+                />
+              )}
+            </div>
+          )}
+
           {/* Location */}
-          <FieldRow
-            icon="location_on"
-            text={locationValue || t('itemEditor.addLocation')}
-            active={!!locationValue}
-          />
+          {editingLocation ? (
+            <div className="flex items-center gap-3.5 px-4 py-2.5">
+              <Icon name="location_on" size={20} color="var(--color-primary)" />
+              <input
+                ref={locationRef}
+                type="text"
+                value={locationValue}
+                onChange={(e) => setLocationValue(e.target.value)}
+                onBlur={() => setEditingLocation(false)}
+                onKeyDown={(e) => { if (e.key === 'Enter') setEditingLocation(false); if (e.key === 'Escape') { setLocationValue(''); setEditingLocation(false); } }}
+                placeholder={t('itemEditor.addLocation')}
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              />
+              {locationValue && (
+                <button
+                  type="button"
+                  onMouseDown={(e) => { e.preventDefault(); setLocationValue(''); setEditingLocation(false); }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Icon name="close" size={16} />
+                </button>
+              )}
+            </div>
+          ) : (
+            <FieldRow
+              icon="location_on"
+              text={locationValue || t('itemEditor.addLocation')}
+              active={!!locationValue}
+              onClick={() => setEditingLocation(true)}
+            />
+          )}
         </div>
 
         {/* Right column */}
@@ -435,23 +679,96 @@ export function ItemEditorPage() {
           {/* Classification card */}
           <div className="rounded-xl bg-surface p-1 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             {/* Priority */}
-            <FieldRow
-              icon="flag"
-              text={priority ? priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase() : t('itemEditor.addPriority')}
-              active={!!priority}
-            />
-            {/* Category */}
-            <FieldRow
-              icon="sell"
-              text={
-                categoryId
-                  ? (categories?.find((c) => c.id === categoryId)?.name || t('itemEditor.addCategory'))
-                  : t('itemEditor.addCategory')
-              }
-              active={!!categoryId}
-            />
+            <div className="relative">
+              <FieldRow
+                icon="flag"
+                text={priorityDisplay || t('itemEditor.addPriority')}
+                active={!!priority}
+                onClick={() => togglePopover('priority')}
+                suffix={priority ? (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); setPriority(''); }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Icon name="close" size={16} />
+                  </button>
+                ) : undefined}
+              />
+              {activePopover === 'priority' && (
+                <PriorityPopover
+                  selected={priority}
+                  onSelect={(val) => { setPriority(val); setActivePopover(null); }}
+                  onClear={() => { setPriority(''); setActivePopover(null); }}
+                  onClose={closePopover}
+                />
+              )}
+            </div>
+
+            {/* Category (tasks only) */}
+            {isTask && (
+              <div className="relative">
+                <FieldRow
+                  icon="sell"
+                  text={
+                    categoryId
+                      ? (categories?.find((c) => c.id === categoryId)?.name || t('itemEditor.addCategory'))
+                      : t('itemEditor.addCategory')
+                  }
+                  active={!!categoryId}
+                  onClick={() => togglePopover('category')}
+                  suffix={categoryId ? (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setCategoryId(''); }}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <Icon name="close" size={16} />
+                    </button>
+                  ) : undefined}
+                />
+                {activePopover === 'category' && categories && (
+                  <CategoryPopover
+                    categories={categories}
+                    selected={categoryId}
+                    onSelect={(id) => { setCategoryId(id); setActivePopover(null); }}
+                    onClear={() => { setCategoryId(''); setActivePopover(null); }}
+                    onClose={closePopover}
+                  />
+                )}
+              </div>
+            )}
+
             {/* Tags */}
-            <FieldRow icon="label" text={t('itemEditor.addTags')} />
+            <div className="px-4 py-2.5">
+              <div className="flex items-center gap-3.5">
+                <Icon name="label" size={20} color={tags.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <div className="flex flex-1 flex-wrap items-center gap-1.5">
+                  {tags.map((tag) => (
+                    <span key={tag} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                      {tag}
+                      <button type="button" onClick={() => handleRemoveTag(tag)} className="text-muted-foreground hover:text-foreground">
+                        <Icon name="close" size={12} />
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); }
+                      if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
+                        setTags((prev) => prev.slice(0, -1));
+                      }
+                    }}
+                    onBlur={handleAddTag}
+                    placeholder={tags.length === 0 ? t('itemEditor.addTags') : ''}
+                    className="min-w-[80px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Info card */}

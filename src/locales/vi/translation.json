@@ -1434,6 +1434,7 @@
     "addCategory": "Thêm danh mục",
     "addTags": "Thêm thẻ",
     "infoText": "Thời gian, thời lượng, nhắc nhở và cài đặt nâng cao sẽ xuất hiện sau khi chọn ngày.",
-    "save": "Lưu"
+    "save": "Lưu",
+    "clear": "Xóa"
   }
 }

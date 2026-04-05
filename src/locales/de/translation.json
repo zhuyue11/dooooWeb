@@ -1434,6 +1434,7 @@
     "addCategory": "Kategorie hinzufügen",
     "addTags": "Tags hinzufügen",
     "infoText": "Uhrzeit, Dauer, Erinnerungen und erweiterte Einstellungen werden nach Auswahl eines Datums angezeigt.",
-    "save": "Speichern"
+    "save": "Speichern",
+    "clear": "Löschen"
   }
 }

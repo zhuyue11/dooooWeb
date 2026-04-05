@@ -1440,6 +1440,7 @@
     "addCategory": "Adicionar categoria",
     "addTags": "Adicionar tags",
     "infoText": "Hora, duração, lembretes e configurações avançadas aparecerão após selecionar uma data.",
-    "save": "Salvar"
+    "save": "Salvar",
+    "clear": "Limpar"
   }
 }
