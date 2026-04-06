@@ -66,8 +66,9 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
     >
       {/* Untimed items — no time-of-day */}
       {noTimeOfDayItems.length > 0 && (
-        <div className="overflow-y-auto border-b border-border px-4 py-2" style={{ maxHeight: 60 }}>
-          <div className="flex flex-wrap gap-2">
+        <div className="flex border-b border-border" style={{ maxHeight: 120 }}>
+          <div className="flex w-[60px] flex-shrink-0 items-start px-4 pt-2" />
+          <div className="flex flex-1 flex-col gap-1 overflow-y-auto py-1 pr-4">
             {noTimeOfDayItems.map((item) => {
               const colors = item.itemType === 'EVENT'
                 ? { bg: '#ede9fe', text: '#5b21b6' }
@@ -93,12 +94,13 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
         const sectionItems = itemsByTimeOfDay[section.key];
         if (sectionItems.length === 0) return null;
         return (
-          <div key={section.key} className="overflow-y-auto border-b border-border px-4 py-2" style={{ maxHeight: 60 }}>
-            <div className="mb-1 flex items-center gap-1 text-[11px] font-semibold text-muted-foreground">
-              <Icon name={section.icon} size={12} />
-              {t(section.i18nKey)}
+          <div key={section.key} className="flex border-b border-border" style={{ maxHeight: 120 }}>
+            <div className="flex w-[60px] flex-shrink-0 items-start px-4 pt-2">
+              <span className="text-xs font-medium text-muted-foreground">
+                <Icon name={section.icon} size={14} />
+              </span>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-1 flex-col gap-1 overflow-y-auto py-1 pr-4">
               {sectionItems.map((item) => {
                 const colors = item.itemType === 'EVENT'
                   ? { bg: '#ede9fe', text: '#5b21b6' }
@@ -164,11 +166,13 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
                     if (categoryName) metaParts.push(categoryName);
                     if (item.priority) metaParts.push(item.priority.charAt(0).toUpperCase() + item.priority.slice(1).toLowerCase());
 
+                    const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
+
                     return (
                       <div
                         key={item.id}
                         data-testid={`day-task-${item.id}`}
-                        className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                        className={`overflow-hidden rounded-md ${item.isCompleted ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                         style={{
                           backgroundColor: colors.bg,
                           padding: '6px 10px',
@@ -176,14 +180,52 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
                         }}
                         onClick={() => onItemClick?.(item)}
                       >
-                        <span
-                          className={`text-[12px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
-                          style={{ color: colors.text }}
-                        >
-                          {item.title}
-                        </span>
-                        <div className="text-[11px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
-                          {metaParts.join(' · ')}
+                        {/* Title + priority flag */}
+                        <div className="flex items-center gap-1">
+                          <span
+                            className={`text-[12px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                            style={{ color: colors.text }}
+                          >
+                            {item.title}
+                          </span>
+                          {isHighPriority && <Icon name="flag" size={11} color="var(--color-destructive)" />}
+                        </div>
+                        {/* Meta line: time · category · priority · description */}
+                        <div className="flex items-center gap-1.5 text-[11px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
+                          <span>{metaParts.join(' · ')}</span>
+                          {item.description && (
+                            <span className="truncate opacity-70">— {item.description}</span>
+                          )}
+                        </div>
+                        {/* Tags line: group, plan, assignee, recurring, reminder, participants */}
+                        <div className="flex flex-wrap items-center gap-1" style={{ color: colors.text }}>
+                          {item.groupId && (
+                            <span className="inline-flex items-center gap-px rounded-full border border-[#3b82f6] px-1 text-[9px] font-medium text-[#3b82f6]">
+                              <Icon name="group" size={8} color="#3b82f6" />
+                              {item.groupName || t('calendarPage.itemRow.group')}
+                            </span>
+                          )}
+                          {item.planName && (
+                            <span className="inline-flex items-center gap-px rounded-full border border-secondary px-1 text-[9px] font-medium text-secondary">
+                              {item.planName}
+                            </span>
+                          )}
+                          {item.assigneeName && (
+                            <span className="inline-flex items-center gap-px text-[9px] opacity-80">
+                              <Icon name="person" size={9} color={colors.text} /> {item.assigneeName}
+                            </span>
+                          )}
+                          {!!item.repeat && <Icon name="repeat" size={10} color={colors.text} style={{ opacity: 0.6 }} />}
+                          {(item.firstReminderMinutes != null || item.secondReminderMinutes != null) && (
+                            <Icon name="notifications" size={10} color={colors.text} style={{ opacity: 0.6 }} />
+                          )}
+                          {item.isForAllMembers && item.participantSummary && item.participantSummary.goingCount > 0 && (
+                            <span className="text-[9px] font-medium opacity-80">
+                              {item.trackCompletion !== false
+                                ? `${item.participantSummary.completedCount}/${item.participantSummary.goingCount}`
+                                : `${item.participantSummary.goingCount}`} {t('calendarPage.itemRow.going').toLowerCase()}
+                            </span>
+                          )}
                         </div>
                       </div>
                     );
