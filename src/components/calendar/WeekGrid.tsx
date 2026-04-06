@@ -77,6 +77,57 @@ function layoutOverlaps(items: CalendarItem[]): Map<string, LayoutInfo> {
   return result;
 }
 
+/** Shared row component for untimed item sections (all-day, morning, afternoon, evening). */
+function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLabelWidth }: {
+  icon?: string;
+  weekDates: Date[];
+  getItems: (dateKey: string) => CalendarItem[];
+  categories?: Category[];
+  onItemClick?: (item: CalendarItem) => void;
+  hourLabelWidth: number;
+}) {
+  return (
+    <div className="flex" style={{ maxHeight: 60 }}>
+      <div style={{ width: hourLabelWidth }} className="flex flex-shrink-0 items-start justify-end pr-2 pt-1">
+        {icon && <Icon name={icon} size={10} className="text-muted-foreground" />}
+      </div>
+      <div className="grid flex-1 grid-cols-7 border-b border-border" style={{ maxHeight: 60, overflowY: 'auto' }}>
+        {weekDates.map((date, i) => {
+          const items = getItems(toISODate(date));
+          return (
+            <div key={i} className="flex flex-col gap-0.5 border-l border-border px-0.5 py-1">
+              {items.map((item) => {
+                const colors = item.itemType === 'EVENT'
+                  ? { bg: '#ede9fe', text: '#5b21b6' }
+                  : getCategoryColor(item.categoryId, categories);
+                return (
+                  <div
+                    key={item.id}
+                    data-testid={`task-card-${item.id}`}
+                    className={`cursor-pointer overflow-hidden rounded px-1 py-0.5 transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
+                    style={{ backgroundColor: colors.bg, color: colors.text }}
+                    onClick={() => onItemClick?.(item)}
+                  >
+                    <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
+                      {item.title}
+                    </div>
+                    {item.groupName && (
+                      <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                        <Icon name="group" size={7} color="#3b82f6" />
+                        {item.groupName}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 interface WeekGridProps {
   weekDates: Date[];
   itemsByDate: Map<string, CalendarItem[]>;
@@ -107,17 +158,31 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
     }
   }, [weekDates[0]?.getTime()]); // re-scroll when week changes
 
-  // Pre-process items per date: separate timed vs untimed
+  // Pre-process items per date: separate timed vs untimed, group untimed by timeOfDay
   const timedByDate = new Map<string, CalendarItem[]>();
-  const untimedByDate = new Map<string, CalendarItem[]>();
+  const noTodByDate = new Map<string, CalendarItem[]>(); // no timeOfDay
+  const todByDate = new Map<string, Map<string, CalendarItem[]>>(); // keyed by timeOfDay
   for (const date of weekDates) {
     const key = toISODate(date);
     const items = itemsByDate.get(key) || [];
     timedByDate.set(key, items.filter((item) => item.hasTime));
-    untimedByDate.set(key, items.filter((item) => !item.hasTime));
+    const untimed = items.filter((item) => !item.hasTime);
+    noTodByDate.set(key, untimed.filter((item) => !item.timeOfDay));
+    const todMap = new Map<string, CalendarItem[]>();
+    for (const tod of ['MORNING', 'AFTERNOON', 'EVENING']) {
+      const todItems = untimed.filter((item) => item.timeOfDay === tod);
+      if (todItems.length > 0) todMap.set(tod, todItems);
+    }
+    todByDate.set(key, todMap);
   }
 
-  const hasAnyUntimed = weekDates.some((d) => (untimedByDate.get(toISODate(d))?.length ?? 0) > 0);
+  const TIME_OF_DAY_SECTIONS = [
+    { key: 'MORNING', icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
+    { key: 'AFTERNOON', icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
+    { key: 'EVENING', icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
+  ];
+
+  const hasAnyNoTod = weekDates.some((d) => (noTodByDate.get(toISODate(d))?.length ?? 0) > 0);
 
   return (
     <div
@@ -158,46 +223,31 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
         </div>
       </div>
 
-      {/* Untimed items row */}
-      {hasAnyUntimed && (
-        <div className="flex border-b border-border">
-          <div style={{ width: HOUR_LABEL_WIDTH }} className="flex-shrink-0" />
-          <div className="grid flex-1 grid-cols-7 gap-px py-1">
-            {weekDates.map((date, i) => {
-              const key = toISODate(date);
-              const items = untimedByDate.get(key) || [];
-              return (
-                <div key={i} className="flex flex-col gap-0.5 px-0.5">
-                  {items.map((item) => {
-                    const colors = item.itemType === 'EVENT'
-                      ? { bg: '#ede9fe', text: '#5b21b6' }
-                      : getCategoryColor(item.categoryId, categories);
-                    return (
-                      <div
-                        key={item.id}
-                        data-testid={`task-card-${item.id}`}
-                        className={`cursor-pointer overflow-hidden rounded px-1 py-0.5 transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
-                        style={{ backgroundColor: colors.bg, color: colors.text }}
-                        onClick={() => onItemClick?.(item)}
-                      >
-                        <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
-                          {item.title}
-                        </div>
-                        {item.groupName && (
-                          <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
-                            <Icon name="group" size={7} color="#3b82f6" />
-                            {item.groupName}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+      {/* Untimed sections — each is a row matching the time grid structure */}
+      {hasAnyNoTod && (
+        <UntimedRow
+          weekDates={weekDates}
+          getItems={(key) => noTodByDate.get(key) || []}
+          categories={categories}
+          onItemClick={onItemClick}
+          hourLabelWidth={HOUR_LABEL_WIDTH}
+        />
       )}
+      {TIME_OF_DAY_SECTIONS.map((section) => {
+        const hasItems = weekDates.some((d) => (todByDate.get(toISODate(d))?.get(section.key)?.length ?? 0) > 0);
+        if (!hasItems) return null;
+        return (
+          <UntimedRow
+            key={section.key}
+            icon={section.icon}
+            weekDates={weekDates}
+            getItems={(key) => todByDate.get(key)?.get(section.key) || []}
+            categories={categories}
+            onItemClick={onItemClick}
+            hourLabelWidth={HOUR_LABEL_WIDTH}
+          />
+        );
+      })}
 
       {/* Time grid */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
