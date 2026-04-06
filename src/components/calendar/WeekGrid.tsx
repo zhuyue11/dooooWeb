@@ -8,12 +8,12 @@ import { useDisplay } from '@/lib/contexts/display-context';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 
-interface LayoutInfo { column: number; totalColumns: number; hidden: boolean; overflowCount: number }
+export interface LayoutInfo { column: number; totalColumns: number; hidden: boolean; overflowCount: number }
 
 const MAX_VISIBLE_COLS = 2;
 
-/** Assign side-by-side columns to overlapping items (Google Calendar style), max 2 visible. */
-function layoutOverlaps(items: CalendarItem[]): Map<string, LayoutInfo> {
+/** Assign side-by-side columns to overlapping items (Google Calendar style). */
+export function layoutOverlaps(items: CalendarItem[], maxVisibleCols: number = MAX_VISIBLE_COLS): Map<string, LayoutInfo> {
   const result = new Map<string, LayoutInfo>();
   if (items.length === 0) return result;
 
@@ -51,14 +51,14 @@ function layoutOverlaps(items: CalendarItem[]): Map<string, LayoutInfo> {
     const totalCols = maxCol + 1;
     for (const o of overlapping) {
       const info = result.get(o.id)!;
-      info.totalColumns = Math.max(info.totalColumns, Math.min(totalCols, MAX_VISIBLE_COLS));
+      info.totalColumns = Math.max(info.totalColumns, Math.min(totalCols, maxVisibleCols));
     }
   }
 
   // Mark items beyond MAX_VISIBLE_COLS as hidden and count overflow
   for (const span of spans) {
     const info = result.get(span.id)!;
-    if (info.column >= MAX_VISIBLE_COLS) {
+    if (info.column >= maxVisibleCols) {
       info.hidden = true;
     }
   }
