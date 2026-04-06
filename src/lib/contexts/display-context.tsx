@@ -55,7 +55,7 @@ export function DisplayProvider({ children }: { children: ReactNode }) {
     () => (localStorage.getItem(STORAGE_KEYS.TIME_FORMAT) as TimeFormatSetting) || 'auto',
   );
   const [weekStartDay, setWeekStartDayState] = useState<WeekStartDay>(
-    () => (localStorage.getItem(STORAGE_KEYS.WEEK_START_DAY) as WeekStartDay) || 'sunday',
+    () => (localStorage.getItem(STORAGE_KEYS.WEEK_START_DAY) as WeekStartDay) || 'monday',
   );
 
   // Resolve 'auto' → actual format based on current language
