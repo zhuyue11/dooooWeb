@@ -36,7 +36,17 @@ export function getCategoryColor(
     const cat = categories.find((c) => c.id === categoryId);
     if (cat?.color) {
       // Generate pastel bg + dark text from the category's hex color
-      return { bg: `${cat.color}20`, text: cat.color };
+      // Blend category color at ~12% with white to produce an opaque pastel
+      const hex = cat.color.replace('#', '');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      const alpha = 0.12;
+      const blendR = Math.round(r * alpha + 255 * (1 - alpha));
+      const blendG = Math.round(g * alpha + 255 * (1 - alpha));
+      const blendB = Math.round(b * alpha + 255 * (1 - alpha));
+      const bg = `#${blendR.toString(16).padStart(2, '0')}${blendG.toString(16).padStart(2, '0')}${blendB.toString(16).padStart(2, '0')}`;
+      return { bg, text: cat.color };
     }
   }
 
