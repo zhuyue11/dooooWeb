@@ -8,6 +8,75 @@ import { useDisplay } from '@/lib/contexts/display-context';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 
+interface LayoutInfo { column: number; totalColumns: number; hidden: boolean; overflowCount: number }
+
+const MAX_VISIBLE_COLS = 2;
+
+/** Assign side-by-side columns to overlapping items (Google Calendar style), max 2 visible. */
+function layoutOverlaps(items: CalendarItem[]): Map<string, LayoutInfo> {
+  const result = new Map<string, LayoutInfo>();
+  if (items.length === 0) return result;
+
+  const spans = items.map((item) => {
+    const d = new Date(item.date);
+    const start = d.getHours() * 60 + d.getMinutes();
+    const end = start + (item.duration || 60);
+    return { id: item.id, start, end };
+  }).sort((a, b) => a.start - b.start || a.end - b.end);
+
+  // Greedy column assignment
+  const columns: { id: string; end: number }[][] = [];
+  for (const span of spans) {
+    let placed = false;
+    for (let c = 0; c < columns.length; c++) {
+      if (columns[c][columns[c].length - 1].end <= span.start) {
+        columns[c].push(span);
+        result.set(span.id, { column: c, totalColumns: 0, hidden: false, overflowCount: 0 });
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      columns.push([span]);
+      result.set(span.id, { column: columns.length - 1, totalColumns: 0, hidden: false, overflowCount: 0 });
+    }
+  }
+
+  // Set totalColumns per overlap cluster, cap visible at MAX_VISIBLE_COLS
+  for (const span of spans) {
+    const overlapping = spans.filter(
+      (other) => other.start < span.end && other.end > span.start,
+    );
+    const maxCol = Math.max(...overlapping.map((o) => result.get(o.id)!.column));
+    const totalCols = maxCol + 1;
+    for (const o of overlapping) {
+      const info = result.get(o.id)!;
+      info.totalColumns = Math.max(info.totalColumns, Math.min(totalCols, MAX_VISIBLE_COLS));
+    }
+  }
+
+  // Mark items beyond MAX_VISIBLE_COLS as hidden and count overflow
+  for (const span of spans) {
+    const info = result.get(span.id)!;
+    if (info.column >= MAX_VISIBLE_COLS) {
+      info.hidden = true;
+    }
+  }
+
+  // For each visible item in the last visible column, count how many hidden items overlap it
+  for (const span of spans) {
+    const info = result.get(span.id)!;
+    if (info.hidden || info.column !== MAX_VISIBLE_COLS - 1) continue;
+    const hiddenOverlapping = spans.filter((other) => {
+      const otherInfo = result.get(other.id)!;
+      return otherInfo.hidden && other.start < span.end && other.end > span.start;
+    });
+    info.overflowCount = hiddenOverlapping.length;
+  }
+
+  return result;
+}
+
 interface WeekGridProps {
   weekDates: Date[];
   itemsByDate: Map<string, CalendarItem[]>;
@@ -176,58 +245,73 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                       />
                     ))}
 
-                    {/* Timed items — absolutely positioned */}
-                    {timedItems.map((item) => {
-                      const itemDate = new Date(item.date);
-                      const startHour = itemDate.getHours();
-                      const startMinute = itemDate.getMinutes();
-                      const top = (startHour + startMinute / 60) * HOUR_HEIGHT;
-                      const duration = item.duration || 60;
-                      const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
-                      const colors = item.itemType === 'EVENT'
-                        ? { bg: '#ede9fe', text: '#5b21b6' }
-                        : getCategoryColor(item.categoryId, categories);
+                    {/* Timed items — absolutely positioned, side-by-side for overlaps (max 2) */}
+                    {(() => {
+                      const layout = layoutOverlaps(timedItems);
+                      return timedItems.filter((item) => !layout.get(item.id)?.hidden).map((item) => {
+                        const itemDate = new Date(item.date);
+                        const startHour = itemDate.getHours();
+                        const startMinute = itemDate.getMinutes();
+                        const top = (startHour + startMinute / 60) * HOUR_HEIGHT;
+                        const duration = item.duration || 60;
+                        const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
+                        const colors = item.itemType === 'EVENT'
+                          ? { bg: '#ede9fe', text: '#5b21b6' }
+                          : getCategoryColor(item.categoryId, categories);
+                        const info = layout.get(item.id)!;
+                        const col = info.column;
+                        const total = info.totalColumns;
+                        const widthPct = `${100 / total}%`;
+                        const leftPct = `${(col / total) * 100}%`;
 
-                      return (
-                        <div
-                          key={item.id}
-                          data-testid={`task-card-${item.id}`}
-                          className={`absolute left-0.5 right-0.5 cursor-pointer overflow-hidden rounded transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
-                          style={{
-                            top,
-                            height,
-                            backgroundColor: colors.bg,
-                            padding: '2px 4px',
-                            zIndex: 1,
-                          }}
-                          onClick={() => onItemClick?.(item)}
-                        >
-                          <div className="flex items-start justify-between gap-0.5">
-                            <div className="flex min-w-0 items-center gap-0.5">
-                              {item.itemType === 'EVENT' && (
-                                <Icon name="calendar_today" size={9} color={colors.text} />
-                              )}
-                              <span
-                                className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
-                                style={{ color: colors.text }}
-                              >
-                                {item.title}
+                        return (
+                          <div
+                            key={item.id}
+                            data-testid={`task-card-${item.id}`}
+                            className={`absolute cursor-pointer overflow-hidden rounded transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
+                            style={{
+                              top,
+                              height,
+                              left: leftPct,
+                              width: widthPct,
+                              backgroundColor: colors.bg,
+                              padding: '2px 4px',
+                              zIndex: 1,
+                            }}
+                            onClick={() => onItemClick?.(item)}
+                          >
+                            <div className="flex items-start justify-between gap-0.5">
+                              <div className="flex min-w-0 items-center gap-0.5">
+                                {item.itemType === 'EVENT' && (
+                                  <Icon name="calendar_today" size={9} color={colors.text} />
+                                )}
+                                <span
+                                  className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                                  style={{ color: colors.text }}
+                                >
+                                  {item.title}
+                                </span>
+                              </div>
+                              <span className="flex-shrink-0 text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
+                                {formatTime(item.date, timeFormat as TimeFormat)}
+                                {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
                               </span>
                             </div>
-                            <span className="flex-shrink-0 text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
-                              {formatTime(item.date, timeFormat as TimeFormat)}
-                              {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
-                            </span>
+                            {item.groupName && (
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                                <Icon name="group" size={7} color="#3b82f6" />
+                                {item.groupName}
+                              </span>
+                            )}
+                            {info.overflowCount > 0 && (
+                              <span className="mt-0.5 block text-[8px] font-medium text-muted-foreground">
+                                +{info.overflowCount} more
+                              </span>
+                            )}
                           </div>
-                          {item.groupName && (
-                            <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
-                              <Icon name="group" size={7} color="#3b82f6" />
-                              {item.groupName}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
+                        );
+                      });
+                    })()}
                   </div>
                 );
               })}
