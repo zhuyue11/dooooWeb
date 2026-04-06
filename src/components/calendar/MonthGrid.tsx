@@ -13,12 +13,13 @@ interface MonthGridProps {
   today: Date;
   categories?: Category[];
   onSelectDate: (date: Date) => void;
+  onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
 }
 
 const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
-export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDate, today, categories, onSelectDate, isLoading }: MonthGridProps) {
+export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading }: MonthGridProps) {
   const { t } = useTranslation();
   const activeMonth = currentMonth.getMonth();
   const weeks: Date[][] = [];
@@ -85,8 +86,9 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                         return (
                           <div
                             key={item.id}
-                            className={`overflow-hidden rounded px-1 py-px ${item.isCompleted ? 'opacity-60' : ''}`}
+                            className={`overflow-hidden rounded px-1 py-px ${item.isCompleted ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                             style={{ backgroundColor: colors.bg, color: colors.text }}
+                            onClick={(e) => { if (onItemClick) { e.stopPropagation(); onItemClick(item); } }}
                           >
                             <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
                               {item.title}

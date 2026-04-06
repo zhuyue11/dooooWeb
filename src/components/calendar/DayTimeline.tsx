@@ -11,12 +11,13 @@ interface DayTimelineProps {
   date: Date;
   items: CalendarItem[];
   categories?: Category[];
+  onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
 }
 
 const HOUR_HEIGHT = 60; // px per hour row
 
-export function DayTimeline({ date, items, categories, isLoading }: DayTimelineProps) {
+export function DayTimeline({ date, items, categories, onItemClick, isLoading }: DayTimelineProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -60,8 +61,9 @@ export function DayTimeline({ date, items, categories, isLoading }: DayTimelineP
                 <div
                   key={item.id}
                   data-testid={`day-task-${item.id}`}
-                  className="rounded-md px-2.5 py-1"
+                  className={`rounded-md px-2.5 py-1 ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                   style={{ backgroundColor: colors.bg }}
+                  onClick={() => onItemClick?.(item)}
                 >
                   <span className="text-xs font-medium" style={{ color: colors.text }}>{item.title}</span>
                 </div>
@@ -119,12 +121,13 @@ export function DayTimeline({ date, items, categories, isLoading }: DayTimelineP
                       <div
                         key={item.id}
                         data-testid={`day-task-${item.id}`}
-                        className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''}`}
+                        className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                         style={{
                           backgroundColor: colors.bg,
                           padding: '6px 10px',
                           minHeight: blockHeight,
                         }}
+                        onClick={() => onItemClick?.(item)}
                       >
                         <span
                           className={`text-[12px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}

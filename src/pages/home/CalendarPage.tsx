@@ -99,6 +99,7 @@ export function CalendarPage() {
             today={today}
             categories={categories}
             onSelectDate={handleSelectDate}
+            onItemClick={handleItemClick}
             isLoading={isLoading}
           />
         )}
@@ -107,6 +108,7 @@ export function CalendarPage() {
             date={visibleDates[0]}
             items={dayItems}
             categories={categories}
+            onItemClick={handleItemClick}
             isLoading={isLoading}
           />
         )}
