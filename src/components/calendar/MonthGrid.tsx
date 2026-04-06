@@ -74,23 +74,25 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                     {date.getDate()}
                   </span>
 
-                  {/* Category dots */}
+                  {/* Item titles */}
                   {!isLoading && items.length > 0 && (
-                    <div className="flex flex-wrap gap-[3px] overflow-hidden" style={{ maxHeight: 18 }}>
-                      {items.slice(0, 5).map((item) => {
-                        const color = item.itemType === 'EVENT'
-                          ? '#5b21b6'
-                          : getCategoryColor(item.categoryId, categories).text;
+                    <div className="flex flex-col gap-0.5 overflow-hidden">
+                      {items.slice(0, 3).map((item) => {
+                        const colors = item.itemType === 'EVENT'
+                          ? { bg: '#ede9fe', text: '#5b21b6' }
+                          : getCategoryColor(item.categoryId, categories);
                         return (
-                          <span
+                          <div
                             key={item.id}
-                            className="inline-block h-1.5 w-1.5 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
+                            className={`truncate rounded px-1 py-px text-[10px] font-medium leading-tight ${item.isCompleted ? 'opacity-60 line-through' : ''}`}
+                            style={{ backgroundColor: colors.bg, color: colors.text }}
+                          >
+                            {item.title}
+                          </div>
                         );
                       })}
-                      {items.length > 5 && (
-                        <span className="text-[8px] leading-none text-muted-foreground">+{items.length - 5}</span>
+                      {items.length > 3 && (
+                        <span className="text-[9px] leading-none text-muted-foreground">+{items.length - 3}</span>
                       )}
                     </div>
                   )}
