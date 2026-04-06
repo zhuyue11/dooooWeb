@@ -3,6 +3,7 @@ import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '@/components/ui/Icon';
 
 interface MonthGridProps {
   visibleDates: Date[]; // 35 or 42 dates from getMonthGridDates
@@ -84,10 +85,18 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                         return (
                           <div
                             key={item.id}
-                            className={`truncate rounded px-1 py-px text-[10px] font-medium leading-tight ${item.isCompleted ? 'opacity-60 line-through' : ''}`}
+                            className={`overflow-hidden rounded px-1 py-px ${item.isCompleted ? 'opacity-60' : ''}`}
                             style={{ backgroundColor: colors.bg, color: colors.text }}
                           >
-                            {item.title}
+                            <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
+                              {item.title}
+                            </div>
+                            {item.groupName && (
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                                <Icon name="group" size={7} color="#3b82f6" />
+                                {item.groupName}
+                              </span>
+                            )}
                           </div>
                         );
                       })}

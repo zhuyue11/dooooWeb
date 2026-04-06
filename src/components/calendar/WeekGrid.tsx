@@ -107,11 +107,19 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                       <div
                         key={item.id}
                         data-testid={`task-card-${item.id}`}
-                        className={`cursor-pointer truncate rounded px-1 py-0.5 text-[10px] font-medium leading-tight transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60 line-through' : ''}`}
+                        className={`cursor-pointer overflow-hidden rounded px-1 py-0.5 transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
                         style={{ backgroundColor: colors.bg, color: colors.text }}
                         onClick={() => onItemClick?.(item)}
                       >
-                        {item.title}
+                        <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
+                          {item.title}
+                        </div>
+                        {item.groupName && (
+                          <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                            <Icon name="group" size={7} color="#3b82f6" />
+                            {item.groupName}
+                          </span>
+                        )}
                       </div>
                     );
                   })}
@@ -194,21 +202,29 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                           }}
                           onClick={() => onItemClick?.(item)}
                         >
-                          <div className="flex items-center gap-0.5">
-                            {item.itemType === 'EVENT' && (
-                              <Icon name="calendar_today" size={9} color={colors.text} />
-                            )}
-                            <span
-                              className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
-                              style={{ color: colors.text }}
-                            >
-                              {item.title}
+                          <div className="flex items-start justify-between gap-0.5">
+                            <div className="flex min-w-0 items-center gap-0.5">
+                              {item.itemType === 'EVENT' && (
+                                <Icon name="calendar_today" size={9} color={colors.text} />
+                              )}
+                              <span
+                                className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                                style={{ color: colors.text }}
+                              >
+                                {item.title}
+                              </span>
+                            </div>
+                            <span className="flex-shrink-0 text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
+                              {formatTime(item.date, timeFormat as TimeFormat)}
+                              {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
                             </span>
                           </div>
-                          <span className="text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
-                            {formatTime(item.date, timeFormat as TimeFormat)}
-                            {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
-                          </span>
+                          {item.groupName && (
+                            <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                              <Icon name="group" size={7} color="#3b82f6" />
+                              {item.groupName}
+                            </span>
+                          )}
                         </div>
                       );
                     })}
