@@ -30,13 +30,16 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
   const currentHour = new Date().getHours();
   const hours = getHoursArray();
 
-  // Auto-scroll to 8 AM (or current hour if after 8)
+  // Auto-scroll to current hour row after loading completes
   useEffect(() => {
-    if (scrollRef.current) {
-      const scrollToHour = Math.max(8, currentHour - 1);
-      scrollRef.current.scrollTop = scrollToHour * HOUR_HEIGHT;
+    if (!isLoading && scrollRef.current) {
+      const targetHour = Math.max(0, currentHour - 1);
+      const hourEl = scrollRef.current.querySelector(`[data-testid="hour-row-${targetHour}"]`);
+      if (hourEl) {
+        hourEl.scrollIntoView({ block: 'start' });
+      }
     }
-  }, [date]); // re-scroll when date changes
+  }, [isLoading, date]);
 
   // Group timed items by their start hour
   const itemsByHour = new Map<number, CalendarItem[]>();

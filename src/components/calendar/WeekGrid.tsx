@@ -150,13 +150,14 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
   const currentHour = new Date().getHours();
   const hours = getHoursArray();
 
-  // Auto-scroll to 8 AM (or current hour if after 8)
+  // Auto-scroll to current time after loading completes
   useEffect(() => {
-    if (scrollRef.current) {
-      const scrollToHour = Math.max(8, currentHour - 1);
-      scrollRef.current.scrollTop = scrollToHour * HOUR_HEIGHT;
+    if (!isLoading && scrollRef.current) {
+      const now = new Date();
+      const scrollTo = Math.max(0, (now.getHours() + now.getMinutes() / 60 - 1)) * HOUR_HEIGHT;
+      scrollRef.current.scrollTop = scrollTo;
     }
-  }, [weekDates[0]?.getTime()]); // re-scroll when week changes
+  }, [isLoading, weekDates[0]?.getTime()]);
 
   // Pre-process items per date: separate timed vs untimed, group untimed by timeOfDay
   const timedByDate = new Map<string, CalendarItem[]>();
