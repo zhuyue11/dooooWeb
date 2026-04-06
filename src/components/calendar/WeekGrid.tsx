@@ -207,6 +207,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                           </div>
                           <span className="text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
                             {formatTime(item.date, timeFormat as TimeFormat)}
+                            {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
                           </span>
                         </div>
                       );
