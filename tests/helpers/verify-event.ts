@@ -206,6 +206,44 @@ export async function verifyEventInDashboard(
   }
 }
 
+/**
+ * Verify whether an event with `title` is rendered on a specific date in the
+ * week view. Used by RE/RDE recurring tests.
+ */
+export async function verifyEventOccurrenceAtDate(
+  page: Page,
+  title: string,
+  dateKey: string,
+  visible: boolean,
+) {
+  await page.goto('/calendar');
+  await page.waitForSelector('[data-testid="calendar-date-range"]', { timeout: 10000 });
+  await page.locator('[data-testid="view-tab-week"]').click().catch(() => {});
+  await page.waitForTimeout(300);
+
+  const dayColumn = page.locator(`[data-testid="day-column-${dateKey}"]`);
+  if (!(await dayColumn.isVisible({ timeout: 1000 }).catch(() => false))) {
+    const target = new Date(dateKey + 'T00:00:00Z');
+    const today = new Date();
+    const goForward = target.getTime() > today.getTime();
+    const navBtn = goForward ? 'nav-next-week' : 'nav-prev-week';
+    for (let i = 0; i < 26; i++) {
+      await page.locator(`[data-testid="${navBtn}"]`).click();
+      await page.waitForTimeout(200);
+      if (await dayColumn.isVisible({ timeout: 300 }).catch(() => false)) break;
+    }
+  }
+  await expect(dayColumn).toBeVisible({ timeout: 5000 });
+
+  const titleInColumn = dayColumn.getByText(title, { exact: true });
+  if (visible) {
+    await expect(titleInColumn.first()).toBeVisible({ timeout: 3000 });
+  } else {
+    await page.waitForTimeout(300);
+    await expect(titleInColumn).toHaveCount(0, { timeout: 3000 });
+  }
+}
+
 /** Verify event does NOT appear in a view */
 export async function verifyEventNotInView(page: Page, title: string, view: 'week' | 'month' | 'day') {
   await navigateToView(page, view);

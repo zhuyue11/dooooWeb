@@ -194,10 +194,22 @@ export function ItemEditorPage() {
   const {
     createTaskMutation, createEventMutation,
     updateTaskMutation, updateEventMutation,
+    createTaskInstanceMutation, updateTaskInstanceMutation,
+    convertTaskInstanceMutation,
+    createEventInstanceMutation, updateEventInstanceMutation,
+    convertEventInstanceMutation,
   } = useItemMutations();
 
   const isEditMode = !!id;
   const typeParam = searchParams.get('type') || 'task';
+
+  // Single-occurrence editing — set when navigated from the side panel's
+  // RecurringScopeModal. `scope` decides how `handleSubmit` dispatches the save.
+  // `occurrenceDate` is the date of the clicked occurrence (`YYYY-MM-DD`).
+  const scope = searchParams.get('scope') as 'this' | 'future' | 'all' | null;
+  const occurrenceDate = searchParams.get('occurrenceDate'); // `YYYY-MM-DD`
+  const isOccurrenceEdit = isEditMode && scope === 'this' && !!occurrenceDate;
+  const isFutureEdit = isEditMode && scope === 'future' && !!occurrenceDate;
 
   // Get draft from location.state (passed from modal "More Options")
   const draft = (location.state as { draft?: ItemFormDraft } | null)?.draft;
@@ -270,6 +282,12 @@ export function ItemEditorPage() {
   const locationRef = useRef<HTMLInputElement>(null);
   const meetingLinkRef = useRef<HTMLInputElement>(null);
 
+  // Captures the parent task/event's title + date *as loaded* — used by the
+  // single-occurrence edit dispatch to detect title/date changes vs other
+  // field changes (mirrors dooooApp's editSingleTaskInstance behavior).
+  const originalTitleRef = useRef<string | null>(null);
+  const originalDateRef = useRef<string | null>(null); // YYYY-MM-DD
+
   // ── Load existing item for edit mode ──
   const { data: existingItem } = useQuery({
     queryKey: [typeParam === 'event' ? 'event' : 'task', id],
@@ -285,6 +303,24 @@ export function ItemEditorPage() {
     setItemType(isTask ? 'TASK' : 'EVENT');
     setTitle(existingItem.title);
     setDescription(existingItem.description || '');
+
+    // Capture original title + date (YYYY-MM-DD) for the single-occurrence
+    // edit dispatch — these are used by handleSubmit to detect title/date
+    // changes that require routing to the convert endpoint.
+    //
+    // For occurrence edits, the "original date" we compare against is the
+    // occurrence date (from the URL), not the parent's start date — otherwise
+    // every edit would look like a date change.
+    originalTitleRef.current = existingItem.title;
+    if ((scope === 'this' || scope === 'future') && occurrenceDate) {
+      originalDateRef.current = occurrenceDate;
+    } else if (existingItem.date) {
+      const od = new Date(existingItem.date);
+      originalDateRef.current = `${od.getFullYear()}-${String(od.getMonth() + 1).padStart(2, '0')}-${String(od.getDate()).padStart(2, '0')}`;
+    } else {
+      originalDateRef.current = null;
+    }
+
     if (existingItem.date) {
       setSelectedDate(new Date(existingItem.date));
       if (existingItem.hasTime) {
@@ -346,7 +382,16 @@ export function ItemEditorPage() {
       if (event.guests) setGuests(event.guests);
       if (event.meetingLink) setMeetingLink(event.meetingLink);
     }
-  }, [existingItem, typeParam]);
+
+    // For "edit this occurrence" / "edit this and future", seed the form's
+    // selectedDate from the occurrence date in the URL, NOT the parent's start
+    // date — otherwise the new standalone task/event lands on the parent's
+    // base date instead of the clicked occurrence.
+    if ((scope === 'this' || scope === 'future') && occurrenceDate) {
+      const od = new Date(occurrenceDate + 'T00:00:00');
+      setSelectedDate(od);
+    }
+  }, [existingItem, typeParam, scope, occurrenceDate]);
 
   // Focus title on mount (create mode only)
   useEffect(() => {
@@ -452,7 +497,10 @@ export function ItemEditorPage() {
 
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
-    setSelectedRepeat(null);
+    // Note: previously this also cleared selectedRepeat, which broke the
+    // legitimate "shift the whole recurring series forward by N days" flow
+    // (RT8 / RE8 / edit-all-occurrences with a date change). Repeat patterns
+    // are date-relative, not date-dependent, so we keep the repeat as-is.
     setActivePopover(null);
   }, []);
 
@@ -525,6 +573,15 @@ export function ItemEditorPage() {
       ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
       : undefined;
 
+    // Compute previous-day key for the "edit this and future" path. The new
+    // tail item starts on `occurrenceDate`, so the parent's recurrence ends
+    // on `occurrenceDate - 1 day`.
+    const previousDayKey = (key: string) => {
+      const d = new Date(key + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() - 1);
+      return d.toISOString().slice(0, 10);
+    };
+
     if (isTask) {
       let dateStr: string | undefined;
       if (selectedDate) {
@@ -534,6 +591,95 @@ export function ItemEditorPage() {
       }
 
       if (isEditMode) {
+        // ── Single-occurrence task edit (scope = "this") ──
+        if (isOccurrenceEdit && occurrenceDate) {
+          const titleChanged = trimmedTitle !== (originalTitleRef.current ?? '');
+          const dateChanged = dateOnly !== originalDateRef.current;
+
+          if (titleChanged || dateChanged) {
+            // Title or date changed → create new standalone task + REMOVE original.
+            // The backend convert endpoint does this transactionally.
+            await convertTaskInstanceMutation.mutateAsync({
+              taskId: id!,
+              instanceId: null,
+              data: {
+                title: trimmedTitle,
+                description: description || undefined,
+                date: dateStr!,
+                hasTime,
+                priority: (priority?.toLowerCase() as any) || undefined,
+                categoryId: categoryId || undefined,
+                firstReminderMinutes: firstReminder ?? null,
+                secondReminderMinutes: secondReminder ?? null,
+                duration: effectiveDuration ?? null,
+                dateType,
+                showInTodoWhenOverdue,
+                setToDoneAutomatically,
+                originalInstanceDate: occurrenceDate,
+              },
+            });
+          } else {
+            // Other fields changed → upsert a MODIFIED instance for this date
+            await createTaskInstanceMutation.mutateAsync({
+              taskId: id!,
+              data: {
+                instanceDate: occurrenceDate,
+                status: 'MODIFIED',
+                title: trimmedTitle,
+                description: description || undefined,
+                hasTime,
+                timeOfDay: !hasTime ? timeOfDay ?? undefined : undefined,
+                priority: (priority?.toLowerCase() as any) || undefined,
+                categoryId: categoryId || null,
+                firstReminderMinutes: firstReminder ?? null,
+                secondReminderMinutes: secondReminder ?? null,
+                duration: effectiveDuration ?? null,
+              },
+            });
+          }
+          navigate(-1);
+          return;
+        }
+
+        // ── Edit this and future (scope = "future") ──
+        if (isFutureEdit && occurrenceDate) {
+          // 1) End-cap the parent's recurrence on previousDay
+          const truncatedRepeat = selectedRepeat
+            ? { ...selectedRepeat, endCondition: { type: 'date' as const, endDate: previousDayKey(occurrenceDate) } }
+            : null;
+          await updateTaskMutation.mutateAsync({
+            id: id!,
+            data: { repeat: truncatedRepeat as any },
+          });
+
+          // 2) Create a new task carrying the edited fields, starting on occurrenceDate
+          const tailRepeat = selectedRepeat
+            ? { ...selectedRepeat, endCondition: selectedRepeat.endCondition }
+            : undefined;
+          await createTaskMutation.mutateAsync({
+            title: trimmedTitle,
+            description: description || undefined,
+            date: dateStr,
+            hasTime,
+            timeOfDay: !hasTime ? timeOfDay ?? undefined : undefined,
+            timeMode: 'FIXED',
+            timeZone: hasTime ? tz : undefined,
+            dateType,
+            showInTodoWhenOverdue,
+            setToDoneAutomatically,
+            priority: priority || undefined,
+            categoryId: categoryId || undefined,
+            location: locationValue || undefined,
+            repeat: tailRepeat,
+            duration: effectiveDuration ?? undefined,
+            firstReminderMinutes: firstReminder,
+            secondReminderMinutes: secondReminder,
+          });
+          navigate(-1);
+          return;
+        }
+
+        // ── All occurrences (scope = "all" or undefined) ──
         const req: UpdateTaskRequest = {
           title: trimmedTitle,
           description: description || undefined,
@@ -593,6 +739,120 @@ export function ItemEditorPage() {
       }
 
       if (isEditMode) {
+        // ── Single-occurrence event edit (scope = "this") ──
+        if (isOccurrenceEdit && occurrenceDate) {
+          const titleChanged = trimmedTitle !== (originalTitleRef.current ?? '');
+          const dateChanged = dateOnly !== originalDateRef.current;
+
+          if (titleChanged || dateChanged) {
+            await convertEventInstanceMutation.mutateAsync({
+              eventId: id!,
+              instanceId: null,
+              data: {
+                title: trimmedTitle,
+                description: description || undefined,
+                date: dateStr!,
+                hasTime: hasStartTime,
+                timeZone: hasStartTime ? tz : undefined,
+                endDate: endDateStr ?? null,
+                endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
+                duration: effectiveDuration ?? null,
+                priority: priority || undefined,
+                location: locationValue || null,
+                guests: guests.length > 0 ? guests : null,
+                meetingLink: meetingLink || null,
+                firstReminderMinutes: firstReminder ?? null,
+                secondReminderMinutes: secondReminder ?? null,
+                originalInstanceDate: occurrenceDate,
+              },
+            });
+          } else {
+            // No title/date change → upsert MODIFIED instance via the date-keyed
+            // PATCH endpoint. Per the backend, instances are addressed by date.
+            await updateEventInstanceMutation.mutateAsync({
+              eventId: id!,
+              date: occurrenceDate,
+              data: {
+                status: 'MODIFIED',
+                title: trimmedTitle,
+                description: description || undefined,
+                hasTime: hasStartTime,
+                timeZone: hasStartTime ? tz : undefined,
+                endDate: endDateStr ?? null,
+                endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
+                duration: effectiveDuration ?? null,
+                priority: priority || undefined,
+                location: locationValue || null,
+                guests: guests.length > 0 ? guests : null,
+                meetingLink: meetingLink || null,
+                firstReminderMinutes: firstReminder ?? null,
+                secondReminderMinutes: secondReminder ?? null,
+              },
+            }).catch(async (err: any) => {
+              // PATCH /events/:eventId/instances/:date returns 404 if no stored
+              // instance exists yet (virtual occurrence). Fall back to creating
+              // a new MODIFIED instance.
+              if (err?.response?.status === 404) {
+                await createEventInstanceMutation.mutateAsync({
+                  eventId: id!,
+                  data: {
+                    date: occurrenceDate,
+                    status: 'MODIFIED',
+                    title: trimmedTitle,
+                    description: description || undefined,
+                    hasTime: hasStartTime,
+                    timeZone: hasStartTime ? tz : undefined,
+                    endDate: endDateStr ?? null,
+                    endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
+                    duration: effectiveDuration ?? null,
+                    priority: priority || undefined,
+                    location: locationValue || null,
+                    guests: guests.length > 0 ? guests : null,
+                    meetingLink: meetingLink || null,
+                    firstReminderMinutes: firstReminder ?? null,
+                    secondReminderMinutes: secondReminder ?? null,
+                  },
+                });
+              } else {
+                throw err;
+              }
+            });
+          }
+          navigate(-1);
+          return;
+        }
+
+        // ── Edit this and future event occurrences ──
+        if (isFutureEdit && occurrenceDate) {
+          // Read parent event's existing repeat from selectedRepeat (loaded into form)
+          const truncatedRepeat = selectedRepeat
+            ? { ...selectedRepeat, endCondition: { type: 'date' as const, endDate: previousDayKey(occurrenceDate) } }
+            : null;
+          await updateEventMutation.mutateAsync({
+            id: id!,
+            data: { repeat: truncatedRepeat as any },
+          });
+
+          await createEventMutation.mutateAsync({
+            title: trimmedTitle,
+            description: description || undefined,
+            date: dateStr,
+            hasTime: hasStartTime,
+            timeZone: hasStartTime ? tz : undefined,
+            endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
+            endDate: endDateStr,
+            duration: effectiveDuration ?? undefined,
+            priority: priority || undefined,
+            location: locationValue || undefined,
+            guests: guests.length > 0 ? guests : undefined,
+            meetingLink: meetingLink || undefined,
+            repeat: selectedRepeat || undefined,
+          });
+          navigate(-1);
+          return;
+        }
+
+        // ── All occurrences (or non-recurring) ──
         const req: UpdateEventRequest = {
           title: trimmedTitle,
           description: description || undefined,
@@ -606,6 +866,7 @@ export function ItemEditorPage() {
           location: locationValue || undefined,
           guests: guests.length > 0 ? guests : null,
           meetingLink: meetingLink || null,
+          repeat: selectedRepeat ?? null,
         };
         await updateEventMutation.mutateAsync({ id: id!, data: req });
       } else {
@@ -622,6 +883,7 @@ export function ItemEditorPage() {
           location: locationValue || undefined,
           guests: guests.length > 0 ? guests : undefined,
           meetingLink: meetingLink || undefined,
+          repeat: selectedRepeat ?? undefined,
         };
         await createEventMutation.mutateAsync(req);
       }
@@ -635,6 +897,9 @@ export function ItemEditorPage() {
     dateType, showInTodoWhenOverdue, setToDoneAutomatically,
     guests, meetingLink, eventEndDate, useEndTime, endDate,
     isEditMode, id, createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
+    isOccurrenceEdit, isFutureEdit, occurrenceDate,
+    convertTaskInstanceMutation, createTaskInstanceMutation,
+    convertEventInstanceMutation, updateEventInstanceMutation, createEventInstanceMutation,
     navigate, selectedTimeZone, eventEndTimeZone,
   ]);
 

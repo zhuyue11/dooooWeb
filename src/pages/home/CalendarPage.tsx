@@ -13,6 +13,7 @@ import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { toISODate } from '@/utils/date';
 import { toggleTask } from '@/lib/api';
+import { getParentId } from '@/utils/calendarItemId';
 import { useQueryClient } from '@tanstack/react-query';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 
@@ -32,7 +33,10 @@ export function CalendarPage() {
   const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    await toggleTask(item.id);
+    // For recurring instances, item.id is a virtual id (`${taskId}_${YYYY-MM-DD}`).
+    // toggleTask must hit the parent task id; per-occurrence completion is a
+    // separate flow not handled here.
+    await toggleTask(getParentId(item));
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-events'] });

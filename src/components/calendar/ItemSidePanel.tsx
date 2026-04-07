@@ -7,6 +7,8 @@ import { useCategories } from '@/hooks/useCategories';
 import { formatFullDate, formatTime } from '@/utils/date';
 import { getCategoryName, getCategoryColor } from '@/utils/category';
 import { useDisplay } from '@/lib/contexts/display-context';
+import { getParentId, getOccurrenceDateKey, isRecurringInstance } from '@/utils/calendarItemId';
+import { RecurringScopeModal } from './RecurringScopeModal';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
@@ -88,9 +90,17 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
   const navigate = useNavigate();
   const { data: categories } = useCategories();
   const { timeFormat } = useDisplay();
-  const { deleteTaskMutation, deleteEventMutation } = useItemMutations();
+  const {
+    deleteTaskMutation,
+    deleteEventMutation,
+    deleteTaskInstanceMutation,
+    deleteEventInstanceMutation,
+    updateTaskMutation,
+    updateEventMutation,
+  } = useItemMutations();
   const [isClosing, setIsClosing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [scopeModalMode, setScopeModalMode] = useState<'edit' | 'delete' | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Close on Escape
@@ -113,28 +123,97 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
   const canEdit = item.itemType === 'EVENT' || (!item.isCompleted && (!isGroupTask || isTaskOwner));
   const canDelete = item.itemType === 'EVENT' || !isGroupTask || isTaskOwner;
 
-  // CalendarItem IDs for events are prefixed with "event-" — strip it for API calls
-  const apiId = item.itemType === 'EVENT' ? item.id.replace(/^event-/, '') : item.id;
+  // Resolve the parent task/event id (never the virtual occurrence id) so all
+  // routing and mutations target the actual backend record.
+  const parentId = getParentId(item);
+  const occurrenceDateKey = getOccurrenceDateKey(item);
+  const recurring = isRecurringInstance(item);
   const typeParam = item.itemType.toLowerCase();
 
   const handleExpand = useCallback(() => {
     onClose();
-    navigate(`/items/${apiId}?type=${typeParam}`);
-  }, [navigate, apiId, typeParam, onClose]);
+    navigate(`/items/${parentId}?type=${typeParam}`);
+  }, [navigate, parentId, typeParam, onClose]);
+
+  const navigateToEditor = useCallback(
+    (scope?: 'this' | 'future' | 'all') => {
+      onClose();
+      const qs = new URLSearchParams({ type: typeParam });
+      if (scope) {
+        qs.set('scope', scope);
+        if (scope !== 'all') qs.set('occurrenceDate', occurrenceDateKey);
+      }
+      navigate(`/items/${parentId}/edit?${qs.toString()}`);
+    },
+    [navigate, parentId, typeParam, occurrenceDateKey, onClose],
+  );
 
   const handleEdit = useCallback(() => {
-    onClose();
-    navigate(`/items/${apiId}/edit?type=${typeParam}`);
-  }, [navigate, apiId, typeParam, onClose]);
+    if (recurring) {
+      setScopeModalMode('edit');
+      return;
+    }
+    navigateToEditor();
+  }, [recurring, navigateToEditor]);
+
+  // Compute the previous-day ISO date string used by "this and future" delete
+  const previousDayKey = useCallback(() => {
+    const d = new Date(occurrenceDateKey + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() - 1);
+    return d.toISOString().slice(0, 10);
+  }, [occurrenceDateKey]);
 
   const handleDelete = useCallback(async () => {
+    // Non-recurring or recurring "all" path: full parent delete
     if (item.itemType === 'EVENT') {
-      await deleteEventMutation.mutateAsync(apiId);
+      await deleteEventMutation.mutateAsync(parentId);
     } else {
-      await deleteTaskMutation.mutateAsync(apiId);
+      await deleteTaskMutation.mutateAsync(parentId);
     }
     onClose();
-  }, [deleteTaskMutation, deleteEventMutation, apiId, item.itemType, onClose]);
+  }, [deleteTaskMutation, deleteEventMutation, parentId, item.itemType, onClose]);
+
+  const handleScopeDeleteThis = useCallback(async () => {
+    if (item.itemType === 'EVENT') {
+      await deleteEventInstanceMutation.mutateAsync({ eventId: parentId, date: occurrenceDateKey });
+    } else {
+      await deleteTaskInstanceMutation.mutateAsync({ taskId: parentId, date: occurrenceDateKey });
+    }
+    setScopeModalMode(null);
+    onClose();
+  }, [deleteEventInstanceMutation, deleteTaskInstanceMutation, parentId, occurrenceDateKey, item.itemType, onClose]);
+
+  const handleScopeDeleteFuture = useCallback(async () => {
+    const truncated = {
+      ...(typeof item.repeat === 'object' && item.repeat !== null ? item.repeat : {}),
+      endCondition: { type: 'date', endDate: previousDayKey() },
+    };
+    if (item.itemType === 'EVENT') {
+      await updateEventMutation.mutateAsync({ id: parentId, data: { repeat: truncated as any } });
+    } else {
+      await updateTaskMutation.mutateAsync({ id: parentId, data: { repeat: truncated as any } });
+    }
+    setScopeModalMode(null);
+    onClose();
+  }, [updateEventMutation, updateTaskMutation, parentId, item.repeat, item.itemType, previousDayKey, onClose]);
+
+  const handleScopeDeleteAll = useCallback(async () => {
+    if (item.itemType === 'EVENT') {
+      await deleteEventMutation.mutateAsync(parentId);
+    } else {
+      await deleteTaskMutation.mutateAsync(parentId);
+    }
+    setScopeModalMode(null);
+    onClose();
+  }, [deleteEventMutation, deleteTaskMutation, parentId, item.itemType, onClose]);
+
+  const handleDeleteClick = useCallback(() => {
+    if (recurring) {
+      setScopeModalMode('delete');
+      return;
+    }
+    setShowDeleteConfirm(true);
+  }, [recurring]);
 
   const handleToggle = useCallback(() => {
     onToggle?.(item);
@@ -255,7 +334,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
             {canDelete && (
               <button
                 data-testid="side-panel-delete"
-                onClick={() => setShowDeleteConfirm(true)}
+                onClick={handleDeleteClick}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
                 title={t('itemView.delete')}
               >
@@ -413,6 +492,46 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
             </div>
           </div>
         )}
+
+        {/* ── Recurring scope picker (edit/delete this/future/all) ── */}
+        <RecurringScopeModal
+          open={scopeModalMode !== null}
+          mode={scopeModalMode ?? 'edit'}
+          itemType={item.itemType}
+          pending={
+            deleteTaskInstanceMutation.isPending ||
+            deleteEventInstanceMutation.isPending ||
+            updateTaskMutation.isPending ||
+            updateEventMutation.isPending ||
+            deleteTaskMutation.isPending ||
+            deleteEventMutation.isPending
+          }
+          onThis={() => {
+            if (scopeModalMode === 'edit') {
+              setScopeModalMode(null);
+              navigateToEditor('this');
+            } else {
+              handleScopeDeleteThis();
+            }
+          }}
+          onAllFuture={() => {
+            if (scopeModalMode === 'edit') {
+              setScopeModalMode(null);
+              navigateToEditor('future');
+            } else {
+              handleScopeDeleteFuture();
+            }
+          }}
+          onAll={() => {
+            if (scopeModalMode === 'edit') {
+              setScopeModalMode(null);
+              navigateToEditor('all');
+            } else {
+              handleScopeDeleteAll();
+            }
+          }}
+          onClose={() => setScopeModalMode(null)}
+        />
       </div>
     </div>,
     document.body,

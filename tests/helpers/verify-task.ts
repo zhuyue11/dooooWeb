@@ -256,6 +256,54 @@ export async function verifyTaskInTodoPage(page: Page, options: VerifyTaskOption
   }
 }
 
+/**
+ * Verify whether a task with `title` is rendered on a specific date in the
+ * week view. Used by the recurring edit/delete tests (RT/RD) to assert that an
+ * occurrence is present or absent on a particular day after a scoped operation.
+ *
+ * Navigates to /calendar, switches to week view, scrolls to the week containing
+ * `dateKey`, and inspects only the day column for that date — never the global
+ * grid (which is too broad and can produce false positives).
+ */
+export async function verifyOccurrenceAtDate(
+  page: Page,
+  title: string,
+  dateKey: string,
+  visible: boolean,
+) {
+  await page.goto('/calendar');
+  await page.waitForSelector('[data-testid="calendar-date-range"]', { timeout: 10000 });
+  await page.locator('[data-testid="view-tab-week"]').click().catch(() => {});
+  await page.waitForTimeout(300);
+
+  // Navigate to the right week
+  const dayColumn = page.locator(`[data-testid="day-column-${dateKey}"]`);
+  if (!(await dayColumn.isVisible({ timeout: 1000 }).catch(() => false))) {
+    const target = new Date(dateKey + 'T00:00:00Z');
+    const today = new Date();
+    const goForward = target.getTime() > today.getTime();
+    const navBtn = goForward ? 'nav-next-week' : 'nav-prev-week';
+    for (let i = 0; i < 26; i++) {
+      await page.locator(`[data-testid="${navBtn}"]`).click();
+      await page.waitForTimeout(200);
+      if (await dayColumn.isVisible({ timeout: 300 }).catch(() => false)) break;
+    }
+  }
+  await expect(dayColumn).toBeVisible({ timeout: 5000 });
+
+  // Use exact match — partial match would let "RT1-foo" match "RT1-foo-modified",
+  // creating false positives when the test asserts that the original title is
+  // gone after a "this occurrence" edit.
+  const titleInColumn = dayColumn.getByText(title, { exact: true });
+  if (visible) {
+    await expect(titleInColumn.first()).toBeVisible({ timeout: 3000 });
+  } else {
+    // Wait for any pending re-render then assert NOT visible
+    await page.waitForTimeout(300);
+    await expect(titleInColumn).toHaveCount(0, { timeout: 3000 });
+  }
+}
+
 /** Verify task does NOT appear in a specific view */
 export async function verifyTaskNotInView(page: Page, title: string, view: 'week' | 'month' | 'day' | 'todo' | 'dashboard') {
   switch (view) {

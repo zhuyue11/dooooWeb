@@ -430,6 +430,60 @@ export interface ConvertInstanceToTaskRequest {
   originalInstanceDate?: string; // Original date of the instance to mark as REMOVED (for date change scenarios)
 }
 
+/**
+ * Body for POST /api/events/:eventId/instances/:instanceId?/convert
+ *
+ * Same shape as ConvertInstanceToTaskRequest but with event-only fields. Used by
+ * the "Edit this occurrence" flow when the user changes title or date — backend
+ * creates a new standalone event and marks the original occurrence REMOVED.
+ */
+export interface ConvertInstanceToEventRequest {
+  title: string;
+  description?: string | null;
+  date: string; // ISO — new event's date
+  hasTime?: boolean;
+  timeZone?: string | null;
+  endDate?: string | null;
+  endTimeZone?: string | null;
+  duration?: number | null;
+  priority?: string | null;
+  location?: string | null;
+  locationAddress?: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
+  locationPlaceId?: string | null;
+  guests?: Array<{ email: string; name?: string }> | null;
+  meetingLink?: string | null;
+  firstReminderMinutes?: number | null;
+  secondReminderMinutes?: number | null;
+  /** Required when no instanceId is supplied (i.e. converting a virtual occurrence). */
+  originalInstanceDate?: string;
+}
+
+export interface CreateEventInstanceRequest {
+  date: string; // ISO — required: which occurrence
+  status?: 'PENDING' | 'COMPLETED' | 'REMOVED' | 'MODIFIED';
+  title?: string;
+  description?: string | null;
+  hasTime?: boolean;
+  timeZone?: string | null;
+  endDate?: string | null;
+  endTimeZone?: string | null;
+  duration?: number | null;
+  priority?: string | null;
+  location?: string | null;
+  locationAddress?: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
+  locationPlaceId?: string | null;
+  guests?: Array<{ email: string; name?: string }> | null;
+  meetingLink?: string | null;
+  firstReminderMinutes?: number | null;
+  secondReminderMinutes?: number | null;
+}
+
+export type UpdateEventInstanceRequest = Partial<Omit<CreateEventInstanceRequest, 'date'>>;
+
 export interface TaskInstancesResponse {
   success: boolean;
   data: {

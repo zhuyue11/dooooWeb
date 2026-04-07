@@ -7,18 +7,40 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
+  createTaskInstance,
+  updateTaskInstance,
+  deleteTaskInstance,
+  convertTaskInstance,
+  createEventInstance,
+  updateEventInstance,
+  deleteEventInstance,
+  convertEventInstance,
 } from '@/lib/api';
-import type { CreateTaskRequest, UpdateTaskRequest, CreateEventRequest, UpdateEventRequest } from '@/types/api';
+import type {
+  CreateTaskRequest,
+  UpdateTaskRequest,
+  CreateEventRequest,
+  UpdateEventRequest,
+  CreateTaskInstanceRequest,
+  UpdateTaskInstanceRequest,
+  ConvertInstanceToTaskRequest,
+  CreateEventInstanceRequest,
+  UpdateEventInstanceRequest,
+  ConvertInstanceToEventRequest,
+} from '@/types/api';
 
 function useInvalidateAll() {
   const queryClient = useQueryClient();
   return () => {
     // Calendar queries
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-task-instances'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-recurring-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-attending-events'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-event-instances'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-recurring-events'] });
     // To-do and dashboard queries
     queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['todo-assigned-group-tasks'] });
@@ -69,6 +91,86 @@ export function useItemMutations() {
     onSuccess: invalidate,
   });
 
+  // ── Task instance mutations (for "edit/delete this occurrence" of recurring tasks) ──
+
+  const createTaskInstanceMutation = useMutation({
+    mutationFn: ({ taskId, data }: { taskId: string; data: CreateTaskInstanceRequest }) =>
+      createTaskInstance(taskId, data),
+    onSuccess: invalidate,
+  });
+
+  const updateTaskInstanceMutation = useMutation({
+    mutationFn: ({
+      taskId,
+      instanceId,
+      data,
+    }: {
+      taskId: string;
+      instanceId: string;
+      data: UpdateTaskInstanceRequest;
+    }) => updateTaskInstance(taskId, instanceId, data),
+    onSuccess: invalidate,
+  });
+
+  const deleteTaskInstanceMutation = useMutation({
+    mutationFn: ({ taskId, date }: { taskId: string; date: string }) =>
+      deleteTaskInstance(taskId, date),
+    onSuccess: invalidate,
+  });
+
+  const convertTaskInstanceMutation = useMutation({
+    mutationFn: ({
+      taskId,
+      instanceId,
+      data,
+    }: {
+      taskId: string;
+      instanceId: string | null;
+      data: ConvertInstanceToTaskRequest;
+    }) => convertTaskInstance(taskId, instanceId, data),
+    onSuccess: invalidate,
+  });
+
+  // ── Event instance mutations (for "edit/delete this occurrence" of recurring events) ──
+
+  const createEventInstanceMutation = useMutation({
+    mutationFn: ({ eventId, data }: { eventId: string; data: CreateEventInstanceRequest }) =>
+      createEventInstance(eventId, data),
+    onSuccess: invalidate,
+  });
+
+  const updateEventInstanceMutation = useMutation({
+    mutationFn: ({
+      eventId,
+      date,
+      data,
+    }: {
+      eventId: string;
+      date: string;
+      data: UpdateEventInstanceRequest;
+    }) => updateEventInstance(eventId, date, data),
+    onSuccess: invalidate,
+  });
+
+  const deleteEventInstanceMutation = useMutation({
+    mutationFn: ({ eventId, date }: { eventId: string; date: string }) =>
+      deleteEventInstance(eventId, date),
+    onSuccess: invalidate,
+  });
+
+  const convertEventInstanceMutation = useMutation({
+    mutationFn: ({
+      eventId,
+      instanceId,
+      data,
+    }: {
+      eventId: string;
+      instanceId: string | null;
+      data: ConvertInstanceToEventRequest;
+    }) => convertEventInstance(eventId, instanceId, data),
+    onSuccess: invalidate,
+  });
+
   return {
     createTaskMutation,
     updateTaskMutation,
@@ -77,5 +179,13 @@ export function useItemMutations() {
     createEventMutation,
     updateEventMutation,
     deleteEventMutation,
+    createTaskInstanceMutation,
+    updateTaskInstanceMutation,
+    deleteTaskInstanceMutation,
+    convertTaskInstanceMutation,
+    createEventInstanceMutation,
+    updateEventInstanceMutation,
+    deleteEventInstanceMutation,
+    convertEventInstanceMutation,
   };
 }

@@ -214,3 +214,63 @@
 | # | Test Case | Status | Notes |
 |---|-----------|--------|-------|
 | EE1-EE12 | All edit event tests | [!] | **Blocked by backend bug**: event update Prisma transaction timeout (500 error). Backend `eventController.ts:102` exceeds 5000ms transaction timeout. |
+
+---
+
+## RECURRING TASK EDIT (RT1-RT9)
+
+Setup for all: create a fresh daily recurring task (count=5) starting tomorrow (d+1).
+
+| # | Test Case | Scope | Status | Notes |
+|---|-----------|-------|--------|-------|
+| RT1 | Edit d+3 title — only that date changes, others unchanged | this | [ ] | |
+| RT2 | Edit d+3 priority (MODIFIED path) — only that date's priority changes | this | [ ] | |
+| RT3 | Edit d+3 date → move to d+10. d+3 empty, d+10 shows task, others unchanged | this | [ ] | Exercises convert-instance-to-task backend endpoint |
+| RT4 | Edit d+3 twice in succession — second edit replaces first, no stacking | this | [ ] | |
+| RT5 | Edit this-and-future — title change from d+3. d+1,d+2 original; d+3..d+5 new title | future | [ ] | Two parent tasks after split |
+| RT6 | Edit this-and-future — time change (09:00 → 14:00) from d+3 | future | [ ] | Verify via day-view hour row |
+| RT7 | Edit all — title change. All 5 dates show new title | all | [ ] | Regression: "all" branch still works |
+| RT8 | Edit all — date shift. Whole series moves forward | all | [ ] | |
+| RT9 | Scope modal visibility — recurring shows modal, non-recurring opens editor directly | selector | [ ] | |
+
+## RECURRING TASK DELETE (RD1-RD6)
+
+Setup for all: fresh daily recurring task (count=5), d+1..d+5.
+
+| # | Test Case | Scope | Status | Notes |
+|---|-----------|-------|--------|-------|
+| RD1 | Delete d+3 — d+3 empty, d+1,d+2,d+4,d+5 present | this | [ ] | |
+| RD2 | Delete d+1 (base date) — d+1 empty, d+2..d+5 present | this | [ ] | Exercises base-date REMOVED render path |
+| RD3 | Delete d+3, then delete d+3 again — no error | this | [ ] | Idempotency |
+| RD4 | Delete this-and-future — d+1,d+2 present, d+3..d+5 empty | future | [ ] | |
+| RD5 | Delete all — all 5 empty, parent gone from /todo | all | [ ] | |
+| RD6 | Scope modal visibility — recurring shows 3-button modal, non-recurring shows single confirm | selector | [ ] | |
+
+## RECURRING EVENT EDIT (RE1-RE9)
+
+Setup for all: fresh daily recurring event (count=5) at 10:00, d+1..d+5, with a location.
+
+| # | Test Case | Scope | Status | Notes |
+|---|-----------|-------|--------|-------|
+| RE1 | Edit d+3 title — only that date changes | this | [ ] | |
+| RE2 | Edit d+3 location (MODIFIED path) — only that date | this | [ ] | |
+| RE3 | Edit d+3 date → d+10. d+3 empty, d+10 shows event | this | [ ] | Exercises convert-instance-to-event backend endpoint (NEW) |
+| RE4 | Edit d+3 twice in succession — second edit replaces first | this | [ ] | |
+| RE5 | Edit this-and-future — title change from d+3 | future | [ ] | |
+| RE6 | Edit this-and-future — time change (10:00 → 15:00) from d+3 | future | [ ] | |
+| RE7 | Edit all — title change. All 5 dates updated | all | [ ] | Regression: depends on existing event-update transaction-timeout bug being fixed |
+| RE8 | Edit all — date shift | all | [ ] | |
+| RE9 | Scope modal visibility — recurring event shows modal | selector | [ ] | |
+
+## RECURRING EVENT DELETE (RDE1-RDE6)
+
+Setup for all: fresh daily recurring event (count=5), d+1..d+5.
+
+| # | Test Case | Scope | Status | Notes |
+|---|-----------|-------|--------|-------|
+| RDE1 | Delete d+3 — d+3 empty, others present | this | [ ] | |
+| RDE2 | Delete d+1 (base date) — d+1 empty, others present | this | [ ] | |
+| RDE3 | Delete d+3, then delete d+3 again — no error | this | [ ] | |
+| RDE4 | Delete this-and-future — d+1,d+2 present, d+3..d+5 empty | future | [ ] | |
+| RDE5 | Delete all — all 5 empty, parent gone from dashboard | all | [ ] | |
+| RDE6 | Scope modal visibility — recurring event shows 3-button modal | selector | [ ] | |

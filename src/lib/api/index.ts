@@ -37,6 +37,9 @@ import type {
   EventAttendee,
   CreateEventRequest,
   UpdateEventRequest,
+  CreateEventInstanceRequest,
+  UpdateEventInstanceRequest,
+  ConvertInstanceToEventRequest,
   RsvpRequest,
 } from '@/types/api';
 import type {
@@ -143,6 +146,18 @@ export async function getTaskInstances(params?: { from?: string; to?: string }):
   return res.data;
 }
 
+/**
+ * Fetch every recurring (repeat IS NOT NULL) personal task for the user.
+ *
+ * Used by the calendar to load recurring tasks once per session, since the
+ * date-range `getTasks` query only returns tasks whose start date falls in
+ * the visible week. Mirrors `getRecurringEvents` (already exposed in backend).
+ */
+export async function getRecurringTasks(): Promise<Task[]> {
+  const res = await apiClient.get<{ success: boolean; data: Task[] }>('/api/tasks/recurring');
+  return res.data.data;
+}
+
 export async function createTaskInstance(taskId: string, data: CreateTaskInstanceRequest): Promise<TaskInstance> {
   const res = await apiClient.post<{ success: boolean; data: TaskInstance }>(`/api/tasks/${taskId}/instances`, data);
   return res.data.data;
@@ -163,8 +178,24 @@ export async function toggleTaskInstance(taskId: string, instanceId?: string, in
   return res.data.data;
 }
 
-export async function convertInstanceToTask(taskId: string, date: string, data: ConvertInstanceToTaskRequest): Promise<Task> {
-  const res = await apiClient.post<{ success: boolean; data: Task }>(`/api/tasks/${taskId}/instances/${date}/convert`, data);
+/**
+ * Convert a single occurrence of a recurring task into a new standalone task,
+ * marking the original occurrence as REMOVED. Transactional on the backend.
+ *
+ * Pass `instanceId` when a stored TaskInstance already exists for the occurrence
+ * (i.e. it was previously MODIFIED). Pass `null` for virtual occurrences — in
+ * that case `data.originalInstanceDate` is required so the backend knows which
+ * date to mark REMOVED.
+ */
+export async function convertTaskInstance(
+  taskId: string,
+  instanceId: string | null,
+  data: ConvertInstanceToTaskRequest,
+): Promise<Task> {
+  const url = instanceId
+    ? `/api/tasks/${taskId}/instances/${instanceId}/convert`
+    : `/api/tasks/${taskId}/instances/convert`;
+  const res = await apiClient.post<{ success: boolean; data: Task }>(url, data);
   return res.data.data;
 }
 
@@ -227,6 +258,64 @@ export async function getAttendingEvents(params?: { from?: string; to?: string }
 
 export async function getUserEventInstances(params: { from: string; to: string }): Promise<EventInstance[]> {
   const res = await apiClient.get<{ success: boolean; data: EventInstance[] }>('/api/event-instances', { params });
+  return res.data.data;
+}
+
+/**
+ * Fetch every recurring (repeat IS NOT NULL) personal event for the user.
+ *
+ * Same purpose as getRecurringTasks but for events. This endpoint already
+ * exists in the backend at `GET /api/events/recurring` and is unused by
+ * dooooWeb today.
+ */
+export async function getRecurringEvents(): Promise<Event[]> {
+  const res = await apiClient.get<{ success: boolean; data: Event[] }>('/api/events/recurring');
+  return res.data.data;
+}
+
+export async function createEventInstance(eventId: string, data: CreateEventInstanceRequest): Promise<EventInstance> {
+  const res = await apiClient.post<{ success: boolean; data: EventInstance }>(`/api/events/${eventId}/instances`, data);
+  return res.data.data;
+}
+
+/**
+ * Update an existing stored event instance. Note the backend keys event instances
+ * by `(eventId, date)`, not by instance id, so the URL takes the *date string* of
+ * the original occurrence, not the instance row id.
+ */
+export async function updateEventInstance(
+  eventId: string,
+  date: string,
+  data: UpdateEventInstanceRequest,
+): Promise<EventInstance> {
+  const res = await apiClient.patch<{ success: boolean; data: EventInstance }>(
+    `/api/events/${eventId}/instances/${date}`,
+    data,
+  );
+  return res.data.data;
+}
+
+export async function deleteEventInstance(eventId: string, date: string): Promise<void> {
+  await apiClient.delete(`/api/events/${eventId}/instances/${date}`);
+}
+
+/**
+ * Convert a single occurrence of a recurring event into a new standalone event,
+ * marking the original occurrence as REMOVED. Transactional on the backend.
+ *
+ * Pass `instanceId` when a stored EventInstance already exists for the occurrence.
+ * Pass `null` for virtual occurrences — `data.originalInstanceDate` is required
+ * in that case.
+ */
+export async function convertEventInstance(
+  eventId: string,
+  instanceId: string | null,
+  data: ConvertInstanceToEventRequest,
+): Promise<Event> {
+  const url = instanceId
+    ? `/api/events/${eventId}/instances/${instanceId}/convert`
+    : `/api/events/${eventId}/instances/convert`;
+  const res = await apiClient.post<{ success: boolean; data: Event }>(url, data);
   return res.data.data;
 }
 

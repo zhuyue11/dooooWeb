@@ -51,8 +51,11 @@ export async function openSidePanelForItem(page: Page, title: string) {
   }
   await page.waitForTimeout(300);
 
-  // Verify panel opened
-  await expect(page.getByText(title).first()).toBeVisible({ timeout: 3000 });
+  // Verify panel opened: the side panel renders the title in a heading. Use a
+  // role-based locator scoped to the panel container so we don't false-match the
+  // tiny pills in the calendar grid (which exist but may be hidden by overflow).
+  const sidePanel = page.locator('[data-testid^="side-panel"], .animate-panel-in, [class*="panel"]').first();
+  await expect(sidePanel.getByText(title).first()).toBeVisible({ timeout: 3000 });
 }
 
 /** Open the full editor for an item (via side panel Edit button) */
@@ -199,5 +202,85 @@ export async function deleteItem(page: Page, title: string) {
   await confirmBtn.click();
 
   // Wait for side panel to close
+  await page.waitForTimeout(500);
+}
+
+// ── Recurring scope helpers (for RT/RD/RE/RDE tests) ──
+
+/**
+ * Open the side panel for a specific occurrence of a recurring item by clicking
+ * the item's card inside the day column for the given date. Falls back to the
+ * generic openSidePanelForItem if the day column isn't visible.
+ */
+export async function openSidePanelForOccurrence(page: Page, title: string, dateKey: string) {
+  await page.goto('/calendar');
+  await page.waitForSelector('[data-testid="calendar-date-range"]', { timeout: 10000 });
+  // Make sure we're in week view
+  await page.locator('[data-testid="view-tab-week"]').click().catch(() => {});
+  await page.waitForTimeout(300);
+
+  // Navigate to the week containing dateKey if not visible
+  const dayColumn = page.locator(`[data-testid="day-column-${dateKey}"]`);
+  if (!(await dayColumn.isVisible({ timeout: 1000 }).catch(() => false))) {
+    const target = new Date(dateKey + 'T00:00:00Z');
+    const today = new Date();
+    const goForward = target.getTime() > today.getTime();
+    const navBtn = goForward ? 'nav-next-week' : 'nav-prev-week';
+    for (let i = 0; i < 26; i++) {
+      await page.locator(`[data-testid="${navBtn}"]`).click();
+      await page.waitForTimeout(200);
+      if (await dayColumn.isVisible({ timeout: 300 }).catch(() => false)) break;
+    }
+  }
+
+  // Click the task card inside the day column
+  const card = dayColumn.locator(`[data-testid^="task-card-"]`).filter({ hasText: title }).first();
+  if (await card.isVisible({ timeout: 1000 }).catch(() => false)) {
+    await card.click();
+  } else {
+    // Fall back to clicking any matching element on the page
+    await openSidePanelForItem(page, title);
+  }
+  await page.waitForTimeout(300);
+}
+
+/**
+ * In the recurring scope modal, click one of the three scope buttons.
+ * Pass `'this' | 'future' | 'all'`. The data-testid attributes match
+ * RecurringScopeModal: scope-this, scope-future, scope-all.
+ */
+export async function chooseEditScope(page: Page, scope: 'this' | 'future' | 'all') {
+  const modal = page.locator('[data-testid="recurring-scope-modal"]');
+  await expect(modal).toBeVisible({ timeout: 3000 });
+  await modal.locator(`[data-testid="scope-${scope}"]`).click();
+  // For 'this' / 'future' the modal closes and the editor opens; for 'all' the
+  // editor opens (with scope=all). Wait for navigation to /edit.
+  await page.waitForURL(/\/items\/.*\/edit/, { timeout: 5000 });
+  await page.waitForTimeout(300);
+}
+
+/**
+ * In the recurring scope modal opened from the Delete button, click one of the
+ * three scope buttons. The mutation runs in-place; no editor navigation.
+ */
+export async function chooseDeleteScope(page: Page, scope: 'this' | 'future' | 'all') {
+  const modal = page.locator('[data-testid="recurring-scope-modal"]');
+  await expect(modal).toBeVisible({ timeout: 3000 });
+  // Listen for the mutation API call so we know when it completes
+  const apiPromise = page.waitForResponse(
+    (resp) =>
+      resp.url().includes('/api/') &&
+      (resp.request().method() === 'DELETE' ||
+        resp.request().method() === 'PATCH' ||
+        resp.request().method() === 'POST'),
+    { timeout: 10000 },
+  ).catch(() => null);
+  await modal.locator(`[data-testid="scope-${scope}"]`).click();
+  const resp = await apiPromise;
+  if (resp && !resp.ok()) {
+    const body = await resp.text().catch(() => '');
+    throw new Error(`Delete-scope API failed: ${resp.status()} ${resp.request().method()} ${resp.url()} — ${body}`);
+  }
+  // Modal closes after success; give the calendar a moment to invalidate.
   await page.waitForTimeout(500);
 }
