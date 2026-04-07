@@ -34,7 +34,7 @@ async function createRecurringEvent(
   await createEventViaFullEditor(page, {
     title,
     date: startDate,
-    time: opts.time ?? '10:00',
+    time: opts.time ?? '07:00',
     location: opts.location,
     repeat: { frequency: 'daily', count: 5 },
   });
@@ -142,8 +142,8 @@ test.describe('EDIT EVENT — This and future (RE5-RE6)', () => {
     await verifyEventOccurrenceAtDate(page, newTitle, dayKey(5), true);
   });
 
-  test('RE6: Edit "this and future" time (10:00 → 15:00) — split applies to d+3..d+5', async ({ page }) => {
-    const { title } = await createRecurringEvent(page, 'RE6', { time: '10:00' });
+  test('RE6: Edit "this and future" time (07:00 → 15:00) — split applies to d+3..d+5', async ({ page }) => {
+    const { title } = await createRecurringEvent(page, 'RE6', { time: '07:00' });
 
     await openSidePanelForOccurrence(page, title, dayKey(3));
     await page.locator('[data-testid="side-panel-edit"]').click();
@@ -201,7 +201,7 @@ test.describe('EDIT EVENT — Scope modal visibility (RE9)', () => {
 
     const nonRecurringTitle = generateUniqueTitle('RE9-non');
     const startDate = toISODate(offsetDateUTC(1));
-    await createEventViaFullEditor(page, { title: nonRecurringTitle, date: startDate, time: '10:00' });
+    await createEventViaFullEditor(page, { title: nonRecurringTitle, date: startDate, time: '07:00' });
     await waitForCalendarLoad(page);
     await openSidePanelForOccurrence(page, nonRecurringTitle, startDate);
     await page.locator('[data-testid="side-panel-edit"]').click();

@@ -225,8 +225,12 @@ export function ItemEditorPage() {
   const [timeValue, setTimeValue] = useState(draft?.timeValue || '09:00');
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>(draft?.timeOfDay || null);
 
-  // Event time
-  const [hasStartTime, setHasStartTime] = useState(draft?.hasStartTime ?? false);
+  // Event time. Events always require a time (enforced by the backend with
+  // 400 "Event must have a time"), so new events default to hasStartTime=true.
+  // Tasks can be untimed, so their `hasTime` defaults to false above.
+  const [hasStartTime, setHasStartTime] = useState(
+    draft?.hasStartTime ?? (itemType === 'EVENT'),
+  );
   const [startTimeValue, setStartTimeValue] = useState(draft?.startTimeValue || '10:00');
   const [hasEndTime, setHasEndTime] = useState(draft?.hasEndTime ?? false);
   const [endTimeValue, setEndTimeValue] = useState(draft?.endTimeValue || '11:00');
@@ -483,6 +487,8 @@ export function ItemEditorPage() {
       setDuration(null);
       setFirstReminder(undefined);
       setSecondReminder(undefined);
+      // Events always require a clock time (backend returns 400 otherwise).
+      setHasStartTime(true);
     } else {
       setHasStartTime(false);
       setHasEndTime(false);

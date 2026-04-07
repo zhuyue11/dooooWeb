@@ -17,7 +17,7 @@ async function createRecurringEvent(page: any, prefix: string) {
   await createEventViaFullEditor(page, {
     title,
     date: startDate,
-    time: '10:00',
+    time: '07:00',
     repeat: { frequency: 'daily', count: 5 },
   });
   await waitForCalendarLoad(page);
@@ -107,7 +107,7 @@ test.describe('DELETE EVENT — Scope modal visibility (RDE6)', () => {
 
     const nonRecurringTitle = generateUniqueTitle('RDE6-non');
     const startDate = toISODate(offsetDateUTC(1));
-    await createEventViaFullEditor(page, { title: nonRecurringTitle, date: startDate, time: '10:00' });
+    await createEventViaFullEditor(page, { title: nonRecurringTitle, date: startDate, time: '07:00' });
     await waitForCalendarLoad(page);
     await openSidePanelForOccurrence(page, nonRecurringTitle, startDate);
     await page.locator('[data-testid="side-panel-delete"]').click();

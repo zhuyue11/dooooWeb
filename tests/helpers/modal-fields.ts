@@ -95,21 +95,23 @@ export async function setDateInEditor(page: Page, dateKey: string) {
 export async function setTimeInModal(page: Page, time: string) {
   const [hours, minutes] = time.split(':').map(Number);
 
-  // Try different entry points depending on context:
-  // Tasks: "Add time" → TimeOfDayPicker → "At time" → numeric inputs
-  // Events: "Start time" → numeric inputs directly
-  const addTimeBtn = page.getByText('Add time').first();
-  const startTimeBtn = page.getByText('Start time').first();
-
-  if (await addTimeBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-    await addTimeBtn.click();
-    await page.waitForTimeout(200);
-  } else if (await startTimeBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-    await startTimeBtn.click();
+  // Event editors default to hasStartTime=true (events require a time), so the
+  // TimePicker is already visible and there's no schedule-icon button to click.
+  // Task editors default to hasTime=false → the row shows a button with the
+  // schedule icon that opens the TimeOfDayPicker. Detect and click the button
+  // only if it's present, matching the same icon-based pattern setDateInEditor
+  // uses. (Text-based selectors are fragile: the visible label is "Time", not
+  // "Add time", because `calendarPage.form.addTime` resolves to "Time".)
+  const timeFieldRow = page.locator('button').filter({
+    has: page.locator('span.material-symbols-rounded', { hasText: 'schedule' }),
+  }).first();
+  if (await timeFieldRow.isVisible({ timeout: 500 }).catch(() => false)) {
+    await timeFieldRow.click();
     await page.waitForTimeout(200);
   }
 
-  // If TimeOfDayPicker is showing (Morning/Afternoon/Evening/At time), click "At time"
+  // If TimeOfDayPicker is showing (tasks: Morning/Afternoon/Evening/At time),
+  // click "At time" to surface the numeric inputs.
   const atTimeBtn = page.getByText('At time').first();
   if (await atTimeBtn.isVisible({ timeout: 500 }).catch(() => false)) {
     await atTimeBtn.click();
