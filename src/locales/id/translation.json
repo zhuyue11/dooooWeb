@@ -1421,7 +1421,9 @@
     "confirmDelete": "Hapus item ini?",
     "deleteDescription": "Tindakan ini tidak dapat dibatalkan. Item akan dihapus secara permanen.",
     "backToCalendar": "Kembali ke Kalender",
-    "timeZone": "Zona waktu"
+    "timeZone": "Zona waktu",
+    "guests": "Tamu",
+    "meetingLink": "Tautan rapat"
   },
   "itemEditor": {
     "newTask": "Tugas Baru",

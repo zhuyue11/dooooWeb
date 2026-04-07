@@ -1421,7 +1421,9 @@
     "confirmDelete": "Eliminare questo elemento?",
     "deleteDescription": "Questa azione non può essere annullata. L'elemento verrà eliminato definitivamente.",
     "backToCalendar": "Torna al calendario",
-    "timeZone": "Fuso orario"
+    "timeZone": "Fuso orario",
+    "guests": "Ospiti",
+    "meetingLink": "Link riunione"
   },
   "itemEditor": {
     "newTask": "Nuova attività",

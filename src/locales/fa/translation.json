@@ -1421,7 +1421,9 @@
     "confirmDelete": "این مورد حذف شود؟",
     "deleteDescription": "این عمل قابل بازگشت نیست. مورد به طور دائم حذف خواهد شد.",
     "backToCalendar": "بازگشت به تقویم",
-    "timeZone": "منطقه زمانی"
+    "timeZone": "منطقه زمانی",
+    "guests": "مهمانان",
+    "meetingLink": "لینک جلسه"
   },
   "itemEditor": {
     "newTask": "وظیفه جدید",

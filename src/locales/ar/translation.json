@@ -1421,7 +1421,9 @@
     "confirmDelete": "حذف هذا العنصر؟",
     "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف العنصر نهائيًا.",
     "backToCalendar": "العودة إلى التقويم",
-    "timeZone": "المنطقة الزمنية"
+    "timeZone": "المنطقة الزمنية",
+    "guests": "الضيوف",
+    "meetingLink": "رابط الاجتماع"
   },
   "itemEditor": {
     "newTask": "مهمة جديدة",

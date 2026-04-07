@@ -116,7 +116,7 @@ export async function createTask(data: CreateTaskRequest): Promise<Task> {
 }
 
 export async function updateTask(id: string, data: UpdateTaskRequest): Promise<Task> {
-  const res = await apiClient.put<{ success: boolean; data: Task }>(`/api/tasks/${id}`, data);
+  const res = await apiClient.patch<{ success: boolean; data: Task }>(`/api/tasks/${id}`, data);
   return res.data.data;
 }
 
@@ -138,8 +138,8 @@ export async function getAssignedGroupTasks(): Promise<Task[]> {
 
 // ===== Task Instances =====
 
-export async function getTaskInstances(): Promise<TaskInstancesResponse> {
-  const res = await apiClient.get<TaskInstancesResponse>('/api/tasks/instances');
+export async function getTaskInstances(params?: { from?: string; to?: string }): Promise<TaskInstancesResponse> {
+  const res = await apiClient.get<TaskInstancesResponse>('/api/tasks/instances', { params });
   return res.data;
 }
 
@@ -207,7 +207,7 @@ export async function createEvent(data: CreateEventRequest): Promise<Event> {
 }
 
 export async function updateEvent(id: string, data: UpdateEventRequest): Promise<Event> {
-  const res = await apiClient.put<{ success: boolean; data: Event }>(`/api/events/${id}`, data);
+  const res = await apiClient.patch<{ success: boolean; data: Event }>(`/api/events/${id}`, data);
   return res.data.data;
 }
 

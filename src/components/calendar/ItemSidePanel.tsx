@@ -191,9 +191,12 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
 
   const durationDisplay = item.duration ? `${item.duration} min` : null;
   const reminderDisplay = formatReminder(item.firstReminderMinutes);
+  const secondReminderDisplay = formatReminder(item.secondReminderMinutes);
   const locationDisplay = item.location || null;
+  const guestsDisplay = item.guests && item.guests.length > 0 ? item.guests : null;
+  const meetingLinkDisplay = item.meetingLink || null;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay;
 
   return createPortal(
     <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
@@ -319,10 +322,46 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                 </>
               )}
+              {secondReminderDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
+                </>
+              )}
               {locationDisplay && (
                 <>
                   <div className="mx-4 border-t border-border" />
                   <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
+                </>
+              )}
+              {guestsDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <div className="flex items-start gap-3 px-4 py-3">
+                    <Icon name="group" size={18} color="var(--color-muted-foreground)" className="mt-0.5" />
+                    <div className="flex-1">
+                      <span className="text-[13px] text-muted-foreground">{t('itemView.guests')}</span>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {guestsDisplay.map((g) => (
+                          <span key={g.email} className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                            {g.email}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+              {meetingLinkDisplay && (
+                <>
+                  <div className="mx-4 border-t border-border" />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="videocam" size={18} color="var(--color-muted-foreground)" />
+                    <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.meetingLink')}</span>
+                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-primary hover:underline">
+                      {meetingLinkDisplay}
+                    </a>
+                  </div>
                 </>
               )}
               {tzDisplay && (

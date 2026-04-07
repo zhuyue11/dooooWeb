@@ -1427,7 +1427,9 @@
     "confirmDelete": "Excluir este item?",
     "deleteDescription": "Esta ação não pode ser desfeita. O item será excluído permanentemente.",
     "backToCalendar": "Voltar ao calendário",
-    "timeZone": "Fuso horário"
+    "timeZone": "Fuso horário",
+    "guests": "Convidados",
+    "meetingLink": "Link da reunião"
   },
   "itemEditor": {
     "newTask": "Nova tarefa",

@@ -1421,7 +1421,9 @@
     "confirmDelete": "Удалить этот элемент?",
     "deleteDescription": "Это действие нельзя отменить. Элемент будет удалён навсегда.",
     "backToCalendar": "Вернуться к календарю",
-    "timeZone": "Часовой пояс"
+    "timeZone": "Часовой пояс",
+    "guests": "Гости",
+    "meetingLink": "Ссылка на встречу"
   },
   "itemEditor": {
     "newTask": "Новая задача",

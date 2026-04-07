@@ -1421,7 +1421,9 @@
     "confirmDelete": "ลบรายการนี้หรือไม่?",
     "deleteDescription": "การดำเนินการนี้ไม่สามารถยกเลิกได้ รายการจะถูกลบอย่างถาวร",
     "backToCalendar": "กลับไปที่ปฏิทิน",
-    "timeZone": "เขตเวลา"
+    "timeZone": "เขตเวลา",
+    "guests": "ผู้เข้าร่วม",
+    "meetingLink": "ลิงก์ประชุม"
   },
   "itemEditor": {
     "newTask": "งานใหม่",

@@ -1427,7 +1427,9 @@
     "confirmDelete": "このアイテムを削除しますか？",
     "deleteDescription": "この操作は取り消せません。アイテムは完全に削除されます。",
     "backToCalendar": "カレンダーに戻る",
-    "timeZone": "タイムゾーン"
+    "timeZone": "タイムゾーン",
+    "guests": "ゲスト",
+    "meetingLink": "会議リンク"
   },
   "itemEditor": {
     "newTask": "新しいタスク",

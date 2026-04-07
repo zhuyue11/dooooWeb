@@ -1426,7 +1426,9 @@
     "confirmDelete": "删除此项目？",
     "deleteDescription": "此操作无法撤销。该项目将被永久删除。",
     "backToCalendar": "返回日历",
-    "timeZone": "时区"
+    "timeZone": "时区",
+    "guests": "来宾",
+    "meetingLink": "会议链接"
   },
   "itemEditor": {
     "newTask": "新建任务",

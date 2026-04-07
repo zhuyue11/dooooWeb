@@ -1,6 +1,93 @@
-import type { Task, Event } from '@/types/api';
+import type { Task, Event, EventInstance } from '@/types/api';
 import type { CalendarItem, ParticipantSummary } from './useWeekCalendar';
 import { toISODate } from '@/utils/date';
+
+// ── Participant summary (per-date, for recurring "for all members" group tasks) ──
+
+/**
+ * Compute participant summary for a specific instance date.
+ * Ported 1:1 from dooooApp/utils/participantHelpers.ts:computeParticipantSummaryForDate.
+ *
+ * Rules (in order):
+ *   1. TaskParticipantInstance records keyed to this date take precedence.
+ *   2. TaskParticipant (Join All) applies to dates on/after startParticipateTime,
+ *      unless already overridden by a per-date instance.
+ *   3. LEFT status with stoppedParticipatingAt: dates on/before that stop date
+ *      are treated as CONFIRMED; later dates stay LEFT.
+ *   4. DECLINED applies to all dates.
+ */
+export function computeParticipantSummaryForDate(
+  task: Task,
+  instanceDate: Date,
+): ParticipantSummary | undefined {
+  if (!task.isForAllMembers) return undefined;
+
+  const instanceDateStr = toISODate(instanceDate);
+  const userStatusMap = new Map<string, { status: string }>();
+
+  if (task.participantInstances) {
+    for (const pi of task.participantInstances as Array<{
+      participantUserId?: string;
+      status: string;
+      taskInstance?: { date?: string };
+    }>) {
+      const userId = pi.participantUserId;
+      if (!userId) continue;
+      if (pi.taskInstance?.date) {
+        const piDate = new Date(pi.taskInstance.date);
+        if (toISODate(piDate) === instanceDateStr) {
+          userStatusMap.set(userId, { status: pi.status });
+        }
+      }
+    }
+  }
+
+  if (task.participants) {
+    for (const p of task.participants as Array<{
+      userId: string;
+      status: string;
+      startParticipateTime?: string | null;
+      stoppedParticipatingAt?: string | null;
+    }>) {
+      const userId = p.userId;
+      if (!userId) continue;
+      if (userStatusMap.has(userId)) continue;
+
+      if (p.status === 'DECLINED') {
+        userStatusMap.set(userId, { status: 'DECLINED' });
+        continue;
+      }
+
+      if (p.startParticipateTime) {
+        const startDateStr = toISODate(new Date(p.startParticipateTime));
+        if (startDateStr <= instanceDateStr) {
+          let effectiveStatus = p.status;
+          if (p.status === 'LEFT' && p.stoppedParticipatingAt) {
+            const stoppedDateStr = toISODate(new Date(p.stoppedParticipatingAt));
+            if (instanceDateStr <= stoppedDateStr) {
+              effectiveStatus = 'CONFIRMED';
+            }
+          }
+          userStatusMap.set(userId, { status: effectiveStatus });
+        }
+      }
+    }
+  }
+
+  let goingCount = 0;
+  let notGoingCount = 0;
+  let completedCount = 0;
+  for (const { status } of userStatusMap.values()) {
+    if (status === 'CONFIRMED') goingCount++;
+    else if (status === 'COMPLETED') {
+      goingCount++;
+      completedCount++;
+    } else if (status === 'DECLINED' || status === 'LEFT') notGoingCount++;
+  }
+
+  if (goingCount === 0 && notGoingCount === 0) return undefined;
+  return { goingCount, notGoingCount, completedCount };
+}
 
 // ── Participant summary (matches dooooApp's computeParticipantSummary) ──
 
@@ -32,12 +119,13 @@ export function computeParticipantSummary(task: Task): ParticipantSummary {
 
 // ── Convert tasks/events to CalendarItems ──
 
-export function taskToCalendarItem(task: Task): CalendarItem {
+export function taskToCalendarItem(task: Task, displayDate?: string): CalendarItem {
   return {
     id: task.id,
     title: task.title,
     description: task.description,
-    date: task.date!,
+    // Display date — caller may override with completedAt for no-date completed tasks
+    date: displayDate ?? task.date ?? '',
     hasTime: !!task.hasTime,
     timeOfDay: task.timeOfDay,
     itemType: 'TASK',
@@ -94,6 +182,36 @@ export function eventToCalendarItem(event: Event): CalendarItem {
     secondReminderMinutes: event.secondReminderMinutes,
     sourceEvent: event,
   };
+}
+
+export function eventInstanceToCalendarItem(instance: EventInstance, parentEvent?: Event): CalendarItem {
+  // Use the parent event for fields that the instance doesn't override (e.g. repeat, groupId)
+  const merged: CalendarItem = {
+    id: `event-instance-${instance.id}`,
+    title: instance.title,
+    description: instance.description ?? undefined,
+    date: instance.date,
+    hasTime: !!instance.hasTime,
+    itemType: 'EVENT',
+    isCompleted: instance.status === 'COMPLETED',
+    priority: instance.priority ?? undefined,
+    duration: instance.duration ?? undefined,
+    repeat: parentEvent?.repeat,
+    groupId: parentEvent?.groupId ?? undefined,
+    location: instance.location ?? parentEvent?.location,
+    locationAddress: instance.locationAddress ?? parentEvent?.locationAddress,
+    endDate: instance.endDate ?? undefined,
+    guests: instance.guests ?? parentEvent?.guests,
+    meetingLink: instance.meetingLink ?? parentEvent?.meetingLink,
+    eventStatus: instance.eventStatus,
+    googleCalendarEventId: instance.googleCalendarEventId ?? undefined,
+    firstReminderMinutes: instance.firstReminderMinutes ?? parentEvent?.firstReminderMinutes,
+    secondReminderMinutes: instance.secondReminderMinutes ?? parentEvent?.secondReminderMinutes,
+    sourceEvent: parentEvent,
+    isInstance: true,
+    eventId: instance.eventId,
+  };
+  return merged;
 }
 
 // ── Sort helpers ──

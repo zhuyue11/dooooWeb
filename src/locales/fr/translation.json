@@ -1421,7 +1421,9 @@
     "confirmDelete": "Supprimer cet élément ?",
     "deleteDescription": "Cette action est irréversible. L'élément sera définitivement supprimé.",
     "backToCalendar": "Retour au calendrier",
-    "timeZone": "Fuseau horaire"
+    "timeZone": "Fuseau horaire",
+    "guests": "Invités",
+    "meetingLink": "Lien de réunion"
   },
   "itemEditor": {
     "newTask": "Nouvelle tâche",

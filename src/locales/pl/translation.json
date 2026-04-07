@@ -1421,7 +1421,9 @@
     "confirmDelete": "Usunąć ten element?",
     "deleteDescription": "Tej czynności nie można cofnąć. Element zostanie trwale usunięty.",
     "backToCalendar": "Powrót do kalendarza",
-    "timeZone": "Strefa czasowa"
+    "timeZone": "Strefa czasowa",
+    "guests": "Goście",
+    "meetingLink": "Link do spotkania"
   },
   "itemEditor": {
     "newTask": "Nowe zadanie",

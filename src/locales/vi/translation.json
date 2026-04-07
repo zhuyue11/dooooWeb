@@ -1421,7 +1421,9 @@
     "confirmDelete": "Xóa mục này?",
     "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
     "backToCalendar": "Quay lại lịch",
-    "timeZone": "Múi giờ"
+    "timeZone": "Múi giờ",
+    "guests": "Khách mời",
+    "meetingLink": "Liên kết cuộc họp"
   },
   "itemEditor": {
     "newTask": "Công việc mới",

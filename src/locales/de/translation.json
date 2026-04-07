@@ -1421,7 +1421,9 @@
     "confirmDelete": "Dieses Element löschen?",
     "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Das Element wird dauerhaft gelöscht.",
     "backToCalendar": "Zurück zum Kalender",
-    "timeZone": "Zeitzone"
+    "timeZone": "Zeitzone",
+    "guests": "Gäste",
+    "meetingLink": "Besprechungslink"
   },
   "itemEditor": {
     "newTask": "Neue Aufgabe",
