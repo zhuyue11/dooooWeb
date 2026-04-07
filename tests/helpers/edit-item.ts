@@ -51,10 +51,10 @@ export async function openSidePanelForItem(page: Page, title: string) {
   }
   await page.waitForTimeout(300);
 
-  // Verify panel opened: the side panel renders the title in a heading. Use a
-  // role-based locator scoped to the panel container so we don't false-match the
-  // tiny pills in the calendar grid (which exist but may be hidden by overflow).
-  const sidePanel = page.locator('[data-testid^="side-panel"], .animate-panel-in, [class*="panel"]').first();
+  // Verify panel opened: scope the title check into the side panel container so
+  // we don't false-match the tiny pills in the calendar grid (which exist in the
+  // DOM but are hidden by overflow:hidden on their parent row).
+  const sidePanel = page.getByTestId('item-side-panel');
   await expect(sidePanel.getByText(title).first()).toBeVisible({ timeout: 3000 });
 }
 
@@ -215,9 +215,17 @@ export async function deleteItem(page: Page, title: string) {
 export async function openSidePanelForOccurrence(page: Page, title: string, dateKey: string) {
   await page.goto('/calendar');
   await page.waitForSelector('[data-testid="calendar-date-range"]', { timeout: 10000 });
-  // Make sure we're in week view
-  await page.locator('[data-testid="view-tab-week"]').click().catch(() => {});
-  await page.waitForTimeout(300);
+
+  // Force week view. Don't swallow click errors — if the tab isn't there or
+  // isn't clickable, we want to know immediately rather than spend 30s in the
+  // nav loop below clicking week-arrows in the wrong view.
+  await page.locator('[data-testid="view-tab-week"]').click();
+  // Confirm week view is actually rendered by waiting for any day-column to appear.
+  await page.waitForSelector('[data-testid^="day-column-"]', { timeout: 5000 });
+  // Reset to today so the nav-loop offset is bounded by the requested date,
+  // not by whatever week a previous test left the calendar on.
+  await page.locator('[data-testid="nav-today"]').click();
+  await page.waitForTimeout(200);
 
   // Navigate to the week containing dateKey if not visible
   const dayColumn = page.locator(`[data-testid="day-column-${dateKey}"]`);

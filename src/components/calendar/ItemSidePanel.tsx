@@ -285,6 +285,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
       {/* Panel */}
       <div
         ref={panelRef}
+        data-testid="item-side-panel"
         className={`relative flex h-full w-[420px] max-w-full flex-col bg-surface shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
         style={{ borderLeft: '1px solid var(--color-border)' }}
         onClick={(e) => e.stopPropagation()}
