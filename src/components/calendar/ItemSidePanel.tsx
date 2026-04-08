@@ -498,7 +498,6 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSi
         <RecurringScopeModal
           open={scopeModalMode !== null}
           mode={scopeModalMode ?? 'edit'}
-          itemType={item.itemType}
           pending={
             deleteTaskInstanceMutation.isPending ||
             deleteEventInstanceMutation.isPending ||

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 interface Props {
   open: boolean;
   mode: 'edit' | 'delete';
-  itemType?: 'TASK' | 'EVENT';
   pending?: boolean;
   onThis: () => void;
   onAllFuture: () => void;
@@ -19,9 +18,11 @@ interface Props {
  *   - This and all future occurrences
  *   - All occurrences
  *
- * Reuses i18n keys from `recurringOptions.*`. Visual style mirrors the inline
- * delete-confirm overlay in `ItemSidePanel.tsx`. The same modal is used for
- * both tasks and events; the parent decides which mutation each button calls.
+ * i18n keys live under `calendar.recurringOptions.*` (the same block both
+ * dooooWeb and dooooApp share — see `src/locales/<lang>/translation.json`).
+ * Visual style mirrors the inline delete-confirm overlay in `ItemSidePanel.tsx`.
+ * The same modal is used for both tasks and events; the parent decides which
+ * mutation each button calls.
  */
 export function RecurringScopeModal({
   open,
@@ -37,7 +38,6 @@ export function RecurringScopeModal({
   if (!open) return null;
 
   const isEdit = mode === 'edit';
-  const titleKey = isEdit ? 'recurringOptions.editThisOccurrence' : 'recurringOptions.deleteThisOccurrence';
   const buttonClassPrimary =
     'w-full rounded-lg bg-primary px-4 py-3 text-left text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50';
   const buttonClassNeutral =
@@ -59,17 +59,7 @@ export function RecurringScopeModal({
         className="mx-6 w-full max-w-sm rounded-xl bg-surface p-6 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-semibold text-foreground">
-          {t(isEdit ? 'recurringOptions.editThisOccurrence' : 'recurringOptions.deleteThisOccurrence').replace(
-            /^(Edit|Delete) this occurrence$/i,
-            isEdit ? 'Edit recurring task' : 'Delete recurring task',
-          )}
-        </h3>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t('recurringOptions.affectsOnlyThis')}
-        </p>
-
-        <div className="mt-5 flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <button
             type="button"
             className={baseClass}
@@ -77,7 +67,7 @@ export function RecurringScopeModal({
             disabled={pending}
             data-testid="scope-this"
           >
-            {t(titleKey)}
+            {t(isEdit ? 'calendar.recurringOptions.editThisOccurrence' : 'calendar.recurringOptions.deleteThisOccurrence')}
           </button>
           <button
             type="button"
@@ -86,7 +76,7 @@ export function RecurringScopeModal({
             disabled={pending}
             data-testid="scope-future"
           >
-            {t(isEdit ? 'recurringOptions.editAllFuture' : 'recurringOptions.deleteAllFuture')}
+            {t(isEdit ? 'calendar.recurringOptions.editAllFuture' : 'calendar.recurringOptions.deleteAllFuture')}
           </button>
           <button
             type="button"
@@ -95,7 +85,7 @@ export function RecurringScopeModal({
             disabled={pending}
             data-testid="scope-all"
           >
-            {t(isEdit ? 'recurringOptions.editAllOccurrences' : 'recurringOptions.deleteAllOccurrences')}
+            {t(isEdit ? 'calendar.recurringOptions.editAllOccurrences' : 'calendar.recurringOptions.deleteAllOccurrences')}
           </button>
         </div>
 
