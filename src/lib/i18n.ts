@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 // Tier 1
 import en from '@/locales/en/translation.json';
 import zh from '@/locales/zh/translation.json';
+import zhHant from '@/locales/zh-Hant/translation.json';
 import es from '@/locales/es/translation.json';
 import fr from '@/locales/fr/translation.json';
 import de from '@/locales/de/translation.json';
@@ -24,7 +25,15 @@ import id from '@/locales/id/translation.json';
 import fa from '@/locales/fa/translation.json';
 
 // Detect browser language (web equivalent of expo-localization)
-const browserLanguage = navigator.language.split('-')[0] || 'en';
+// Handle zh-Hant/zh-TW/zh-HK → 'zh-Hant', other zh variants → 'zh'
+function detectBrowserLanguage(): string {
+  const navLang = navigator.language;
+  if (navLang.startsWith('zh')) {
+    return /zh-(Hant|TW|HK|MO)/i.test(navLang) ? 'zh-Hant' : 'zh';
+  }
+  return navLang.split('-')[0] || 'en';
+}
+const browserLanguage = detectBrowserLanguage();
 
 i18n
   .use(initReactI18next)
@@ -33,6 +42,7 @@ i18n
       // Tier 1
       en: { translation: en },
       zh: { translation: zh },
+      'zh-Hant': { translation: zhHant },
       es: { translation: es },
       fr: { translation: fr },
       de: { translation: de },

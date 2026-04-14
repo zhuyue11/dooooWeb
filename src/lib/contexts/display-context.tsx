@@ -11,6 +11,7 @@ export type WeekStartDay = 'sunday' | 'monday';
 const TIME_FORMAT_BY_LANGUAGE: Record<SupportedLanguage, TimeFormat> = {
   en: '12h',
   zh: '24h',
+  'zh-Hant': '24h',
   ja: '24h',
   ko: '12h',
   es: '24h',

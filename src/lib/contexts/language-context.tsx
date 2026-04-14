@@ -4,14 +4,15 @@ import { STORAGE_KEYS } from '../config';
 
 // Same supported languages as dooooApp
 export type SupportedLanguage =
-  | 'en' | 'zh' | 'es' | 'fr' | 'de'
+  | 'en' | 'zh' | 'zh-Hant' | 'es' | 'fr' | 'de'
   | 'ja' | 'ko' | 'pt' | 'ru' | 'ar'
   | 'it' | 'tr' | 'pl' | 'nl' | 'th'
   | 'vi' | 'id' | 'fa';
 
 export const SUPPORTED_LANGUAGES: { code: SupportedLanguage; name: string; nativeName: string }[] = [
   { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
+  { code: 'zh', name: 'Chinese (Simplified)', nativeName: '简体中文' },
+  { code: 'zh-Hant', name: 'Chinese (Traditional)', nativeName: '繁體中文' },
   { code: 'es', name: 'Spanish', nativeName: 'Español' },
   { code: 'fr', name: 'French', nativeName: 'Français' },
   { code: 'de', name: 'German', nativeName: 'Deutsch' },
@@ -47,7 +48,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
     if (stored) return stored as SupportedLanguage;
     // Use browser language if it's supported
-    const browserLang = navigator.language.split('-')[0] as SupportedLanguage;
+    // Handle zh-Hant/zh-TW/zh-HK → 'zh-Hant', other zh variants → 'zh'
+    const navLang = navigator.language;
+    if (navLang.startsWith('zh')) {
+      const isTraditional = /zh-(Hant|TW|HK|MO)/i.test(navLang);
+      return isTraditional ? 'zh-Hant' : 'zh';
+    }
+    const browserLang = navLang.split('-')[0] as SupportedLanguage;
     if (SUPPORTED_LANGUAGES.some((l) => l.code === browserLang)) return browserLang;
     return 'en';
   });
