@@ -147,11 +147,11 @@ test.describe('EDIT TASK (ET1-ET15)', () => {
     await waitForCalendarLoad(page);
 
     await openFullEditorForItem(page, title);
-    await editField(page, 'category', 'Personal');
+    await editField(page, 'category', 'Home');
     await saveEdit(page);
 
     await waitForCalendarLoad(page);
-    await verifyTaskInSidePanel(page, { title, dateKey, category: 'Personal' });
+    await verifyTaskInSidePanel(page, { title, dateKey, category: 'Home' });
   });
 
   test('ET10: Edit task description', async ({ page }) => {

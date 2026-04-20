@@ -4,7 +4,6 @@ import type { Category } from '@/types/api';
 /** Hardcoded category colors for seed/default categories (bg + text pairs). */
 export const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
   cme63mc0q0005f2ui0dfg1tqg: { bg: '#dbeafe', text: '#1e40af' },  // Work
-  cme63mc0q0006f2ui0dfg1tqh: { bg: '#d1fae5', text: '#065f46' },  // Personal
   cme63mc0q000af2ui0dfg1tql: { bg: '#ffedd5', text: '#9a3412' },  // Home
   cme63mc0q000bf2ui0dfg1tqm: { bg: '#cffafe', text: '#155e75' },  // Travel
   cme63mc0q0007f2ui0dfg1tqi: { bg: '#fef3c7', text: '#92400e' },  // Shopping
@@ -14,7 +13,6 @@ export const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
 
 export const CATEGORY_NAMES: Record<string, string> = {
   cme63mc0q0005f2ui0dfg1tqg: 'Work',
-  cme63mc0q0006f2ui0dfg1tqh: 'Personal',
   cme63mc0q000af2ui0dfg1tql: 'Home',
   cme63mc0q000bf2ui0dfg1tqm: 'Travel',
   cme63mc0q0007f2ui0dfg1tqi: 'Shopping',

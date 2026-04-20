@@ -18,7 +18,7 @@ export interface SeedTask {
 export const SEED_TASKS: SeedTask[] = [
   { title: 'Morning standup', dateOffset: 0, hasTime: true, time: '9:00', isCompleted: true, priority: 'MEDIUM', category: 'Work' },
   { title: 'Review PR #42', dateOffset: 0, hasTime: true, time: '11:00', isCompleted: false, priority: 'HIGH', category: 'Work' },
-  { title: 'Lunch with Sara', dateOffset: 0, hasTime: true, time: '12:30', isCompleted: false, priority: null, category: 'Personal' },
+  { title: 'Lunch with Sara', dateOffset: 0, hasTime: true, time: '12:30', isCompleted: false, priority: null, category: 'Home' },
   { title: 'Write blog post', dateOffset: 0, hasTime: false, isCompleted: true, priority: 'LOW', category: 'Learning' },
   { title: 'Gym session', dateOffset: 0, hasTime: true, time: '18:00', isCompleted: false, priority: null, category: 'Health' },
   { title: 'Buy groceries', dateOffset: 0, hasTime: false, isCompleted: false, priority: null, category: 'Shopping' },
@@ -27,14 +27,14 @@ export const SEED_TASKS: SeedTask[] = [
   { title: 'Team retro', dateOffset: 1, hasTime: true, time: '14:00', isCompleted: false, priority: 'MEDIUM', category: 'Work' },
   { title: 'Read chapter 5', dateOffset: 1, hasTime: false, isCompleted: false, priority: 'LOW', category: 'Learning' },
   { title: 'Deploy v2.1', dateOffset: 2, hasTime: true, time: '10:00', isCompleted: false, priority: 'HIGH', category: 'Work' },
-  { title: 'Update resume', dateOffset: -1, hasTime: false, isCompleted: true, priority: 'MEDIUM', category: 'Personal' },
+  { title: 'Update resume', dateOffset: -1, hasTime: false, isCompleted: true, priority: 'MEDIUM', category: 'Work' },
   { title: 'Plan weekend trip', dateOffset: 2, hasTime: false, isCompleted: false, priority: null, category: 'Travel' },
   { title: 'Fix bike tire', dateOffset: -2, hasTime: false, isCompleted: true, priority: 'LOW', category: 'Home' },
   // No-date (unplanned) tasks
   { title: 'Read "Deep Work" book', dateOffset: null, hasTime: false, isCompleted: false, priority: 'LOW', category: 'Learning' },
   { title: 'Organize desk', dateOffset: null, hasTime: false, isCompleted: false, priority: null, category: 'Home' },
   { title: 'Research vacation spots', dateOffset: null, hasTime: false, isCompleted: false, priority: null, category: 'Travel' },
-  { title: 'Update LinkedIn profile', dateOffset: null, hasTime: false, isCompleted: true, priority: 'MEDIUM', category: 'Personal' },
+  { title: 'Update LinkedIn profile', dateOffset: null, hasTime: false, isCompleted: true, priority: 'MEDIUM', category: 'Work' },
 ];
 
 // ── Expected counts derived from ALL sources (personal + group + events) ──
@@ -83,7 +83,7 @@ export interface SeedGroupTask {
 export const SEED_GROUP_TASKS: SeedGroupTask[] = [
   { id: 'web-cal-gt01', title: 'Design sync', dateOffset: 0, hasTime: true, time: '10:00', isForAllMembers: false, webUserRole: 'owner', category: 'Work', priority: 'MEDIUM' },
   { id: 'web-cal-gt02', title: 'Code review session', dateOffset: 0, hasTime: true, time: '15:00', isForAllMembers: true, webUserRole: 'participant', participantSummary: { going: 2, declined: 1 }, category: 'Work', priority: 'HIGH' },
-  { id: 'web-cal-gt03', title: 'Team lunch', dateOffset: 1, hasTime: true, time: '12:00', isForAllMembers: true, webUserRole: 'owner', participantSummary: { going: 3, declined: 0 }, category: 'Personal', priority: null },
+  { id: 'web-cal-gt03', title: 'Team lunch', dateOffset: 1, hasTime: true, time: '12:00', isForAllMembers: true, webUserRole: 'owner', participantSummary: { going: 3, declined: 0 }, category: 'Work', priority: null },
   { id: 'web-cal-gt04', title: 'Sprint demo', dateOffset: 2, hasTime: true, time: '14:00', isForAllMembers: true, webUserRole: 'participant', participantSummary: { going: 1, declined: 0 }, category: 'Work', priority: 'MEDIUM' },
   { id: 'web-cal-gt05', title: 'Standup rotation', dateOffset: 1, hasTime: true, time: '9:00', isForAllMembers: true, webUserRole: 'owner', participantSummary: { going: 2, declined: 0 }, category: 'Work', priority: null },
 ];
