@@ -1,0 +1,314 @@
+# dooooWeb Implementation Progress
+
+Tracks what has been completed, what's in progress, and what's remaining across all 7 phases to reach full dooooApp feature parity.
+
+Last updated: 2026-04-21
+
+## Tech Stack
+
+- **Build**: Vite + React 18 + TypeScript
+- **Routing**: React Router v7 (`createBrowserRouter`)
+- **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`, CSS custom properties for theming)
+- **State**: React Query (TanStack Query) + Context API (5 providers: auth, theme, language, display, websocket)
+- **i18n**: i18next + react-i18next (19 languages, RTL support for Arabic/Farsi)
+- **HTTP**: Axios with token interceptor + 401 redirect
+- **Real-time**: WebSocket context with exponential backoff reconnect
+- **E2E**: Playwright (22 spec files + fixtures + helpers + seed data)
+
+## Architecture Summary
+
+- **Entry**: `src/App.tsx` — provider tree: QueryClient → Language → Theme → Display → Auth → WebSocket → RouterProvider
+- **Routing**: `src/router.tsx` — `PublicRoute` (login/register/forgot) + `ProtectedRoute` → `AppShell` (sidebar + header + `<Outlet>`)
+- **API layer**: `src/lib/api/index.ts` — 50+ typed functions covering auth, tasks, task instances, categories, events, event instances, groups, targets, plans, notifications, search
+- **Contexts**: `src/lib/contexts/` — auth-context, theme-context, language-context, display-context, websocket-context
+- **Types**: `src/types/api.ts` (Task, Event, Group, Notification), `src/types/target.ts` (Target, Plan, Template, Execution)
+- **Calendar**: `src/components/calendar/` — MonthGrid, WeekGrid, DayTimeline, ItemSidePanel, ItemFormModal, RecurringScopeModal, CalendarHeader, ItemRow, ItemCard, ItemPanel
+- **UI primitives**: `src/components/ui/` — Button, Card, Input, Icon, CalendarPopover, RepeatPopover, TimePicker, DurationPicker, ReminderPicker, TimeOfDayPicker, TimeZonePicker
+- **Layout**: `src/components/layout/` — AppShell, Sidebar (8 nav items, collapsible), Header (mobile toggle)
+- **Hooks**: `src/hooks/` — useItemMutations (14 mutations), useCalendar, useWeekCalendar, useCategories, useGroups
+
+**dooooApp is the source of truth** for all business logic. Before implementing any feature in dooooWeb, always check dooooApp's equivalent screen for the correct behavior, data flow, and edge cases.
+
+---
+
+## Phase 1: Foundation & Core ✅ Complete
+
+**Scope:** Project scaffold, authentication, routing, design system, internationalization, API client, real-time infrastructure, and E2E testing foundation.
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 1.1 Vite + React + TypeScript scaffold | ✅ Done | `package.json`, `tsconfig.json`, `vite.config.ts` with path aliases (`@/`). Tailwind CSS v4 via `@tailwindcss/vite` plugin consuming CSS custom properties. |
+| 1.2 React Router v7 with protected routing | ✅ Done | `createBrowserRouter` in `router.tsx`. 28 routes defined. `ProtectedRoute` component redirects unauthenticated users to `/login`. `PublicRoute` component redirects authenticated users to `/home`. `AppShell` wraps all protected routes with `Sidebar` + `Header` + `<Outlet>` layout. |
+| 1.3 Auth context + token management | ✅ Done | `auth-context.tsx` — `login()`, `register()`, `logout()`, `forgotPassword()`, `resetPassword()`, `updateProfile()`, `changePassword()` methods. JWT token stored in `localStorage` at `@doooo_auth_token`. Auto-fetches current user on mount via `GET /api/auth/me`. Exposes `user`, `isAuthenticated`, `isLoading` state. |
+| 1.4 Login + registration pages | ✅ Done | `LoginPage.tsx` — Google + Apple OAuth buttons (UI scaffolding only, not wired to backend OAuth redirect flow), email login link. `EmailLoginPage.tsx` — email/password form with field validation and error display. `RegisterPage.tsx` — name, email, password fields + optional invitation code. `ForgotPasswordPage.tsx` — email submission for password reset. |
+| 1.5 Design system + CSS custom properties | ✅ Done | CSS variables for theming: `--color-background`, `--color-foreground`, `--color-surface`, `--color-primary`, `--color-secondary`, `--color-muted`, `--color-destructive`, `--color-warning`, `--color-info`, `--color-border`. Light/dark variants via `.dark` class. Layout variables: `--sidebar-width: 260px`, `--sidebar-collapsed-width: 64px`. Border radii: `sm: 4px`, `md: 8px`, `lg: 12px`. Custom animations: `panel-in/out`, `modal-enter/exit`, `page-enter`, `backdrop-in/out`. |
+| 1.6 Base UI components | ✅ Done | `Button` (44 lines, variant-based), `Card`, `Input`, `Icon` (Material Symbols Rounded wrapper with font variation settings). Consistent `rounded-xl` card pattern across all pages. |
+| 1.7 Theme system (light/dark/auto) | ✅ Done | `theme-context.tsx` — `ThemePattern` type (`auto` / `light` / `dark`). Auto mode: light during 6AM–6PM, dark otherwise (matches dooooApp). Persisted to `localStorage` at `@doooo_theme_pattern`. Applies `class="dark"` to `<html>`. `ThemeSettingsPage.tsx` (40 lines) — 3-button selector. |
+| 1.8 Internationalization (19 languages) | ✅ Done | `i18n.ts` — i18next with `react-i18next`, translation files at `src/locales/{lang}/translation.json`. 19 locales: en, zh, zh-Hant, ja, ko, es, fr, de, pt, ru, it, nl, pl, tr, ar, fa, th, vi, id. `language-context.tsx` — detects from `navigator.language`, persists to `localStorage` at `@doooo_language`. RTL support: Arabic and Farsi set `document.documentElement.dir = 'rtl'`. Per-language time format defaults (12h for en/ko/ar, 24h for all others). |
+| 1.9 API client + HTTP layer | ✅ Done | `lib/api/client.ts` — Axios instance with base URL from `VITE_API_BASE_URL` (default `http://localhost:3001`). Request interceptor auto-attaches `Authorization: Bearer {token}`. Response interceptor handles 401 → clear token → redirect to `/login`. `lib/api/index.ts` — 50+ typed functions organized by domain: auth (8), tasks (10), task instances (5), categories (4), events (9), event instances (5), groups (13), targets (5), plans (4), notifications (5), search (1). |
+| 1.10 WebSocket context | ✅ Done | `websocket-context.tsx` (77 lines) — connects on auth with token, disconnects on logout. Exponential backoff reconnect (max 5 attempts). Exposes `{ isConnected }` via `useWebSocket()` hook. **Note:** Currently only tracks connection state — does not parse or dispatch incoming messages. Message dispatching is tracked in Phase 7.2. |
+| 1.11 E2E test infrastructure | ✅ Done | Playwright config: base URL `http://localhost:5173`, timezone UTC, screenshot on failure, trace on first retry, HTML reporter. `global-setup.ts` starts Vite dev server. `auth.setup.ts` logs in and saves session state to `.auth/user.json`. `auth.teardown.ts` cleans up. `seed-data.ts` for deterministic test data. `fixtures/` and `helpers/` directories for reusable test utilities. |
+
+**What's working:**
+- Full email auth flow (login, register, forgot password) with token persistence and auto-redirect
+- Protected route guard with redirect to `/login` for unauthenticated users
+- Light/dark/auto theme toggle with time-based auto mode matching dooooApp
+- 19-language picker with instant switching, RTL layout for Arabic/Farsi, per-language time format defaults
+- All API types defined and 50+ API functions wired to dooooBackend
+- Display preferences (date/time format, week start) functional in context, used across calendar and item views
+- Playwright E2E infrastructure with auth session reuse, seed data, and 22 spec files
+
+---
+
+## Phase 2: Personal Productivity ✅ Complete
+
+**Scope:** Dashboard, calendar (month/week/day views), task and event CRUD with full editor, recurring item lifecycle, todo list, categories, and comprehensive E2E test coverage.
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 2.1 Home / Dashboard page | ✅ Done | `HomePage.tsx` (485 lines). Personalized greeting with time-based message (Good morning/afternoon/evening). Formatted date display. **5 metric cards**: Today's Tasks, Overdue, To-do (undated), This Week, Completion Rate (%). **4-panel body**: Today panel (personal + group tasks + events, time-sorted), Overdue panel (past incomplete, conditional display), To-do panel (no-date or DUE tasks), Upcoming panel (next 5 items, tomorrow+ only). Create item modal + side panel for viewing/editing. React Query data fetching with `dashboard-*` query keys. |
+| 2.2 Calendar — month view | ✅ Done | `MonthGrid.tsx` (118 lines). Full month grid with date cells showing task/event indicator dots. Click-to-select day triggers item list display. Current day highlight. Respects `weekStartDay` from display context (Sunday or Monday). |
+| 2.3 Calendar — week view | ✅ Done | `WeekGrid.tsx` (375 lines) + `useWeekCalendar.ts` (671 lines). Hourly time grid (24h), positioned event/task blocks with calculated top/height based on start time and duration. All-day row for dateless items. Current time indicator line. Click time slot to create item at that time. Recurring instance expansion and modification tracking. |
+| 2.4 Calendar — day view | ✅ Done | `DayTimeline.tsx` (262 lines). Single-day hourly timeline with task/event blocks. Current time indicator. Click time slot to create. Same positioning logic as week view but single-column. |
+| 2.5 Calendar page orchestration | ✅ Done | `CalendarPage.tsx` — view toggle (month/week/day) in `CalendarHeader.tsx` (99 lines). Date navigation (previous/next period, today button). Selected date state shared across views. View-specific data fetching with `calendar-*` and `week-*` query keys. |
+| 2.6 Item side panel | ✅ Done | `ItemSidePanel.tsx` (539 lines). Slide-out panel for viewing item details from calendar context. Displays all fields: title, description, date/time, duration, priority, category, recurrence, reminders, location. Edit and delete action buttons. Transition to edit mode or navigate to full editor page. |
+| 2.7 Item form modal (quick create) | ✅ Done | `ItemFormModal.tsx` (443 lines). Inline creation form triggered from calendar cells. Supports: title, date (pre-filled from clicked cell), time, type toggle (task/event), quick priority selector. Submits via `useItemMutations` and invalidates calendar queries. |
+| 2.8 Recurring scope modal | ✅ Done | `RecurringScopeModal.tsx` (106 lines). Three-option dialog for recurring item modifications: "This occurrence only", "This and future occurrences", "All occurrences". Used by both edit and delete flows for tasks and events with repeat patterns. |
+| 2.9 Task CRUD — full editor | ✅ Done | `ItemEditorPage.tsx` (1,845 lines). Handles both task and event creation/editing with type toggle. **Task fields:** title, description, date, time, time-of-day presets (MORNING/AFTERNOON/EVENING), duration picker, priority (LOW/MEDIUM/HIGH/URGENT), category selector, repeat/recurrence (daily/weekly/monthly/yearly/custom with interval + specific days), reminders (first + second with minute presets), location, date type (SCHEDULED/DUE), overdue handling (`showInTodoWhenOverdue`, `setToDoneAutomatically`). **Event fields:** start time, end time, end date, guests, meeting link, timezone (FIXED/GLOBAL mode), RSVP. Form validation, past-date handling, timezone-aware duration calculation. Route: `/items/new` (create) and `/items/:id/edit` (edit). |
+| 2.10 Task instances + recurring handling | ✅ Done | Full recurring task lifecycle via `useItemMutations.ts` (191 lines, 14 mutations). API functions: `createTaskInstance`, `updateTaskInstance`, `deleteTaskInstance`, `toggleTaskInstance`, `convertTaskInstance` (convert occurrence to standalone task). `getRecurringTasks` for fetching recurring task parents. `getUserTaskInstances` for date-range instance queries. `RecurringScopeModal` gates scope-aware edits/deletes. React Query cache invalidation across 13 query key families on mutation success. |
+| 2.11 Event CRUD + instances | ✅ Done | Full event lifecycle: `createEvent`, `updateEvent`, `deleteEvent`, `rsvpEvent`, `getAttendingEvents`, `getEventAttendees`. Recurring events: `getRecurringEvents`, `getUserEventInstances`, `createEventInstance`, `updateEventInstance`, `deleteEventInstance`, `convertEventInstance`. Same scope-modal pattern as tasks. |
+| 2.12 Todo page | ✅ Done | `TodoPage.tsx` (338 lines). Task list with **filters**: category dropdown, priority dropdown (URGENT/HIGH/MEDIUM/LOW), text search input. **Sorting**: items with dates before dateless, then by due date ascending, then by priority (URGENT first), then alphabetical. Task count display. Inline toggle completion. Group task support via `getAssignedGroupTasks()`. Clear filters button. Empty state per filter combination. |
+| 2.13 Categories | ✅ Done | `useCategories.ts` hook backed by React Query. API functions: `getCategories`, `createCategory`, `updateCategory`, `deleteCategory`. Category selector component in ItemEditorPage with color swatches. Used in TodoPage filter dropdown and Dashboard metrics. |
+| 2.14 Calendar UI sub-components | ✅ Done | `CalendarPopover.tsx` (201 lines) — date picker popover with month navigation. `RepeatPopover.tsx` (344 lines) — full recurrence rule builder (frequency, interval, specific days, end condition). `TimePicker.tsx` (174 lines) — hour/minute selection. `DurationPicker.tsx` (162 lines) — duration input with presets. `ReminderPicker.tsx` (237 lines) — reminder offset selection (5/10/15/30/60 min, 1h, 1d, custom). `TimeOfDayPicker.tsx` (83 lines) — morning/afternoon/evening selector. `TimeZonePicker.tsx` (179 lines) — timezone selection for events. |
+| 2.15 Display context (logic layer) | ✅ Done | `display-context.tsx` — `DateFormat` (MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD), `TimeFormat` (auto/12h/24h with per-language defaults), `WeekStartDay` (Sunday/Monday). All persisted to `localStorage`. Used by calendar grids and item display throughout the app. **Note:** UI settings page is a stub — see Phase 6.5. |
+| 2.16 E2E tests for CRUD + calendar | ✅ Done | 22 spec files providing comprehensive coverage: `login.spec.ts` (auth flows, redirects), `dashboard.spec.ts` (greeting, metrics from seed data), `calendar.spec.ts` (views, item management), `todo.spec.ts` (filtering, sorting), `item-views.spec.ts` (detail view, edit navigation), `create-item.spec.ts` (modal flow), `create-task-basic.spec.ts`, `create-task-full-editor.spec.ts`, `create-task-recurring.spec.ts`, `create-task-reminders-options.spec.ts`, `create-task-time-duration.spec.ts`, `create-event-basic.spec.ts`, `create-event-duration.spec.ts`, `create-event-full-editor.spec.ts`, `create-event-guests-tz.spec.ts`, `create-event-recurring.spec.ts`, `edit-task.spec.ts`, `edit-task-recurring.spec.ts`, `edit-event.spec.ts`, `edit-event-recurring.spec.ts`, `delete-task-recurring.spec.ts`, `delete-event-recurring.spec.ts`. All tests assert against seed data, not API responses. |
+
+**What's working:**
+- Dashboard with live metrics, 4-panel item sections, and create/view/edit actions
+- Three calendar views (month/week/day) with task and event rendering, current time indicator, and date navigation
+- Full item editor with every field from dooooApp: recurrence, reminders, duration, timezone, time-of-day, location, overdue handling, guests, assignees
+- Recurring item lifecycle: create, modify (this/future/all), delete (this/future/all), convert occurrence to standalone
+- Todo page with multi-axis filtering (category, priority, search) and multi-level sorting
+- 22 Playwright spec files covering auth, dashboard, calendar, task CRUD, event CRUD, recurring operations
+
+---
+
+## Phase 3: Groups & Collaboration ⬜ Not Started
+
+**Scope:** Group management, member roles, group-scoped calendar and tasks, real-time group messaging, "For All Members" activities with participant tracking, invitations, and group discovery. API functions for all group operations are already wired in `lib/api/index.ts` (13 functions). Types are defined in `types/api.ts` (Group, GroupMember, GroupMessage, GroupInvitation). `useGroups.ts` hook exists. Both page components are stubs rendering `<StubPage>`.
+
+**dooooApp reference files:**
+- `GroupScreen.tsx` (398 lines) — group list with filters
+- `GroupDetailScreen.tsx` (497 lines) — group detail with calendar + chat + members
+- `DiscoverGroupsScreen.tsx` (274 lines) — public group search and join
+- `GroupFormModal.tsx` (347 lines) — create/edit group form
+- `GroupViewModal.tsx` (492 lines) — group info + preferences + member management
+- `GroupChatPanel.tsx` (118 lines) — real-time chat panel
+- `hooks/useGroupChat.ts` — messages, sendMessage, loadMore, pagination
+- `hooks/useGroupInvitation.ts` — invitation flow
+- `hooks/useMembersData.ts` — members + pending invitations
+- `hooks/useParticipation.ts` — CONFIRMED/DECLINED/LEFT tracking
+- `hooks/useUnreadMessageCount.ts` — unread badge per group
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 3.1 Group list page | ⬜ | **Stub exists** (`GroupListPage.tsx` — renders StubPage). **Build:** Group cards (name, description, member count, avatar stack, unread message badge). **3 filter pills:** All / My Groups (owner) / Joined (member, not owner). Sorting: starred groups first, then by `updatedAt` descending. Empty states per filter (different messages + conditional create button). Pull-to-refresh equivalent (React Query refetch). dooooApp reference: `GroupScreen.tsx` uses `useSwipeFilter` for horizontal pill swipe + FlatList. |
+| 3.2 Create/Edit group modal | ⬜ | **Build:** Modal form with fields: group name (required), description (optional), color picker (hex color swatches). Create calls `POST /api/groups`, edit calls `PUT /api/groups/:groupId`. Validation: name required, max length. Success → navigate to group detail. dooooApp reference: `GroupFormModal.tsx` (347 lines) — used for both create and edit, includes color picker grid. |
+| 3.3 Group detail page — header + calendar | ⬜ | **Stub exists** (`GroupDetailPage.tsx` — renders StubPage with `groupId` from params). **Build:** Group header (avatar/color, name, member count, description). Reuse existing calendar components (MonthGrid/WeekGrid/DayTimeline) filtered to group tasks/events by passing `groupId` filter to API calls. Owner/admin action menu (edit, invite, delete). Member-only actions (chat, leave). Group color theming on header. dooooApp reference: `GroupDetailScreen.tsx` uses `ExpandableCalendar` scoped to group. |
+| 3.4 Member management | ⬜ | **API ready:** `getMembers()`, `addGroupMember()`, `removeGroupMember()`, `updateGroupMemberRole()`. **Build:** Member list component with role badges (ADMIN / MEMBER), avatar + name per row. Invite member modal (search by email or username → `createGroupInvitation()`). Remove member confirmation dialog (admin only). Role change dropdown: MEMBER ↔ ADMIN (owner only). Pending invitation list with cancel option. Owner cannot be removed or leave. dooooApp reference: `GroupViewModal.tsx` member section + `hooks/useMembersData.ts`. |
+| 3.5 Group task assignment | ⬜ | **Types ready:** `TaskAssignment`, `assigneeId` on Task, `isForAllMembers`, `trackCompletion`, `TaskParticipant` (status: INVITED/CONFIRMED/DECLINED/LEFT), `TaskParticipantInstance`. **Build:** Assignee picker in ItemEditor that loads group members when editing a group task. "For All Members" toggle — creates a group activity that broadcasts to all members. Participant tracking UI: per-member status chips (INVITED/CONFIRMED/DECLINED/LEFT), completion stats display. Participant selection modal for multi-select. dooooApp references: `AssigneeSelector`, `ParticipantSelectionModal`, `CompletionStatsDisplay`, `hooks/useParticipation.ts`. |
+| 3.6 Group messaging — real-time chat | ⬜ | **API ready:** `sendMessage()`, `getMessages()`. **Types ready:** `GroupMessage`, `CreateMessageRequest`, `MessageListResponse`. **Build:** Chat panel component (slide-out or inline): message list with infinite scroll pagination (`hasMore` flag), message input bar with send button, timestamps with relative formatting, system messages for group events. **Critical:** Requires extending `websocket-context.tsx` to parse incoming `group_message` WS events and push to React Query cache (currently WebSocket only tracks connection state). Without WS message dispatch, chat requires polling fallback. dooooApp reference: `GroupChatPanel.tsx` uses `useGroupChat` hook with `messages[]`, `sendMessage()`, `loadMoreMessages()`, `markMessageAsReadInState()`. |
+| 3.7 Group member preferences | ⬜ | **Build:** Per-group preferences panel (inside group detail or settings sub-view): `muteMessages` toggle (suppress chat notifications), `muteTasks` toggle (suppress task assignment notifications), `isStarred` toggle (pins group to top of list). API: `PATCH /api/groups/:groupId/members/:userId/preferences`. dooooApp reference: `GroupViewModal.tsx` "My Preferences" section — 3 toggles. |
+| 3.8 Group invitations | ⬜ | **API ready:** `createGroupInvitation()`, `acceptGroupInvitation()`, `declineGroupInvitation()`. **Build:** Invitation card component (group name, role offered, inviter name, accept/decline buttons). Display in notification inbox (Phase 5.1) and optionally as a dedicated invitation section. Optimistic UI for accept/decline. Toast confirmation on action. dooooApp reference: `NotificationScreen.tsx` handles GROUP_INVITATION type with `InvitationBottomSheet` (iOS: ActionSheetIOS). |
+| 3.9 Group discovery | ⬜ | **Build:** Discovery page or section with search input (debounced 500ms) → `apiService.searchPublicGroups()`. Result cards: group name, description, member count. "Join" button per card (adds user as MEMBER role). Empty state for no results. May need new API endpoint if `searchPublicGroups` doesn't exist in backend yet — check dooooBackend. dooooApp reference: `DiscoverGroupsScreen.tsx` (274 lines). |
+| 3.10 E2E tests for groups | ⬜ | **Required coverage:** Create group (name, color), view group detail, invite member, accept invitation, assign task to member, "For All Members" activity, group chat send/receive, member preferences toggle, group calendar filtering, leave group, delete group. Tests must verify items appear in group calendar views. |
+
+**Dependencies:** Step 3.6 (group messaging) is blocked on WebSocket message dispatching (Phase 7.2) for real-time delivery — can implement with polling fallback first. Step 3.5 (task assignment) builds on existing ItemEditor fields. Step 3.8 (invitations) ties into Phase 5.1 (notification inbox).
+
+---
+
+## Phase 4: Targets, Plans & AI ⬜ Not Started
+
+**Scope:** Target/goal management, plan browsing and execution, AI-powered planning assistant with streaming chat, and linking between targets, plans, and tasks. API functions for targets and plans are already wired in `lib/api/index.ts` (9 functions). Types are fully defined in `types/target.ts`. All page components are stubs.
+
+**dooooApp reference files:**
+- `TargetPlanHomeScreen.tsx` (869 lines) — tabbed home with targets + plans
+- `TargetDetailScreen.tsx` (508 lines) — target detail with linked plans/tasks
+- `PlanDetailScreen.tsx` (1,084 lines) — plan detail with list/calendar views + execution history
+- `StartPlanScreen.tsx` (1,397 lines) — plan execution wizard (most complex screen)
+- `AIChatScreen.tsx` (1,218 lines) — AI planning assistant
+- `services/aiService.ts` (160 lines) — SSE streaming to Claude
+- `types/target.ts` — Target, Plan, TaskTemplate, EventTemplate, PlanExecution, TargetPlan, TargetTask
+- `types/planningSession.ts` — PlanningSession, ChatMessage types
+- `utils/planScheduler.ts` — scheduling algorithm
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 4.1 Target list + CRUD | ⬜ | **Stub exists** (`TargetPlanHomePage.tsx`). **API ready:** `getTargets`, `getTarget`, `createTarget`, `updateTarget`, `deleteTarget`. **Build:** Tabbed page with Targets tab and Plans tab. **Targets tab:** status filter pills (Active / Completed / Archived), target cards (name, description preview, status badge, linked plan count, linked task count). Create target button → TargetFormModal (name, description, status). Edit/delete actions per target. Status transitions: active → completed → archived (and reverse). Empty states per status filter. dooooApp reference: `TargetPlanHomeScreen.tsx` — segment control for targets/plans, status filter pills, `TargetFormModal`. |
+| 4.2 Target detail page | ⬜ | **Stub exists** (`TargetDetailPage.tsx`). **Build:** Target header (name, status badge, description with rich text display). **Linked plans section:** list of plans associated via `TargetPlan` junction, each with plan name + status + template count. "Link plan" button to associate existing plans. Unlink option per plan. **Linked tasks section:** list of tasks associated via `TargetTask` junction. Progress visualization (% of linked tasks completed). Edit button → TargetFormModal pre-filled. Delete with confirmation. dooooApp reference: `TargetDetailScreen.tsx` (508 lines) — rich text display, linked plans list, unlink action. |
+| 4.3 Plan list + browsing | ⬜ | **Build:** Plans tab on TargetPlanHomePage. **Plan filter pills:** All / Planned / In Progress / Completed / Saved / Discovery. Combined display of Plan + PlanExecution items. Sorting: in-progress first → planned → saved → completed. Plan cards: name, template count, AI-generated badge (sparkle icon), status color coding. Navigation to plan detail on card click. dooooApp reference: `TargetPlanHomeScreen.tsx` plans segment — `usePlans()` + `usePlanExecutions()` hooks, combined sorting. |
+| 4.4 Plan detail page — list view | ⬜ | **Stub exists** (`PlanDetailPage.tsx`). **API ready:** `getPlan`, `getPlanTemplates`. **Build:** Plan header (name, description, AI badge). **List view:** ordered list of task templates (title, description, duration, gap days between templates, priority, category) and event templates (title, duration, meeting link). Template editing inline or via modal. Execution history section: list of `PlanExecution` records with status badge (IN_PROGRESS / COMPLETED), start date, progress. "Start Plan" button to begin new execution. Archive/delete plan actions. dooooApp reference: `PlanDetailScreen.tsx` list tab — flat template list with reordering, execution history timeline. |
+| 4.5 Plan detail page — calendar view | ⬜ | **Build:** Week-based calendar preview showing templates positioned on a timeline. Start date picker to preview how templates would schedule across days. Hour-based timeline visualization with task/event blocks. Conflict detection display (overlapping with existing calendar items). View toggle between list and calendar. dooooApp reference: `PlanDetailScreen.tsx` calendar tab — `GlassDatePicker`, week pager, hour timeline. |
+| 4.6 Plan execution wizard | ⬜ | **API ready:** `executePlan(planId, data)` with `ExecutePlanInput` (startDate, targetId, tasks[], events[]). **Build:** Multi-step wizard: (1) Pick start date. (2) Select time preference: morning/afternoon/evening + scheduling mode: spread/compact. (3) Review generated schedule — templates expanded to actual dates based on `gapDays` from start date. (4) Drag-to-reschedule individual items with live conflict checking against existing calendar. (5) Optionally link to target. (6) Execute — backend creates real tasks/events. Show summary of created items. **This is the most complex UI in the app** (~1,400 lines in dooooApp). Consider phasing: basic execution first (steps 1, 3, 6), then add drag-to-reschedule and conflict detection. dooooApp reference: `StartPlanScreen.tsx` — `PagerView` week navigation, `HOUR_HEIGHT = 60px` timeline, `instanceOverrides` map, `ConflictInfo` tracking, `TimePreferenceModal`. |
+| 4.7 AI Chat — streaming infrastructure | ⬜ | **Build:** SSE client for AI chat endpoint (check dooooBackend for `/api/ai/chat` or equivalent). Streaming text accumulator that renders tokens as they arrive. Event type discrimination: `text_delta`, `plan`, `plan_update`, `recommended_plan`, `target_proposal`, `base_plan_proposal`, `target_created`, `off_topic`, `error`, `done`. Session ID management for conversation continuity (resume vs. new). Loading states (typing dots, "Generating plan..." spinner). Error handling for stream interruption. dooooApp reference: `services/aiService.ts` — `streamAIChatResponse()` with SSE callbacks: `onTextDelta`, `onPlan`, `onPlanUpdate`, `onRecommendedPlan`, `onTargetProposal`, `onBasePlanProposal`, `onTargetCreated`, `onOffTopic`, `onError`, `onDone`. |
+| 4.8 AI Chat — conversation UI | ⬜ | **Stub exists** (`AIChatPage.tsx`). **Build:** Chat interface: message list (user right-aligned, AI left-aligned), text input bar (multiline, max 500 chars, Enter-to-send + Shift+Enter newline), typing indicator (pulsing dots), auto-scroll with user-scrolled-up escape hatch. Session history panel (sidebar or drawer): list of past sessions, click to load, search by title. "Start Over" confirmation modal. Session resume prompt when returning to active session. Off-topic reply handling (static message, no backend call). dooooApp reference: `AIChatScreen.tsx` — `ChatMessage` type with optional `planAction`/`proposal` fields, `PulsingDots`, `ChatHistoryPanel`, resume detection via `contextMatches`. |
+| 4.9 AI Chat — proposal cards + plan preview | ⬜ | **Build:** **Target proposal card:** AI suggests creating a target → Confirm/Decline buttons → on confirm calls target creation API. **Base plan scope proposal:** AI confirms plan scope before generating → Confirm/Decline. **Plan preview panel:** When AI generates a plan, show plan name + task/event template list with "View Plan" and "Start Plan" action buttons. **Plan recommendation card:** AI suggests an existing public plan. **High-quality retry detection:** Regex match for "try again"/"better"/"redo" → sets `useHighQuality` flag on next request. Synthetic user messages for confirm/decline actions (e.g., `[Confirm] Create the target with name="..."`). dooooApp reference: `AIChatScreen.tsx` proposal rendering, `PlanPreviewPanel`, `ProposalCard`. |
+| 4.10 Target-Plan-Task linking | ⬜ | **Types ready:** `TargetPlan`, `TargetTask`, `LinkTargetPlanRequest`, `LinkTargetTaskRequest`. **Build:** UI to link/unlink plans from targets (on target detail page + plan detail page). UI to link/unlink tasks from targets (on target detail + task view). Cross-navigation: click linked target from task view → navigate to target detail, click linked plan → plan detail. Show linked relationships bidirectionally. |
+| 4.11 Plan execution review + scoring | ⬜ | **Build:** After a plan execution completes, show review dialog: completion stats (X of Y tasks done), optional rating (1-5 stars), optional notes text area. Save review via API (`PlanExecution.reviewScore`, `PlanExecution.reviewNotes`). Execution history entries show review scores. dooooApp reference: `PlanReviewModal`, `PlanExecutionDeleteModal` components. |
+| 4.12 E2E tests for targets/plans/AI | ⬜ | **Required coverage:** Create target, edit target status, create plan (if API supports), view plan detail, execute plan (basic flow), AI chat send message + receive streaming response, target proposal confirm/decline, plan generation, linking target ↔ plan ↔ task. |
+
+**Dependencies:** AI Chat (4.7-4.9) requires a working AI endpoint in dooooBackend — verify `/api/ai/chat` exists and supports SSE streaming. Plan execution (4.6) is the highest-complexity step and may warrant its own sub-phase.
+
+---
+
+## Phase 5: Notifications, Search & Statistics ⬜ Not Started
+
+**Scope:** Notification inbox with 19 notification types, global search across all entities, statistics dashboard with charts, unread badges, and optional web push notifications.
+
+**dooooApp reference files:**
+- `NotificationScreen.tsx` (433 lines) — notification list with filters + actions
+- `types/notifications.ts` — 19 notification types with metadata
+- `lib/notificationFormatter.ts` — per-type message formatting
+- `SearchScreen.tsx` (972 lines) — multi-entity search with filters
+- `StatisticsScreen.tsx` (60 lines) — placeholder in dooooApp too
+- `hooks/useNotifications.ts` — notification data + filtering
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 5.1 Notification inbox page | ⬜ | **Stub exists** (`NotificationPage.tsx`). **API ready:** `getNotifications`, `getUnreadCount`, `markNotificationAsRead`, `markAllNotificationsAsRead`, `deleteNotification`. **Build:** Notification list with type-based icons. **19 notification types:** TASK_ASSIGNED, TASK_OVERDUE, TASK_COMPLETED, TASK_COMMENT, TASK_MENTION, PROJECT_INVITATION, GROUP_INVITATION, PROJECT_MEMBER_JOINED, GROUP_MEMBER_JOINED, GROUP_MEMBER_LEFT, GROUP_MEMBER_REMOVED, GROUP_MEMBER_ROLE_CHANGED, DAILY_DIGEST, WEEKLY_DIGEST, SYSTEM_ALERT, EVENT_INVITATION, EVENT_UPDATED, EVENT_CANCELLED, EVENT_RSVP_CHANGED. **3 filter tabs:** Unread (default) / Invitations / All. Unread/read visual distinction (bold vs muted). Per-notification formatting via `notificationFormatter` (localized title + message). |
+| 5.2 Notification actions | ⬜ | **Build:** Per-type actions: **Invitations** (GROUP_INVITATION, PROJECT_INVITATION, EVENT_INVITATION) — Accept/Decline buttons with `acceptGroupInvitation()` / `declineGroupInvitation()` / `rsvpEvent()`. **Regular notifications** — mark as read (single), delete (single). **Bulk action** — "Mark all as read" button in header. **Navigation** — click notification to navigate to relevant entity: TASK_* → task view, EVENT_* → event view, GROUP_* → group detail. Optimistic UI for mark-read and delete. dooooApp reference: `NotificationScreen.tsx` — `handleAcceptInvitation()` / `handleDeclineInvitation()` with iOS ActionSheetIOS / Android `InvitationBottomSheet`. |
+| 5.3 Unread notification badge | ⬜ | **API ready:** `getUnreadCount()`. **Build:** Badge on notification icon in Sidebar header showing unread count (number or dot for > 99). Polling interval (every 30s) or WebSocket push when Phase 7.2 is done. Update badge count on mark-read / mark-all-read actions (optimistic decrement). dooooApp reference: `ProfileScreen.tsx` shows unread badge on notification row. |
+| 5.4 Search page | ⬜ | **Stub exists** (`SearchPage.tsx`). **API ready:** `searchTasks(query, filters)` with pagination. **Build:** Search input (debounced 300ms) with results list below. **Filters:** priority dropdown (URGENT/HIGH/MEDIUM/LOW), category dropdown, date range (from/to date pickers), status toggle (overdueOnly, completedOnly). Active filter chips display with individual clear. "Clear all filters" option. Results as `ItemRow` cards with inline actions (toggle complete, click to view). **Scope gap:** dooooApp searches tasks, events, categories, plans, targets, and groups. Backend `searchTasks` may only cover tasks — check if additional search endpoints exist or need to be built for events/groups/targets. dooooApp reference: `SearchScreen.tsx` (972 lines) — multi-entity search via local SQLite + API, `DooooPanel` modal on result tap. |
+| 5.5 Statistics page | ⬜ | **Stub exists** (`StatisticsPage.tsx`). dooooApp's `StatisticsScreen.tsx` is also a placeholder (60 lines). **Build:** Task completion rates (daily/weekly/monthly bar or line charts), streak tracking (consecutive days with completions), category breakdown (pie chart), priority distribution, productivity trends over time. Consider Recharts or Chart.js for visualization. May need new backend aggregate endpoints (`GET /api/tasks/stats` or similar) — check dooooBackend. This is a feature that doesn't exist fully in dooooApp either, so design is open. |
+| 5.6 Web push notifications | ⬜ | **Build:** Service worker registration for Web Push API. VAPID key configuration. Permission request flow (prompt user, handle denied state gracefully). Notification display when app is in background tab. Backend needs `POST /api/notifications/register-push` endpoint with web push subscription object. **May defer** — web push has lower adoption than mobile push and requires backend changes. Consider as Phase 7 stretch goal. |
+| 5.7 E2E tests for notifications/search | ⬜ | **Required coverage:** Notification list displays seeded notifications, filter by unread/invitations/all, mark single as read, mark all as read, delete notification, invitation accept/decline flow. Search: text query returns results, filter by priority, filter by date range, clear filters. Badge count matches unread count. |
+
+**Dependencies:** Step 5.6 (web push) requires backend support and service worker. Step 5.5 (statistics) may need new backend endpoints. Step 5.3 (badge) benefits from Phase 7.2 (WebSocket dispatch) for real-time updates.
+
+---
+
+## Phase 6: Settings & Account Management 🔶 Partial
+
+**Scope:** Complete all settings sub-pages to match dooooApp's settings screens. Settings index routing is complete; theme and language settings are functional; all other pages are stubs.
+
+**dooooApp reference files:**
+- `ThemeSettingsScreen.tsx` (709 lines) — pattern + color + palette pickers
+- `DisplaySettingsScreen.tsx` — display style (flat vs 3D glass)
+- `FontSettingsScreen.tsx` — font family + size
+- `LanguageSettingsScreen.tsx` — language list
+- `CalendarSettingsScreen.tsx` (16 lines) — placeholder in dooooApp too
+- `NotificationSettingsScreen.tsx` (16 lines) — placeholder in dooooApp too
+- `TaskDefaultsScreen.tsx` — placeholder in dooooApp too
+- `AccountInfoScreen.tsx` (664 lines) — profile editing + linked accounts
+- `ChangePasswordScreen.tsx` (383 lines) — password change form
+- `PrivacySecurityScreen.tsx` (16 lines) — placeholder in dooooApp too
+- `DataManagementScreen.tsx` (16 lines) — placeholder in dooooApp too
+- `AboutScreen.tsx` — app info
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 6.1 Settings index page + routing | ✅ Done | `SettingsPage.tsx` — 9-item menu list (Profile, Account, Theme, Language, Display, Notifications, Privacy, Help, About) with Material Symbols icons. All routes defined in `router.tsx` as nested children. Consistent card UI with navigation links. |
+| 6.2 Theme settings — light/dark/auto | ✅ Done | `ThemeSettingsPage.tsx` (40 lines). 3-button selector for theme pattern (Auto/Light/Dark). Uses `useTheme()` hook. Persisted to localStorage. **Gap vs dooooApp:** Missing color picker (9 accent colors) and palette picker (9 full themes). See step 6.4. |
+| 6.3 Language settings | ✅ Done | `LanguageSettingsPage.tsx`. Lists all 19 languages with native name + English name. Click to switch instantly via `useLanguage()` context. Checkmark on active language. Persisted to localStorage. |
+| 6.4 Theme — accent colors + color palettes | ⬜ | **Build:** Extend `ThemeSettingsPage.tsx` to match dooooApp's full theme system. **Color picker section:** 9 accent color swatches (electric #360EFF, emerald, ocean, crimson, amber, yellow, cyan, purple, pink). Selecting a color updates CSS custom properties `--color-primary`, `--color-secondary`, `--color-accent`. Persisted to localStorage. **Palette picker section:** 9 full-theme presets (light, dark, ocean, crimson, amber, yellow, cyan, purple, pink) — each palette overrides ALL CSS tokens (background, surface, border, etc.), not just primary. Togglable (tap to apply, tap again to deselect). Palette active → disables pattern selector. Extend `theme-context.tsx` with `ThemeColor` and `ColorPalette` types + state + setters + `[data-color]` / `[data-palette]` CSS attribute management. dooooApp reference: `ThemeSettingsScreen.tsx` (709 lines) — pattern picker modal, color swatch grid, palette cards. |
+| 6.5 Display settings | ⬜ | **Stub exists** (`DisplaySettingsPage.tsx`). **Logic layer complete** in `display-context.tsx`. **Build UI only:** Date format selector (MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD) with radio buttons or dropdown. Time format selector (Auto / 12-hour / 24-hour) — auto uses per-language defaults. Week start day selector (Sunday / Monday). Each option shows a preview of the format. All selections call existing context setters — no new logic needed, only UI. **Lowest-effort settings page to complete.** |
+| 6.6 Profile page | ⬜ | **Stub exists** (`ProfilePage.tsx`). **API ready:** `updateProfile()` in auth context, `User` type has `name`, `email`, `avatarUrl`. **Build:** Avatar display (initials fallback if no image), avatar upload (file picker → `PATCH /api/users/profile` with multipart). Name edit (inline or modal input). Email display (read-only or with verification flow). User ID display (copyable). Account creation date. dooooApp reference: `AccountInfoScreen.tsx` (664 lines) — `ImagePicker` for avatar, `InputDialog` for inline editing. |
+| 6.7 Account info + change password | ⬜ | **Stub exists** (`AccountInfoPage.tsx`). **API ready:** `changePassword()` in auth context. **Build:** Combine account info + password change into one page (or two sub-sections). **Linked accounts section:** display linked OAuth providers (Google, Apple, WeChat) with icons + colors, link/unlink buttons. **Change password form:** current password (show/hide toggle), new password (show/hide toggle), confirm password (show/hide toggle). **Validation:** current required, new ≥ 8 chars, new ≠ current, new === confirm. Success → alert + clear fields. Error → show backend message. **Delete account option** with type-confirmation dialog. dooooApp references: `AccountInfoScreen.tsx` linked accounts + `ChangePasswordScreen.tsx` (383 lines) password form. |
+| 6.8 Notification preferences | ⬜ | **Stub exists** (`NotificationSettingsPage.tsx`). dooooApp's equivalent is also a placeholder (16 lines). **Build:** Toggle switches for notification categories: task reminders on/off, group invitations on/off, group messages on/off, plan updates on/off, event updates on/off, daily digest on/off, weekly digest on/off. Quiet hours setting (start time, end time). Push notification master toggle (if Phase 5.6 web push is implemented). Requires backend preference endpoint — check if `PATCH /api/users/notification-preferences` exists. |
+| 6.9 Calendar settings | ⬜ | **No route or page exists in dooooWeb.** dooooApp's `CalendarSettingsScreen.tsx` is also a placeholder (16 lines). **Build:** Add route `/settings/calendar` and nav item. Default calendar view selector (month/week/day). Show/hide weekends toggle. Show week numbers toggle. Default event duration (30min/1h/2h). Time slot granularity (15/30/60 min). These would feed into `display-context.tsx` or a new `calendar-context.tsx`. **Low priority** — dooooApp hasn't built this either. |
+| 6.9a Font settings | ⬜ | **No route or page exists in dooooWeb.** dooooApp has `FontSettingsScreen.tsx` with font family selector (per-language font catalog with preview images) and font size scaling. **Build:** Could be a section within Display settings (6.5) rather than a separate page. Font family picker showing system + web fonts, font size slider (small/medium/large/extra-large). Update CSS `--font-sans` variable. **Lower priority for web** — browsers handle font rendering differently than mobile, and most users are satisfied with system fonts. |
+| 6.9b Task defaults | ⬜ | **No route or page exists in dooooWeb.** dooooApp's `TaskDefaultsScreen.tsx` is a placeholder. **Build:** Default priority selector, default reminder presets, default duration, default time-of-day. Applied as pre-filled values in ItemEditorPage when creating new tasks. Store in localStorage or user preferences API. **Low priority** — dooooApp hasn't built this either. |
+| 6.10 Privacy & Security | ⬜ | **Stub exists** (`PrivacySecurityPage.tsx`). dooooApp's equivalent is a placeholder (16 lines). **Build:** Profile visibility setting (public/private). Data sharing toggles. Active sessions list (device name, last active, location — if backend supports). "Log out all devices" button. Two-factor authentication setup (if backend supports TOTP/WebAuthn). **Low priority** — dooooApp hasn't built this either. |
+| 6.11 Data management | ⬜ | **No route exists** (would be under settings). dooooApp's `DataManagementScreen.tsx` is a placeholder (16 lines). **Build:** Export data button (download JSON/CSV of tasks, events, targets, plans). Import data (file upload → parse → create entities). Clear local cache (React Query cache + localStorage cleanup). Sync status display (last synced time, pending changes). Delete account with type-to-confirm dialog and consequences warning. **Partially low priority** — dooooApp hasn't built full data management either, but delete account is important. |
+| 6.12 Help + Feedback + Bug Report | ⬜ | **Stub exists** (`HelpPage.tsx`). dooooApp has 3 separate screens: `HelpScreen.tsx`, `FeedbackScreen.tsx`, `ReportBugScreen.tsx`. **Build:** Combined page with sections: FAQ accordion (common questions), contact support (email link or form), feedback form (text area + category selector + submit), bug report form (description + steps to reproduce + device info auto-fill + submit). Links to documentation. Social media links. |
+| 6.13 About page | ⬜ | **Stub exists** (`AboutPage.tsx` — currently shows "doooo v0.1.0"). **Build:** Version info (app version, build number). Changelog link. Terms of service link. Privacy policy link. Open source licenses/acknowledgments. Social links (GitHub, Twitter, etc.). Logo display. dooooApp reference: `AboutScreen.tsx`. |
+| 6.14 E2E tests for settings | ⬜ | **Required coverage:** Theme switch (light/dark/auto, verify CSS class), language switch (verify UI text changes), display settings (date format, time format, week start — verify calendar renders correctly). Color picker and palette selection. Profile edit (name change). Password change flow. |
+
+**Dependencies:** Step 6.8 (notification preferences) may need a new backend endpoint. Step 6.10 (privacy) depends on backend session management support. Step 6.4 (theme colors) requires CSS token engineering.
+
+---
+
+## Phase 7: Polish & Parity ⬜ Not Started
+
+**Scope:** Everything remaining to achieve full dooooApp feature parity plus web-specific enhancements. These are cross-cutting concerns that improve the entire application.
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 7.1 OAuth login wiring | ⬜ | Login page has Google + Apple buttons rendered but **not functional** — clicking them does nothing. **Build:** Google OAuth via redirect flow (register OAuth client, redirect to Google consent screen, handle callback with authorization code, exchange for token via backend). Apple Sign-In via redirect or popup (Apple JS SDK). WeChat OAuth (if applicable for web — WeChat requires QR scan flow). Backend OAuth endpoints already exist for dooooApp — reuse the same `GET /api/auth/google/callback` pattern with web-specific redirect URIs. Persist token on success, redirect to `/home`. dooooApp reference: `lib/oauth-service.ts`, `lib/google-auth.ts`. |
+| 7.2 WebSocket message dispatching | ⬜ | **Critical infrastructure.** `websocket-context.tsx` currently only tracks `isConnected` — incoming messages are ignored. **Build:** Message parser for WS event types: `task_updated`, `task_deleted`, `event_updated`, `event_deleted`, `group_message`, `notification`, `task_instance_updated`. Dispatch handler that invalidates relevant React Query caches on each event type (e.g., `task_updated` → `queryClient.invalidateQueries({ queryKey: ['tasks'] })`). Enables real-time UI updates without polling. **Prerequisite for:** group chat (Phase 3.6), notification badges (Phase 5.3), live calendar updates. |
+| 7.3 Calendar — 5-week expanded view | ⬜ | dooooApp's expandable calendar supports a 5-week view (6-row grid showing full month context with tasks visible per day). **Build:** New calendar view mode in CalendarHeader toggle. 5-week grid component similar to MonthGrid but showing task indicators with more detail (time + title, not just dots). dooooApp reference: `ExpandableCalendar.tsx` — 5-week expanded state with `WEEKS_BUFFER = 25`. |
+| 7.4 Calendar — list / agenda view | ⬜ | dooooApp supports a list/agenda view as an alternative to grid calendar. **Build:** Chronological list of upcoming items grouped by date. Each date header followed by task/event rows with time + title + status. Infinite scroll forward in time. Compact representation for days with no items. |
+| 7.5 Calendar — infinite scroll | ⬜ | dooooApp implements infinite scroll for calendar navigation (swipe for next/previous week/month). **Build:** Virtualized scrolling for week view (load adjacent weeks on scroll near edge). Month view: load adjacent months. Dynamic data fetching as user scrolls through time ranges. dooooApp reference: `ExpandableCalendar.tsx` — 51-week sliding window with `SHIFT_SIZE = 5`, `SHIFT_THRESHOLD = 20`. **Note:** Full parity with dooooApp's sophisticated 2-tier system (in-memory window + SQLite expansion) is likely overkill for web — a simpler React Query pagination approach may suffice. |
+| 7.6 Responsive design audit | ⬜ | Current `AppShell` layout with `Sidebar` works on desktop but needs mobile optimization. **Build:** Collapsible sidebar as hamburger overlay on mobile viewports (<768px). Responsive calendar grids (week view → single day on mobile, month grid cells smaller). Touch-friendly interaction targets (≥44px tap areas). Bottom navigation bar option for mobile web. Responsive item editor (full-screen on mobile vs. side panel on desktop). Test across viewport widths: 375px (iPhone), 768px (tablet), 1024px+. |
+| 7.7 Google Calendar integration | ⬜ | dooooApp imports/syncs Google Calendar events. **Build:** Google Calendar API OAuth consent flow (calendar scope). Calendar list fetching (user's Google calendars). Event import (one-time or sync). Display Google events alongside local events with distinct visual treatment. Optional two-way sync (create/update/delete). Requires Google API client ID + backend proxy for token refresh. **May defer** — significant scope, requires Google Cloud Console setup. |
+| 7.8 Keyboard shortcuts | ⬜ | **Build:** Global keyboard shortcut handler (useEffect with keydown listener). Shortcuts: `N` = new item, `/` = focus search, `T` = navigate to today in calendar, `←` / `→` = previous/next period in calendar, `Esc` = close modal/panel, `?` = show shortcut help overlay. Suppress when user is typing in input/textarea. Help overlay showing all available shortcuts. |
+| 7.9 Drag and drop | ⬜ | Week/day calendar views should support drag-and-drop for rescheduling tasks/events. **Build:** Drag handle on positioned event blocks. Drop targets at time slots. Update start time/date on drop via `updateTask` / `updateEvent` API. Visual feedback during drag (ghost element, time label). Recurring item scope prompt on drop. Consider `@dnd-kit` or native HTML5 drag API. dooooApp reference: gesture-based drag on `ExpandableCalendar`. |
+| 7.10 Activity history page | ⬜ | dooooApp has `ActivityHistoryScreen.tsx` (placeholder). **Build:** Timeline of recent user actions: task completions, plan executions, group events, status changes. Route `/activity` or section within dashboard. Chronological list with action type icon + description + timestamp. Pagination. **Low priority** — dooooApp hasn't fully built this either. |
+| 7.11 Performance optimization | ⬜ | **Build:** Code splitting per route via `React.lazy()` + `Suspense` (currently all routes are eagerly loaded). Virtual scrolling for long task lists (react-virtual or @tanstack/virtual). Image optimization (lazy loading, WebP). Bundle size analysis (`vite-plugin-visualizer`). React Query prefetching for route transitions (`queryClient.prefetchQuery` on link hover). Memoization audit for expensive calendar computations. |
+| 7.12 Accessibility (a11y) | ⬜ | **Build:** ARIA labels on all interactive elements. Keyboard navigation for calendar grids (arrow keys move between days). Screen reader announcements for dynamic content (task completion, notifications). Focus management on modal open/close. Color contrast compliance (WCAG AA). Reduced motion support (`prefers-reduced-motion` media query). Skip-to-content link. Form field associations (`<label>` + `htmlFor`). |
+| 7.13 PWA support | ⬜ | **Build:** Web app manifest (`manifest.json` with name, icons, theme color, start URL, display: standalone). Service worker for offline page caching (at minimum, app shell caching). App icons at required sizes (192x192, 512x512). Splash screen configuration. "Add to home screen" prompt handling. Complements Phase 5.6 (web push) for full PWA experience. Consider `vite-plugin-pwa` for easy setup. |
+
+**Dependencies:** Step 7.2 (WebSocket dispatch) is a prerequisite for real-time features across Phases 3, 5. Step 7.1 (OAuth) blocks full auth parity. Steps 7.11-7.13 are independent and can be done in any order.
+
+---
+
+## Summary
+
+| Phase | Status | Done | Total | Key Blockers |
+|-------|--------|------|-------|--------------|
+| 1 — Foundation & Core | ✅ Complete | 11 | 11 | — |
+| 2 — Personal Productivity | ✅ Complete | 16 | 16 | — |
+| 3 — Groups & Collaboration | ⬜ Not Started | 0 | 10 | WebSocket dispatch (7.2) for real-time chat |
+| 4 — Targets, Plans & AI | ⬜ Not Started | 0 | 12 | AI streaming endpoint verification, plan execution complexity |
+| 5 — Notifications, Search & Statistics | ⬜ Not Started | 0 | 7 | Backend aggregate endpoints for statistics |
+| 6 — Settings & Account | 🔶 Partial | 3 | 16 | Backend preference endpoints for some settings |
+| 7 — Polish & Parity | ⬜ Not Started | 0 | 13 | OAuth wiring, Google Calendar API setup |
+
+**Overall: 30 of 85 steps complete (~35%)**
+
+---
+
+## Known Issues
+
+### ⚠️ OAuth buttons are non-functional
+
+Login page renders Google and Apple OAuth buttons but they are purely visual — clicking them does nothing. No OAuth redirect or token exchange is implemented. Email login is the only working auth method. This blocks users who signed up via OAuth on dooooApp from logging in on dooooWeb.
+
+### ⚠️ WebSocket context does not dispatch messages
+
+The WebSocket connection is established and tracked (`isConnected` state) but incoming messages are completely ignored — no parsing, no dispatching to React Query caches. All data freshness relies on React Query's `staleTime` and manual refetching after mutations. This means:
+- No real-time calendar updates when another device creates/modifies tasks
+- No real-time group chat (Phase 3.6 is blocked)
+- No real-time notification badge updates (Phase 5.3 falls back to polling)
+
+### ⚠️ Display Settings page has no UI despite complete logic layer
+
+`display-context.tsx` contains working display preference logic (date format with 3 options, time format with auto/12h/24h and per-language defaults, week start day Sunday/Monday). These preferences are already used throughout the app's calendar and item display. But `DisplaySettingsPage.tsx` is a 2-line stub — users cannot change these preferences through the UI. This is the lowest-effort settings page to complete (UI only, no new logic).
+
+### ⚠️ Theme settings lack color picker and palette support
+
+Only light/dark/auto mode is available. dooooApp offers 9 accent colors and 9 full-theme palettes. The `theme-context.tsx` would need to be extended with `ThemeColor` and `ColorPalette` state, and CSS tokens need `[data-color]` / `[data-palette]` attribute selectors.
+
+### ⚠️ No route for several dooooApp settings screens
+
+Calendar Settings, Data Management have no route or page component in dooooWeb. These need to be added to both `router.tsx` and the settings navigation menu.
+
+### ⚠️ Statistics screen is a placeholder in both dooooApp and dooooWeb
+
+`StatisticsScreen.tsx` in dooooApp is only 60 lines (placeholder). dooooWeb's `StatisticsPage.tsx` is a stub. This feature needs design work before implementation — neither platform has a reference implementation. Backend aggregate endpoints likely need to be built.
+
+### ⚠️ Several dooooApp settings screens are also placeholders
+
+The following dooooApp screens are placeholders (16 lines each): `CalendarSettingsScreen.tsx`, `NotificationSettingsScreen.tsx`, `TaskDefaultsScreen.tsx`, `PrivacySecurityScreen.tsx`, `DataManagementScreen.tsx`. dooooWeb should implement these at the same level as dooooApp — if dooooApp hasn't built them, dooooWeb can stub them with the same "coming soon" treatment and move on.
+
+---
+
+## Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Complete |
+| 🔶 | Partially complete (some sub-steps done) |
+| 🔄 | In progress |
+| ⬜ | Not started |
+| 📋 | Backlog (deferred, not in current scope) |
