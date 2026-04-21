@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Ja, stornieren",
     "canceling": "Wird storniert...",
     "cancelInvitationError": "Einladung konnte nicht storniert werden. Bitte versuchen Sie es erneut.",
+    "groupCount": "{{count}} Gruppen",
+    "groupCountOne": "1 Gruppe",
+    "newGroup": "Neue Gruppe",
+    "owner": "Besitzer",
+    "newMessages": "{{count}} neu",
     "participate": {
       "invitedMessage": "Du bist eingeladen",
       "confirm": "Bestätigen",

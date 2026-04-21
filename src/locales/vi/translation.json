@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Có, hủy",
     "canceling": "Đang hủy...",
     "cancelInvitationError": "Không thể hủy lời mời. Vui lòng thử lại.",
+    "groupCount": "{{count}} nhóm",
+    "groupCountOne": "1 nhóm",
+    "newGroup": "Nhóm Mới",
+    "owner": "Chủ sở hữu",
+    "newMessages": "{{count}} mới",
     "participate": {
       "invitedMessage": "Bạn được mời",
       "confirm": "Xác nhận",

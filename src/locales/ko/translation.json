@@ -993,6 +993,11 @@
     "yesCancelInvitation": "예, 취소",
     "canceling": "취소 중...",
     "cancelInvitationError": "초대 취소에 실패했습니다. 다시 시도해 주세요.",
+    "groupCount": "{{count}}개 그룹",
+    "groupCountOne": "1개 그룹",
+    "newGroup": "새 그룹",
+    "owner": "소유자",
+    "newMessages": "{{count}}개 새 메시지",
     "participate": {
       "invitedMessage": "초대를 받았습니다",
       "confirm": "확인",

@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Ya, batalkan",
     "canceling": "Membatalkan...",
     "cancelInvitationError": "Gagal membatalkan undangan. Silakan coba lagi.",
+    "groupCount": "{{count}} grup",
+    "groupCountOne": "1 grup",
+    "newGroup": "Grup Baru",
+    "owner": "Pemilik",
+    "newMessages": "{{count}} baru",
     "participate": {
       "invitedMessage": "Anda diundang",
       "confirm": "Konfirmasi",

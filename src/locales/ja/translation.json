@@ -993,6 +993,11 @@
     "yesCancelInvitation": "はい、キャンセル",
     "canceling": "キャンセル中...",
     "cancelInvitationError": "招待のキャンセルに失敗しました。もう一度お試しください。",
+    "groupCount": "{{count}}グループ",
+    "groupCountOne": "1グループ",
+    "newGroup": "新規グループ",
+    "owner": "オーナー",
+    "newMessages": "{{count}}件の新着",
     "participate": {
       "invitedMessage": "招待されました",
       "confirm": "確認",

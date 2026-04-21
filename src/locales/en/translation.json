@@ -1010,6 +1010,11 @@
     "yesCancelInvitation": "Yes, Cancel",
     "canceling": "Canceling...",
     "cancelInvitationError": "Failed to cancel invitation. Please try again.",
+    "groupCount": "{{count}} groups",
+    "groupCountOne": "1 group",
+    "newGroup": "New Group",
+    "owner": "Owner",
+    "newMessages": "{{count}} new",
     "participate": {
       "invitedMessage": "You are invited",
       "confirm": "Confirm",

@@ -2,7 +2,7 @@
 
 Tracks what has been completed, what's in progress, and what's remaining across all 7 phases to reach full dooooApp feature parity.
 
-Last updated: 2026-04-21
+Last updated: 2026-04-22
 
 ## Tech Stack
 
@@ -93,7 +93,7 @@ Last updated: 2026-04-21
 
 ---
 
-## Phase 3: Groups & Collaboration ⬜ Not Started
+## Phase 3: Groups & Collaboration 🔶 Partial
 
 **Scope:** Group management, member roles, group-scoped calendar and tasks, real-time group messaging, "For All Members" activities with participant tracking, invitations, and group discovery. API functions for all group operations are already wired in `lib/api/index.ts` (13 functions). Types are defined in `types/api.ts` (Group, GroupMember, GroupMessage, GroupInvitation). `useGroups.ts` hook exists. Both page components are stubs rendering `<StubPage>`.
 
@@ -112,8 +112,8 @@ Last updated: 2026-04-21
 
 | Step | Status | Notes |
 |------|--------|-------|
-| 3.1 Group list page | ⬜ | **Stub exists** (`GroupListPage.tsx` — renders StubPage). **Build:** Group cards (name, description, member count, avatar stack, unread message badge). **3 filter pills:** All / My Groups (owner) / Joined (member, not owner). Sorting: starred groups first, then by `updatedAt` descending. Empty states per filter (different messages + conditional create button). Pull-to-refresh equivalent (React Query refetch). dooooApp reference: `GroupScreen.tsx` uses `useSwipeFilter` for horizontal pill swipe + FlatList. |
-| 3.2 Create/Edit group modal | ⬜ | **Build:** Modal form with fields: group name (required), description (optional), color picker (hex color swatches). Create calls `POST /api/groups`, edit calls `PUT /api/groups/:groupId`. Validation: name required, max length. Success → navigate to group detail. dooooApp reference: `GroupFormModal.tsx` (347 lines) — used for both create and edit, includes color picker grid. |
+| 3.1 Group list page | ✅ Done | `GroupListPage.tsx` — full implementation. **Components:** `GroupCard.tsx` (reusable card: color strip, name, star icon, description, member count, unread badge / owner badge), `CreateGroupModal.tsx` (name 100 chars, description 500 chars, 9 color swatches, validation, creates group + navigates). **3 filter pills:** All / My Groups / Joined — matching dooooApp's `GroupScreen.tsx` logic (`ownerId === user.id` for My, `!==` for Joined). **Sorting:** starred groups first (via `GroupMember.isStarred`), then `updatedAt` descending. **Empty states:** per-filter messages with conditional create button (no create on Joined filter). **2-column card grid.** Uses existing `useGroups()` hook. Translations added to all 19 locale files (5 new keys). |
+| 3.2 Create/Edit group modal | 🔶 | **Create mode done** via `CreateGroupModal.tsx` (built in 3.1). **Remaining:** Edit mode — pre-fill form with existing group data, call `PUT /api/groups/:groupId`. dooooApp reference: `GroupFormModal.tsx` (347 lines) — used for both create and edit, includes color picker grid. |
 | 3.3 Group detail page — header + calendar | ⬜ | **Stub exists** (`GroupDetailPage.tsx` — renders StubPage with `groupId` from params). **Build:** Group header (avatar/color, name, member count, description). Reuse existing calendar components (MonthGrid/WeekGrid/DayTimeline) filtered to group tasks/events by passing `groupId` filter to API calls. Owner/admin action menu (edit, invite, delete). Member-only actions (chat, leave). Group color theming on header. dooooApp reference: `GroupDetailScreen.tsx` uses `ExpandableCalendar` scoped to group. |
 | 3.4 Member management | ⬜ | **API ready:** `getMembers()`, `addGroupMember()`, `removeGroupMember()`, `updateGroupMemberRole()`. **Build:** Member list component with role badges (ADMIN / MEMBER), avatar + name per row. Invite member modal (search by email or username → `createGroupInvitation()`). Remove member confirmation dialog (admin only). Role change dropdown: MEMBER ↔ ADMIN (owner only). Pending invitation list with cancel option. Owner cannot be removed or leave. dooooApp reference: `GroupViewModal.tsx` member section + `hooks/useMembersData.ts`. |
 | 3.5 Group task assignment | ⬜ | **Types ready:** `TaskAssignment`, `assigneeId` on Task, `isForAllMembers`, `trackCompletion`, `TaskParticipant` (status: INVITED/CONFIRMED/DECLINED/LEFT), `TaskParticipantInstance`. **Build:** Assignee picker in ItemEditor that loads group members when editing a group task. "For All Members" toggle — creates a group activity that broadcasts to all members. Participant tracking UI: per-member status chips (INVITED/CONFIRMED/DECLINED/LEFT), completion stats display. Participant selection modal for multi-select. dooooApp references: `AssigneeSelector`, `ParticipantSelectionModal`, `CompletionStatsDisplay`, `hooks/useParticipation.ts`. |
@@ -258,13 +258,13 @@ Last updated: 2026-04-21
 |-------|--------|------|-------|--------------|
 | 1 — Foundation & Core | ✅ Complete | 11 | 11 | — |
 | 2 — Personal Productivity | ✅ Complete | 16 | 16 | — |
-| 3 — Groups & Collaboration | ⬜ Not Started | 0 | 10 | WebSocket dispatch (7.2) for real-time chat |
+| 3 — Groups & Collaboration | 🔶 Partial | 1 | 10 | WebSocket dispatch (7.2) for real-time chat |
 | 4 — Targets, Plans & AI | ⬜ Not Started | 0 | 12 | AI streaming endpoint verification, plan execution complexity |
 | 5 — Notifications, Search & Statistics | ⬜ Not Started | 0 | 7 | Backend aggregate endpoints for statistics |
 | 6 — Settings & Account | 🔶 Partial | 3 | 16 | Backend preference endpoints for some settings |
 | 7 — Polish & Parity | ⬜ Not Started | 0 | 13 | OAuth wiring, Google Calendar API setup |
 
-**Overall: 30 of 85 steps complete (~35%)**
+**Overall: 31 of 85 steps complete (~36%)**
 
 ---
 

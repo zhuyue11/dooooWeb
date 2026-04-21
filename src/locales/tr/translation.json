@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Evet, iptal et",
     "canceling": "İptal ediliyor...",
     "cancelInvitationError": "Davet iptal edilemedi. Lütfen tekrar deneyin.",
+    "groupCount": "{{count}} grup",
+    "groupCountOne": "1 grup",
+    "newGroup": "Yeni Grup",
+    "owner": "Sahip",
+    "newMessages": "{{count}} yeni",
     "participate": {
       "invitedMessage": "Davet edildiniz",
       "confirm": "Onayla",

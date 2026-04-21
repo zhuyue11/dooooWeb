@@ -993,6 +993,11 @@
     "yesCancelInvitation": "確定取消",
     "canceling": "取消中...",
     "cancelInvitationError": "取消邀請失敗，請重試。",
+    "groupCount": "{{count}} 個群組",
+    "groupCountOne": "1 個群組",
+    "newGroup": "新建群組",
+    "owner": "群主",
+    "newMessages": "{{count}} 則新訊息",
     "participate": {
       "invitedMessage": "您已被邀請",
       "confirm": "確認",

@@ -993,6 +993,11 @@
     "yesCancelInvitation": "بله، لغو کن",
     "canceling": "در حال لغو...",
     "cancelInvitationError": "لغو دعوت ناموفق بود. لطفاً دوباره تلاش کنید.",
+    "groupCount": "{{count}} گروه",
+    "groupCountOne": "۱ گروه",
+    "newGroup": "گروه جدید",
+    "owner": "مالک",
+    "newMessages": "{{count}} جدید",
     "participate": {
       "invitedMessage": "شما دعوت شده‌اید",
       "confirm": "تأیید",

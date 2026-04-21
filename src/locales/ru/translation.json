@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Да, отменить",
     "canceling": "Отмена...",
     "cancelInvitationError": "Не удалось отменить приглашение. Пожалуйста, попробуйте снова.",
+    "groupCount": "{{count}} групп",
+    "groupCountOne": "1 группа",
+    "newGroup": "Новая Группа",
+    "owner": "Владелец",
+    "newMessages": "{{count}} новых",
     "participate": {
       "invitedMessage": "Вы приглашены",
       "confirm": "Подтвердить",

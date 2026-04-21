@@ -993,6 +993,11 @@
     "yesCancelInvitation": "نعم، إلغاء",
     "canceling": "جارٍ الإلغاء...",
     "cancelInvitationError": "فشل إلغاء الدعوة. يرجى المحاولة مرة أخرى.",
+    "groupCount": "{{count}} مجموعات",
+    "groupCountOne": "مجموعة واحدة",
+    "newGroup": "مجموعة جديدة",
+    "owner": "المالك",
+    "newMessages": "{{count}} جديد",
     "participate": {
       "invitedMessage": "تمت دعوتك",
       "confirm": "تأكيد",

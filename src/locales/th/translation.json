@@ -993,6 +993,11 @@
     "yesCancelInvitation": "ใช่ ยกเลิก",
     "canceling": "กำลังยกเลิก...",
     "cancelInvitationError": "ไม่สามารถยกเลิกคำเชิญได้ โปรดลองอีกครั้ง",
+    "groupCount": "{{count}} กลุ่ม",
+    "groupCountOne": "1 กลุ่ม",
+    "newGroup": "กลุ่มใหม่",
+    "owner": "เจ้าของ",
+    "newMessages": "{{count}} ใหม่",
     "participate": {
       "invitedMessage": "คุณได้รับเชิญ",
       "confirm": "ยืนยัน",

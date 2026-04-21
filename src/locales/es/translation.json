@@ -993,6 +993,11 @@
     "yesCancelInvitation": "Sí, cancelar",
     "canceling": "Cancelando...",
     "cancelInvitationError": "No se pudo cancelar la invitación. Por favor, inténtelo de nuevo.",
+    "groupCount": "{{count}} grupos",
+    "groupCountOne": "1 grupo",
+    "newGroup": "Nuevo Grupo",
+    "owner": "Propietario",
+    "newMessages": "{{count}} nuevos",
     "participate": {
       "invitedMessage": "Has sido invitado",
       "confirm": "Confirmar",

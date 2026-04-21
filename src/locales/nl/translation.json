@@ -996,6 +996,11 @@
     "yesCancelInvitation": "Ja, annuleren",
     "canceling": "Annuleren...",
     "cancelInvitationError": "Kan uitnodiging niet annuleren. Probeer het opnieuw.",
+    "groupCount": "{{count}} groepen",
+    "groupCountOne": "1 groep",
+    "newGroup": "Nieuwe Groep",
+    "owner": "Eigenaar",
+    "newMessages": "{{count}} nieuw",
     "participate": {
       "invitedMessage": "Je bent uitgenodigd",
       "confirm": "Bevestigen",
