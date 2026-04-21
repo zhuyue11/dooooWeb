@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Möchten Sie \"{{groupName}}\" wirklich verlassen? Sie haben dann keinen Zugriff mehr auf Gruppenaufgaben und -nachrichten.",
     "leaveGroupSuccess": "Sie haben die Gruppe verlassen. Bitte aktualisieren Sie den Kalender, um aktualisierte Aufgaben zu sehen.",
     "leaveGroupError": "Gruppe konnte nicht verlassen werden. Bitte versuchen Sie es erneut.",
-    "createdOn": "Erstellt am",
+    "createdOn": "Erstellt am {{date}}",
     "makeAdmin": "Zum Administrator machen",
     "makeMember": "Zum Mitglied machen",
     "makeViewer": "Zum Betrachter machen",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Diese Aktivität ist beendet. Sie können sie nicht mehr als abgeschlossen markieren.",
       "activityEndedLabel": "Aktivität beendet",
       "cannotLeaveEnded": "Diese Aktivität ist beendet. Sie können nicht mehr austreten."
-    }
+    },
+    "groupInfo": "Gruppeninfo",
+    "ownedBy": "Eigentümer: {{name}}",
+    "moreFeaturesComing": "Kalender, Chat und Mitgliederverwaltung kommen bald."
   },
   "chat": {
     "typeMessage": "Nachricht eingeben...",

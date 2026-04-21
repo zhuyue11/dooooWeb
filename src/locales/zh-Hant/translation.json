@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "確定要退出「{{groupName}}」嗎？您將無法再存取群組任務和訊息。",
     "leaveGroupSuccess": "您已退出群組。請重新整理日曆以查看更新的任務。",
     "leaveGroupError": "退出群組失敗，請重試。",
-    "createdOn": "建立於",
+    "createdOn": "建立於 {{date}}",
     "makeAdmin": "設為管理員",
     "makeMember": "設為成員",
     "makeViewer": "設為訪客",
@@ -1045,7 +1045,10 @@
       "activityEndedLabel": "活動已結束",
       "cannotLeaveEnded": "此活動已結束，您無法再退出。",
       "activityDeleted": "此活動已被刪除"
-    }
+    },
+    "groupInfo": "群組資訊",
+    "ownedBy": "擁有者：{{name}}",
+    "moreFeaturesComing": "日曆、聊天和成員管理即將推出。"
   },
   "chat": {
     "typeMessage": "輸入訊息...",

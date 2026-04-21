@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Êtes-vous sûr de vouloir quitter « {{groupName}} » ? Vous n'aurez plus accès aux tâches et messages du groupe.",
     "leaveGroupSuccess": "Vous avez quitté le groupe. Veuillez actualiser le calendrier pour voir les tâches mises à jour.",
     "leaveGroupError": "Échec de la sortie du groupe. Veuillez réessayer.",
-    "createdOn": "Créé le",
+    "createdOn": "Créé le {{date}}",
     "makeAdmin": "Nommer administrateur",
     "makeMember": "Nommer membre",
     "makeViewer": "Nommer observateur",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Cette activité est terminée. Vous ne pouvez plus la marquer comme terminée.",
       "activityEndedLabel": "Activité terminée",
       "cannotLeaveEnded": "Cette activité est terminée. Vous ne pouvez plus quitter."
-    }
+    },
+    "groupInfo": "Infos du groupe",
+    "ownedBy": "Propriétaire : {{name}}",
+    "moreFeaturesComing": "Calendrier, chat et gestion des membres à venir."
   },
   "chat": {
     "typeMessage": "Tapez un message...",

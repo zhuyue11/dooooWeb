@@ -1,11 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useGroups } from '@/hooks/useGroups';
+import { createGroup } from '@/lib/api';
 import { Icon } from '@/components/ui/Icon';
 import { GroupCard } from '@/components/groups/GroupCard';
-import { CreateGroupModal } from '@/components/groups/CreateGroupModal';
+import { GroupFormModal } from '@/components/groups/GroupFormModal';
+import type { GroupFormData } from '@/components/groups/GroupFormModal';
 import type { Group } from '@/types/api';
 
 type GroupFilter = 'all' | 'my_group' | 'joined_group';
@@ -16,8 +19,20 @@ export function GroupListPage() {
   const navigate = useNavigate();
   const { data: groups = [], isLoading } = useGroups();
 
+  const queryClient = useQueryClient();
+
   const [filter, setFilter] = useState<GroupFilter>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleCreateGroup = useCallback(async (data: GroupFormData) => {
+    const group = await createGroup({
+      name: data.name,
+      description: data.description,
+      color: data.color,
+    });
+    await queryClient.invalidateQueries({ queryKey: ['groups'] });
+    navigate(`/groups/${group.id}`);
+  }, [queryClient, navigate]);
 
   const sortedAndFiltered = useMemo(() => {
     if (!user) return [];
@@ -145,7 +160,12 @@ export function GroupListPage() {
         </div>
       )}
 
-      <CreateGroupModal open={showCreateModal} onClose={() => setShowCreateModal(false)} />
+      <GroupFormModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateGroup}
+        mode="create"
+      />
     </div>
   );
 }

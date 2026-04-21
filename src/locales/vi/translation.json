@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Bạn có chắc chắn muốn rời \"{{groupName}}\"? Bạn sẽ không còn quyền truy cập vào công việc và tin nhắn của nhóm.",
     "leaveGroupSuccess": "Bạn đã rời nhóm. Vui lòng làm mới lịch để xem công việc đã cập nhật.",
     "leaveGroupError": "Rời nhóm thất bại. Vui lòng thử lại.",
-    "createdOn": "Được tạo vào",
+    "createdOn": "Tạo ngày {{date}}",
     "makeAdmin": "Đặt làm quản trị viên",
     "makeMember": "Đặt làm thành viên",
     "makeViewer": "Đặt làm người xem",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Hoạt động này đã kết thúc. Bạn không thể đánh dấu hoàn thành được nữa.",
       "activityEndedLabel": "Hoạt động đã kết thúc",
       "cannotLeaveEnded": "Hoạt động này đã kết thúc. Bạn không thể rời đi nữa."
-    }
+    },
+    "groupInfo": "Thông tin nhóm",
+    "ownedBy": "Chủ sở hữu: {{name}}",
+    "moreFeaturesComing": "Lịch, trò chuyện và quản lý thành viên sắp ra mắt."
   },
   "chat": {
     "typeMessage": "Nhập tin nhắn...",

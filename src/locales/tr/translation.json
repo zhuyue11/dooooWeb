@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "\"{{groupName}}\" grubundan ayrılmak istediğinizden emin misiniz? Artık grup görevlerine ve mesajlarına erişemeyeceksiniz.",
     "leaveGroupSuccess": "Gruptan ayrıldınız. Güncellenmiş görevleri görmek için lütfen takvimi yenileyin.",
     "leaveGroupError": "Gruptan ayrılınamadı. Lütfen tekrar deneyin.",
-    "createdOn": "Oluşturulma tarihi",
+    "createdOn": "{{date}} tarihinde oluşturuldu",
     "makeAdmin": "Yönetici Yap",
     "makeMember": "Üye Yap",
     "makeViewer": "İzleyici Yap",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Bu etkinlik sona erdi. Artık tamamlandı olarak işaretleyemezsiniz.",
       "activityEndedLabel": "Etkinlik sona erdi",
       "cannotLeaveEnded": "Bu etkinlik sona erdi. Artık ayrılamazsınız."
-    }
+    },
+    "groupInfo": "Grup bilgisi",
+    "ownedBy": "Sahibi: {{name}}",
+    "moreFeaturesComing": "Takvim, sohbet ve üye yönetimi yakında."
   },
   "chat": {
     "typeMessage": "Mesaj yazın...",

@@ -1,8 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { createGroup } from '@/lib/api';
 import { Icon } from '@/components/ui/Icon';
 
 const COLOR_PRESETS = [
@@ -17,15 +14,22 @@ const COLOR_PRESETS = [
   '#6366F1', // indigo
 ];
 
-interface CreateGroupModalProps {
-  open: boolean;
-  onClose: () => void;
+export interface GroupFormData {
+  name: string;
+  description?: string;
+  color?: string;
 }
 
-export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
+interface GroupFormModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (data: GroupFormData) => Promise<void>;
+  initialData?: { name: string; description?: string; color?: string };
+  mode: 'create' | 'edit';
+}
+
+export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: GroupFormModalProps) {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const nameRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState('');
@@ -36,13 +40,19 @@ export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
 
   useEffect(() => {
     if (open) {
-      setName('');
-      setDescription('');
-      setColor(COLOR_PRESETS[0]);
+      if (initialData) {
+        setName(initialData.name);
+        setDescription(initialData.description || '');
+        setColor(initialData.color || COLOR_PRESETS[0]);
+      } else {
+        setName('');
+        setDescription('');
+        setColor(COLOR_PRESETS[0]);
+      }
       setError('');
       setTimeout(() => nameRef.current?.focus(), 100);
     }
-  }, [open]);
+  }, [open, initialData]);
 
   if (!open) return null;
 
@@ -56,14 +66,12 @@ export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
     setSubmitting(true);
     setError('');
     try {
-      const group = await createGroup({
+      await onSubmit({
         name: trimmed,
         description: description.trim() || undefined,
         color,
       });
-      await queryClient.invalidateQueries({ queryKey: ['groups'] });
       onClose();
-      navigate(`/groups/${group.id}`);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : t('groups.failedToSaveGroup');
       setError(message);
@@ -71,6 +79,8 @@ export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
       setSubmitting(false);
     }
   }
+
+  const isCreate = mode === 'create';
 
   return (
     <div
@@ -82,8 +92,12 @@ export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <h2 className="text-lg font-semibold text-foreground">{t('groups.createGroup')}</h2>
-        <p className="mt-1 text-[13px] text-muted-foreground">{t('groups.ownerInfo')}</p>
+        <h2 className="text-lg font-semibold text-foreground">
+          {isCreate ? t('groups.createGroup') : t('groups.editGroup')}
+        </h2>
+        {isCreate && (
+          <p className="mt-1 text-[13px] text-muted-foreground">{t('groups.ownerInfo')}</p>
+        )}
 
         {/* Form */}
         <div className="mt-5 flex flex-col gap-4">
@@ -173,8 +187,10 @@ export function CreateGroupModal({ open, onClose }: CreateGroupModalProps) {
           >
             {submitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            ) : (
+            ) : isCreate ? (
               t('groups.create')
+            ) : (
+              t('groups.save')
             )}
           </button>
         </div>

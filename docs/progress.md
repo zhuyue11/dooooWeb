@@ -2,7 +2,7 @@
 
 Tracks what has been completed, what's in progress, and what's remaining across all 7 phases to reach full dooooApp feature parity.
 
-Last updated: 2026-04-22
+Last updated: 2026-04-23
 
 ## Tech Stack
 
@@ -112,9 +112,9 @@ Last updated: 2026-04-22
 
 | Step | Status | Notes |
 |------|--------|-------|
-| 3.1 Group list page | ✅ Done | `GroupListPage.tsx` — full implementation. **Components:** `GroupCard.tsx` (reusable card: color strip, name, star icon, description, member count, unread badge / owner badge), `CreateGroupModal.tsx` (name 100 chars, description 500 chars, 9 color swatches, validation, creates group + navigates). **3 filter pills:** All / My Groups / Joined — matching dooooApp's `GroupScreen.tsx` logic (`ownerId === user.id` for My, `!==` for Joined). **Sorting:** starred groups first (via `GroupMember.isStarred`), then `updatedAt` descending. **Empty states:** per-filter messages with conditional create button (no create on Joined filter). **2-column card grid.** Uses existing `useGroups()` hook. Translations added to all 19 locale files (5 new keys). |
-| 3.2 Create/Edit group modal | 🔶 | **Create mode done** via `CreateGroupModal.tsx` (built in 3.1). **Remaining:** Edit mode — pre-fill form with existing group data, call `PUT /api/groups/:groupId`. dooooApp reference: `GroupFormModal.tsx` (347 lines) — used for both create and edit, includes color picker grid. |
-| 3.3 Group detail page — header + calendar | ⬜ | **Stub exists** (`GroupDetailPage.tsx` — renders StubPage with `groupId` from params). **Build:** Group header (avatar/color, name, member count, description). Reuse existing calendar components (MonthGrid/WeekGrid/DayTimeline) filtered to group tasks/events by passing `groupId` filter to API calls. Owner/admin action menu (edit, invite, delete). Member-only actions (chat, leave). Group color theming on header. dooooApp reference: `GroupDetailScreen.tsx` uses `ExpandableCalendar` scoped to group. |
+| 3.1 Group list page | ✅ Done | `GroupListPage.tsx` — full implementation. **Components:** `GroupCard.tsx` (reusable card: color strip, name, star icon, description, member count, unread badge / owner badge), `GroupFormModal.tsx` (unified create/edit modal: name 100 chars, description 500 chars, 9 color swatches, validation, `onSubmit` callback pattern). **3 filter pills:** All / My Groups / Joined — matching dooooApp's `GroupScreen.tsx` logic (`ownerId === user.id` for My, `!==` for Joined). **Sorting:** starred groups first (via `GroupMember.isStarred`), then `updatedAt` descending. **Empty states:** per-filter messages with conditional create button (no create on Joined filter). **2-column card grid.** Uses existing `useGroups()` hook. Translations added to all 19 locale files (5 new keys). |
+| 3.2 Create/Edit group modal | ✅ Done | `GroupFormModal.tsx` — unified modal with `mode: 'create' | 'edit'` prop (replaces old `CreateGroupModal.tsx`). **Props:** `open`, `onClose`, `onSubmit` callback (parent handles API + navigation), `initialData?` (pre-fills form in edit mode), `mode`. **Mode-based rendering:** title ("Create Group" / "Edit Group"), subtitle (owner info in create only), button text ("Create" / "Save"). Form initialization from `initialData` when editing. Exported `GroupFormData` type. **GroupDetailPage.tsx** rewritten from stub to host edit mode: fetches group via `getGroup()`, displays group info (color dot, name, member count, description, created date, owner), edit button gated to OWNER/ADMIN role via `members.find()`. **E2E:** `group-edit.spec.ts` — 8 tests covering create group, detail page display, edit modal pre-fill, edit name, edit description, cancel discards changes, validation (empty name disables save), back navigation. All pass. Translations added to all 19 locale files (4 keys: `groupInfo`, `ownedBy`, `moreFeaturesComing`, updated `createdOn` with `{{date}}`). |
+| 3.3 Group detail page — header + calendar | ⬜ | **Minimal page exists** (`GroupDetailPage.tsx` — group header with color dot, name, member count, description, info section, edit button). **Remaining:** Reuse existing calendar components (MonthGrid/WeekGrid/DayTimeline) filtered to group tasks/events by passing `groupId` filter to API calls. Owner/admin action menu (invite, delete). Member-only actions (chat, leave). Group color theming on header. dooooApp reference: `GroupDetailScreen.tsx` uses `ExpandableCalendar` scoped to group. |
 | 3.4 Member management | ⬜ | **API ready:** `getMembers()`, `addGroupMember()`, `removeGroupMember()`, `updateGroupMemberRole()`. **Build:** Member list component with role badges (ADMIN / MEMBER), avatar + name per row. Invite member modal (search by email or username → `createGroupInvitation()`). Remove member confirmation dialog (admin only). Role change dropdown: MEMBER ↔ ADMIN (owner only). Pending invitation list with cancel option. Owner cannot be removed or leave. dooooApp reference: `GroupViewModal.tsx` member section + `hooks/useMembersData.ts`. |
 | 3.5 Group task assignment | ⬜ | **Types ready:** `TaskAssignment`, `assigneeId` on Task, `isForAllMembers`, `trackCompletion`, `TaskParticipant` (status: INVITED/CONFIRMED/DECLINED/LEFT), `TaskParticipantInstance`. **Build:** Assignee picker in ItemEditor that loads group members when editing a group task. "For All Members" toggle — creates a group activity that broadcasts to all members. Participant tracking UI: per-member status chips (INVITED/CONFIRMED/DECLINED/LEFT), completion stats display. Participant selection modal for multi-select. dooooApp references: `AssigneeSelector`, `ParticipantSelectionModal`, `CompletionStatsDisplay`, `hooks/useParticipation.ts`. |
 | 3.6 Group messaging — real-time chat | ⬜ | **API ready:** `sendMessage()`, `getMessages()`. **Types ready:** `GroupMessage`, `CreateMessageRequest`, `MessageListResponse`. **Build:** Chat panel component (slide-out or inline): message list with infinite scroll pagination (`hasMore` flag), message input bar with send button, timestamps with relative formatting, system messages for group events. **Critical:** Requires extending `websocket-context.tsx` to parse incoming `group_message` WS events and push to React Query cache (currently WebSocket only tracks connection state). Without WS message dispatch, chat requires polling fallback. dooooApp reference: `GroupChatPanel.tsx` uses `useGroupChat` hook with `messages[]`, `sendMessage()`, `loadMoreMessages()`, `markMessageAsReadInState()`. |
@@ -258,13 +258,13 @@ Last updated: 2026-04-22
 |-------|--------|------|-------|--------------|
 | 1 — Foundation & Core | ✅ Complete | 11 | 11 | — |
 | 2 — Personal Productivity | ✅ Complete | 16 | 16 | — |
-| 3 — Groups & Collaboration | 🔶 Partial | 1 | 10 | WebSocket dispatch (7.2) for real-time chat |
+| 3 — Groups & Collaboration | 🔶 Partial | 2 | 10 | WebSocket dispatch (7.2) for real-time chat |
 | 4 — Targets, Plans & AI | ⬜ Not Started | 0 | 12 | AI streaming endpoint verification, plan execution complexity |
 | 5 — Notifications, Search & Statistics | ⬜ Not Started | 0 | 7 | Backend aggregate endpoints for statistics |
 | 6 — Settings & Account | 🔶 Partial | 3 | 16 | Backend preference endpoints for some settings |
 | 7 — Polish & Parity | ⬜ Not Started | 0 | 13 | OAuth wiring, Google Calendar API setup |
 
-**Overall: 31 of 85 steps complete (~36%)**
+**Overall: 32 of 85 steps complete (~38%)**
 
 ---
 

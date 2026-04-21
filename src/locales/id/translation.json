@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Apakah Anda yakin ingin keluar dari \"{{groupName}}\"? Anda tidak akan lagi memiliki akses ke tugas dan pesan grup.",
     "leaveGroupSuccess": "Anda telah keluar dari grup. Silakan segarkan kalender untuk melihat tugas yang diperbarui.",
     "leaveGroupError": "Gagal keluar dari grup. Silakan coba lagi.",
-    "createdOn": "Dibuat pada",
+    "createdOn": "Dibuat pada {{date}}",
     "makeAdmin": "Jadikan Admin",
     "makeMember": "Jadikan Anggota",
     "makeViewer": "Jadikan Peninjau",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Aktivitas ini telah berakhir. Anda tidak dapat lagi menandainya sebagai selesai.",
       "activityEndedLabel": "Aktivitas berakhir",
       "cannotLeaveEnded": "Aktivitas ini telah berakhir. Anda tidak dapat keluar lagi."
-    }
+    },
+    "groupInfo": "Info grup",
+    "ownedBy": "Pemilik: {{name}}",
+    "moreFeaturesComing": "Kalender, obrolan, dan manajemen anggota segera hadir."
   },
   "chat": {
     "typeMessage": "Ketik pesan...",

@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Sei sicuro di voler lasciare \"{{groupName}}\"? Non avrai più accesso alle attività e ai messaggi del gruppo.",
     "leaveGroupSuccess": "Hai lasciato il gruppo. Aggiorna il calendario per vedere le attività aggiornate.",
     "leaveGroupError": "Impossibile lasciare il gruppo. Riprova.",
-    "createdOn": "Creato il",
+    "createdOn": "Creato il {{date}}",
     "makeAdmin": "Rendi Amministratore",
     "makeMember": "Rendi Membro",
     "makeViewer": "Rendi Visualizzatore",
@@ -1044,7 +1044,10 @@
       "activityEnded": "Questa attività è terminata. Non puoi più segnarla come completata.",
       "activityEndedLabel": "Attività terminata",
       "cannotLeaveEnded": "Questa attività è terminata. Non puoi più uscire."
-    }
+    },
+    "groupInfo": "Info gruppo",
+    "ownedBy": "Proprietario: {{name}}",
+    "moreFeaturesComing": "Calendario, chat e gestione membri in arrivo."
   },
   "chat": {
     "typeMessage": "Scrivi un messaggio...",

@@ -953,7 +953,7 @@
     "leaveGroupConfirm": "Are you sure you want to leave \"{{groupName}}\"? You will no longer have access to group tasks and messages.",
     "leaveGroupSuccess": "You have left the group. Please refresh the calendar to see updated tasks.",
     "leaveGroupError": "Failed to leave group. Please try again.",
-    "createdOn": "Created on",
+    "createdOn": "Created on {{date}}",
     "makeAdmin": "Make Admin",
     "makeMember": "Make Member",
     "makeViewer": "Make Viewer",
@@ -1062,7 +1062,10 @@
       "activityEndedLabel": "Activity ended",
       "cannotLeaveEnded": "This activity has ended. You can no longer leave.",
       "activityDeleted": "This activity has been deleted"
-    }
+    },
+    "groupInfo": "Group Info",
+    "ownedBy": "Owned by {{name}}",
+    "moreFeaturesComing": "Calendar, chat, and member management coming soon."
   },
   "chat": {
     "typeMessage": "Type a message...",

@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "Czy na pewno chcesz opuścić \"{{groupName}}\"? Nie będziesz już mieć dostępu do zadań i wiadomości grupy.",
     "leaveGroupSuccess": "Opuściłeś grupę. Proszę odśwież kalendarz, aby zobaczyć zaktualizowane zadania.",
     "leaveGroupError": "Nie udało się opuścić grupy. Spróbuj ponownie.",
-    "createdOn": "Utworzono",
+    "createdOn": "Utworzono {{date}}",
     "makeAdmin": "Ustaw jako administratora",
     "makeMember": "Ustaw jako członka",
     "makeViewer": "Ustaw jako obserwatora",
@@ -1044,7 +1044,10 @@
       "activityEnded": "To działanie zostało zakończone. Nie możesz już oznaczyć go jako ukończone.",
       "activityEndedLabel": "Działanie zakończone",
       "cannotLeaveEnded": "To działanie się zakończyło. Nie możesz już opuścić."
-    }
+    },
+    "groupInfo": "Informacje o grupie",
+    "ownedBy": "Właściciel: {{name}}",
+    "moreFeaturesComing": "Kalendarz, czat i zarządzanie członkami wkrótce."
   },
   "chat": {
     "typeMessage": "Wpisz wiadomość...",

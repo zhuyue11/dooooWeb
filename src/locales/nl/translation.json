@@ -939,7 +939,7 @@
     "leaveGroupConfirm": "Weet u zeker dat u \"{{groupName}}\" wilt verlaten? U heeft geen toegang meer tot groepstaken en -berichten.",
     "leaveGroupSuccess": "U heeft de groep verlaten. Ververs de agenda om bijgewerkte taken te zien.",
     "leaveGroupError": "Groep verlaten mislukt. Probeer het opnieuw.",
-    "createdOn": "Aangemaakt op",
+    "createdOn": "Aangemaakt op {{date}}",
     "makeAdmin": "Beheerder maken",
     "makeMember": "Lid maken",
     "makeViewer": "Kijker maken",
@@ -1047,7 +1047,10 @@
       "activityEnded": "Deze activiteit is beëindigd. Je kunt deze niet meer als voltooid markeren.",
       "activityEndedLabel": "Activiteit beëindigd",
       "cannotLeaveEnded": "Deze activiteit is beëindigd. U kunt niet meer vertrekken."
-    }
+    },
+    "groupInfo": "Groepsinformatie",
+    "ownedBy": "Eigenaar: {{name}}",
+    "moreFeaturesComing": "Agenda, chat en ledenbeheer komen binnenkort."
   },
   "chat": {
     "typeMessage": "Typ een bericht...",

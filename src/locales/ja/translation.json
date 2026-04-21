@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "「{{groupName}}」から退出してもよろしいですか? グループのタスクとメッセージにアクセスできなくなります。",
     "leaveGroupSuccess": "グループから退出しました。カレンダーを更新して、最新のタスクを確認してください。",
     "leaveGroupError": "グループの退出に失敗しました。もう一度お試しください。",
-    "createdOn": "作成日",
+    "createdOn": "作成日: {{date}}",
     "makeAdmin": "管理者にする",
     "makeMember": "メンバーにする",
     "makeViewer": "閲覧者にする",
@@ -1044,7 +1044,10 @@
       "activityEnded": "このアクティビティは終了しました。完了としてマークすることはできません。",
       "activityEndedLabel": "アクティビティ終了",
       "cannotLeaveEnded": "このアクティビティは終了しました。退出することはできません。"
-    }
+    },
+    "groupInfo": "グループ情報",
+    "ownedBy": "オーナー: {{name}}",
+    "moreFeaturesComing": "カレンダー、チャット、メンバー管理は近日公開予定です。"
   },
   "chat": {
     "typeMessage": "メッセージを入力...",

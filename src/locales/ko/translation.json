@@ -936,7 +936,7 @@
     "leaveGroupConfirm": "\"{{groupName}}\"에서 나가시겠습니까? 그룹 할 일과 메시지에 더 이상 액세스할 수 없습니다.",
     "leaveGroupSuccess": "그룹에서 나갔습니다. 업데이트된 할 일을 보려면 캘린더를 새로고침하세요.",
     "leaveGroupError": "그룹 나가기에 실패했습니다. 다시 시도해 주세요.",
-    "createdOn": "생성일",
+    "createdOn": "생성일: {{date}}",
     "makeAdmin": "관리자로 지정",
     "makeMember": "멤버로 지정",
     "makeViewer": "뷰어로 지정",
@@ -1044,7 +1044,10 @@
       "activityEnded": "이 활동이 종료되었습니다. 더 이상 완료로 표시할 수 없습니다.",
       "activityEndedLabel": "활동 종료됨",
       "cannotLeaveEnded": "이 활동이 종료되었습니다. 더 이상 나갈 수 없습니다."
-    }
+    },
+    "groupInfo": "그룹 정보",
+    "ownedBy": "소유자: {{name}}",
+    "moreFeaturesComing": "캘린더, 채팅, 멤버 관리 기능이 곧 제공됩니다."
   },
   "chat": {
     "typeMessage": "메시지를 입력하세요...",
