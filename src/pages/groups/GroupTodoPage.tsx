@@ -25,7 +25,7 @@ export function GroupTodoPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { data: categories } = useCategories();
+  const { data: categories } = useCategories(groupId);
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState('');
@@ -150,6 +150,7 @@ export function GroupTodoPage() {
           currentUserId={user?.id}
           onClose={() => setSidePanelItem(null)}
           onToggle={handleToggle}
+          groupId={groupId}
         />
       )}
     </div>

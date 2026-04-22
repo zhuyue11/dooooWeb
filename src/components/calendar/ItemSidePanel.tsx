@@ -19,6 +19,7 @@ interface ItemSidePanelProps {
   currentUserId?: string;
   onClose: () => void;
   onToggle?: (item: CalendarItem) => void;
+  groupId?: string;
 }
 
 // ── Detail row ──
@@ -85,10 +86,10 @@ function formatReminder(minutes: number | null | undefined): string | null {
 
 // ── Main component ──
 
-export function ItemSidePanel({ item, currentUserId, onClose, onToggle }: ItemSidePanelProps) {
+export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId }: ItemSidePanelProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data: categories } = useCategories();
+  const { data: categories } = useCategories(groupId);
   const { timeFormat } = useDisplay();
   const {
     deleteTaskMutation,

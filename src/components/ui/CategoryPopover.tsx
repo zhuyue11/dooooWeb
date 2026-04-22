@@ -17,9 +17,10 @@ interface CategoryPopoverProps {
   onSelect: (id: string) => void;
   onClear: () => void;
   onClose: () => void;
+  groupId?: string;
 }
 
-export function CategoryPopover({ categories, selected, onSelect, onClear, onClose }: CategoryPopoverProps) {
+export function CategoryPopover({ categories, selected, onSelect, onClear, onClose, groupId }: CategoryPopoverProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -35,8 +36,8 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
     setIsCreating(true);
     setError(null);
     try {
-      const created = await createCategory({ name: trimmed, color: selectedColor });
-      await queryClient.invalidateQueries({ queryKey: ['categories'] });
+      const created = await createCategory({ name: trimmed, color: selectedColor, groupId });
+      await queryClient.invalidateQueries({ queryKey: groupId ? ['categories', 'group', groupId] : ['categories'] });
       onSelect(created.id);
       onClose();
     } catch (err: unknown) {

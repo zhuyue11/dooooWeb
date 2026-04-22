@@ -130,7 +130,6 @@ export function ItemEditorPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { data: categories } = useCategories();
   const {
     createTaskMutation, createEventMutation,
     updateTaskMutation, updateEventMutation,
@@ -153,6 +152,8 @@ export function ItemEditorPage() {
 
   // Get draft from location.state (passed from modal "More Options")
   const draft = (location.state as { draft?: ItemFormDraft } | null)?.draft;
+
+  const { data: categories } = useCategories(draft?.groupId);
 
   // ── Form state ──
   const [itemType, setItemType] = useState<ItemType>(draft?.itemType || (typeParam === 'event' ? 'EVENT' : 'TASK'));
@@ -1734,6 +1735,7 @@ export function ItemEditorPage() {
                     onSelect={(id) => { setCategoryId(id); setActivePopover(null); }}
                     onClear={() => { setCategoryId(''); setActivePopover(null); }}
                     onClose={closePopover}
+                    groupId={draft?.groupId}
                   />
                 )}
               </div>

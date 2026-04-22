@@ -201,8 +201,9 @@ export async function convertTaskInstance(
 
 // ===== Categories =====
 
-export async function getCategories(): Promise<Category[]> {
-  const res = await apiClient.get<{ success: boolean; data: Category[] }>('/api/categories');
+export async function getCategories(groupId?: string): Promise<Category[]> {
+  const params = groupId ? { groupId } : {};
+  const res = await apiClient.get<{ success: boolean; data: Category[] }>('/api/categories', { params });
   return res.data.data;
 }
 
@@ -366,7 +367,7 @@ export async function removeGroupMember(groupId: string, userId: string): Promis
 }
 
 export async function updateGroupMemberRole(groupId: string, userId: string, role: string): Promise<GroupMember> {
-  const res = await apiClient.patch<{ success: boolean; data: GroupMember }>(`/api/groups/${groupId}/members/${userId}/role`, { role });
+  const res = await apiClient.put<{ success: boolean; data: GroupMember }>(`/api/groups/${groupId}/members/${userId}`, { role });
   return res.data.data;
 }
 
@@ -435,6 +436,15 @@ export async function acceptGroupInvitation(invitationId: string): Promise<void>
 
 export async function declineGroupInvitation(invitationId: string): Promise<void> {
   await apiClient.post(`/api/invitations/${invitationId}/decline`);
+}
+
+export async function getGroupInvitations(groupId: string): Promise<GroupInvitation[]> {
+  const res = await apiClient.get<{ success: boolean; data: GroupInvitation[] }>(`/api/groups/${groupId}/invitations`);
+  return res.data.data;
+}
+
+export async function cancelGroupInvitation(groupId: string, invitationId: string): Promise<void> {
+  await apiClient.delete(`/api/groups/${groupId}/invitations/${invitationId}`);
 }
 
 // ===== Targets =====

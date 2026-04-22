@@ -20,7 +20,7 @@ import { getParentId } from '@/utils/calendarItemId';
 export function GroupCalendarPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const { user } = useAuth();
-  const { data: categories } = useCategories();
+  const { data: categories } = useCategories(groupId);
   const queryClient = useQueryClient();
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -154,6 +154,7 @@ export function GroupCalendarPage() {
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
           onToggle={handleToggle}
+          groupId={groupId}
         />
       )}
     </div>

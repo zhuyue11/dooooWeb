@@ -504,6 +504,7 @@ export interface Category {
   isDefault: boolean;
   sortOrder: number;
   userId: string | null;
+  groupId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -517,6 +518,7 @@ export interface CategoriesResponse {
 export interface CreateCategoryRequest {
   name: string;
   color: string;
+  groupId?: string;
 }
 
 export interface UpdateCategoryRequest {
