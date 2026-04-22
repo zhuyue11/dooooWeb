@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "معلومات المجموعة",
     "ownedBy": "المالك: {{name}}",
-    "moreFeaturesComing": "التقويم والدردشة وإدارة الأعضاء قريبًا."
+    "moreFeaturesComing": "التقويم والدردشة وإدارة الأعضاء قريبًا.",
+    "navTasks": "المهام",
+    "navCalendar": "التقويم",
+    "navChat": "الدردشة",
+    "navMembers": "الأعضاء",
+    "navSettings": "الإعدادات",
+    "taskSingular": "مهمة",
+    "taskPlural": "مهام",
+    "searchTasks": "البحث عن مهام...",
+    "filter": "تصفية",
+    "addTask": "إضافة مهمة",
+    "noTasksFound": "لم يتم العثور على مهام",
+    "noGroupTasks": "لا توجد مهام في هذه المجموعة بعد"
   },
   "chat": {
     "typeMessage": "اكتب رسالة...",

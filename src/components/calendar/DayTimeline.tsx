@@ -15,6 +15,7 @@ interface DayTimelineProps {
   categories?: Category[];
   onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
+  hideGroupTag?: boolean;
 }
 
 const HOUR_HEIGHT = 60; // px per hour row
@@ -24,7 +25,7 @@ const TIME_OF_DAY_SECTIONS = [
   { key: 'EVENING' as const, icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
 ] as const;
 
-export function DayTimeline({ date, items, categories, onItemClick, isLoading }: DayTimelineProps) {
+export function DayTimeline({ date, items, categories, onItemClick, isLoading, hideGroupTag }: DayTimelineProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -216,7 +217,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
                       </div>
                       {/* Tags line */}
                       <div className="flex flex-wrap items-center gap-1" style={{ color: colors.text }}>
-                        {item.groupId && (
+                        {item.groupId && !hideGroupTag && (
                           <span className="inline-flex items-center gap-px rounded-full border border-[#3b82f6] px-1 text-[9px] font-medium text-[#3b82f6]">
                             <Icon name="group" size={8} color="#3b82f6" />
                             {item.groupName || t('calendarPage.itemRow.group')}
@@ -232,9 +233,9 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading }:
                             <Icon name="person" size={9} color={colors.text} /> {item.assigneeName}
                           </span>
                         )}
-                        {!!item.repeat && <Icon name="repeat" size={10} color={colors.text} style={{ opacity: 0.6 }} />}
+                        {!!item.repeat && <span className="opacity-60"><Icon name="repeat" size={10} color={colors.text} /></span>}
                         {(item.firstReminderMinutes != null || item.secondReminderMinutes != null) && (
-                          <Icon name="notifications" size={10} color={colors.text} style={{ opacity: 0.6 }} />
+                          <span className="opacity-60"><Icon name="notifications" size={10} color={colors.text} /></span>
                         )}
                         {item.isForAllMembers && item.participantSummary && item.participantSummary.goingCount > 0 && (
                           <span className="text-[9px] font-medium opacity-80">

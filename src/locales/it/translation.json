@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Info gruppo",
     "ownedBy": "Proprietario: {{name}}",
-    "moreFeaturesComing": "Calendario, chat e gestione membri in arrivo."
+    "moreFeaturesComing": "Calendario, chat e gestione membri in arrivo.",
+    "navTasks": "Attività",
+    "navCalendar": "Calendario",
+    "navChat": "Chat",
+    "navMembers": "Membri",
+    "navSettings": "Impostazioni",
+    "taskSingular": "attività",
+    "taskPlural": "attività",
+    "searchTasks": "Cerca attività...",
+    "filter": "Filtra",
+    "addTask": "Aggiungi attività",
+    "noTasksFound": "Nessuna attività trovata",
+    "noGroupTasks": "Nessuna attività in questo gruppo"
   },
   "chat": {
     "typeMessage": "Scrivi un messaggio...",

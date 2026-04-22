@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "اطلاعات گروه",
     "ownedBy": "مالک: {{name}}",
-    "moreFeaturesComing": "تقویم، چت و مدیریت اعضا به زودی."
+    "moreFeaturesComing": "تقویم، چت و مدیریت اعضا به زودی.",
+    "navTasks": "وظایف",
+    "navCalendar": "تقویم",
+    "navChat": "چت",
+    "navMembers": "اعضا",
+    "navSettings": "تنظیمات",
+    "taskSingular": "وظیفه",
+    "taskPlural": "وظایف",
+    "searchTasks": "جستجوی وظایف...",
+    "filter": "فیلتر",
+    "addTask": "افزودن وظیفه",
+    "noTasksFound": "وظیفه‌ای یافت نشد",
+    "noGroupTasks": "هنوز وظیفه‌ای در این گروه وجود ندارد"
   },
   "chat": {
     "typeMessage": "پیامی بنویسید...",

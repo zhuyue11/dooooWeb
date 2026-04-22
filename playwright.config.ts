@@ -9,7 +9,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5180',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     // Match Docker's UTC timezone so seed dates align with browser "today"
@@ -33,7 +33,7 @@ export default defineConfig({
   // Start Vite dev server before tests
   webServer: {
     command: 'npm run dev',
-    url: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173',
+    url: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5180',
     reuseExistingServer: !process.env.CI,
   },
 });

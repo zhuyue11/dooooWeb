@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Gruppeninfo",
     "ownedBy": "Eigentümer: {{name}}",
-    "moreFeaturesComing": "Kalender, Chat und Mitgliederverwaltung kommen bald."
+    "moreFeaturesComing": "Kalender, Chat und Mitgliederverwaltung kommen bald.",
+    "navTasks": "Aufgaben",
+    "navCalendar": "Kalender",
+    "navChat": "Chat",
+    "navMembers": "Mitglieder",
+    "navSettings": "Einstellungen",
+    "taskSingular": "Aufgabe",
+    "taskPlural": "Aufgaben",
+    "searchTasks": "Aufgaben suchen...",
+    "filter": "Filter",
+    "addTask": "Aufgabe hinzufügen",
+    "noTasksFound": "Keine Aufgaben gefunden",
+    "noGroupTasks": "Noch keine Aufgaben in dieser Gruppe"
   },
   "chat": {
     "typeMessage": "Nachricht eingeben...",

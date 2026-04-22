@@ -31,7 +31,7 @@ export function GroupListPage() {
       color: data.color,
     });
     await queryClient.invalidateQueries({ queryKey: ['groups'] });
-    navigate(`/groups/${group.id}`);
+    navigate(`/groups/${group.id}/tasks`);
   }, [queryClient, navigate]);
 
   const sortedAndFiltered = useMemo(() => {
@@ -154,7 +154,7 @@ export function GroupListPage() {
               key={group.id}
               group={group}
               currentUserId={user!.id}
-              onClick={() => navigate(`/groups/${group.id}`)}
+              onClick={() => navigate(`/groups/${group.id}/tasks`)}
             />
           ))}
         </div>

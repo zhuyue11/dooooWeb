@@ -1048,7 +1048,19 @@
     },
     "groupInfo": "群組資訊",
     "ownedBy": "擁有者：{{name}}",
-    "moreFeaturesComing": "日曆、聊天和成員管理即將推出。"
+    "moreFeaturesComing": "日曆、聊天和成員管理即將推出。",
+    "navTasks": "任務",
+    "navCalendar": "日曆",
+    "navChat": "聊天",
+    "navMembers": "成員",
+    "navSettings": "設定",
+    "taskSingular": "個任務",
+    "taskPlural": "個任務",
+    "searchTasks": "搜尋任務...",
+    "filter": "篩選",
+    "addTask": "新增任務",
+    "noTasksFound": "找不到任務",
+    "noGroupTasks": "此群組暫無任務"
   },
   "chat": {
     "typeMessage": "輸入訊息...",

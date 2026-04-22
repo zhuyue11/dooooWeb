@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Информация о группе",
     "ownedBy": "Владелец: {{name}}",
-    "moreFeaturesComing": "Календарь, чат и управление участниками скоро появятся."
+    "moreFeaturesComing": "Календарь, чат и управление участниками скоро появятся.",
+    "navTasks": "Задачи",
+    "navCalendar": "Календарь",
+    "navChat": "Чат",
+    "navMembers": "Участники",
+    "navSettings": "Настройки",
+    "taskSingular": "задача",
+    "taskPlural": "задач",
+    "searchTasks": "Поиск задач...",
+    "filter": "Фильтр",
+    "addTask": "Добавить задачу",
+    "noTasksFound": "Задачи не найдены",
+    "noGroupTasks": "В этой группе пока нет задач"
   },
   "chat": {
     "typeMessage": "Введите сообщение...",

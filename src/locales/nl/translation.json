@@ -1050,7 +1050,19 @@
     },
     "groupInfo": "Groepsinformatie",
     "ownedBy": "Eigenaar: {{name}}",
-    "moreFeaturesComing": "Agenda, chat en ledenbeheer komen binnenkort."
+    "moreFeaturesComing": "Agenda, chat en ledenbeheer komen binnenkort.",
+    "navTasks": "Taken",
+    "navCalendar": "Agenda",
+    "navChat": "Chat",
+    "navMembers": "Leden",
+    "navSettings": "Instellingen",
+    "taskSingular": "taak",
+    "taskPlural": "taken",
+    "searchTasks": "Taken zoeken...",
+    "filter": "Filter",
+    "addTask": "Taak toevoegen",
+    "noTasksFound": "Geen taken gevonden",
+    "noGroupTasks": "Nog geen taken in deze groep"
   },
   "chat": {
     "typeMessage": "Typ een bericht...",

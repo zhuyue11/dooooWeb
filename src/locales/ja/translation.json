@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "グループ情報",
     "ownedBy": "オーナー: {{name}}",
-    "moreFeaturesComing": "カレンダー、チャット、メンバー管理は近日公開予定です。"
+    "moreFeaturesComing": "カレンダー、チャット、メンバー管理は近日公開予定です。",
+    "navTasks": "タスク",
+    "navCalendar": "カレンダー",
+    "navChat": "チャット",
+    "navMembers": "メンバー",
+    "navSettings": "設定",
+    "taskSingular": "タスク",
+    "taskPlural": "タスク",
+    "searchTasks": "タスクを検索...",
+    "filter": "フィルター",
+    "addTask": "タスク追加",
+    "noTasksFound": "タスクが見つかりません",
+    "noGroupTasks": "このグループにはまだタスクがありません"
   },
   "chat": {
     "typeMessage": "メッセージを入力...",

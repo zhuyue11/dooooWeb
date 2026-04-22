@@ -1,10 +1,9 @@
 import { useRef, useEffect } from 'react';
-import { isSameDay, toISODate, getHoursArray, formatHourLabel, formatTime } from '@/utils/date';
+import { isSameDay, toISODate, getHoursArray, formatHourLabel } from '@/utils/date';
 import { getCategoryColor } from '@/utils/category';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
-import type { TimeFormat } from '@/utils/date';
-import { useDisplay } from '@/lib/contexts/display-context';
+
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 
@@ -78,13 +77,14 @@ export function layoutOverlaps(items: CalendarItem[], maxVisibleCols: number = M
 }
 
 /** Shared row component for untimed item sections (all-day, morning, afternoon, evening). */
-function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLabelWidth }: {
+function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLabelWidth, hideGroupTag }: {
   icon?: string;
   weekDates: Date[];
   getItems: (dateKey: string) => CalendarItem[];
   categories?: Category[];
   onItemClick?: (item: CalendarItem) => void;
   hourLabelWidth: number;
+  hideGroupTag?: boolean;
 }) {
   return (
     <div className="flex" style={{ maxHeight: 60 }}>
@@ -111,7 +111,7 @@ function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLa
                     <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
                       {item.title}
                     </div>
-                    {item.groupName && (
+                    {item.groupName && !hideGroupTag && (
                       <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
                         <Icon name="group" size={7} color="#3b82f6" />
                         {item.groupName}
@@ -137,15 +137,15 @@ interface WeekGridProps {
   onSelectDate: (date: Date) => void;
   onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
+  hideGroupTag?: boolean;
 }
 
 const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 const HOUR_HEIGHT = 60; // px per hour row
 const HOUR_LABEL_WIDTH = 48; // px for hour label column
 
-export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading }: WeekGridProps) {
+export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading, hideGroupTag }: WeekGridProps) {
   const { t } = useTranslation();
-  const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentHour = new Date().getHours();
   const hours = getHoursArray();
@@ -232,6 +232,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
           categories={categories}
           onItemClick={onItemClick}
           hourLabelWidth={HOUR_LABEL_WIDTH}
+          hideGroupTag={hideGroupTag}
         />
       )}
       {TIME_OF_DAY_SECTIONS.map((section) => {
@@ -246,6 +247,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
             categories={categories}
             onItemClick={onItemClick}
             hourLabelWidth={HOUR_LABEL_WIDTH}
+            hideGroupTag={hideGroupTag}
           />
         );
       })}
@@ -331,24 +333,18 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                             }}
                             onClick={() => onItemClick?.(item)}
                           >
-                            <div className="flex items-start justify-between gap-0.5">
-                              <div className="flex min-w-0 items-center gap-0.5">
-                                {item.itemType === 'EVENT' && (
-                                  <Icon name="calendar_today" size={9} color={colors.text} />
-                                )}
-                                <span
-                                  className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
-                                  style={{ color: colors.text }}
-                                >
-                                  {item.title}
-                                </span>
-                              </div>
-                              <span className="flex-shrink-0 text-[9px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
-                                {formatTime(item.date, timeFormat as TimeFormat)}
-                                {item.duration ? ` – ${formatTime(new Date(new Date(item.date).getTime() + item.duration * 60000).toISOString(), timeFormat as TimeFormat)}` : ''}
+                            <div className="flex min-w-0 items-center gap-0.5">
+                              {item.itemType === 'EVENT' && (
+                                <Icon name="calendar_today" size={9} color={colors.text} />
+                              )}
+                              <span
+                                className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                                style={{ color: colors.text }}
+                              >
+                                {item.title}
                               </span>
                             </div>
-                            {item.groupName && (
+                            {item.groupName && !hideGroupTag && (
                               <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
                                 <Icon name="group" size={7} color="#3b82f6" />
                                 {item.groupName}

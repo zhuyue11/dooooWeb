@@ -1048,7 +1048,19 @@
     },
     "groupInfo": "群组信息",
     "ownedBy": "所有者：{{name}}",
-    "moreFeaturesComing": "日历、聊天和成员管理即将推出。"
+    "moreFeaturesComing": "日历、聊天和成员管理即将推出。",
+    "navTasks": "任务",
+    "navCalendar": "日历",
+    "navChat": "聊天",
+    "navMembers": "成员",
+    "navSettings": "设置",
+    "taskSingular": "个任务",
+    "taskPlural": "个任务",
+    "searchTasks": "搜索任务...",
+    "filter": "筛选",
+    "addTask": "添加任务",
+    "noTasksFound": "未找到任务",
+    "noGroupTasks": "此群组暂无任务"
   },
   "chat": {
     "typeMessage": "输入消息...",

@@ -15,11 +15,12 @@ interface MonthGridProps {
   onSelectDate: (date: Date) => void;
   onItemClick?: (item: CalendarItem) => void;
   isLoading: boolean;
+  hideGroupTag?: boolean;
 }
 
 const SHORT_DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
-export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading }: MonthGridProps) {
+export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading, hideGroupTag }: MonthGridProps) {
   const { t } = useTranslation();
   const activeMonth = currentMonth.getMonth();
   const weeks: Date[][] = [];
@@ -93,7 +94,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                             <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
                               {item.title}
                             </div>
-                            {item.groupName && (
+                            {item.groupName && !hideGroupTag && (
                               <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
                                 <Icon name="group" size={7} color="#3b82f6" />
                                 {item.groupName}

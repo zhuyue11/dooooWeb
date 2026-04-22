@@ -16,6 +16,7 @@ interface ItemPanelProps {
   categories?: Category[];
   isLoading: boolean;
   currentUserId?: string;
+  hideGroupTag?: boolean;
   onAddClick?: () => void;
   onToggle?: (item: CalendarItem) => void;
   onItemClick?: (item: CalendarItem) => void;
@@ -46,7 +47,7 @@ function formatPanelDate(date: Date | null, today: Date, visibleDates: Date[], v
   }
 }
 
-export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId, onAddClick, onToggle, onItemClick }: ItemPanelProps) {
+export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, categories, isLoading, currentUserId, hideGroupTag, onAddClick, onToggle, onItemClick }: ItemPanelProps) {
   const { t } = useTranslation();
   return (
     <div
@@ -77,7 +78,7 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
           </div>
         ) : (
           items.map((item) => (
-            <ItemRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} onToggle={onToggle} onClick={onItemClick} />
+            <ItemRow key={item.id} item={item} categories={categories} showDate={!selectedDate} currentUserId={currentUserId} hideGroupTag={hideGroupTag} onToggle={onToggle} onClick={onItemClick} />
           ))
         )}
       </div>

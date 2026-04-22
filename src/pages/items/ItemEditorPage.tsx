@@ -47,6 +47,7 @@ export interface ItemFormDraft {
   duration?: number | null;
   firstReminderMinutes?: number | null;
   secondReminderMinutes?: number | null;
+  groupId?: string;
 }
 
 // ── Popover wrapper (click-outside-to-close) ──
@@ -724,6 +725,7 @@ export function ItemEditorPage() {
           duration: effectiveDuration ?? undefined,
           firstReminderMinutes: firstReminder,
           secondReminderMinutes: secondReminder,
+          groupId: draft?.groupId,
         };
         await createTaskMutation.mutateAsync(req);
       }
@@ -890,6 +892,7 @@ export function ItemEditorPage() {
           guests: guests.length > 0 ? guests : undefined,
           meetingLink: meetingLink || undefined,
           repeat: selectedRepeat ?? undefined,
+          groupId: draft?.groupId,
         };
         await createEventMutation.mutateAsync(req);
       }

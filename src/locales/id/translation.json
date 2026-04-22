@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Info grup",
     "ownedBy": "Pemilik: {{name}}",
-    "moreFeaturesComing": "Kalender, obrolan, dan manajemen anggota segera hadir."
+    "moreFeaturesComing": "Kalender, obrolan, dan manajemen anggota segera hadir.",
+    "navTasks": "Tugas",
+    "navCalendar": "Kalender",
+    "navChat": "Obrolan",
+    "navMembers": "Anggota",
+    "navSettings": "Pengaturan",
+    "taskSingular": "tugas",
+    "taskPlural": "tugas",
+    "searchTasks": "Cari tugas...",
+    "filter": "Filter",
+    "addTask": "Tambah tugas",
+    "noTasksFound": "Tugas tidak ditemukan",
+    "noGroupTasks": "Belum ada tugas di grup ini"
   },
   "chat": {
     "typeMessage": "Ketik pesan...",

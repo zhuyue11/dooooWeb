@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Grup bilgisi",
     "ownedBy": "Sahibi: {{name}}",
-    "moreFeaturesComing": "Takvim, sohbet ve üye yönetimi yakında."
+    "moreFeaturesComing": "Takvim, sohbet ve üye yönetimi yakında.",
+    "navTasks": "Görevler",
+    "navCalendar": "Takvim",
+    "navChat": "Sohbet",
+    "navMembers": "Üyeler",
+    "navSettings": "Ayarlar",
+    "taskSingular": "görev",
+    "taskPlural": "görev",
+    "searchTasks": "Görev ara...",
+    "filter": "Filtre",
+    "addTask": "Görev ekle",
+    "noTasksFound": "Görev bulunamadı",
+    "noGroupTasks": "Bu grupta henüz görev yok"
   },
   "chat": {
     "typeMessage": "Mesaj yazın...",

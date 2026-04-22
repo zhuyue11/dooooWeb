@@ -1065,7 +1065,19 @@
     },
     "groupInfo": "Group Info",
     "ownedBy": "Owned by {{name}}",
-    "moreFeaturesComing": "Calendar, chat, and member management coming soon."
+    "moreFeaturesComing": "Calendar, chat, and member management coming soon.",
+    "navTasks": "Tasks",
+    "navCalendar": "Calendar",
+    "navChat": "Chat",
+    "navMembers": "Members",
+    "navSettings": "Settings",
+    "taskSingular": "task",
+    "taskPlural": "tasks",
+    "searchTasks": "Search tasks...",
+    "filter": "Filter",
+    "addTask": "Add task",
+    "noTasksFound": "No tasks found",
+    "noGroupTasks": "No tasks in this group yet"
   },
   "chat": {
     "typeMessage": "Type a message...",

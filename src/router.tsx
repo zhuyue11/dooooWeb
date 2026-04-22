@@ -17,7 +17,11 @@ import { SearchPage } from '@/pages/home/SearchPage';
 
 // Groups
 import { GroupListPage } from '@/pages/groups/GroupListPage';
-import { GroupDetailPage } from '@/pages/groups/GroupDetailPage';
+import { GroupTodoPage } from '@/pages/groups/GroupTodoPage';
+import { GroupCalendarPage } from '@/pages/groups/GroupCalendarPage';
+import { GroupChatPage } from '@/pages/groups/GroupChatPage';
+import { GroupMembersPage } from '@/pages/groups/GroupMembersPage';
+import { GroupSettingsPage } from '@/pages/groups/GroupSettingsPage';
 
 // Targets & Plans
 import { TargetPlanHomePage } from '@/pages/targets/TargetPlanHomePage';
@@ -77,7 +81,12 @@ export const router = createBrowserRouter([
 
           // Groups
           { path: '/groups', element: <GroupListPage /> },
-          { path: '/groups/:groupId', element: <GroupDetailPage /> },
+          { path: '/groups/:groupId', element: <Navigate to="tasks" replace /> },
+          { path: '/groups/:groupId/tasks', element: <GroupTodoPage /> },
+          { path: '/groups/:groupId/calendar', element: <GroupCalendarPage /> },
+          { path: '/groups/:groupId/chat', element: <GroupChatPage /> },
+          { path: '/groups/:groupId/members', element: <GroupMembersPage /> },
+          { path: '/groups/:groupId/settings', element: <GroupSettingsPage /> },
 
           // Targets & Plans
           { path: '/targets', element: <TargetPlanHomePage /> },

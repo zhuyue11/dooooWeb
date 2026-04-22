@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Informações do grupo",
     "ownedBy": "Proprietário: {{name}}",
-    "moreFeaturesComing": "Calendário, chat e gestão de membros em breve."
+    "moreFeaturesComing": "Calendário, chat e gestão de membros em breve.",
+    "navTasks": "Tarefas",
+    "navCalendar": "Calendário",
+    "navChat": "Chat",
+    "navMembers": "Membros",
+    "navSettings": "Configurações",
+    "taskSingular": "tarefa",
+    "taskPlural": "tarefas",
+    "searchTasks": "Buscar tarefas...",
+    "filter": "Filtrar",
+    "addTask": "Adicionar tarefa",
+    "noTasksFound": "Nenhuma tarefa encontrada",
+    "noGroupTasks": "Nenhuma tarefa neste grupo ainda"
   },
   "chat": {
     "typeMessage": "Digite uma mensagem...",

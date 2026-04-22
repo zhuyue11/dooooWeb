@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "ข้อมูลกลุ่ม",
     "ownedBy": "เจ้าของ: {{name}}",
-    "moreFeaturesComing": "ปฏิทิน แชท และการจัดการสมาชิกจะมาเร็วๆ นี้"
+    "moreFeaturesComing": "ปฏิทิน แชท และการจัดการสมาชิกจะมาเร็วๆ นี้",
+    "navTasks": "งาน",
+    "navCalendar": "ปฏิทิน",
+    "navChat": "แชท",
+    "navMembers": "สมาชิก",
+    "navSettings": "ตั้งค่า",
+    "taskSingular": "งาน",
+    "taskPlural": "งาน",
+    "searchTasks": "ค้นหางาน...",
+    "filter": "กรอง",
+    "addTask": "เพิ่มงาน",
+    "noTasksFound": "ไม่พบงาน",
+    "noGroupTasks": "ยังไม่มีงานในกลุ่มนี้"
   },
   "chat": {
     "typeMessage": "พิมพ์ข้อความ...",

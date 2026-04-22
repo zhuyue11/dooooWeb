@@ -13,11 +13,12 @@ interface ItemRowProps {
   categories?: Category[];
   showDate?: boolean;
   currentUserId?: string;
+  hideGroupTag?: boolean;
   onToggle?: (item: CalendarItem) => void;
   onClick?: (item: CalendarItem) => void;
 }
 
-export function ItemRow({ item, categories, showDate, currentUserId, onToggle, onClick }: ItemRowProps) {
+export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTag, onToggle, onClick }: ItemRowProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
 
@@ -117,8 +118,8 @@ export function ItemRow({ item, categories, showDate, currentUserId, onToggle, o
               <Icon name="calendar_today" size={10} /> {t('calendarPage.itemRow.event')}
             </span>
           )}
-          {/* Group name tag */}
-          {item.groupId && (
+          {/* Group name tag — hidden when already inside a group context */}
+          {item.groupId && !hideGroupTag && (
             <span className="flex items-center gap-0.5 rounded-full border border-[#3b82f6] px-1.5 text-[10px] font-medium text-[#3b82f6]">
               <Icon name="group" size={9} /> {item.groupName || t('calendarPage.itemRow.group')}
             </span>

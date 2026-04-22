@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Thông tin nhóm",
     "ownedBy": "Chủ sở hữu: {{name}}",
-    "moreFeaturesComing": "Lịch, trò chuyện và quản lý thành viên sắp ra mắt."
+    "moreFeaturesComing": "Lịch, trò chuyện và quản lý thành viên sắp ra mắt.",
+    "navTasks": "Nhiệm vụ",
+    "navCalendar": "Lịch",
+    "navChat": "Trò chuyện",
+    "navMembers": "Thành viên",
+    "navSettings": "Cài đặt",
+    "taskSingular": "nhiệm vụ",
+    "taskPlural": "nhiệm vụ",
+    "searchTasks": "Tìm nhiệm vụ...",
+    "filter": "Lọc",
+    "addTask": "Thêm nhiệm vụ",
+    "noTasksFound": "Không tìm thấy nhiệm vụ",
+    "noGroupTasks": "Chưa có nhiệm vụ trong nhóm này"
   },
   "chat": {
     "typeMessage": "Nhập tin nhắn...",

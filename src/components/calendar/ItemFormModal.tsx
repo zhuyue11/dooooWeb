@@ -18,13 +18,14 @@ type TimeOfDay = 'MORNING' | 'AFTERNOON' | 'EVENING' | null;
 
 interface ItemFormModalProps {
   defaultDate?: Date;
+  groupId?: string;
   onClose: () => void;
   onSaved: () => void;
 }
 
 // ── Main Modal ──
 
-export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalProps) {
+export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFormModalProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { createTaskMutation, createEventMutation } = useItemMutations();
@@ -124,12 +125,13 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
       startTimeValue,
       hasEndTime,
       endTimeValue,
+      groupId,
     };
     setTimeout(() => {
       onClose();
       navigate('/items/new', { state: { draft } });
     }, 150);
-  }, [itemType, title, selectedDate, hasTime, timeValue, timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue, onClose, navigate]);
+  }, [itemType, title, selectedDate, hasTime, timeValue, timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue, groupId, onClose, navigate]);
 
   const handleSubmit = useCallback(async () => {
     if (!isTitleValid) return;
@@ -159,6 +161,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
         dateType: 'SCHEDULED',
         showInTodoWhenOverdue: true,
         setToDoneAutomatically: false,
+        groupId,
       };
 
       await createTaskMutation.mutateAsync(req);
@@ -182,6 +185,7 @@ export function ItemFormModal({ defaultDate, onClose, onSaved }: ItemFormModalPr
         hasTime: hasStartTime,
         timeZone: hasStartTime ? tz : undefined,
         endDate: endDateStr,
+        groupId,
       };
 
       await createEventMutation.mutateAsync(req);

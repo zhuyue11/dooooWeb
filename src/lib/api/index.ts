@@ -381,6 +381,48 @@ export async function getMessages(groupId: string, page = 1, limit = 50): Promis
   return res.data.data;
 }
 
+// Group Tasks & Events
+export async function getGroupTasks(
+  groupId: string,
+  filters?: { from?: string; to?: string; recurring?: boolean; status?: string; priority?: string },
+): Promise<Task[]> {
+  const params: Record<string, string> = {};
+  if (filters?.from) params.from = filters.from;
+  if (filters?.to) params.to = filters.to;
+  if (filters?.recurring) params.recurring = 'true';
+  if (filters?.status) params.status = filters.status;
+  if (filters?.priority) params.priority = filters.priority;
+  const res = await apiClient.get<{ success: boolean; data: Task[] }>(`/api/groups/${groupId}/tasks`, { params });
+  return res.data.data;
+}
+
+export async function getGroupTodoTasks(
+  groupId: string,
+  timezone: string,
+): Promise<{ unplanned: Task[]; overdue: Task[] }> {
+  const res = await apiClient.get<{ success: boolean; data: { unplanned: Task[]; overdue: Task[] } }>(
+    `/api/groups/${groupId}/tasks`,
+    { params: { todo: 'true', timezone } },
+  );
+  return res.data.data;
+}
+
+export async function getGroupEvents(
+  groupId: string,
+  params?: { from?: string; to?: string },
+): Promise<Event[]> {
+  const qp: Record<string, string> = {};
+  if (params?.from) qp.from = params.from;
+  if (params?.to) qp.to = params.to;
+  const res = await apiClient.get<{ success: boolean; data: Event[] }>(`/api/groups/${groupId}/events`, { params: qp });
+  return res.data.data;
+}
+
+export async function getRecurringGroupEvents(groupId: string): Promise<Event[]> {
+  const res = await apiClient.get<{ success: boolean; data: Event[] }>(`/api/groups/${groupId}/events/recurring`);
+  return res.data.data;
+}
+
 // Group Invitations
 export async function createGroupInvitation(groupId: string, data: CreateGroupInvitationRequest): Promise<CreateGroupInvitationResponse> {
   const res = await apiClient.post<{ success: boolean; data: CreateGroupInvitationResponse }>(`/api/groups/${groupId}/invitations`, data);

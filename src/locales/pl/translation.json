@@ -1047,7 +1047,19 @@
     },
     "groupInfo": "Informacje o grupie",
     "ownedBy": "Właściciel: {{name}}",
-    "moreFeaturesComing": "Kalendarz, czat i zarządzanie członkami wkrótce."
+    "moreFeaturesComing": "Kalendarz, czat i zarządzanie członkami wkrótce.",
+    "navTasks": "Zadania",
+    "navCalendar": "Kalendarz",
+    "navChat": "Czat",
+    "navMembers": "Członkowie",
+    "navSettings": "Ustawienia",
+    "taskSingular": "zadanie",
+    "taskPlural": "zadań",
+    "searchTasks": "Szukaj zadań...",
+    "filter": "Filtr",
+    "addTask": "Dodaj zadanie",
+    "noTasksFound": "Nie znaleziono zadań",
+    "noGroupTasks": "Brak zadań w tej grupie"
   },
   "chat": {
     "typeMessage": "Wpisz wiadomość...",
