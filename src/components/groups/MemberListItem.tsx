@@ -5,11 +5,11 @@ import { PopoverWrapper } from '@/components/ui/PopoverWrapper';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { GroupMember } from '@/types/api';
 
-const ROLE_BADGE_STYLES: Record<string, string> = {
-  OWNER: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
-  ADMIN: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-  MEMBER: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  VIEWER: 'bg-gray-100 text-gray-700 dark:bg-gray-800/50 dark:text-gray-400',
+const ROLE_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
+  OWNER: { bg: 'rgba(245, 158, 11, 0.15)', text: '#d97706' },
+  ADMIN: { bg: 'rgba(239, 68, 68, 0.15)', text: '#dc2626' },
+  MEMBER: { bg: 'rgba(59, 130, 246, 0.15)', text: '#2563eb' },
+  VIEWER: { bg: 'rgba(107, 114, 128, 0.15)', text: '#6b7280' },
 };
 
 const ROLE_KEYS: Record<string, string> = {
@@ -96,7 +96,11 @@ export function MemberListItem({
         {/* Role badge */}
         <span
           data-testid={`role-badge-${member.userId}`}
-          className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase ${ROLE_BADGE_STYLES[member.role] || ROLE_BADGE_STYLES.VIEWER}`}
+          className="shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase"
+          style={{
+            backgroundColor: (ROLE_BADGE_COLORS[member.role] || ROLE_BADGE_COLORS.VIEWER).bg,
+            color: (ROLE_BADGE_COLORS[member.role] || ROLE_BADGE_COLORS.VIEWER).text,
+          }}
         >
           {t(ROLE_KEYS[member.role] || ROLE_KEYS.VIEWER)}
         </span>

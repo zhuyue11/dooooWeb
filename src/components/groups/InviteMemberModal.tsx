@@ -185,7 +185,7 @@ export function InviteMemberModal({
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4">
           {/* Copied code success message */}
           {copiedCode && (
-            <div className="mb-4 flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2.5 dark:bg-green-900/20">
+            <div className="mb-4 flex items-center gap-2 rounded-lg px-3 py-2.5" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
               <Icon name="check_circle" size={18} color="var(--color-primary)" />
               <span className="text-sm text-foreground">
                 {t('groups.inviteModalCopiedMessage')} — <span className="font-mono font-semibold">{copiedCode}</span>
@@ -195,7 +195,7 @@ export function InviteMemberModal({
 
           {/* Info box */}
           {!copiedCode && (
-            <div className="mb-4 flex items-start gap-2 rounded-lg bg-blue-50 px-3 py-2.5 dark:bg-blue-900/20">
+            <div className="mb-4 flex items-start gap-2 rounded-lg px-3 py-2.5" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
               <Icon name="info" size={18} color="var(--color-info)" className="mt-0.5 shrink-0" />
               <span className="text-sm text-muted-foreground">
                 {t('groups.inviteModalInfoText')}
