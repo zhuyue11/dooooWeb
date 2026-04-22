@@ -857,7 +857,11 @@
     "categoryCreated": "Kategorie erfolgreich erstellt",
     "categoryUpdated": "Kategorie erfolgreich aktualisiert",
     "categoryDeleted": "Kategorie erfolgreich gelöscht",
-    "deleteCategoryConfirm": "Möchten Sie diese Kategorie wirklich löschen?"
+    "deleteCategoryConfirm": "Möchten Sie diese Kategorie wirklich löschen?",
+    "createNew": "Neu erstellen",
+    "namePlaceholder": "Kategoriename",
+    "duplicateName": "Eine Kategorie mit diesem Namen existiert bereits",
+    "creating": "Wird erstellt..."
   },
   "errors": {
     "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",

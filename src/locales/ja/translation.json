@@ -857,7 +857,11 @@
     "categoryCreated": "カテゴリーを作成しました",
     "categoryUpdated": "カテゴリーを更新しました",
     "categoryDeleted": "カテゴリーを削除しました",
-    "deleteCategoryConfirm": "このカテゴリーを削除してもよろしいですか?"
+    "deleteCategoryConfirm": "このカテゴリーを削除してもよろしいですか?",
+    "createNew": "新規作成",
+    "namePlaceholder": "カテゴリー名",
+    "duplicateName": "同じ名前のカテゴリーが既に存在します",
+    "creating": "作成中..."
   },
   "errors": {
     "genericError": "問題が発生しました。もう一度お試しください。",

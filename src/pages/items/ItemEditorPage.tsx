@@ -12,6 +12,8 @@ import { TimeOfDayPicker } from '@/components/ui/TimeOfDayPicker';
 import { TimeZonePicker } from '@/components/ui/TimeZonePicker';
 import { DurationPopover, formatDurationDisplay } from '@/components/ui/DurationPicker';
 import { ReminderPopover, formatReminderDisplay } from '@/components/ui/ReminderPicker';
+import { PopoverWrapper } from '@/components/ui/PopoverWrapper';
+import { CategoryPopover } from '@/components/ui/CategoryPopover';
 import { toNoonUTC, combineDateAndTime } from '@/utils/dateForm';
 import { getRepeatDisplayText } from '@/utils/repeatDisplay';
 import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
@@ -48,29 +50,6 @@ export interface ItemFormDraft {
   firstReminderMinutes?: number | null;
   secondReminderMinutes?: number | null;
   groupId?: string;
-}
-
-// ── Popover wrapper (click-outside-to-close) ──
-
-function PopoverWrapper({ children, onClose, className }: {
-  children: React.ReactNode;
-  onClose: () => void;
-  className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [onClose]);
-
-  return (
-    <div ref={ref} className={`absolute left-0 top-full mt-1 z-50 rounded-xl border border-border bg-surface shadow-[0_8px_24px_rgba(0,0,0,0.2)] ${className || ''}`}>
-      {children}
-    </div>
-  );
 }
 
 // ── Field row component ──
@@ -124,46 +103,6 @@ function PriorityPopover({ selected, onSelect, onClear, onClose }: {
         >
           <Icon name="flag" size={16} className={opt.color} />
           <span>{t(opt.key)}</span>
-        </button>
-      ))}
-      {selected && (
-        <>
-          <div className="mx-2 my-1 border-t border-border" />
-          <button
-            type="button"
-            onClick={onClear}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
-          >
-            <Icon name="close" size={16} />
-            <span>{t('itemEditor.clear')}</span>
-          </button>
-        </>
-      )}
-    </PopoverWrapper>
-  );
-}
-
-// ── Category popover ──
-
-function CategoryPopover({ categories, selected, onSelect, onClear, onClose }: {
-  categories: { id: string; name: string; color: string }[];
-  selected: string;
-  onSelect: (id: string) => void;
-  onClear: () => void;
-  onClose: () => void;
-}) {
-  const { t } = useTranslation();
-  return (
-    <PopoverWrapper onClose={onClose} className="w-[220px] max-h-[280px] overflow-y-auto p-1">
-      {categories.map((cat) => (
-        <button
-          key={cat.id}
-          type="button"
-          onClick={() => onSelect(cat.id)}
-          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === cat.id ? 'bg-muted font-medium' : ''}`}
-        >
-          <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: cat.color }} />
-          <span className="truncate">{cat.name}</span>
         </button>
       ))}
       {selected && (

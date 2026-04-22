@@ -857,7 +857,11 @@
     "categoryCreated": "Tạo danh mục thành công",
     "categoryUpdated": "Cập nhật danh mục thành công",
     "categoryDeleted": "Xóa danh mục thành công",
-    "deleteCategoryConfirm": "Bạn có chắc chắn muốn xóa danh mục này?"
+    "deleteCategoryConfirm": "Bạn có chắc chắn muốn xóa danh mục này?",
+    "createNew": "Tạo mới",
+    "namePlaceholder": "Tên danh mục",
+    "duplicateName": "Đã tồn tại danh mục có tên này",
+    "creating": "Đang tạo..."
   },
   "errors": {
     "genericError": "Đã xảy ra lỗi. Vui lòng thử lại.",

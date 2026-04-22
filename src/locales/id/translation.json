@@ -857,7 +857,11 @@
     "categoryCreated": "Kategori berhasil dibuat",
     "categoryUpdated": "Kategori berhasil diperbarui",
     "categoryDeleted": "Kategori berhasil dihapus",
-    "deleteCategoryConfirm": "Apakah Anda yakin ingin menghapus kategori ini?"
+    "deleteCategoryConfirm": "Apakah Anda yakin ingin menghapus kategori ini?",
+    "createNew": "Buat baru",
+    "namePlaceholder": "Nama kategori",
+    "duplicateName": "Kategori dengan nama ini sudah ada",
+    "creating": "Membuat..."
   },
   "errors": {
     "genericError": "Terjadi kesalahan. Silakan coba lagi.",

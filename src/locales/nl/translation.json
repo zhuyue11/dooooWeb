@@ -860,7 +860,11 @@
     "categoryCreated": "Categorie succesvol aangemaakt",
     "categoryUpdated": "Categorie succesvol bijgewerkt",
     "categoryDeleted": "Categorie succesvol verwijderd",
-    "deleteCategoryConfirm": "Weet u zeker dat u deze categorie wilt verwijderen?"
+    "deleteCategoryConfirm": "Weet u zeker dat u deze categorie wilt verwijderen?",
+    "createNew": "Nieuw aanmaken",
+    "namePlaceholder": "Categorienaam",
+    "duplicateName": "Er bestaat al een categorie met deze naam",
+    "creating": "Aanmaken..."
   },
   "errors": {
     "genericError": "Er is iets misgegaan. Probeer het opnieuw.",

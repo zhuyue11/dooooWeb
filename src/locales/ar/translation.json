@@ -857,7 +857,11 @@
     "categoryCreated": "تم إنشاء الفئة بنجاح",
     "categoryUpdated": "تم تحديث الفئة بنجاح",
     "categoryDeleted": "تم حذف الفئة بنجاح",
-    "deleteCategoryConfirm": "هل أنت متأكد من حذف هذه الفئة؟"
+    "deleteCategoryConfirm": "هل أنت متأكد من حذف هذه الفئة؟",
+    "createNew": "إنشاء جديد",
+    "namePlaceholder": "اسم الفئة",
+    "duplicateName": "توجد فئة بهذا الاسم بالفعل",
+    "creating": "جاري الإنشاء..."
   },
   "errors": {
     "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",

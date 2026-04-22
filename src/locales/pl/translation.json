@@ -857,7 +857,11 @@
     "categoryCreated": "Kategoria utworzona pomyślnie",
     "categoryUpdated": "Kategoria zaktualizowana pomyślnie",
     "categoryDeleted": "Kategoria usunięta pomyślnie",
-    "deleteCategoryConfirm": "Czy na pewno chcesz usunąć tę kategorię?"
+    "deleteCategoryConfirm": "Czy na pewno chcesz usunąć tę kategorię?",
+    "createNew": "Utwórz nową",
+    "namePlaceholder": "Nazwa kategorii",
+    "duplicateName": "Kategoria o tej nazwie już istnieje",
+    "creating": "Tworzenie..."
   },
   "errors": {
     "genericError": "Coś poszło nie tak. Spróbuj ponownie.",

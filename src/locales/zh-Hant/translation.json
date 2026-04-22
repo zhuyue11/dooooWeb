@@ -857,7 +857,11 @@
     "categoryCreated": "分類建立成功",
     "categoryUpdated": "分類更新成功",
     "categoryDeleted": "分類刪除成功",
-    "deleteCategoryConfirm": "確定要刪除此分類嗎？"
+    "deleteCategoryConfirm": "確定要刪除此分類嗎？",
+    "createNew": "新建",
+    "namePlaceholder": "分類名稱",
+    "duplicateName": "已存在同名分類",
+    "creating": "建立中..."
   },
   "errors": {
     "genericError": "發生錯誤，請重試",

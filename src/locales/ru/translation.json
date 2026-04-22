@@ -857,7 +857,11 @@
     "categoryCreated": "Категория успешно создана",
     "categoryUpdated": "Категория успешно обновлена",
     "categoryDeleted": "Категория успешно удалена",
-    "deleteCategoryConfirm": "Вы уверены, что хотите удалить эту категорию?"
+    "deleteCategoryConfirm": "Вы уверены, что хотите удалить эту категорию?",
+    "createNew": "Создать",
+    "namePlaceholder": "Название категории",
+    "duplicateName": "Категория с таким названием уже существует",
+    "creating": "Создание..."
   },
   "errors": {
     "genericError": "Что-то пошло не так. Попробуйте снова.",

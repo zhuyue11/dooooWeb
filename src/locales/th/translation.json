@@ -857,7 +857,11 @@
     "categoryCreated": "สร้างหมวดหมู่สำเร็จ",
     "categoryUpdated": "อัปเดตหมวดหมู่สำเร็จ",
     "categoryDeleted": "ลบหมวดหมู่สำเร็จ",
-    "deleteCategoryConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่นี้?"
+    "deleteCategoryConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่นี้?",
+    "createNew": "สร้างใหม่",
+    "namePlaceholder": "ชื่อหมวดหมู่",
+    "duplicateName": "มีหมวดหมู่ชื่อนี้อยู่แล้ว",
+    "creating": "กำลังสร้าง..."
   },
   "errors": {
     "genericError": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",

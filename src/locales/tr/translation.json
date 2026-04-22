@@ -857,7 +857,11 @@
     "categoryCreated": "Kategori başarıyla oluşturuldu",
     "categoryUpdated": "Kategori başarıyla güncellendi",
     "categoryDeleted": "Kategori başarıyla silindi",
-    "deleteCategoryConfirm": "Bu kategoriyi silmek istediğinizden emin misiniz?"
+    "deleteCategoryConfirm": "Bu kategoriyi silmek istediğinizden emin misiniz?",
+    "createNew": "Yeni oluştur",
+    "namePlaceholder": "Kategori adı",
+    "duplicateName": "Bu isimde bir kategori zaten var",
+    "creating": "Oluşturuluyor..."
   },
   "errors": {
     "genericError": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",

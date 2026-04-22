@@ -874,7 +874,11 @@
     "categoryCreated": "Category created successfully",
     "categoryUpdated": "Category updated successfully",
     "categoryDeleted": "Category deleted successfully",
-    "deleteCategoryConfirm": "Are you sure you want to delete this category?"
+    "deleteCategoryConfirm": "Are you sure you want to delete this category?",
+    "createNew": "Create new",
+    "namePlaceholder": "Category name",
+    "duplicateName": "A category with this name already exists",
+    "creating": "Creating..."
   },
   "errors": {
     "genericError": "Something went wrong. Please try again.",
