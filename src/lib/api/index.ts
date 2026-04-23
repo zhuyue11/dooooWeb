@@ -31,6 +31,10 @@ import type {
   CreateGroupInvitationRequest,
   CreateGroupInvitationResponse,
   TaskAssignment,
+  TaskParticipant,
+  TaskParticipantInstance,
+  ParticipationStatusResponse,
+  TaskCompletionStats,
   Notification,
   Event,
   EventInstance,
@@ -445,6 +449,97 @@ export async function getGroupInvitations(groupId: string): Promise<GroupInvitat
 
 export async function cancelGroupInvitation(groupId: string, invitationId: string): Promise<void> {
   await apiClient.delete(`/api/groups/${groupId}/invitations/${invitationId}`);
+}
+
+// ===== Collaboration (Group Activity Participation) =====
+
+export async function getParticipationStatus(
+  taskId: string,
+  date?: string,
+): Promise<ParticipationStatusResponse> {
+  const params: Record<string, string> = {};
+  if (date) params.date = date;
+  const res = await apiClient.get<{ success: boolean; data: ParticipationStatusResponse }>(
+    `/api/collaboration/tasks/${taskId}/participation-status`,
+    { params },
+  );
+  return res.data.data;
+}
+
+export async function participateInTask(
+  taskId: string,
+  participationType: 'next' | 'all' | 'single',
+  date?: string,
+): Promise<void> {
+  await apiClient.post(`/api/collaboration/tasks/${taskId}/participate`, { participationType, date });
+}
+
+export async function declineParticipation(taskId: string): Promise<void> {
+  await apiClient.post(`/api/collaboration/tasks/${taskId}/decline`);
+}
+
+export async function leaveTask(
+  taskId: string,
+  leaveType: 'single' | 'all' = 'all',
+  date?: string,
+): Promise<void> {
+  await apiClient.post(`/api/collaboration/tasks/${taskId}/leave`, { leaveType, date });
+}
+
+export async function markNotGoing(
+  taskId: string,
+  date: string,
+  taskInstanceId?: string,
+): Promise<void> {
+  await apiClient.post(`/api/collaboration/tasks/${taskId}/not-going`, { date, taskInstanceId });
+}
+
+export async function inviteParticipants(
+  taskId: string,
+  userIds: string[],
+  taskDate?: string,
+): Promise<void> {
+  await apiClient.post(`/api/collaboration/tasks/${taskId}/invite`, { userIds, taskDate });
+}
+
+export async function getTaskParticipants(taskId: string): Promise<TaskParticipant[]> {
+  const res = await apiClient.get<{ success: boolean; data: TaskParticipant[] }>(
+    `/api/collaboration/tasks/${taskId}/participants`,
+  );
+  return res.data.data;
+}
+
+export async function getTaskCompletionStats(taskId: string): Promise<TaskCompletionStats> {
+  const res = await apiClient.get<{ success: boolean; data: TaskCompletionStats }>(
+    `/api/tasks/${taskId}/completion-stats`,
+  );
+  return res.data.data;
+}
+
+export async function completeParticipantTask(
+  taskId: string,
+  isCompleted: boolean,
+  date?: string,
+): Promise<void> {
+  await apiClient.put(`/api/collaboration/tasks/${taskId}/complete`, { isCompleted, date });
+}
+
+export async function completeParticipantInstance(
+  taskId: string,
+  instanceId: string,
+  isCompleted: boolean,
+): Promise<void> {
+  await apiClient.put(
+    `/api/collaboration/tasks/${taskId}/participant-instances/${instanceId}/complete`,
+    { isCompleted },
+  );
+}
+
+export async function getMyParticipantInstances(): Promise<TaskParticipantInstance[]> {
+  const res = await apiClient.get<{ success: boolean; data: TaskParticipantInstance[] }>(
+    '/api/collaboration/participant-instances/me',
+  );
+  return res.data.data;
 }
 
 // ===== Targets =====

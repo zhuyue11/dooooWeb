@@ -364,6 +364,7 @@
       "selectAssigneesModal": "Select Assignees",
       "selectAssigneeModal": "Select Assignee",
       "noMembersAvailable": "No members available",
+      "membersSelected": "members selected",
       "videoPlatformNotSupported": "This video platform is not supported. Added as a link.",
       "timePicker": {
         "hour": "Hour",

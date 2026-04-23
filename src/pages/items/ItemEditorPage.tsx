@@ -17,9 +17,20 @@ import { CategoryPopover } from '@/components/ui/CategoryPopover';
 import { toNoonUTC, combineDateAndTime } from '@/utils/dateForm';
 import { getRepeatDisplayText } from '@/utils/repeatDisplay';
 import type { CreateTaskRequest, CreateEventRequest, UpdateTaskRequest, UpdateEventRequest, Task, Event as ApiEvent, Repeat } from '@/types/api';
+import { useAuth } from '@/lib/contexts/auth-context';
+import { ForAllMembersToggle } from '@/components/groups/ForAllMembersToggle';
+import { TrackCompletionToggle } from '@/components/groups/TrackCompletionToggle';
+import { AssigneePicker } from '@/components/groups/AssigneePicker';
+import { ParticipantSelectionModal } from '@/components/groups/ParticipantSelectionModal';
 import { useTranslation } from 'react-i18next';
 
 // ── Helpers ──
+
+type ApiPriority = UpdateTaskRequest['priority'];
+/** Map UI priority (uppercase) to the lowercase format the API expects. */
+function toApiPriority(p: string): ApiPriority {
+  return (p ? p.toLowerCase() : undefined) as ApiPriority;
+}
 
 /** Get UTC offset in minutes for a given IANA timezone at a given instant. */
 function getTimezoneOffsetMinutes(tz: string, date: Date): number {
@@ -85,9 +96,11 @@ const PRIORITY_OPTIONS = [
   { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-blue-500' },
 ] as const;
 
+type PriorityValue = typeof PRIORITY_OPTIONS[number]['value'];
+
 function PriorityPopover({ selected, onSelect, onClear, onClose }: {
   selected: string;
-  onSelect: (value: string) => void;
+  onSelect: (value: PriorityValue) => void;
   onClear: () => void;
   onClose: () => void;
 }) {
@@ -153,6 +166,7 @@ export function ItemEditorPage() {
   // Get draft from location.state (passed from modal "More Options")
   const draft = (location.state as { draft?: ItemFormDraft } | null)?.draft;
 
+  const { user } = useAuth();
   const { data: categories } = useCategories(draft?.groupId);
 
   // ── Form state ──
@@ -185,7 +199,7 @@ export function ItemEditorPage() {
   const [timeZonePickerTarget, setTimeZonePickerTarget] = useState<'start' | 'end'>('start');
 
   // Additional fields
-  const [priority, setPriority] = useState<string>('');
+  const [priority, setPriority] = useState<'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW' | ''>('');
   const [categoryId, setCategoryId] = useState<string>('');
   const [locationValue, setLocationValue] = useState('');
   const [selectedRepeat, setSelectedRepeat] = useState<Repeat | null>(draft?.repeat || null);
@@ -217,6 +231,14 @@ export function ItemEditorPage() {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [activeInfoPanel, setActiveInfoPanel] = useState<'dateType' | 'overdue' | 'autoDone' | null>(null);
 
+  // Group task assignment
+  const [isForAllMembers, setIsForAllMembers] = useState(false);
+  const [trackCompletion, setTrackCompletion] = useState(true);
+  const [assigneeId, setAssigneeId] = useState<string | null>(null);
+  const [assignments, setAssignments] = useState<string[]>([]);
+  const [participateMyself, setParticipateMyself] = useState(true);
+  const [showParticipantModal, setShowParticipantModal] = useState(false);
+
   // UI state
   const [activePopover, setActivePopover] = useState<ActivePopover>(null);
   const [editingLocation, setEditingLocation] = useState(false);
@@ -234,7 +256,7 @@ export function ItemEditorPage() {
   const originalDateRef = useRef<string | null>(null); // YYYY-MM-DD
 
   // ── Load existing item for edit mode ──
-  const { data: existingItem } = useQuery({
+  const { data: existingItem } = useQuery<Task | ApiEvent>({
     queryKey: [typeParam === 'event' ? 'event' : 'task', id],
     queryFn: () => typeParam === 'event' ? getEvent(id!) : getTask(id!),
     enabled: isEditMode,
@@ -285,7 +307,7 @@ export function ItemEditorPage() {
     if (existingItem.timeZone) setSelectedTimeZone(existingItem.timeZone);
     if (isTask) {
       const task = existingItem as Task;
-      setPriority(task.priority?.toUpperCase() || '');
+      setPriority((task.priority?.toUpperCase() || '') as PriorityValue | '');
       setCategoryId(task.categoryId || '');
       setTimeOfDay(task.timeOfDay || null);
       setLocationValue(task.location || '');
@@ -297,10 +319,14 @@ export function ItemEditorPage() {
       setDuration(task.duration ?? null);
       setFirstReminder(task.firstReminderMinutes != null ? task.firstReminderMinutes : undefined);
       setSecondReminder(task.secondReminderMinutes != null ? task.secondReminderMinutes : undefined);
+      // Group assignment state
+      if (task.isForAllMembers != null) setIsForAllMembers(task.isForAllMembers);
+      if (task.trackCompletion != null) setTrackCompletion(task.trackCompletion);
+      if (task.assigneeId) setAssigneeId(task.assigneeId);
     } else {
       const event = existingItem as ApiEvent;
       setLocationValue(event.location || '');
-      setPriority(event.priority?.toUpperCase() || '');
+      setPriority((event.priority?.toUpperCase() || '') as PriorityValue | '');
       if (event.endDate) {
         const ed = new Date(event.endDate);
         if (event.hasTime) {
@@ -336,7 +362,7 @@ export function ItemEditorPage() {
       const od = new Date(occurrenceDate + 'T00:00:00');
       setSelectedDate(od);
     }
-  }, [existingItem, typeParam, scope, occurrenceDate]);
+  }, [existingItem, typeParam, scope, occurrenceDate, browserTimeZone]);
 
   // Focus title on mount (create mode only)
   useEffect(() => {
@@ -614,7 +640,7 @@ export function ItemEditorPage() {
             dateType,
             showInTodoWhenOverdue,
             setToDoneAutomatically,
-            priority: priority || undefined,
+            priority: toApiPriority(priority),
             categoryId: categoryId || undefined,
             location: locationValue || undefined,
             repeat: tailRepeat,
@@ -637,13 +663,15 @@ export function ItemEditorPage() {
           dateType,
           showInTodoWhenOverdue,
           setToDoneAutomatically,
-          priority: priority || undefined,
+          priority: toApiPriority(priority),
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? null,
           duration: effectiveDuration ?? null,
           firstReminderMinutes: firstReminder ?? null,
           secondReminderMinutes: secondReminder ?? null,
+          isForAllMembers,
+          trackCompletion,
         };
         await updateTaskMutation.mutateAsync({ id: id!, data: req });
       } else {
@@ -658,7 +686,7 @@ export function ItemEditorPage() {
           dateType,
           showInTodoWhenOverdue,
           setToDoneAutomatically,
-          priority: priority || undefined,
+          priority: toApiPriority(priority),
           categoryId: categoryId || undefined,
           location: locationValue || undefined,
           repeat: selectedRepeat ?? undefined,
@@ -666,6 +694,19 @@ export function ItemEditorPage() {
           firstReminderMinutes: firstReminder,
           secondReminderMinutes: secondReminder,
           groupId: draft?.groupId,
+          // Group assignment fields
+          ...(draft?.groupId && {
+            isForAllMembers,
+            ...(isForAllMembers
+              ? {
+                  trackCompletion,
+                  assignments: [
+                    ...(participateMyself && user?.id ? [user.id] : []),
+                    ...assignments,
+                  ].filter((id2, i, arr) => arr.indexOf(id2) === i), // dedup
+                }
+              : { assigneeId: assigneeId || undefined }),
+          }),
         };
         await createTaskMutation.mutateAsync(req);
       }
@@ -705,7 +746,7 @@ export function ItemEditorPage() {
                 endDate: endDateStr ?? null,
                 endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
                 duration: effectiveDuration ?? null,
-                priority: priority || undefined,
+                priority: toApiPriority(priority),
                 location: locationValue || null,
                 guests: guests.length > 0 ? guests : null,
                 meetingLink: meetingLink || null,
@@ -729,7 +770,7 @@ export function ItemEditorPage() {
                 endDate: endDateStr ?? null,
                 endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
                 duration: effectiveDuration ?? null,
-                priority: priority || undefined,
+                priority: toApiPriority(priority),
                 location: locationValue || null,
                 guests: guests.length > 0 ? guests : null,
                 meetingLink: meetingLink || null,
@@ -753,7 +794,7 @@ export function ItemEditorPage() {
                     endDate: endDateStr ?? null,
                     endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : null,
                     duration: effectiveDuration ?? null,
-                    priority: priority || undefined,
+                    priority: toApiPriority(priority),
                     location: locationValue || null,
                     guests: guests.length > 0 ? guests : null,
                     meetingLink: meetingLink || null,
@@ -790,7 +831,7 @@ export function ItemEditorPage() {
             endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
             endDate: endDateStr,
             duration: effectiveDuration ?? undefined,
-            priority: priority || undefined,
+            priority: toApiPriority(priority),
             location: locationValue || undefined,
             guests: guests.length > 0 ? guests : undefined,
             meetingLink: meetingLink || undefined,
@@ -810,7 +851,7 @@ export function ItemEditorPage() {
           endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr ?? null,
           duration: effectiveDuration ?? null,
-          priority: priority || undefined,
+          priority: toApiPriority(priority),
           location: locationValue || undefined,
           guests: guests.length > 0 ? guests : null,
           meetingLink: meetingLink || null,
@@ -827,7 +868,7 @@ export function ItemEditorPage() {
           endTimeZone: hasEndTime && eventEndTimeZone ? eventEndTimeZone : undefined,
           endDate: endDateStr,
           duration: effectiveDuration ?? undefined,
-          priority: priority || undefined,
+          priority: toApiPriority(priority),
           location: locationValue || undefined,
           guests: guests.length > 0 ? guests : undefined,
           meetingLink: meetingLink || undefined,
@@ -844,6 +885,7 @@ export function ItemEditorPage() {
     timeOfDay, hasStartTime, startTimeValue, hasEndTime, endTimeValue,
     priority, categoryId, locationValue, selectedRepeat, effectiveDuration, firstReminder, secondReminder,
     dateType, showInTodoWhenOverdue, setToDoneAutomatically,
+    isForAllMembers, trackCompletion, assigneeId, assignments, participateMyself, user,
     guests, meetingLink, eventEndDate, useEndTime, endDate,
     isEditMode, id, createTaskMutation, createEventMutation, updateTaskMutation, updateEventMutation,
     isOccurrenceEdit, isFutureEdit, occurrenceDate,
@@ -1741,6 +1783,65 @@ export function ItemEditorPage() {
               </div>
             )}
 
+            {/* Group Assignment (only for group tasks) */}
+            {isTask && draft?.groupId && (
+              <div className="border-t border-border" data-testid="group-assignment-section">
+                <ForAllMembersToggle
+                  value={isForAllMembers}
+                  onChange={(v) => {
+                    setIsForAllMembers(v);
+                    // Clear the other mode's selection when toggling
+                    if (v) { setAssigneeId(null); } else { setAssignments([]); }
+                  }}
+                />
+
+                {!isForAllMembers && (
+                  <AssigneePicker
+                    groupId={draft.groupId}
+                    selectedUserId={assigneeId}
+                    onSelect={setAssigneeId}
+                    currentUserId={user?.id || ''}
+                  />
+                )}
+
+                {isForAllMembers && (
+                  <>
+                    <TrackCompletionToggle value={trackCompletion} onChange={setTrackCompletion} />
+
+                    {/* Participate myself toggle */}
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setParticipateMyself((v) => !v)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setParticipateMyself((v) => !v); }}
+                      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+                    >
+                      <Icon name="person" size={20} color="var(--color-primary)" />
+                      <span className="flex-1 text-sm font-medium text-foreground">{t('tasks.input.participateMyself')}</span>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setParticipateMyself((v) => !v); }}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${participateMyself ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                        data-testid="participate-myself-switch"
+                      >
+                        <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${participateMyself ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                      </button>
+                    </div>
+
+                    {/* Select participants */}
+                    <FieldRow
+                      icon="group_add"
+                      text={assignments.length > 0
+                        ? `${assignments.length} ${t('tasks.input.membersSelected')}`
+                        : t('tasks.input.inviteToParticipate')}
+                      onClick={() => setShowParticipantModal(true)}
+                      active={assignments.length > 0}
+                    />
+                  </>
+                )}
+              </div>
+            )}
+
             {/* Tags */}
             <div className="px-4 py-2.5">
               <div className="flex items-center gap-3.5">
@@ -1784,6 +1885,18 @@ export function ItemEditorPage() {
           )}
         </div>
       </div>
+
+      {/* Participant selection modal (for group activities) */}
+      {draft?.groupId && (
+        <ParticipantSelectionModal
+          open={showParticipantModal}
+          onClose={() => setShowParticipantModal(false)}
+          groupId={draft.groupId}
+          selectedUserIds={assignments}
+          onSelectionChange={setAssignments}
+          currentUserId={user?.id || ''}
+        />
+      )}
     </div>
   );
 }

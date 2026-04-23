@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Wybierz osoby",
       "selectAssigneeModal": "Wybierz osobę",
       "noMembersAvailable": "Brak dostępnych członków",
+      "membersSelected": "członków wybranych",
       "videoPlatformNotSupported": "Ta platforma wideo nie jest obsługiwana. Dodano jako link.",
       "timePicker": {
         "hour": "Godz",

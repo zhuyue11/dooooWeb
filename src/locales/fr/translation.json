@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Sélectionner les destinataires",
       "selectAssigneeModal": "Sélectionner le destinataire",
       "noMembersAvailable": "Aucun membre disponible",
+      "membersSelected": "membres sélectionnés",
       "videoPlatformNotSupported": "Cette plateforme vidéo n'est pas prise en charge. Ajouté en tant que lien.",
       "timePicker": {
         "hour": "Heure",

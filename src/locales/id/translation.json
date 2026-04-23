@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Pilih Penerima Tugas",
       "selectAssigneeModal": "Pilih Penerima Tugas",
       "noMembersAvailable": "Tidak ada anggota tersedia",
+      "membersSelected": "anggota dipilih",
       "videoPlatformNotSupported": "Platform video ini tidak didukung. Ditambahkan sebagai tautan.",
       "timePicker": {
         "hour": "Jam",

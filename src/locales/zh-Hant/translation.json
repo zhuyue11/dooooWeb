@@ -357,6 +357,7 @@
       "selectAssigneesModal": "選擇受指派人",
       "selectAssigneeModal": "選擇受指派人",
       "noMembersAvailable": "沒有可用成員",
+      "membersSelected": "名成員已選擇",
       "videoPlatformNotSupported": "不支援該視訊平台，已作為連結新增。",
       "timePicker": {
         "hour": "時",

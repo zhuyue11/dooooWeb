@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Выбор исполнителей",
       "selectAssigneeModal": "Выбор исполнителя",
       "noMembersAvailable": "Нет доступных участников",
+      "membersSelected": "участников выбрано",
       "videoPlatformNotSupported": "Эта видеоплатформа не поддерживается. Добавлено как ссылка.",
       "timePicker": {
         "hour": "Час",

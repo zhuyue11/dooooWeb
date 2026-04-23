@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Seleccionar Personas Asignadas",
       "selectAssigneeModal": "Seleccionar Persona Asignada",
       "noMembersAvailable": "No hay miembros disponibles",
+      "membersSelected": "miembros seleccionados",
       "videoPlatformNotSupported": "Esta plataforma de video no es compatible. Se añadió como enlace.",
       "timePicker": {
         "hour": "Hora",

@@ -106,6 +106,40 @@ export interface TaskParticipantInstance {
   };
 }
 
+// Participation status for group activities
+export type ParticipationStatus = 'INVITED' | 'CONFIRMED' | 'DECLINED' | 'LEFT' | 'NONE';
+
+export interface ParticipationStatusResponse {
+  status: ParticipationStatus;
+  participateAll: boolean;
+  isRecurring: boolean;
+  taskDate: string;
+}
+
+// Completion stats for group activities with trackCompletion
+export interface TaskCompletionStats {
+  totalParticipants: number;
+  completedCount: number;
+  participants: Array<{
+    id: string;
+    name: string;
+    email: string;
+    avatar?: string;
+    isCompleted: boolean;
+    completedAt?: string;
+  }>;
+  notGoingParticipants?: Array<{
+    id: string;
+    name: string;
+    avatar?: string;
+  }>;
+  invitedParticipants?: Array<{
+    id: string;
+    name: string;
+    avatar?: string;
+  }>;
+}
+
 // Repeat configuration for recurring tasks
 export interface Repeat {
   type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';

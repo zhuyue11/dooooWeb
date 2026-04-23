@@ -357,6 +357,7 @@
       "selectAssigneesModal": "اختيار المعينين",
       "selectAssigneeModal": "اختيار معين",
       "noMembersAvailable": "لا يوجد أعضاء متاحون",
+      "membersSelected": "أعضاء محددين",
       "videoPlatformNotSupported": "منصة الفيديو هذه غير مدعومة. تمت إضافته كرابط.",
       "timePicker": {
         "hour": "ساعة",

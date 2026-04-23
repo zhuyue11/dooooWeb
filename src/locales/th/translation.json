@@ -357,6 +357,7 @@
       "selectAssigneesModal": "เลือกผู้รับมอบหมาย",
       "selectAssigneeModal": "เลือกผู้รับมอบหมาย",
       "noMembersAvailable": "ไม่มีสมาชิก",
+      "membersSelected": "สมาชิกที่เลือก",
       "videoPlatformNotSupported": "แพลตฟอร์มวิดีโอนี้ไม่รองรับ เพิ่มเป็นลิงก์แล้ว",
       "timePicker": {
         "hour": "ชั่วโมง",

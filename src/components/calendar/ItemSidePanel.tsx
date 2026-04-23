@@ -9,6 +9,9 @@ import { getCategoryName, getCategoryColor } from '@/utils/category';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { getParentId, getOccurrenceDateKey, isRecurringInstance } from '@/utils/calendarItemId';
 import { RecurringScopeModal } from './RecurringScopeModal';
+import { AssigneeDisplay } from '@/components/groups/AssigneeDisplay';
+import { CompletionStatsDisplay } from '@/components/groups/CompletionStatsDisplay';
+import { ParticipationActions } from '@/components/groups/ParticipationActions';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
@@ -458,6 +461,34 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
                 </>
               )}
             </div>
+          )}
+
+          {/* Group task assignment info */}
+          {isGroupTask && !item.isForAllMembers && item.assigneeName && (
+            <AssigneeDisplay
+              assigneeName={item.assigneeName}
+              assigneeId={item.assigneeId}
+              currentUserId={currentUserId}
+            />
+          )}
+
+          {/* Group activity participation + completion stats */}
+          {isGroupTask && item.isForAllMembers && (
+            <>
+              {currentUserId !== item.userId && (
+                <ParticipationActions
+                  taskId={parentId}
+                  isRecurring={recurring}
+                  date={occurrenceDateKey}
+                />
+              )}
+              <CompletionStatsDisplay
+                taskId={parentId}
+                currentUserId={currentUserId}
+                organizerId={item.userId}
+                trackCompletion={item.trackCompletion}
+              />
+            </>
           )}
 
           {/* Created/updated timestamp */}

@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Beauftragte auswählen",
       "selectAssigneeModal": "Beauftragten auswählen",
       "noMembersAvailable": "Keine Mitglieder verfügbar",
+      "membersSelected": "Mitglieder ausgewählt",
       "videoPlatformNotSupported": "Diese Videoplattform wird nicht unterstützt. Als Link hinzugefügt.",
       "timePicker": {
         "hour": "Stunde",

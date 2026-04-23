@@ -357,6 +357,7 @@
       "selectAssigneesModal": "انتخاب مسئولین",
       "selectAssigneeModal": "انتخاب مسئول",
       "noMembersAvailable": "عضوی در دسترس نیست",
+      "membersSelected": "عضو انتخاب شده",
       "videoPlatformNotSupported": "این پلتفرم ویدیویی پشتیبانی نمی‌شود. به عنوان لینک اضافه شد.",
       "timePicker": {
         "hour": "ساعت",

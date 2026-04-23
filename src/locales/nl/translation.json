@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Toegewezenen selecteren",
       "selectAssigneeModal": "Toegewezene selecteren",
       "noMembersAvailable": "Geen leden beschikbaar",
+      "membersSelected": "leden geselecteerd",
       "videoPlatformNotSupported": "Dit videoplatform wordt niet ondersteund. Toegevoegd als link.",
       "timePicker": {
         "hour": "Uur",

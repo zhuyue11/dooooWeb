@@ -357,6 +357,7 @@
       "selectAssigneesModal": "担当者を選択",
       "selectAssigneeModal": "担当者を選択",
       "noMembersAvailable": "利用可能なメンバーがいません",
+      "membersSelected": "名のメンバーを選択",
       "videoPlatformNotSupported": "この動画プラットフォームはサポートされていません。リンクとして追加しました。",
       "timePicker": {
         "hour": "時",

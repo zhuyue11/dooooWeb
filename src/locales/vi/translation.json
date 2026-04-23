@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Chọn người được giao",
       "selectAssigneeModal": "Chọn người được giao",
       "noMembersAvailable": "Không có thành viên khả dụng",
+      "membersSelected": "thành viên đã chọn",
       "videoPlatformNotSupported": "Nền tảng video này không được hỗ trợ. Đã thêm dưới dạng liên kết.",
       "timePicker": {
         "hour": "Giờ",

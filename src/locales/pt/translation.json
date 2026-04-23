@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Selecionar Responsáveis",
       "selectAssigneeModal": "Selecionar Responsável",
       "noMembersAvailable": "Nenhum membro disponível",
+      "membersSelected": "membros selecionados",
       "videoPlatformNotSupported": "Esta plataforma de vídeo não é suportada. Adicionado como link.",
       "timePicker": {
         "hour": "Hora",

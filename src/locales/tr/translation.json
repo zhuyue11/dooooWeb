@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Atanan Kişileri Seç",
       "selectAssigneeModal": "Atanan Kişiyi Seç",
       "noMembersAvailable": "Kullanılabilir üye yok",
+      "membersSelected": "üye seçildi",
       "videoPlatformNotSupported": "Bu video platformu desteklenmiyor. Bağlantı olarak eklendi.",
       "timePicker": {
         "hour": "Saat",

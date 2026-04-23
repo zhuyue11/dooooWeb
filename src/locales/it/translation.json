@@ -357,6 +357,7 @@
       "selectAssigneesModal": "Seleziona Assegnatari",
       "selectAssigneeModal": "Seleziona Assegnatario",
       "noMembersAvailable": "Nessun membro disponibile",
+      "membersSelected": "membri selezionati",
       "videoPlatformNotSupported": "Questa piattaforma video non è supportata. Aggiunto come link.",
       "timePicker": {
         "hour": "Ora",

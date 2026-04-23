@@ -357,6 +357,7 @@
       "selectAssigneesModal": "选择受让人",
       "selectAssigneeModal": "选择受让人",
       "noMembersAvailable": "没有可用成员",
+      "membersSelected": "名成员已选择",
       "videoPlatformNotSupported": "不支持该视频平台，已作为链接添加。",
       "timePicker": {
         "hour": "时",
