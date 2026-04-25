@@ -382,7 +382,32 @@ export async function sendMessage(groupId: string, data: CreateMessageRequest): 
 }
 
 export async function getMessages(groupId: string, page = 1, limit = 50): Promise<MessageListResponse> {
-  const res = await apiClient.get<{ success: boolean; data: MessageListResponse }>(`/api/groups/${groupId}/messages`, { params: { page, limit } });
+  const res = await apiClient.get<{ success: boolean; data: GroupMessage[]; count: number; hasMore: boolean; page: number; total: number }>(
+    `/api/groups/${groupId}/messages`,
+    { params: { page, limit } },
+  );
+  return { messages: res.data.data, count: res.data.count, hasMore: res.data.hasMore };
+}
+
+export async function editMessage(groupId: string, messageId: string, data: { content: string }): Promise<GroupMessage> {
+  const res = await apiClient.put<{ success: boolean; data: GroupMessage }>(`/api/groups/${groupId}/messages/${messageId}`, data);
+  return res.data.data;
+}
+
+export async function deleteMessage(groupId: string, messageId: string): Promise<void> {
+  await apiClient.delete(`/api/groups/${groupId}/messages/${messageId}`);
+}
+
+export async function markMessagesRead(groupId: string, messageIds: string[]): Promise<void> {
+  await apiClient.post(`/api/groups/${groupId}/messages/mark-read`, { messageIds });
+}
+
+export async function markMessageDelivered(groupId: string, messageId: string): Promise<void> {
+  await apiClient.post(`/api/groups/${groupId}/messages/${messageId}/delivered`);
+}
+
+export async function getUndeliveredMessages(): Promise<{ messages: GroupMessage[]; count: number }> {
+  const res = await apiClient.get<{ success: boolean; data: { messages: GroupMessage[]; count: number } }>('/api/messages/undelivered');
   return res.data.data;
 }
 

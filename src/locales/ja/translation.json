@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "上に未読メッセージが1件あります",
     "unreadMessagesPlural": "上に未読メッセージが{{count}}件あります",
     "newMessageSingular": "新着メッセージ1件",
-    "newMessagesPlural": "新着メッセージ{{count}}件"
+    "newMessagesPlural": "新着メッセージ{{count}}件",
+    "sendFailed": "メッセージの送信に失敗しました",
+    "edited": "編集済み",
+    "today": "今日",
+    "yesterday": "昨日",
+    "messageFrom": "{{sender}}（{{group}}）"
   },
   "dateTime": {
     "justNow": "たった今",

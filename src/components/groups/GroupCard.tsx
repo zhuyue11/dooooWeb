@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { Group } from '@/types/api';
 import { Icon } from '@/components/ui/Icon';
+import { useUnreadMessages } from '@/lib/contexts/unread-messages-context';
 
 interface GroupCardProps {
   group: Group;
@@ -10,12 +11,13 @@ interface GroupCardProps {
 
 export function GroupCard({ group, currentUserId, onClick }: GroupCardProps) {
   const { t } = useTranslation();
+  const { unreadCounts } = useUnreadMessages();
 
   const currentMember = group.members?.find((m) => m.userId === currentUserId);
   const isStarred = currentMember?.isStarred ?? false;
   const isOwner = group.ownerId === currentUserId;
   const memberCount = group.members?.length ?? 0;
-  const hasUnread = (group.unreadCount ?? 0) > 0;
+  const unreadCount = unreadCounts[group.id] ?? 0;
 
   return (
     <div
@@ -58,11 +60,11 @@ export function GroupCard({ group, currentUserId, onClick }: GroupCardProps) {
             </span>
           </div>
 
-          {hasUnread ? (
+          {unreadCount > 0 ? (
             <div className="flex items-center gap-1 rounded-full bg-primary px-2 py-0.5">
               <Icon name="chat_bubble" size={12} color="var(--color-primary-foreground)" />
               <span className="text-[11px] font-semibold text-primary-foreground">
-                {t('groups.newMessages', { count: group.unreadCount })}
+                {t('groups.newMessages', { count: unreadCount })}
               </span>
             </div>
           ) : isOwner ? (

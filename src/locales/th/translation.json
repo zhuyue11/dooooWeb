@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "ข้อความที่ยังไม่ได้อ่าน 1 ข้อความด้านบน",
     "unreadMessagesPlural": "ข้อความที่ยังไม่ได้อ่าน {{count}} ข้อความด้านบน",
     "newMessageSingular": "ข้อความใหม่ 1 ข้อความ",
-    "newMessagesPlural": "ข้อความใหม่ {{count}} ข้อความ"
+    "newMessagesPlural": "ข้อความใหม่ {{count}} ข้อความ",
+    "sendFailed": "ส่งข้อความไม่สำเร็จ",
+    "edited": "แก้ไขแล้ว",
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "messageFrom": "{{sender}} จาก {{group}}"
   },
   "dateTime": {
     "justNow": "เมื่อสักครู่",

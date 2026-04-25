@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "۱ پیام خوانده نشده در بالا",
     "unreadMessagesPlural": "{{count}} پیام خوانده نشده در بالا",
     "newMessageSingular": "۱ پیام جدید",
-    "newMessagesPlural": "{{count}} پیام جدید"
+    "newMessagesPlural": "{{count}} پیام جدید",
+    "sendFailed": "ارسال پیام ناموفق بود",
+    "edited": "ویرایش شده",
+    "today": "امروز",
+    "yesterday": "دیروز",
+    "messageFrom": "{{sender}} از {{group}}"
   },
   "dateTime": {
     "justNow": "هم‌اکنون",

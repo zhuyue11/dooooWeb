@@ -1072,7 +1072,12 @@
     "unreadMessageSingular": "上方有1条未读消息",
     "unreadMessagesPlural": "上方有{{count}}条未读消息",
     "newMessageSingular": "1条新消息",
-    "newMessagesPlural": "{{count}}条新消息"
+    "newMessagesPlural": "{{count}}条新消息",
+    "sendFailed": "发送消息失败",
+    "edited": "已编辑",
+    "today": "今天",
+    "yesterday": "昨天",
+    "messageFrom": "{{sender}} 来自 {{group}}"
   },
   "dateTime": {
     "justNow": "刚刚",

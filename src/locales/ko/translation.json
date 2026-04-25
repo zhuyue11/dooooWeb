@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "위에 읽지 않은 메시지 1개",
     "unreadMessagesPlural": "위에 읽지 않은 메시지 {{count}}개",
     "newMessageSingular": "새 메시지 1개",
-    "newMessagesPlural": "새 메시지 {{count}}개"
+    "newMessagesPlural": "새 메시지 {{count}}개",
+    "sendFailed": "메시지 전송 실패",
+    "edited": "수정됨",
+    "today": "오늘",
+    "yesterday": "어제",
+    "messageFrom": "{{sender}} - {{group}}"
   },
   "dateTime": {
     "justNow": "방금",

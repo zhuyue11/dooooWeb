@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Sidebar } from './Sidebar';
 import type { GroupContext } from './Sidebar';
 import { Header } from './Header';
+import { ChatToast } from '@/components/chat/ChatToast';
 import { getGroup } from '@/lib/api';
 
 const COLLAPSED_KEY = 'sidebar-collapsed';
@@ -44,6 +45,7 @@ export function AppShell() {
 
   return (
     <div className="flex h-screen bg-background">
+      <ChatToast />
       {/* Sidebar — always visible on desktop (lg+), toggleable on mobile */}
       <Sidebar
         isOpen={sidebarOpen}

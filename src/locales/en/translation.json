@@ -1089,7 +1089,12 @@
     "unreadMessageSingular": "1 unread message above",
     "unreadMessagesPlural": "{{count}} unread messages above",
     "newMessageSingular": "1 new message",
-    "newMessagesPlural": "{{count}} new messages"
+    "newMessagesPlural": "{{count}} new messages",
+    "sendFailed": "Failed to send message",
+    "edited": "edited",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "messageFrom": "{{sender}} from {{group}}"
   },
   "dateTime": {
     "justNow": "Just now",

@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "رسالة واحدة غير مقروءة أعلاه",
     "unreadMessagesPlural": "{{count}} رسائل غير مقروءة أعلاه",
     "newMessageSingular": "رسالة جديدة واحدة",
-    "newMessagesPlural": "{{count}} رسائل جديدة"
+    "newMessagesPlural": "{{count}} رسائل جديدة",
+    "sendFailed": "فشل إرسال الرسالة",
+    "edited": "تم التعديل",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "messageFrom": "{{sender}} من {{group}}"
   },
   "dateTime": {
     "justNow": "الآن",

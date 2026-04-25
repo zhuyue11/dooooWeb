@@ -1074,7 +1074,12 @@
     "unreadMessageSingular": "1 ongelezen bericht hierboven",
     "unreadMessagesPlural": "{{count}} ongelezen berichten hierboven",
     "newMessageSingular": "1 nieuw bericht",
-    "newMessagesPlural": "{{count}} nieuwe berichten"
+    "newMessagesPlural": "{{count}} nieuwe berichten",
+    "sendFailed": "Bericht verzenden mislukt",
+    "edited": "bewerkt",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "messageFrom": "{{sender}} uit {{group}}"
   },
   "dateTime": {
     "justNow": "Zojuist",

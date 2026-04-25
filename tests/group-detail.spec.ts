@@ -94,9 +94,10 @@ test.describe('Group detail — sidebar + sub-routes', () => {
     await page.waitForTimeout(300);
   });
 
-  test('chat page renders stub', async ({ page }) => {
+  test('chat page renders', async ({ page }) => {
     await page.goto(`${groupPath}/chat`);
-    await expect(page.getByText(/chat/i).first()).toBeVisible();
+    // Chat input bar should be visible (full chat UI, not stub)
+    await expect(page.getByTestId('chat-input-bar')).toBeVisible({ timeout: 10000 });
   });
 
   test('members page renders stub', async ({ page }) => {

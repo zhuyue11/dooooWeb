@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/lib/contexts/auth-context';
+import { useUnreadMessages } from '@/lib/contexts/unread-messages-context';
 import { Icon } from '@/components/ui/Icon';
 import logo from '@/assets/logo-36.svg';
 
@@ -109,6 +110,7 @@ function MainSidebarContent({
   user: { name?: string; email: string } | null;
 }) {
   const { t } = useTranslation();
+  const { totalUnread } = useUnreadMessages();
 
   return (
     <>
@@ -145,30 +147,49 @@ function MainSidebarContent({
       {/* Navigation */}
       <nav className={`flex-1 overflow-y-auto py-2 ${collapsed ? 'px-2' : 'px-3'}`}>
         <div className="flex flex-col gap-0.5">
-          {NAV_ITEMS.map(({ path, icon, labelKey, fallback }) => (
-            <NavLink
-              key={path}
-              to={path}
-              onClick={onClose}
-              title={collapsed ? t(labelKey, fallback) : undefined}
-              className={({ isActive }) =>
-                `flex h-10 items-center gap-3 rounded-lg text-sm transition-colors ${
-                  collapsed ? 'justify-center px-0' : 'px-4'
-                } ${
-                  isActive
-                    ? 'bg-primary/10 font-semibold text-primary'
-                    : 'font-medium text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon name={icon} size={20} color={isActive ? 'var(--color-primary)' : undefined} />
-                  {!collapsed && <span>{t(labelKey, fallback)}</span>}
-                </>
-              )}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map(({ path, icon, labelKey, fallback }) => {
+            const showBadge = path === '/groups' && totalUnread > 0;
+            return (
+              <NavLink
+                key={path}
+                to={path}
+                onClick={onClose}
+                title={collapsed ? t(labelKey, fallback) : undefined}
+                className={({ isActive }) =>
+                  `flex h-10 items-center gap-3 rounded-lg text-sm transition-colors ${
+                    collapsed ? 'justify-center px-0' : 'px-4'
+                  } ${
+                    isActive
+                      ? 'bg-primary/10 font-semibold text-primary'
+                      : 'font-medium text-muted-foreground hover:bg-muted hover:text-foreground'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className="relative">
+                      <Icon name={icon} size={20} color={isActive ? 'var(--color-primary)' : undefined} />
+                      {showBadge && collapsed && (
+                        <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+                          {totalUnread > 99 ? '99+' : totalUnread}
+                        </span>
+                      )}
+                    </span>
+                    {!collapsed && (
+                      <>
+                        <span className="flex-1">{t(labelKey, fallback)}</span>
+                        {showBadge && (
+                          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[11px] font-bold text-white">
+                            {totalUnread > 99 ? '99+' : totalUnread}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </NavLink>
+            );
+          })}
         </div>
       </nav>
 
@@ -194,7 +215,9 @@ function GroupSidebarContent({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { unreadCounts } = useUnreadMessages();
   const basePath = `/groups/${groupContext.groupId}`;
+  const chatUnread = unreadCounts[groupContext.groupId] || 0;
 
   return (
     <>
@@ -227,6 +250,7 @@ function GroupSidebarContent({
           {GROUP_NAV_ITEMS.map(({ path, icon, labelKey, fallback }) => {
             const fullPath = `${basePath}/${path}`;
             const isActive = location.pathname === fullPath || location.pathname.startsWith(`${fullPath}/`);
+            const showChatBadge = path === 'chat' && chatUnread > 0;
 
             return (
               <NavLink
@@ -242,8 +266,24 @@ function GroupSidebarContent({
                     : 'font-medium text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
-                <Icon name={icon} size={20} color={isActive ? 'var(--color-primary)' : undefined} />
-                {!collapsed && <span>{t(labelKey, fallback)}</span>}
+                <span className="relative">
+                  <Icon name={icon} size={20} color={isActive ? 'var(--color-primary)' : undefined} />
+                  {showChatBadge && collapsed && (
+                    <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+                      {chatUnread > 99 ? '99+' : chatUnread}
+                    </span>
+                  )}
+                </span>
+                {!collapsed && (
+                  <>
+                    <span className="flex-1">{t(labelKey, fallback)}</span>
+                    {showChatBadge && (
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[11px] font-bold text-white">
+                        {chatUnread > 99 ? '99+' : chatUnread}
+                      </span>
+                    )}
+                  </>
+                )}
               </NavLink>
             );
           })}

@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/lib/contexts/theme-context';
 import { DisplayProvider } from '@/lib/contexts/display-context';
 import { AuthProvider } from '@/lib/contexts/auth-context';
 import { WebSocketProvider } from '@/lib/contexts/websocket-context';
+import { UnreadMessagesProvider } from '@/lib/contexts/unread-messages-context';
 import { router } from './router';
 
 const queryClient = new QueryClient({
@@ -24,7 +25,9 @@ export default function App() {
           <DisplayProvider>
             <AuthProvider>
               <WebSocketProvider>
-                <RouterProvider router={router} />
+                <UnreadMessagesProvider>
+                  <RouterProvider router={router} />
+                </UnreadMessagesProvider>
               </WebSocketProvider>
             </AuthProvider>
           </DisplayProvider>

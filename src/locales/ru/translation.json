@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "1 непрочитанное сообщение выше",
     "unreadMessagesPlural": "{{count}} непрочитанных сообщений выше",
     "newMessageSingular": "1 новое сообщение",
-    "newMessagesPlural": "{{count}} новых сообщений"
+    "newMessagesPlural": "{{count}} новых сообщений",
+    "sendFailed": "Не удалось отправить сообщение",
+    "edited": "изменено",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "messageFrom": "{{sender}} из {{group}}"
   },
   "dateTime": {
     "justNow": "Только что",

@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "1 messaggio non letto sopra",
     "unreadMessagesPlural": "{{count}} messaggi non letti sopra",
     "newMessageSingular": "1 nuovo messaggio",
-    "newMessagesPlural": "{{count}} nuovi messaggi"
+    "newMessagesPlural": "{{count}} nuovi messaggi",
+    "sendFailed": "Invio del messaggio non riuscito",
+    "edited": "modificato",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "messageFrom": "{{sender}} da {{group}}"
   },
   "dateTime": {
     "justNow": "Proprio ora",

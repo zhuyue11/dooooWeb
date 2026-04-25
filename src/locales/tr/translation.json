@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "Yukarıda 1 okunmamış mesaj",
     "unreadMessagesPlural": "Yukarıda {{count}} okunmamış mesaj",
     "newMessageSingular": "1 yeni mesaj",
-    "newMessagesPlural": "{{count}} yeni mesaj"
+    "newMessagesPlural": "{{count}} yeni mesaj",
+    "sendFailed": "Mesaj gönderilemedi",
+    "edited": "düzenlendi",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "messageFrom": "{{sender}} - {{group}}"
   },
   "dateTime": {
     "justNow": "Az önce",

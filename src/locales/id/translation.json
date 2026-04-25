@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "1 pesan belum dibaca di atas",
     "unreadMessagesPlural": "{{count}} pesan belum dibaca di atas",
     "newMessageSingular": "1 pesan baru",
-    "newMessagesPlural": "{{count}} pesan baru"
+    "newMessagesPlural": "{{count}} pesan baru",
+    "sendFailed": "Gagal mengirim pesan",
+    "edited": "diedit",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "messageFrom": "{{sender}} dari {{group}}"
   },
   "dateTime": {
     "justNow": "Baru saja",

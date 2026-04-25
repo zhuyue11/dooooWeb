@@ -1071,7 +1071,12 @@
     "unreadMessageSingular": "1 tin nhắn chưa đọc ở trên",
     "unreadMessagesPlural": "{{count}} tin nhắn chưa đọc ở trên",
     "newMessageSingular": "1 tin nhắn mới",
-    "newMessagesPlural": "{{count}} tin nhắn mới"
+    "newMessagesPlural": "{{count}} tin nhắn mới",
+    "sendFailed": "Gửi tin nhắn thất bại",
+    "edited": "đã chỉnh sửa",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "messageFrom": "{{sender}} từ {{group}}"
   },
   "dateTime": {
     "justNow": "Vừa xong",
