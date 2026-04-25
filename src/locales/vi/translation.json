@@ -1313,7 +1313,8 @@
     "chatHistory": "Lịch sử trò chuyện",
     "noSessions": "Chưa có cuộc trò chuyện nào",
     "generalPlanning": "Chung",
-    "planReady": "Kế hoạch đã sẵn sàng"
+    "planReady": "Kế hoạch đã sẵn sàng",
+    "plans": "Kế hoạch & Khóa học"
   },
   "dashboard": {
     "greeting": {

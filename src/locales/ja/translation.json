@@ -1319,7 +1319,8 @@
     "chatHistory": "チャット履歴",
     "noSessions": "まだ会話がありません",
     "generalPlanning": "一般",
-    "planReady": "プラン準備完了"
+    "planReady": "プラン準備完了",
+    "plans": "プランとコース"
   },
   "dashboard": {
     "greeting": {

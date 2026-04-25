@@ -1313,7 +1313,8 @@
     "chatHistory": "Sohbet Geçmişi",
     "noSessions": "Henüz görüşme yok",
     "generalPlanning": "Genel",
-    "planReady": "Plan Hazır"
+    "planReady": "Plan Hazır",
+    "plans": "Plan ve Kurs"
   },
   "dashboard": {
     "greeting": {

@@ -26,6 +26,7 @@ import { GroupSettingsPage } from '@/pages/groups/GroupSettingsPage';
 // Targets & Plans
 import { TargetPlanHomePage } from '@/pages/targets/TargetPlanHomePage';
 import { TargetDetailPage } from '@/pages/targets/TargetDetailPage';
+import { PlanListPage } from '@/pages/targets/PlanListPage';
 import { PlanDetailPage } from '@/pages/targets/PlanDetailPage';
 import { AIChatPage } from '@/pages/targets/AIChatPage';
 
@@ -91,7 +92,7 @@ export const router = createBrowserRouter([
           // Targets & Plans
           { path: '/targets', element: <TargetPlanHomePage /> },
           { path: '/targets/:targetId', element: <TargetDetailPage /> },
-          { path: '/plans', element: <TargetPlanHomePage /> },
+          { path: '/plans', element: <PlanListPage /> },
           { path: '/plans/:planId', element: <PlanDetailPage /> },
           { path: '/ai-chat', element: <AIChatPage /> },
 

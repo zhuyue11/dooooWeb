@@ -1313,7 +1313,8 @@
     "chatHistory": "ประวัติแชท",
     "noSessions": "ยังไม่มีการสนทนา",
     "generalPlanning": "ทั่วไป",
-    "planReady": "แผนพร้อมแล้ว"
+    "planReady": "แผนพร้อมแล้ว",
+    "plans": "แผนและคอร์ส"
   },
   "dashboard": {
     "greeting": {

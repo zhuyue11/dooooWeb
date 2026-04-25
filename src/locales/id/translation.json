@@ -1313,7 +1313,8 @@
     "chatHistory": "Riwayat Obrolan",
     "noSessions": "Belum ada percakapan",
     "generalPlanning": "Umum",
-    "planReady": "Rencana Siap"
+    "planReady": "Rencana Siap",
+    "plans": "Rencana & Kursus"
   },
   "dashboard": {
     "greeting": {

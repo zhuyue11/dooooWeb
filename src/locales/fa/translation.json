@@ -1313,7 +1313,8 @@
     "chatHistory": "تاریخچه گفتگو",
     "noSessions": "هنوز گفتگویی وجود ندارد",
     "generalPlanning": "عمومی",
-    "planReady": "برنامه آماده است"
+    "planReady": "برنامه آماده است",
+    "plans": "برنامه و دوره"
   },
   "dashboard": {
     "greeting": {

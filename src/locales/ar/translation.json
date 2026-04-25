@@ -1313,7 +1313,8 @@
     "chatHistory": "سجل المحادثات",
     "noSessions": "لا توجد محادثات بعد",
     "generalPlanning": "عام",
-    "planReady": "الخطة جاهزة"
+    "planReady": "الخطة جاهزة",
+    "plans": "خطة ودورة"
   },
   "dashboard": {
     "greeting": {

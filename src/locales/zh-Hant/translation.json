@@ -1314,7 +1314,8 @@
     "chatHistory": "聊天紀錄",
     "noSessions": "暫無對話",
     "generalPlanning": "一般",
-    "planReady": "計畫就緒"
+    "planReady": "計畫就緒",
+    "plans": "計畫與課程"
   },
   "dashboard": {
     "greeting": {

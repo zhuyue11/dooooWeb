@@ -1319,7 +1319,8 @@
     "chatHistory": "Histórico de conversas",
     "noSessions": "Nenhuma conversa ainda",
     "generalPlanning": "Geral",
-    "planReady": "Plano pronto"
+    "planReady": "Plano pronto",
+    "plans": "Plano e Curso"
   },
   "dashboard": {
     "greeting": {

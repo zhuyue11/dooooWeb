@@ -1319,7 +1319,8 @@
     "chatHistory": "대화 기록",
     "noSessions": "아직 대화가 없습니다",
     "generalPlanning": "일반",
-    "planReady": "플랜 준비 완료"
+    "planReady": "플랜 준비 완료",
+    "plans": "플랜 & 코스"
   },
   "dashboard": {
     "greeting": {

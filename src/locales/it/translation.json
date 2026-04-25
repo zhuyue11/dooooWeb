@@ -1313,7 +1313,8 @@
     "chatHistory": "Cronologia chat",
     "noSessions": "Nessuna conversazione ancora",
     "generalPlanning": "Generale",
-    "planReady": "Piano pronto"
+    "planReady": "Piano pronto",
+    "plans": "Piano e Corso"
   },
   "dashboard": {
     "greeting": {
