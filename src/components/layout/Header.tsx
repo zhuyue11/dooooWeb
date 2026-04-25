@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
+import { useUnreadNotificationCount } from '@/hooks/useNotifications';
 import logo from '@/assets/logo-36.svg';
 
 interface HeaderProps {
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 export function Header({ onMenuToggle }: HeaderProps) {
   const navigate = useNavigate();
+  const { data: notificationUnread = 0 } = useUnreadNotificationCount();
 
   return (
     <header className="flex h-14 items-center gap-3 border-b border-border bg-surface px-4 lg:hidden">
@@ -25,9 +27,14 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <button
         onClick={() => navigate('/notifications')}
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="relative flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
       >
         <Icon name="notifications" size={20} />
+        {notificationUnread > 0 && (
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+            {notificationUnread > 99 ? '99+' : notificationUnread}
+          </span>
+        )}
       </button>
     </header>
   );

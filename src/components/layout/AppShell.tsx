@@ -5,6 +5,7 @@ import { Sidebar } from './Sidebar';
 import type { GroupContext } from './Sidebar';
 import { Header } from './Header';
 import { ChatToast } from '@/components/chat/ChatToast';
+import { Toast } from '@/components/ui/Toast';
 import { getGroup } from '@/lib/api';
 
 const COLLAPSED_KEY = 'sidebar-collapsed';
@@ -46,6 +47,7 @@ export function AppShell() {
   return (
     <div className="flex h-screen bg-background">
       <ChatToast />
+      <Toast />
       {/* Sidebar — always visible on desktop (lg+), toggleable on mobile */}
       <Sidebar
         isOpen={sidebarOpen}

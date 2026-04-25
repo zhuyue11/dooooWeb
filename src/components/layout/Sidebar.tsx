@@ -2,6 +2,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useUnreadMessages } from '@/lib/contexts/unread-messages-context';
+import { useUnreadNotificationCount } from '@/hooks/useNotifications';
 import { Icon } from '@/components/ui/Icon';
 import logo from '@/assets/logo-36.svg';
 
@@ -111,6 +112,7 @@ function MainSidebarContent({
 }) {
   const { t } = useTranslation();
   const { totalUnread } = useUnreadMessages();
+  const { data: notificationUnread = 0 } = useUnreadNotificationCount();
 
   return (
     <>
@@ -132,6 +134,11 @@ function MainSidebarContent({
               className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Icon name="notifications" size={20} />
+              {notificationUnread > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+                  {notificationUnread > 99 ? '99+' : notificationUnread}
+                </span>
+              )}
             </NavLink>
             <button
               onClick={onToggleCollapse}
