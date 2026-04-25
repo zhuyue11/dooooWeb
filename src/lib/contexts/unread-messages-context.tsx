@@ -19,6 +19,8 @@ export interface IncomingToast {
   groupName: string;
   senderName: string;
   content: string;
+  isSystemMessage?: boolean;
+  attachments?: unknown;
 }
 
 interface UnreadMessagesContextType {
@@ -84,10 +86,9 @@ export function UnreadMessagesProvider({ children }: { children: ReactNode }) {
       const message: GroupMessage = event.data?.message;
       if (!groupId || !message) return;
 
-      // Skip own messages
-      if (message.userId === user?.id) return;
-      // Skip system messages for toast/unread
-      if (message.messageType === 'SYSTEM') return;
+      // Skip own user messages (but still show own system messages since they affect the group)
+      const isSystem = message.messageType === 'SYSTEM';
+      if (!isSystem && message.userId === user?.id) return;
 
       // Mark as delivered
       markMessageDelivered(groupId, message.id).catch(() => {});
@@ -109,7 +110,15 @@ export function UnreadMessagesProvider({ children }: { children: ReactNode }) {
           : message.content;
 
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-      setToast({ id: message.id, groupId, groupName: getGroupName(groupId), senderName, content: preview });
+      setToast({
+        id: message.id,
+        groupId,
+        groupName: getGroupName(groupId),
+        senderName,
+        content: preview,
+        isSystemMessage: isSystem,
+        attachments: isSystem ? message.attachments : undefined,
+      });
       toastTimerRef.current = setTimeout(() => setToast(null), TOAST_DURATION);
     },
     [user?.id],

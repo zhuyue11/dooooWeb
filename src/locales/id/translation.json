@@ -1048,7 +1048,9 @@
       "activityNotStarted": "Kegiatan ini belum dimulai",
       "activityEnded": "Aktivitas ini telah berakhir. Anda tidak dapat lagi menandainya sebagai selesai.",
       "activityEndedLabel": "Aktivitas berakhir",
-      "cannotLeaveEnded": "Aktivitas ini telah berakhir. Anda tidak dapat keluar lagi."
+      "cannotLeaveEnded": "Aktivitas ini telah berakhir. Anda tidak dapat keluar lagi.",
+      "groupActivity": "Aktivitas grup",
+      "recurring": "Berulang"
     },
     "groupInfo": "Info grup",
     "ownedBy": "Pemilik: {{name}}",

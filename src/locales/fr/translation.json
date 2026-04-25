@@ -1048,7 +1048,9 @@
       "activityNotStarted": "Cette activité n'a pas encore commencé",
       "activityEnded": "Cette activité est terminée. Vous ne pouvez plus la marquer comme terminée.",
       "activityEndedLabel": "Activité terminée",
-      "cannotLeaveEnded": "Cette activité est terminée. Vous ne pouvez plus quitter."
+      "cannotLeaveEnded": "Cette activité est terminée. Vous ne pouvez plus quitter.",
+      "groupActivity": "Activité de groupe",
+      "recurring": "Récurrent"
     },
     "groupInfo": "Infos du groupe",
     "ownedBy": "Propriétaire : {{name}}",

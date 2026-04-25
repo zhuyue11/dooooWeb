@@ -1048,7 +1048,9 @@
       "activityNotStarted": "이 활동은 아직 시작되지 않았습니다",
       "activityEnded": "이 활동이 종료되었습니다. 더 이상 완료로 표시할 수 없습니다.",
       "activityEndedLabel": "활동 종료됨",
-      "cannotLeaveEnded": "이 활동이 종료되었습니다. 더 이상 나갈 수 없습니다."
+      "cannotLeaveEnded": "이 활동이 종료되었습니다. 더 이상 나갈 수 없습니다.",
+      "groupActivity": "그룹 활동",
+      "recurring": "반복"
     },
     "groupInfo": "그룹 정보",
     "ownedBy": "소유자: {{name}}",

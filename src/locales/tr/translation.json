@@ -1048,7 +1048,9 @@
       "activityNotStarted": "Bu etkinlik henüz başlamadı",
       "activityEnded": "Bu etkinlik sona erdi. Artık tamamlandı olarak işaretleyemezsiniz.",
       "activityEndedLabel": "Etkinlik sona erdi",
-      "cannotLeaveEnded": "Bu etkinlik sona erdi. Artık ayrılamazsınız."
+      "cannotLeaveEnded": "Bu etkinlik sona erdi. Artık ayrılamazsınız.",
+      "groupActivity": "Grup etkinliği",
+      "recurring": "Tekrarlayan"
     },
     "groupInfo": "Grup bilgisi",
     "ownedBy": "Sahibi: {{name}}",

@@ -1049,7 +1049,9 @@
       "activityEnded": "此活动已结束，您无法再将其标记为完成。",
       "activityEndedLabel": "活动已结束",
       "cannotLeaveEnded": "此活动已结束，您无法再退出。",
-      "activityDeleted": "此活动已被删除"
+      "activityDeleted": "此活动已被删除",
+      "groupActivity": "群组活动",
+      "recurring": "重复"
     },
     "groupInfo": "群组信息",
     "ownedBy": "所有者：{{name}}",

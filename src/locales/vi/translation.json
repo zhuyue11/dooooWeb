@@ -1048,7 +1048,9 @@
       "activityNotStarted": "Hoạt động này chưa bắt đầu",
       "activityEnded": "Hoạt động này đã kết thúc. Bạn không thể đánh dấu hoàn thành được nữa.",
       "activityEndedLabel": "Hoạt động đã kết thúc",
-      "cannotLeaveEnded": "Hoạt động này đã kết thúc. Bạn không thể rời đi nữa."
+      "cannotLeaveEnded": "Hoạt động này đã kết thúc. Bạn không thể rời đi nữa.",
+      "groupActivity": "Hoạt động nhóm",
+      "recurring": "Lặp lại"
     },
     "groupInfo": "Thông tin nhóm",
     "ownedBy": "Chủ sở hữu: {{name}}",

@@ -31,8 +31,10 @@ export function ChatMessageList({
   const scrollRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [newMessageCount, setNewMessageCount] = useState(0);
+  const [unreadAboveCount, setUnreadAboveCount] = useState(0);
   const prevMessageCountRef = useRef(messages.length);
   const isAtBottomRef = useRef(true);
+  const readIdsRef = useRef<Set<string>>(new Set());
 
   // --- Infinite scroll: load older messages when sentinel enters viewport ---
   useEffect(() => {
@@ -85,6 +87,19 @@ export function ChatMessageList({
     if (!container || !user) return;
 
     const timers = new Map<string, ReturnType<typeof setTimeout>>();
+    const visibleIds = new Set<string>();
+
+    const updateUnreadAbove = () => {
+      // Count messages from others that are not yet read and are above the viewport
+      let count = 0;
+      for (const msg of messages) {
+        if (msg.userId === user.id && msg.messageType !== 'SYSTEM') continue;
+        if (!readIdsRef.current.has(msg.id) && !visibleIds.has(msg.id)) {
+          count++;
+        }
+      }
+      setUnreadAboveCount(count);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -93,17 +108,21 @@ export function ChatMessageList({
           if (!msgId) continue;
 
           if (entry.isIntersecting) {
+            visibleIds.add(msgId);
             // Start 500ms timer to mark as read
             if (!timers.has(msgId)) {
               timers.set(
                 msgId,
                 setTimeout(() => {
+                  readIdsRef.current.add(msgId);
                   onMarkAsRead([msgId]);
                   timers.delete(msgId);
+                  updateUnreadAbove();
                 }, 500),
               );
             }
           } else {
+            visibleIds.delete(msgId);
             // Clear timer if scrolled away before 500ms
             const timer = timers.get(msgId);
             if (timer) {
@@ -120,6 +139,9 @@ export function ChatMessageList({
     const elements = container.querySelectorAll('[data-message-id]');
     elements.forEach((el) => observer.observe(el));
 
+    // Initial unread count (messages not yet seen)
+    updateUnreadAbove();
+
     return () => {
       observer.disconnect();
       timers.forEach((timer) => clearTimeout(timer));
@@ -134,6 +156,23 @@ export function ChatMessageList({
     }
   }, []);
 
+  const scrollToFirstUnread = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    // Find the oldest unread message element
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.userId === user?.id && msg.messageType !== 'SYSTEM') continue;
+      if (!readIdsRef.current.has(msg.id)) {
+        const el = container.querySelector(`[data-message-id="${msg.id}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+      }
+    }
+  }, [messages, user?.id]);
+
   // --- Build message list with date separators ---
   const items = buildMessageItems(messages, user?.id);
 
@@ -142,7 +181,7 @@ export function ChatMessageList({
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 text-muted-foreground">
         <Icon name="chat" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-sm">{t('groups.noMessages')}</span>
+        <span className="text-sm">{t('groupInvitation.noMessages')}</span>
       </div>
     );
   }
@@ -164,12 +203,12 @@ export function ChatMessageList({
           const msg = item.message;
           const isOwn = msg.userId === user?.id;
 
-          // Wrap in a div with data-message-id for read tracking (only other users' messages)
+          // Wrap in a div with data-message-id for read tracking (other users' messages + system messages)
           return (
             <div
               key={msg.id}
               className="py-0.5"
-              {...(!isOwn && msg.messageType !== 'SYSTEM' ? { 'data-message-id': msg.id } : {})}
+              {...(!isOwn || msg.messageType === 'SYSTEM' ? { 'data-message-id': msg.id } : {})}
             >
               {msg.messageType === 'SYSTEM' ? (
                 <SystemMessage message={msg} groupColor={groupColor} />
@@ -189,6 +228,19 @@ export function ChatMessageList({
           </div>
         )}
       </div>
+
+      {/* Unread messages above indicator */}
+      {unreadAboveCount > 0 && (
+        <button
+          onClick={scrollToFirstUnread}
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-lg transition-transform hover:scale-105"
+          data-testid="unread-above-indicator"
+        >
+          {unreadAboveCount === 1
+            ? t('chat.unreadMessageSingular')
+            : t('chat.unreadMessagesPlural', { count: unreadAboveCount })}
+        </button>
+      )}
 
       {/* New message indicator pill */}
       {newMessageCount > 0 && (

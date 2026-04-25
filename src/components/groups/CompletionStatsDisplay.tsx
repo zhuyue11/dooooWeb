@@ -54,13 +54,14 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
 
   if (!stats) return null;
 
-  const hasParticipants = stats.participants.length > 0;
+  const participants = stats.participants ?? [];
+  const hasParticipants = participants.length > 0;
   const hasInvited = (stats.invitedParticipants?.length ?? 0) > 0;
   const hasNotGoing = (stats.notGoingParticipants?.length ?? 0) > 0;
 
   if (!hasParticipants && !hasInvited && !hasNotGoing) return null;
 
-  const displayParticipants = showAll ? stats.participants : stats.participants.slice(0, 5);
+  const displayParticipants = showAll ? participants : participants.slice(0, 5);
 
   return (
     <div className="mx-4 my-2 rounded-xl border border-border" data-testid="completion-stats">
@@ -100,7 +101,7 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
               </div>
             ))}
           </div>
-          {stats.participants.length > 5 && !showAll && (
+          {participants.length > 5 && !showAll && (
             <button
               type="button"
               onClick={() => setShowAll(true)}

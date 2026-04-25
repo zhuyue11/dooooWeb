@@ -1048,7 +1048,9 @@
       "activityNotStarted": "このアクティビティはまだ始まっていません",
       "activityEnded": "このアクティビティは終了しました。完了としてマークすることはできません。",
       "activityEndedLabel": "アクティビティ終了",
-      "cannotLeaveEnded": "このアクティビティは終了しました。退出することはできません。"
+      "cannotLeaveEnded": "このアクティビティは終了しました。退出することはできません。",
+      "groupActivity": "グループ活動",
+      "recurring": "繰り返し"
     },
     "groupInfo": "グループ情報",
     "ownedBy": "オーナー: {{name}}",

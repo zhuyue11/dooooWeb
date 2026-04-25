@@ -1066,7 +1066,9 @@
       "activityEnded": "This activity has ended. You can no longer mark it as complete.",
       "activityEndedLabel": "Activity ended",
       "cannotLeaveEnded": "This activity has ended. You can no longer leave.",
-      "activityDeleted": "This activity has been deleted"
+      "activityDeleted": "This activity has been deleted",
+      "groupActivity": "Group Activity",
+      "recurring": "Recurring"
     },
     "groupInfo": "Group Info",
     "ownedBy": "Owned by {{name}}",

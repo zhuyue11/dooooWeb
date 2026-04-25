@@ -1051,7 +1051,9 @@
       "activityNotStarted": "Deze activiteit is nog niet begonnen",
       "activityEnded": "Deze activiteit is beëindigd. Je kunt deze niet meer als voltooid markeren.",
       "activityEndedLabel": "Activiteit beëindigd",
-      "cannotLeaveEnded": "Deze activiteit is beëindigd. U kunt niet meer vertrekken."
+      "cannotLeaveEnded": "Deze activiteit is beëindigd. U kunt niet meer vertrekken.",
+      "groupActivity": "Groepsactiviteit",
+      "recurring": "Herhalend"
     },
     "groupInfo": "Groepsinformatie",
     "ownedBy": "Eigenaar: {{name}}",

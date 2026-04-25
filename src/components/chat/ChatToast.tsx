@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { useUnreadMessages } from '@/lib/contexts/unread-messages-context';
+import { useAuth } from '@/lib/contexts/auth-context';
 
 export function ChatToast() {
   const { t } = useTranslation();
   const { toast, dismissToast } = useUnreadMessages();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   if (!toast) return null;
@@ -15,9 +17,31 @@ export function ChatToast() {
     navigate(`/groups/${toast.groupId}/chat`);
   };
 
-  const title = toast.groupName
-    ? t('chat.messageFrom', { sender: toast.senderName, group: toast.groupName })
-    : toast.senderName;
+  const isSystem = toast.isSystemMessage;
+
+  // For system messages, show group name as title; for user messages, show "sender from group"
+  const title = isSystem
+    ? toast.groupName
+    : toast.groupName
+      ? t('chat.messageFrom', { sender: toast.senderName, group: toast.groupName })
+      : toast.senderName;
+
+  // For system messages, translate the content key with basic attachment data
+  let content = toast.content;
+  if (isSystem && toast.content.startsWith('system.')) {
+    const a = (toast.attachments as Record<string, unknown>) || {};
+    const you = t('common.you');
+    const nameOrYou = (name: unknown, id: unknown) =>
+      user?.id && id === user.id ? you : String(name || '');
+    const translated = t(toast.content, {
+      userName: a.userName || toast.senderName || '',
+      taskTitle: a.taskTitle || '',
+      assigneeName: nameOrYou(a.assigneeName, a.assigneeId),
+      targetUserName: nameOrYou(a.targetUserName, a.targetUserId),
+      newRole: a.newRole || '',
+    });
+    if (translated !== toast.content) content = translated;
+  }
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-4 z-[100] flex justify-center">
@@ -27,12 +51,12 @@ export function ChatToast() {
       data-testid="chat-toast"
     >
       <div className="flex items-start gap-3 p-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <Icon name="chat" size={18} />
+        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${isSystem ? 'bg-secondary text-secondary-foreground' : 'bg-primary text-primary-foreground'}`}>
+          <Icon name={isSystem ? 'notifications' : 'chat'} size={18} />
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">{title}</p>
-          <p className="line-clamp-2 text-sm text-muted-foreground">{toast.content}</p>
+          <p className="line-clamp-2 text-sm text-muted-foreground">{content}</p>
         </div>
         <button
           onClick={(e) => {

@@ -1048,7 +1048,9 @@
       "activityNotStarted": "لم يبدأ هذا النشاط بعد",
       "activityEnded": "انتهى هذا النشاط. لم يعد بإمكانك تحديده كمكتمل.",
       "activityEndedLabel": "انتهى النشاط",
-      "cannotLeaveEnded": "انتهى هذا النشاط. لم يعد بإمكانك المغادرة."
+      "cannotLeaveEnded": "انتهى هذا النشاط. لم يعد بإمكانك المغادرة.",
+      "groupActivity": "نشاط جماعي",
+      "recurring": "متكرر"
     },
     "groupInfo": "معلومات المجموعة",
     "ownedBy": "المالك: {{name}}",
