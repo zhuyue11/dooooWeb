@@ -375,6 +375,20 @@ export async function updateGroupMemberRole(groupId: string, userId: string, rol
   return res.data.data;
 }
 
+// Group Member Preferences
+export async function getGroupPreferences(groupId: string): Promise<GroupMemberPreferences> {
+  const res = await apiClient.get<{ success: boolean; data: GroupMemberPreferences }>(`/api/groups/${groupId}/preferences`);
+  return res.data.data;
+}
+
+export async function updateGroupPreferences(
+  groupId: string,
+  data: Partial<GroupMemberPreferences>,
+): Promise<GroupMemberPreferences> {
+  const res = await apiClient.put<{ success: boolean; data: GroupMemberPreferences }>(`/api/groups/${groupId}/preferences`, data);
+  return res.data.data;
+}
+
 // Group Messages
 export async function sendMessage(groupId: string, data: CreateMessageRequest): Promise<GroupMessage> {
   const res = await apiClient.post<{ success: boolean; data: GroupMessage }>(`/api/groups/${groupId}/messages`, data);

@@ -7,9 +7,10 @@ interface GroupCardProps {
   group: Group;
   currentUserId: string;
   onClick: () => void;
+  onStarToggle?: (groupId: string, isStarred: boolean) => void;
 }
 
-export function GroupCard({ group, currentUserId, onClick }: GroupCardProps) {
+export function GroupCard({ group, currentUserId, onClick, onStarToggle }: GroupCardProps) {
   const { t } = useTranslation();
   const { unreadCounts } = useUnreadMessages();
 
@@ -38,12 +39,22 @@ export function GroupCard({ group, currentUserId, onClick }: GroupCardProps) {
             />
             <span className="text-base font-semibold text-foreground">{group.name}</span>
           </div>
-          <Icon
-            name="star"
-            size={20}
-            filled={isStarred}
-            color={isStarred ? 'var(--color-accent)' : 'var(--color-muted-foreground)'}
-          />
+          <button
+            type="button"
+            data-testid="star-toggle"
+            onClick={(e) => {
+              e.stopPropagation();
+              onStarToggle?.(group.id, !isStarred);
+            }}
+            className="rounded-full p-1 transition-transform hover:scale-110 active:scale-95"
+          >
+            <Icon
+              name="star"
+              size={20}
+              filled={isStarred}
+              color={isStarred ? 'var(--color-accent)' : 'var(--color-muted-foreground)'}
+            />
+          </button>
         </div>
 
         {/* Description */}

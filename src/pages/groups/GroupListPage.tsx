@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useGroups } from '@/hooks/useGroups';
-import { createGroup } from '@/lib/api';
+import { createGroup, updateGroupPreferences } from '@/lib/api';
 import { Icon } from '@/components/ui/Icon';
 import { GroupCard } from '@/components/groups/GroupCard';
 import { GroupFormModal } from '@/components/groups/GroupFormModal';
@@ -23,6 +23,22 @@ export function GroupListPage() {
 
   const [filter, setFilter] = useState<GroupFilter>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const handleStarToggle = useCallback(async (groupId: string, isStarred: boolean) => {
+    // Optimistic update
+    queryClient.setQueryData<Group[]>(['groups'], (old) =>
+      old?.map((g) =>
+        g.id === groupId
+          ? { ...g, members: g.members?.map((m) => (m.userId === user!.id ? { ...m, isStarred } : m)) }
+          : g,
+      ),
+    );
+    try {
+      await updateGroupPreferences(groupId, { isStarred });
+    } catch {
+      queryClient.invalidateQueries({ queryKey: ['groups'] });
+    }
+  }, [queryClient, user]);
 
   const handleCreateGroup = useCallback(async (data: GroupFormData) => {
     const group = await createGroup({
@@ -155,6 +171,7 @@ export function GroupListPage() {
               group={group}
               currentUserId={user!.id}
               onClick={() => navigate(`/groups/${group.id}/tasks`)}
+              onStarToggle={handleStarToggle}
             />
           ))}
         </div>
