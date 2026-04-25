@@ -22,12 +22,14 @@ export function useGroupChat(groupId: string) {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery({
+  } = useInfiniteQuery<MessageListResponse>({
     queryKey,
-    queryFn: ({ pageParam = 1 }) => getMessages(groupId, pageParam, PAGE_SIZE),
+    queryFn: ({ pageParam }) => getMessages(groupId, pageParam as number, PAGE_SIZE),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.hasMore ? allPages.length + 1 : undefined,
     enabled: !!groupId,
+    staleTime: 0,
   });
 
   // Flatten all pages into a single deduplicated array (newest-first)
