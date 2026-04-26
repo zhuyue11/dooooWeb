@@ -1399,7 +1399,8 @@
     "listView": "Lijst",
     "calendarView": "Kalender",
     "progress": "Voortgang",
-    "activities": "Activiteiten"
+    "activities": "Activiteiten",
+    "gapDays": "Interval"
   },
   "dashboard": {
     "greeting": {

@@ -103,6 +103,58 @@ test.describe('Plan detail — user-owned plan with templates', () => {
     await expect(item3.getByText('+1d')).toBeVisible();
   });
 
+  test('clicking a template opens detail panel with title and fields', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-templates-list"]');
+
+    // Click the first template (Morning Stretch)
+    await page.getByTestId('plan-template-item-0').click();
+
+    // Detail panel opens
+    const panel = page.getByTestId('template-detail-panel');
+    await expect(panel).toBeVisible();
+
+    // Shows template title
+    await expect(page.getByTestId('template-detail-title')).toHaveText('Morning Stretch');
+
+    // Shows detail card with time and duration
+    const detailCard = page.getByTestId('template-detail-card');
+    await expect(detailCard).toBeVisible();
+    await expect(detailCard.getByText('7:00 AM')).toBeVisible();
+    await expect(detailCard.getByText('10 min')).toBeVisible();
+  });
+
+  test('template detail panel closes on close button', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-templates-list"]');
+
+    // Open panel
+    await page.getByTestId('plan-template-item-0').click();
+    await expect(page.getByTestId('template-detail-panel')).toBeVisible();
+
+    // Close via close button
+    await page.getByTestId('template-detail-close').click();
+
+    // Panel should be gone after animation
+    await expect(page.getByTestId('template-detail-panel')).not.toBeVisible();
+  });
+
+  test('template detail panel shows gap days for templates with gaps', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-templates-list"]');
+
+    // Click the 4th template (Review Daily Goals, gapDays: 1)
+    await page.getByTestId('plan-template-item-3').click();
+
+    const panel = page.getByTestId('template-detail-panel');
+    await expect(panel).toBeVisible();
+    await expect(page.getByTestId('template-detail-title')).toHaveText('Review Daily Goals');
+
+    // Shows gap days in detail card
+    const detailCard = page.getByTestId('template-detail-card');
+    await expect(detailCard.getByText('+1 day')).toBeVisible();
+  });
+
   test('Start Plan button visible with correct text', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
     await page.waitForSelector('[data-testid="plan-detail-page"]');

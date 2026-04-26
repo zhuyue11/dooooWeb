@@ -1396,7 +1396,8 @@
     "listView": "قائمة",
     "calendarView": "تقويم",
     "progress": "التقدم",
-    "activities": "الأنشطة"
+    "activities": "الأنشطة",
+    "gapDays": "فاصل"
   },
   "dashboard": {
     "greeting": {

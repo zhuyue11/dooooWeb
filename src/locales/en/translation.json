@@ -1387,7 +1387,8 @@
     "listView": "List",
     "calendarView": "Calendar",
     "progress": "Progress",
-    "activities": "Activities"
+    "activities": "Activities",
+    "gapDays": "Gap"
   },
   "search": {
     "title": "Search",

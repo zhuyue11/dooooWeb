@@ -1397,7 +1397,8 @@
     "listView": "列表",
     "calendarView": "日曆",
     "progress": "進度",
-    "activities": "活動"
+    "activities": "活動",
+    "gapDays": "間隔"
   },
   "dashboard": {
     "greeting": {

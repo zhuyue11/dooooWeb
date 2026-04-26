@@ -1402,7 +1402,8 @@
     "listView": "リスト",
     "calendarView": "カレンダー",
     "progress": "進捗",
-    "activities": "アクティビティ"
+    "activities": "アクティビティ",
+    "gapDays": "間隔"
   },
   "dashboard": {
     "greeting": {

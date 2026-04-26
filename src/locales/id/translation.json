@@ -1396,7 +1396,8 @@
     "listView": "Daftar",
     "calendarView": "Kalender",
     "progress": "Kemajuan",
-    "activities": "Aktivitas"
+    "activities": "Aktivitas",
+    "gapDays": "Jeda"
   },
   "dashboard": {
     "greeting": {

@@ -10,6 +10,8 @@ import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PlanTemplateItem } from '@/components/targets/PlanTemplateItem';
 import { PlanExecutionView } from '@/components/targets/PlanExecutionView';
+import { PlanTemplateDetailPanel } from '@/components/targets/PlanTemplateDetailPanel';
+import type { PlanTemplate } from '@/types/target';
 
 const isHtml = (text: string) => /<[^>]+>/.test(text);
 
@@ -31,6 +33,7 @@ export function PlanDetailPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number | null>(null);
 
   const isOwner = !!plan && !!user && plan.userId === user.id;
   const hasBeenExecuted = executions.length > 0;
@@ -243,6 +246,7 @@ export function PlanDetailPage() {
               template={template}
               index={index}
               scheduledDate={scheduledDates[index]}
+              onClick={() => setSelectedTemplateIndex(index)}
             />
           ))}
         </div>
@@ -289,6 +293,15 @@ export function PlanDetailPage() {
         onConfirm={handleRemovePlan}
         onCancel={() => setShowRemoveConfirm(false)}
       />
+
+      {/* Template detail panel */}
+      {selectedTemplateIndex !== null && templates[selectedTemplateIndex] && (
+        <PlanTemplateDetailPanel
+          template={templates[selectedTemplateIndex]}
+          scheduledDate={scheduledDates[selectedTemplateIndex]}
+          onClose={() => setSelectedTemplateIndex(null)}
+        />
+      )}
     </div>
   );
 }

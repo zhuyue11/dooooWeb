@@ -1396,7 +1396,8 @@
     "listView": "Danh sách",
     "calendarView": "Lịch",
     "progress": "Tiến độ",
-    "activities": "Hoạt động"
+    "activities": "Hoạt động",
+    "gapDays": "Khoảng cách"
   },
   "dashboard": {
     "greeting": {

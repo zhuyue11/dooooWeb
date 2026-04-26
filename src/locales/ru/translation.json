@@ -1396,7 +1396,8 @@
     "listView": "Список",
     "calendarView": "Календарь",
     "progress": "Прогресс",
-    "activities": "Действия"
+    "activities": "Действия",
+    "gapDays": "Интервал"
   },
   "dashboard": {
     "greeting": {

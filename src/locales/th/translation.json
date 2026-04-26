@@ -1396,7 +1396,8 @@
     "listView": "รายการ",
     "calendarView": "ปฏิทิน",
     "progress": "ความคืบหน้า",
-    "activities": "กิจกรรม"
+    "activities": "กิจกรรม",
+    "gapDays": "ช่วง"
   },
   "dashboard": {
     "greeting": {

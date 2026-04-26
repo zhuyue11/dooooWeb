@@ -7,6 +7,7 @@ interface PlanTemplateItemProps {
   template: PlanTemplate;
   index: number;
   scheduledDate?: Date;
+  onClick?: () => void;
 }
 
 function formatRepeatLabel(repeatJson: string, t: (key: string, opts?: Record<string, unknown>) => string): string | null {
@@ -89,14 +90,15 @@ function formatScheduledDate(date: Date, t: (key: string) => string): string {
   return date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
 }
 
-export function PlanTemplateItem({ template, index, scheduledDate }: PlanTemplateItemProps) {
+export function PlanTemplateItem({ template, index, scheduledDate, onClick }: PlanTemplateItemProps) {
   const { t } = useTranslation();
   const isEvent = template.type === 'event';
 
   return (
     <div
-      className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5"
+      className={`flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5${onClick ? ' cursor-pointer transition-shadow hover:shadow-md' : ''}`}
       data-testid={`plan-template-item-${index}`}
+      onClick={onClick}
     >
       {/* Order badge */}
       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10">

@@ -1396,7 +1396,8 @@
     "listView": "Liste",
     "calendarView": "Takvim",
     "progress": "İlerleme",
-    "activities": "Etkinlikler"
+    "activities": "Etkinlikler",
+    "gapDays": "Aralık"
   },
   "dashboard": {
     "greeting": {
