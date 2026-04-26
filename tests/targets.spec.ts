@@ -181,6 +181,131 @@ test.describe('Target list + CRUD', () => {
     await expect(page).toHaveURL(/\/targets\/.+/);
   });
 
+  // === Phase 4.2: Target Detail Page tests ===
+
+  test('target detail page renders with target data', async ({ page }) => {
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await expect(page.getByText(TEST_TARGET_NAME_2)).toBeVisible();
+
+    // Click first target card (newest = Run a Marathon)
+    await page.locator('[data-testid^="target-card-"]').first().click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+
+    // Target name visible as heading
+    await expect(page.getByTestId('target-detail-name')).toHaveText(TEST_TARGET_NAME_2);
+
+    // Status badge visible (Active)
+    await expect(page.getByTestId('target-detail-status')).toContainText('Active');
+
+    // Edit and Delete buttons visible
+    await expect(page.getByTestId('target-detail-edit')).toBeVisible();
+    await expect(page.getByTestId('target-detail-delete')).toBeVisible();
+
+    // Sections visible
+    await expect(page.getByTestId('linked-tasks-section')).toBeVisible();
+    await expect(page.getByTestId('plans-section')).toBeVisible();
+
+    // Generate plan button
+    await expect(page.getByTestId('generate-plan-button')).toBeVisible();
+  });
+
+  test('target detail page shows empty states', async ({ page }) => {
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await page.locator('[data-testid^="target-card-"]').first().click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+
+    // Tasks empty state
+    await expect(page.getByTestId('linked-tasks-empty')).toBeVisible();
+    await expect(page.getByText('No tasks linked to this target yet')).toBeVisible();
+
+    // Plans empty state
+    await expect(page.getByTestId('plans-empty')).toBeVisible();
+    await expect(page.getByText('No plans linked to this target')).toBeVisible();
+  });
+
+  test('edit target from detail page', async ({ page }) => {
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await page.locator('[data-testid^="target-card-"]').first().click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+    await expect(page.getByTestId('target-detail-name')).toHaveText(TEST_TARGET_NAME_2);
+
+    // Click edit
+    await page.getByTestId('target-detail-edit').click();
+
+    // Edit modal opens with pre-filled name
+    await expect(page.getByRole('heading', { name: 'Edit Target' })).toBeVisible();
+    const nameInput = page.locator('input[maxlength="100"]');
+    await expect(nameInput).toHaveValue(TEST_TARGET_NAME_2);
+
+    // Change name
+    await nameInput.clear();
+    await nameInput.fill(TEST_TARGET_NAME_2 + ' Updated');
+    await page.getByRole('button', { name: 'Save' }).click();
+
+    // Modal closes, new name visible
+    await expect(page.getByRole('heading', { name: 'Edit Target' })).not.toBeVisible();
+    await expect(page.getByTestId('target-detail-name')).toHaveText(TEST_TARGET_NAME_2 + ' Updated');
+  });
+
+  test('generate plan button navigates to AI chat', async ({ page }) => {
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await page.locator('[data-testid^="target-card-"]').first().click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+
+    // Click generate plan
+    await page.getByTestId('generate-plan-button').click();
+    await expect(page).toHaveURL('/ai-chat');
+  });
+
+  test('back button navigates to targets list', async ({ page }) => {
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await page.locator('[data-testid^="target-card-"]').first().click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+
+    // Click back
+    await page.getByTestId('target-detail-back').click();
+    await expect(page).toHaveURL('/targets');
+  });
+
+  test('delete target from detail page navigates back', async ({ page }) => {
+    // Create a sacrificial target
+    await page.goto('/targets');
+    await page.waitForSelector('[data-testid="ai-fab"]');
+    await page.getByTestId('create-target-button').click();
+    const nameInput = page.locator('input[maxlength="100"]');
+    await nameInput.fill('Target to Delete');
+    await page.getByRole('button', { name: 'Create' }).click();
+    await expect(page.getByRole('heading', { name: 'New Target' })).not.toBeVisible();
+    await expect(page.getByText('Target to Delete')).toBeVisible();
+
+    // Navigate to its detail page
+    const deleteCard = page.locator('[data-testid^="target-card-"]').filter({ hasText: 'Target to Delete' });
+    await deleteCard.click();
+    await expect(page).toHaveURL(/\/targets\/.+/);
+    await expect(page.getByTestId('target-detail-name')).toHaveText('Target to Delete');
+
+    // Click delete
+    await page.getByTestId('target-detail-delete').click();
+
+    // Confirm dialog appears
+    await expect(page.getByText('Are you sure you want to delete "Target to Delete"?')).toBeVisible();
+
+    // Confirm deletion (target the dialog's confirm button, not the page's delete button)
+    const dialog = page.locator('.fixed.inset-0');
+    await dialog.getByRole('button', { name: 'Delete' }).click();
+
+    // Navigates back to list
+    await expect(page).toHaveURL('/targets');
+
+    // Target no longer in list
+    await expect(page.getByText('Target to Delete')).not.toBeVisible();
+  });
+
   test('AI FAB navigates to AI chat page', async ({ page }) => {
     await page.goto('/targets');
     await page.waitForSelector('[data-testid="ai-fab"]');

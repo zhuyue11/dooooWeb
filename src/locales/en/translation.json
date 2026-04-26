@@ -1333,6 +1333,7 @@
     "linkTaskHint": "Execute a plan or link tasks from the task editor",
     "linkedTasksCount": "linked tasks",
     "generateAI": "AI Generate",
+    "generatePlan": "Generate a plan",
     "unlinkPlan": "Unlink Plan",
     "unlinkPlanConfirm": "Remove \"{{name}}\" from this target?",
     "unlink": "Unlink",

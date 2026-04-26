@@ -607,6 +607,24 @@ export async function deleteTarget(id: string): Promise<void> {
   await apiClient.delete(`/api/targets/${id}`);
 }
 
+export async function linkPlanToTarget(targetId: string, planId: string): Promise<TargetPlan> {
+  const res = await apiClient.post<{ success: boolean; data: TargetPlan }>(`/api/targets/${targetId}/plans`, { planId });
+  return res.data.data;
+}
+
+export async function unlinkPlanFromTarget(targetId: string, planId: string): Promise<void> {
+  await apiClient.delete(`/api/targets/${targetId}/plans/${planId}`);
+}
+
+export async function linkTaskToTarget(targetId: string, taskId: string): Promise<TargetTask> {
+  const res = await apiClient.post<{ success: boolean; data: TargetTask }>(`/api/targets/${targetId}/tasks`, { taskId });
+  return res.data.data;
+}
+
+export async function unlinkTaskFromTarget(targetId: string, taskId: string): Promise<void> {
+  await apiClient.delete(`/api/targets/${targetId}/tasks/${taskId}`);
+}
+
 // ===== Plans =====
 
 export async function getPlans(): Promise<Plan[]> {
