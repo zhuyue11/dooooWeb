@@ -1394,7 +1394,15 @@
     "completed": "完了",
     "discovery": "ディスカバリー",
     "course": "コース",
-    "noPlansFilterDesc": "このフィルターに一致するプランはありません"
+    "noPlansFilterDesc": "このフィルターに一致するプランはありません",
+    "startPlan": "プランを開始",
+    "startPlanAgain": "再開する",
+    "removePlan": "プランを削除",
+    "removePlanConfirm": "保存したプランから\"{{name}}\"を削除しますか？後で再度見つけて保存できます。",
+    "listView": "リスト",
+    "calendarView": "カレンダー",
+    "progress": "進捗",
+    "activities": "アクティビティ"
   },
   "dashboard": {
     "greeting": {

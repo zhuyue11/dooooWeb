@@ -1388,7 +1388,15 @@
     "completed": "Завершено",
     "discovery": "Обзор",
     "course": "Курс",
-    "noPlansFilterDesc": "Нет планов, соответствующих этому фильтру"
+    "noPlansFilterDesc": "Нет планов, соответствующих этому фильтру",
+    "startPlan": "Начать план",
+    "startPlanAgain": "Начать снова",
+    "removePlan": "Удалить план",
+    "removePlanConfirm": "Удалить \"{{name}}\" из сохранённых планов? Вы сможете найти и сохранить его снова позже.",
+    "listView": "Список",
+    "calendarView": "Календарь",
+    "progress": "Прогресс",
+    "activities": "Действия"
   },
   "dashboard": {
     "greeting": {

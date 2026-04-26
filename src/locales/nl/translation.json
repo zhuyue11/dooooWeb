@@ -1391,7 +1391,15 @@
     "completed": "Voltooid",
     "discovery": "Ontdek",
     "course": "Cursus",
-    "noPlansFilterDesc": "Geen plannen die overeenkomen met dit filter"
+    "noPlansFilterDesc": "Geen plannen die overeenkomen met dit filter",
+    "startPlan": "Plan starten",
+    "startPlanAgain": "Opnieuw starten",
+    "removePlan": "Plan verwijderen",
+    "removePlanConfirm": "\"{{name}}\" verwijderen uit je opgeslagen plannen? Je kunt het later terugvinden en opnieuw opslaan.",
+    "listView": "Lijst",
+    "calendarView": "Kalender",
+    "progress": "Voortgang",
+    "activities": "Activiteiten"
   },
   "dashboard": {
     "greeting": {

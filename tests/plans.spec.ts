@@ -26,17 +26,17 @@ test.describe('Plan list + browsing', () => {
     await expect(page.getByTestId('ai-fab')).toBeVisible();
   });
 
-  test('shows empty state on default All filter', async ({ page }) => {
+  test('shows seeded plans on default All filter', async ({ page }) => {
     await page.goto('/plans');
     await page.waitForSelector('[data-testid="plan-list-page"]');
 
-    // Empty state visible
-    await expect(page.getByTestId('plan-list-empty')).toBeVisible();
-    await expect(page.getByText('No plans yet')).toBeVisible();
-    await expect(page.getByText('Use the AI planner to create plans for your goals')).toBeVisible();
+    // Seeded plans should appear (3 plans: Morning Routine, Learn Guitar Basics, Empty Plan)
+    await expect(page.getByText('Morning Routine', { exact: true })).toBeVisible();
+    await expect(page.getByText('Learn Guitar Basics')).toBeVisible();
+    await expect(page.getByText('Empty Plan')).toBeVisible();
   });
 
-  test('filter pills switch active state and show empty states', async ({ page }) => {
+  test('filter pills switch active state and show correct content', async ({ page }) => {
     await page.goto('/plans');
     await page.waitForSelector('[data-testid="plan-list-page"]');
 
@@ -44,34 +44,34 @@ test.describe('Plan list + browsing', () => {
     const allPill = page.getByTestId('plan-filter-all');
     await expect(allPill).toHaveClass(/bg-primary/);
 
-    // Click "In Progress" pill
+    // Click "In Progress" pill — no executions, should be empty
     await page.getByTestId('plan-filter-in_progress').click();
     await expect(page.getByTestId('plan-filter-in_progress')).toHaveClass(/bg-primary/);
     await expect(allPill).not.toHaveClass(/bg-primary/);
     await expect(page.getByTestId('plan-list-empty')).toBeVisible();
 
-    // Click "Planned" pill
+    // Click "Planned" pill — seeded plans should appear
     await page.getByTestId('plan-filter-planned').click();
     await expect(page.getByTestId('plan-filter-planned')).toHaveClass(/bg-primary/);
-    await expect(page.getByTestId('plan-list-empty')).toBeVisible();
+    await expect(page.getByText('Morning Routine', { exact: true })).toBeVisible();
 
-    // Click "Saved" pill
+    // Click "Saved" pill — no saved plans from other users
     await page.getByTestId('plan-filter-saved').click();
     await expect(page.getByTestId('plan-filter-saved')).toHaveClass(/bg-primary/);
     await expect(page.getByTestId('plan-list-empty')).toBeVisible();
 
-    // Click "Completed" pill
+    // Click "Completed" pill — no completed executions
     await page.getByTestId('plan-filter-completed').click();
     await expect(page.getByTestId('plan-filter-completed')).toHaveClass(/bg-primary/);
     await expect(page.getByTestId('plan-list-empty')).toBeVisible();
 
-    // Click "Discovery" pill
+    // Click "Discovery" pill — always empty (not implemented)
     await page.getByTestId('plan-filter-discovery').click();
     await expect(page.getByTestId('plan-filter-discovery')).toHaveClass(/bg-primary/);
     await expect(page.getByTestId('plan-list-empty')).toBeVisible();
   });
 
-  test('non-default filters show filter-specific empty message', async ({ page }) => {
+  test('empty filters show filter-specific message', async ({ page }) => {
     await page.goto('/plans');
     await page.waitForSelector('[data-testid="plan-list-page"]');
 
@@ -79,9 +79,9 @@ test.describe('Plan list + browsing', () => {
     await page.getByTestId('plan-filter-in_progress').click();
     await expect(page.getByText('No plans match this filter')).toBeVisible();
 
-    // Switch back to "All" — should show general message
+    // Switch back to "All" — should show seeded plans (not empty state)
     await page.getByTestId('plan-filter-all').click();
-    await expect(page.getByText('Use the AI planner to create plans for your goals')).toBeVisible();
+    await expect(page.getByText('Morning Routine', { exact: true })).toBeVisible();
   });
 
   test('AI FAB navigates to AI chat', async ({ page }) => {

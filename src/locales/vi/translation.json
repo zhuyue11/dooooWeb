@@ -1388,7 +1388,15 @@
     "completed": "Hoàn thành",
     "discovery": "Khám phá",
     "course": "Khóa học",
-    "noPlansFilterDesc": "Không có kế hoạch nào phù hợp với bộ lọc này"
+    "noPlansFilterDesc": "Không có kế hoạch nào phù hợp với bộ lọc này",
+    "startPlan": "Bắt đầu kế hoạch",
+    "startPlanAgain": "Bắt đầu lại",
+    "removePlan": "Xóa kế hoạch",
+    "removePlanConfirm": "Xóa \"{{name}}\" khỏi kế hoạch đã lưu? Bạn có thể tìm và lưu lại sau.",
+    "listView": "Danh sách",
+    "calendarView": "Lịch",
+    "progress": "Tiến độ",
+    "activities": "Hoạt động"
   },
   "dashboard": {
     "greeting": {

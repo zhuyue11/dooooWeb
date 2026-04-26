@@ -1388,7 +1388,15 @@
     "completed": "เสร็จสิ้น",
     "discovery": "สำรวจ",
     "course": "คอร์ส",
-    "noPlansFilterDesc": "ไม่มีแผนที่ตรงกับตัวกรองนี้"
+    "noPlansFilterDesc": "ไม่มีแผนที่ตรงกับตัวกรองนี้",
+    "startPlan": "เริ่มแผน",
+    "startPlanAgain": "เริ่มใหม่",
+    "removePlan": "ลบแผน",
+    "removePlanConfirm": "ลบ \"{{name}}\" จากแผนที่บันทึกไว้? คุณสามารถค้นหาและบันทึกอีกครั้งในภายหลัง",
+    "listView": "รายการ",
+    "calendarView": "ปฏิทิน",
+    "progress": "ความคืบหน้า",
+    "activities": "กิจกรรม"
   },
   "dashboard": {
     "greeting": {

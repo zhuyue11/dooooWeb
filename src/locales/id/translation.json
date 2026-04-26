@@ -1388,7 +1388,15 @@
     "completed": "Selesai",
     "discovery": "Jelajahi",
     "course": "Kursus",
-    "noPlansFilterDesc": "Tidak ada rencana yang cocok dengan filter ini"
+    "noPlansFilterDesc": "Tidak ada rencana yang cocok dengan filter ini",
+    "startPlan": "Mulai Rencana",
+    "startPlanAgain": "Mulai Lagi",
+    "removePlan": "Hapus Rencana",
+    "removePlanConfirm": "Hapus \"{{name}}\" dari rencana tersimpan? Anda dapat menemukan dan menyimpannya lagi nanti.",
+    "listView": "Daftar",
+    "calendarView": "Kalender",
+    "progress": "Kemajuan",
+    "activities": "Aktivitas"
   },
   "dashboard": {
     "greeting": {

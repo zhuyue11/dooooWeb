@@ -285,3 +285,27 @@ export async function waitForDashboardLoad(page: import('@playwright/test').Page
     return els.length > 0 && Array.from(els).every((el) => el.textContent !== '—');
   }, { timeout: 10000 });
 }
+
+// ── Seed plan IDs (must match dooooBackend/prisma/seed.ts) ──
+
+export const SEED_PLANS = {
+  /** User-owned plan with 4 templates */
+  MORNING_ROUTINE: 'web-plan-morning-routine',
+  /** AI-generated plan with 2 templates + HTML description */
+  GUITAR_BASICS: 'web-plan-guitar-basics',
+  /** Plan with 0 templates (empty state testing) */
+  EMPTY: 'web-plan-empty',
+} as const;
+
+export const SEED_PLAN_TEMPLATES = {
+  MORNING_ROUTINE: [
+    { title: 'Morning Stretch', time: '7 AM', duration: '10m', gapDays: 0, hasRepeat: true },
+    { title: 'Morning Journal', time: '7:15 AM', duration: '15m', gapDays: 0, hasRepeat: false },
+    { title: 'Meditation', time: '7:30 AM', duration: '15m', gapDays: 0, hasRepeat: false },
+    { title: 'Review Daily Goals', time: '7:45 AM', duration: '10m', gapDays: 1, hasRepeat: false },
+  ],
+  GUITAR_BASICS: [
+    { title: 'Learn Proper Posture', time: '7 PM', duration: '20m', gapDays: 0, hasRepeat: true },
+    { title: 'First Three Chords', time: '7:30 PM', duration: '25m', gapDays: 3, hasRepeat: false },
+  ],
+} as const;

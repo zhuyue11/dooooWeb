@@ -1388,7 +1388,15 @@
     "completed": "Tamamlandı",
     "discovery": "Keşfet",
     "course": "Kurs",
-    "noPlansFilterDesc": "Bu filtreyle eşleşen plan yok"
+    "noPlansFilterDesc": "Bu filtreyle eşleşen plan yok",
+    "startPlan": "Planı Başlat",
+    "startPlanAgain": "Tekrar Başlat",
+    "removePlan": "Planı Kaldır",
+    "removePlanConfirm": "\"{{name}}\" kaydedilmiş planlarınızdan kaldırılsın mı? Daha sonra tekrar bulup kaydedebilirsiniz.",
+    "listView": "Liste",
+    "calendarView": "Takvim",
+    "progress": "İlerleme",
+    "activities": "Etkinlikler"
   },
   "dashboard": {
     "greeting": {

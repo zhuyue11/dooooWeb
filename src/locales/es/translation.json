@@ -1388,7 +1388,15 @@
     "completed": "Completado",
     "discovery": "Descubrimiento",
     "course": "Curso",
-    "noPlansFilterDesc": "No hay planes que coincidan con este filtro"
+    "noPlansFilterDesc": "No hay planes que coincidan con este filtro",
+    "startPlan": "Iniciar Plan",
+    "startPlanAgain": "Iniciar de nuevo",
+    "removePlan": "Eliminar Plan",
+    "removePlanConfirm": "¿Eliminar \"{{name}}\" de tus planes guardados? Puedes encontrarlo y guardarlo de nuevo más tarde.",
+    "listView": "Lista",
+    "calendarView": "Calendario",
+    "progress": "Progreso",
+    "activities": "Actividades"
   },
   "dashboard": {
     "greeting": {

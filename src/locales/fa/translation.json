@@ -1388,7 +1388,15 @@
     "completed": "تکمیل‌شده",
     "discovery": "کاوش",
     "course": "دوره",
-    "noPlansFilterDesc": "هیچ برنامه‌ای با این فیلتر مطابقت ندارد"
+    "noPlansFilterDesc": "هیچ برنامه‌ای با این فیلتر مطابقت ندارد",
+    "startPlan": "شروع برنامه",
+    "startPlanAgain": "شروع دوباره",
+    "removePlan": "حذف برنامه",
+    "removePlanConfirm": "\"{{name}}\" از برنامه‌های ذخیره شده حذف شود؟ می‌توانید بعداً آن را پیدا کرده و دوباره ذخیره کنید.",
+    "listView": "فهرست",
+    "calendarView": "تقویم",
+    "progress": "پیشرفت",
+    "activities": "فعالیت‌ها"
   },
   "dashboard": {
     "greeting": {

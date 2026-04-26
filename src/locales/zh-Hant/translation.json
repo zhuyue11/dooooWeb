@@ -1389,7 +1389,15 @@
     "completed": "已完成",
     "discovery": "發現",
     "course": "課程",
-    "noPlansFilterDesc": "沒有符合此篩選條件的計畫"
+    "noPlansFilterDesc": "沒有符合此篩選條件的計畫",
+    "startPlan": "開始計畫",
+    "startPlanAgain": "再次開始",
+    "removePlan": "移除計畫",
+    "removePlanConfirm": "從已儲存的計畫中移除\"{{name}}\"？你可以稍後再找到並儲存它。",
+    "listView": "列表",
+    "calendarView": "日曆",
+    "progress": "進度",
+    "activities": "活動"
   },
   "dashboard": {
     "greeting": {

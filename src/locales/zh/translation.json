@@ -1389,7 +1389,15 @@
     "completed": "已完成",
     "discovery": "发现",
     "course": "课程",
-    "noPlansFilterDesc": "没有匹配此筛选条件的计划"
+    "noPlansFilterDesc": "没有匹配此筛选条件的计划",
+    "startPlan": "开始计划",
+    "startPlanAgain": "再次开始",
+    "removePlan": "移除计划",
+    "removePlanConfirm": "从已保存的计划中移除\"{{name}}\"？你可以稍后再找到并保存它。",
+    "listView": "列表",
+    "calendarView": "日历",
+    "progress": "进度",
+    "activities": "活动"
   },
   "dashboard": {
     "greeting": {

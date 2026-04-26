@@ -1388,7 +1388,15 @@
     "completed": "مكتمل",
     "discovery": "اكتشاف",
     "course": "دورة",
-    "noPlansFilterDesc": "لا توجد خطط تطابق هذا الفلتر"
+    "noPlansFilterDesc": "لا توجد خطط تطابق هذا الفلتر",
+    "startPlan": "بدء الخطة",
+    "startPlanAgain": "البدء مجدداً",
+    "removePlan": "إزالة الخطة",
+    "removePlanConfirm": "إزالة \"{{name}}\" من خططك المحفوظة؟ يمكنك العثور عليها وحفظها مرة أخرى لاحقاً.",
+    "listView": "قائمة",
+    "calendarView": "تقويم",
+    "progress": "التقدم",
+    "activities": "الأنشطة"
   },
   "dashboard": {
     "greeting": {
