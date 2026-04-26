@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "\"{{name}}\" aus deinen gespeicherten Plänen entfernen? Du kannst ihn später wieder finden und speichern.",
     "listView": "Liste",
     "calendarView": "Kalender",
+    "planStartsOn": "Der Plan beginnt am:",
+    "weekIndicator": "Woche {{current}}/{{total}}",
     "progress": "Fortschritt",
     "activities": "Aktivitäten",
     "gapDays": "Abstand"

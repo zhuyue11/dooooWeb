@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "إزالة \"{{name}}\" من خططك المحفوظة؟ يمكنك العثور عليها وحفظها مرة أخرى لاحقاً.",
     "listView": "قائمة",
     "calendarView": "تقويم",
+    "planStartsOn": "سيبدأ الخطة في:",
+    "weekIndicator": "الأسبوع {{current}}/{{total}}",
     "progress": "التقدم",
     "activities": "الأنشطة",
     "gapDays": "فاصل"

@@ -1401,6 +1401,8 @@
     "removePlanConfirm": "保存したプランから\"{{name}}\"を削除しますか？後で再度見つけて保存できます。",
     "listView": "リスト",
     "calendarView": "カレンダー",
+    "planStartsOn": "プランの開始日：",
+    "weekIndicator": "{{current}}/{{total}} 週目",
     "progress": "進捗",
     "activities": "アクティビティ",
     "gapDays": "間隔"

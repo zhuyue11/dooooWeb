@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "Xóa \"{{name}}\" khỏi kế hoạch đã lưu? Bạn có thể tìm và lưu lại sau.",
     "listView": "Danh sách",
     "calendarView": "Lịch",
+    "planStartsOn": "Kế hoạch sẽ bắt đầu vào:",
+    "weekIndicator": "Tuần {{current}}/{{total}}",
     "progress": "Tiến độ",
     "activities": "Hoạt động",
     "gapDays": "Khoảng cách"

@@ -1401,6 +1401,8 @@
     "removePlanConfirm": "Remover \"{{name}}\" dos seus planos salvos? Você pode encontrá-lo e salvá-lo novamente mais tarde.",
     "listView": "Lista",
     "calendarView": "Calendário",
+    "planStartsOn": "O plano começará em:",
+    "weekIndicator": "Semana {{current}}/{{total}}",
     "progress": "Progresso",
     "activities": "Atividades",
     "gapDays": "Intervalo"

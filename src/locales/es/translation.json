@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "¿Eliminar \"{{name}}\" de tus planes guardados? Puedes encontrarlo y guardarlo de nuevo más tarde.",
     "listView": "Lista",
     "calendarView": "Calendario",
+    "planStartsOn": "El plan comenzará el:",
+    "weekIndicator": "Semana {{current}}/{{total}}",
     "progress": "Progreso",
     "activities": "Actividades",
     "gapDays": "Intervalo"

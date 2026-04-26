@@ -88,6 +88,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
     <div
       ref={ref}
       className="absolute left-0 top-full mt-2 z-50 w-[300px] rounded-xl border border-border bg-surface p-4 shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+      data-testid="calendar-popover"
     >
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">

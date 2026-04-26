@@ -1401,6 +1401,8 @@
     "removePlanConfirm": "저장된 플랜에서 \"{{name}}\"을 제거하시겠습니까? 나중에 다시 찾아 저장할 수 있습니다.",
     "listView": "목록",
     "calendarView": "캘린더",
+    "planStartsOn": "플랜 시작일:",
+    "weekIndicator": "{{current}}/{{total}} 주차",
     "progress": "진행률",
     "activities": "활동",
     "gapDays": "간격"

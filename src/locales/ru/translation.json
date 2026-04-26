@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "Удалить \"{{name}}\" из сохранённых планов? Вы сможете найти и сохранить его снова позже.",
     "listView": "Список",
     "calendarView": "Календарь",
+    "planStartsOn": "План начнётся:",
+    "weekIndicator": "Неделя {{current}}/{{total}}",
     "progress": "Прогресс",
     "activities": "Действия",
     "gapDays": "Интервал"

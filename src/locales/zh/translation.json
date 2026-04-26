@@ -1396,6 +1396,8 @@
     "removePlanConfirm": "从已保存的计划中移除\"{{name}}\"？你可以稍后再找到并保存它。",
     "listView": "列表",
     "calendarView": "日历",
+    "planStartsOn": "计划将开始于：",
+    "weekIndicator": "第 {{current}}/{{total}} 周",
     "progress": "进度",
     "activities": "活动",
     "gapDays": "间隔"

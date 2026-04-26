@@ -1398,6 +1398,8 @@
     "removePlanConfirm": "\"{{name}}\" verwijderen uit je opgeslagen plannen? Je kunt het later terugvinden en opnieuw opslaan.",
     "listView": "Lijst",
     "calendarView": "Kalender",
+    "planStartsOn": "Het plan begint op:",
+    "weekIndicator": "Week {{current}}/{{total}}",
     "progress": "Voortgang",
     "activities": "Activiteiten",
     "gapDays": "Interval"

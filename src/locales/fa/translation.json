@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "\"{{name}}\" از برنامه‌های ذخیره شده حذف شود؟ می‌توانید بعداً آن را پیدا کرده و دوباره ذخیره کنید.",
     "listView": "فهرست",
     "calendarView": "تقویم",
+    "planStartsOn": "برنامه شروع خوا��د شد در:",
+    "weekIndicator": "هفته {{current}}/{{total}}",
     "progress": "پیشرفت",
     "activities": "فعالیت‌ها",
     "gapDays": "فاصله"

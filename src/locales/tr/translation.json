@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "\"{{name}}\" kaydedilmiş planlarınızdan kaldırılsın mı? Daha sonra tekrar bulup kaydedebilirsiniz.",
     "listView": "Liste",
     "calendarView": "Takvim",
+    "planStartsOn": "Plan başlangıç tarihi:",
+    "weekIndicator": "Hafta {{current}}/{{total}}",
     "progress": "İlerleme",
     "activities": "Etkinlikler",
     "gapDays": "Aralık"

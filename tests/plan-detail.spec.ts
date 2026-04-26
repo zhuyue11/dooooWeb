@@ -55,18 +55,21 @@ test.describe('Plan detail — user-owned plan with templates', () => {
     await expect(page.getByTestId('plan-ai-badge')).not.toBeVisible();
   });
 
-  test('view toggle renders with List active', async ({ page }) => {
+  test('view toggle renders — auto-calendar when all templates have time', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
     await page.waitForSelector('[data-testid="plan-detail-page"]');
 
+    // Morning Routine has all templates with time → auto-switches to calendar
     await expect(page.getByTestId('view-toggle')).toBeVisible();
-    await expect(page.getByTestId('view-toggle-list')).toHaveClass(/bg-primary/);
-    await expect(page.getByTestId('view-toggle-calendar')).not.toHaveClass(/bg-primary/);
+    await expect(page.getByTestId('view-toggle-calendar')).toHaveClass(/bg-primary/);
   });
 
   test('template list renders all 4 templates with correct order', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
     await page.waitForSelector('[data-testid="plan-detail-page"]');
+
+    // Switch to list view (Morning Routine auto-switches to calendar)
+    await page.getByTestId('view-toggle-list').click();
 
     const templateList = page.getByTestId('plan-templates-list');
     await expect(templateList).toBeVisible();
@@ -89,6 +92,8 @@ test.describe('Plan detail — user-owned plan with templates', () => {
 
   test('template items show time and duration badges', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+    await page.getByTestId('view-toggle-list').click();
     await page.waitForSelector('[data-testid="plan-templates-list"]');
 
     // First template: Morning Stretch — 7 AM, 10m, has repeat
@@ -105,6 +110,8 @@ test.describe('Plan detail — user-owned plan with templates', () => {
 
   test('clicking a template opens detail panel with title and fields', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+    await page.getByTestId('view-toggle-list').click();
     await page.waitForSelector('[data-testid="plan-templates-list"]');
 
     // Click the first template (Morning Stretch)
@@ -126,6 +133,8 @@ test.describe('Plan detail — user-owned plan with templates', () => {
 
   test('template detail panel closes on close button', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+    await page.getByTestId('view-toggle-list').click();
     await page.waitForSelector('[data-testid="plan-templates-list"]');
 
     // Open panel
@@ -141,6 +150,8 @@ test.describe('Plan detail — user-owned plan with templates', () => {
 
   test('template detail panel shows gap days for templates with gaps', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+    await page.getByTestId('view-toggle-list').click();
     await page.waitForSelector('[data-testid="plan-templates-list"]');
 
     // Click the 4th template (Review Daily Goals, gapDays: 1)
@@ -187,22 +198,67 @@ test.describe('Plan detail — user-owned plan with templates', () => {
     await expect(page.getByTestId('plan-detail-name')).toHaveText('Morning Routine');
   });
 
-  test('calendar view toggle shows coming soon placeholder', async ({ page }) => {
+  test('calendar view renders week grid with task blocks', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
     await page.waitForSelector('[data-testid="plan-detail-page"]');
 
-    await page.getByTestId('view-toggle-calendar').click();
+    // Morning Routine auto-switches to calendar (all templates have time)
+    await expect(page.getByTestId('plan-calendar-view')).toBeVisible();
 
-    await expect(page.getByTestId('calendar-placeholder')).toBeVisible();
-    await expect(page.getByText('Coming Soon')).toBeVisible();
+    // Start date row visible
+    await expect(page.getByTestId('start-date-row')).toBeVisible();
+    await expect(page.getByText('The plan will start on:')).toBeVisible();
 
-    // Template list should be hidden
-    await expect(page.getByTestId('plan-templates-list')).not.toBeVisible();
+    // Day columns rendered (7 columns)
+    const dayCols = page.locator('[data-testid^="plan-day-col-"]');
+    await expect(dayCols).toHaveCount(7);
 
-    // Switch back to list
+    // At least one plan task block is visible
+    const taskBlocks = page.locator('[data-testid^="plan-task-block-"]');
+    await expect(taskBlocks.first()).toBeVisible();
+  });
+
+  test('switching between list and calendar view', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+
+    // Starts in calendar (auto-calendar)
+    await expect(page.getByTestId('plan-calendar-view')).toBeVisible();
+
+    // Switch to list
     await page.getByTestId('view-toggle-list').click();
     await expect(page.getByTestId('plan-templates-list')).toBeVisible();
-    await expect(page.getByTestId('calendar-placeholder')).not.toBeVisible();
+    await expect(page.getByTestId('plan-calendar-view')).not.toBeVisible();
+
+    // Switch back to calendar
+    await page.getByTestId('view-toggle-calendar').click();
+    await expect(page.getByTestId('plan-calendar-view')).toBeVisible();
+    await expect(page.getByTestId('plan-templates-list')).not.toBeVisible();
+  });
+
+  test('start date picker opens and selects a date', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-calendar-view"]');
+
+    // Click start date row to open date picker
+    await page.getByTestId('start-date-row').locator('button').click();
+
+    // CalendarPopover should appear
+    const popover = page.getByTestId('calendar-popover');
+    await expect(popover).toBeVisible();
+  });
+
+  test('task block click opens template detail panel', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}`);
+    await page.waitForSelector('[data-testid="plan-calendar-view"]');
+
+    // Click the first task block
+    const taskBlocks = page.locator('[data-testid^="plan-task-block-"]');
+    await taskBlocks.first().click();
+
+    // Detail panel opens
+    const panel = page.getByTestId('template-detail-panel');
+    await expect(panel).toBeVisible();
   });
 });
 
@@ -225,6 +281,9 @@ test.describe('Plan detail — AI-generated plan', () => {
 
   test('template list shows 2 templates with gap days', async ({ page }) => {
     await page.goto(`/plans/${SEED_PLANS.GUITAR_BASICS}`);
+    await page.waitForSelector('[data-testid="plan-detail-page"]');
+    // Guitar Basics also has all times set → auto-calendar; switch to list
+    await page.getByTestId('view-toggle-list').click();
     await page.waitForSelector('[data-testid="plan-templates-list"]');
 
     const items = page.locator('[data-testid^="plan-template-item-"]');

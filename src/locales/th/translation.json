@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "ลบ \"{{name}}\" จากแผนที่บันทึกไว้? คุณสามารถค้นหาและบันทึกอีกครั้งในภายหลัง",
     "listView": "รายการ",
     "calendarView": "ปฏิทิน",
+    "planStartsOn": "แผนจะเริ่มในวันที่:",
+    "weekIndicator": "สัปดาห์ {{current}}/{{total}}",
     "progress": "ความคืบหน้า",
     "activities": "กิจกรรม",
     "gapDays": "ช่วง"

@@ -1395,6 +1395,8 @@
     "removePlanConfirm": "Hapus \"{{name}}\" dari rencana tersimpan? Anda dapat menemukan dan menyimpannya lagi nanti.",
     "listView": "Daftar",
     "calendarView": "Kalender",
+    "planStartsOn": "Rencana akan dimulai pada:",
+    "weekIndicator": "Minggu {{current}}/{{total}}",
     "progress": "Kemajuan",
     "activities": "Aktivitas",
     "gapDays": "Jeda"

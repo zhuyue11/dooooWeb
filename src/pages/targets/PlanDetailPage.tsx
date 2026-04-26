@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
@@ -11,6 +11,8 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PlanTemplateItem } from '@/components/targets/PlanTemplateItem';
 import { PlanExecutionView } from '@/components/targets/PlanExecutionView';
 import { PlanTemplateDetailPanel } from '@/components/targets/PlanTemplateDetailPanel';
+import { PlanCalendarView } from '@/components/targets/PlanCalendarView';
+import { hasUnscheduledTasks } from '@/utils/planScheduler';
 import type { PlanTemplate } from '@/types/target';
 
 const isHtml = (text: string) => /<[^>]+>/.test(text);
@@ -34,6 +36,9 @@ export function PlanDetailPage() {
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number | null>(null);
+  const [selectedScheduledDate, setSelectedScheduledDate] = useState<Date | null>(null);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const isOwner = !!plan && !!user && plan.userId === user.id;
   const hasBeenExecuted = executions.length > 0;
@@ -58,6 +63,20 @@ export function PlanDetailPage() {
       return d;
     });
   }, [templates]);
+
+  // Auto-switch to calendar view when all templates have times set (matching dooooApp)
+  useEffect(() => {
+    if (templates.length > 0 && !hasUnscheduledTasks(templates)) {
+      setViewMode('calendar');
+    }
+  }, [templates]);
+
+  // Reset scroll position when switching views
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [viewMode]);
 
   const handleDeletePlan = useCallback(async () => {
     if (!planId) return;
@@ -115,146 +134,158 @@ export function PlanDetailPage() {
     : null;
 
   return (
-    <div className="flex h-full flex-col gap-6" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="plan-detail-page">
-      {/* Back button */}
-      <button
-        type="button"
-        onClick={() => navigate('/plans')}
-        className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        data-testid="plan-detail-back"
-      >
-        <Icon name="arrow_back" size={18} />
-        {t('targetPlan.plans')}
-      </button>
+    <div className="flex h-full flex-col gap-4" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="plan-detail-page">
+      {/* Fixed header area — back, title, description, actions, view toggle */}
+      <div className="flex shrink-0 flex-col gap-4">
+        {/* Back button */}
+        <button
+          type="button"
+          onClick={() => navigate('/plans')}
+          className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          data-testid="plan-detail-back"
+        >
+          <Icon name="arrow_back" size={18} />
+          {t('targetPlan.plans')}
+        </button>
 
-      {/* Header: name + AI badge + actions */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex flex-1 flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <h1 className="text-[22px] font-bold text-foreground" data-testid="plan-detail-name">
-              {plan.name}
-            </h1>
-            {plan.isAiGenerated && (
-              <div
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10"
-                data-testid="plan-ai-badge"
-              >
-                <Icon name="auto_awesome" size={16} color="var(--color-primary)" />
-              </div>
+        {/* Header: name + AI badge + actions */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <h1 className="text-[22px] font-bold text-foreground" data-testid="plan-detail-name">
+                {plan.name}
+              </h1>
+              {plan.isAiGenerated && (
+                <div
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10"
+                  data-testid="plan-ai-badge"
+                >
+                  <Icon name="auto_awesome" size={16} color="var(--color-primary)" />
+                </div>
+              )}
+            </div>
+
+            {plan.description && (
+              sanitizedDescription ? (
+                <div
+                  className="text-[14px] leading-relaxed text-muted-foreground [&_*]:inline [&_br]:hidden [&_li]:before:content-['·_']"
+                  dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+                />
+              ) : (
+                <p className="text-[14px] leading-relaxed text-muted-foreground">{plan.description}</p>
+              )
             )}
           </div>
 
-          {plan.description && (
-            sanitizedDescription ? (
-              <div
-                className="text-[14px] leading-relaxed text-muted-foreground [&_*]:inline [&_br]:hidden [&_li]:before:content-['·_']"
-                dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-              />
-            ) : (
-              <p className="text-[14px] leading-relaxed text-muted-foreground">{plan.description}</p>
-            )
+          {/* Action buttons — hidden during active execution */}
+          {!activeExecution && (
+            <div className="flex shrink-0 items-center gap-2">
+              {isOwner ? (
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  data-testid="plan-delete-btn"
+                >
+                  <Icon name="delete" size={16} />
+                  {t('common.delete')}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowRemoveConfirm(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  data-testid="plan-remove-btn"
+                >
+                  <Icon name="bookmark_remove" size={16} />
+                  {t('common.remove')}
+                </button>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Action buttons — hidden during active execution */}
-        {!activeExecution && (
-          <div className="flex shrink-0 items-center gap-2">
-            {isOwner ? (
-              <button
-                type="button"
-                onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
-                data-testid="plan-delete-btn"
-              >
-                <Icon name="delete" size={16} />
-                {t('common.delete')}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowRemoveConfirm(true)}
-                className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
-                data-testid="plan-remove-btn"
-              >
-                <Icon name="bookmark_remove" size={16} />
-                {t('common.remove')}
-              </button>
-            )}
+        {/* View toggle — only when no active execution and templates exist */}
+        {!activeExecution && templates.length > 0 && (
+          <div className="flex items-center justify-center gap-1" data-testid="view-toggle">
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+              data-testid="view-toggle-list"
+            >
+              <Icon
+                name="format_list_bulleted"
+                size={14}
+                color={viewMode === 'list' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
+              />
+              {t('targetPlan.listView')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                viewMode === 'calendar'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+              data-testid="view-toggle-calendar"
+            >
+              <Icon
+                name="calendar_today"
+                size={14}
+                color={viewMode === 'calendar' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
+              />
+              {t('targetPlan.calendarView')}
+            </button>
           </div>
         )}
       </div>
 
-      {/* View toggle — only when no active execution and templates exist */}
-      {!activeExecution && templates.length > 0 && (
-        <div className="flex items-center justify-center gap-1" data-testid="view-toggle">
-          <button
-            type="button"
-            onClick={() => setViewMode('list')}
-            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
-              viewMode === 'list'
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-            data-testid="view-toggle-list"
-          >
-            <Icon
-              name="format_list_bulleted"
-              size={14}
-              color={viewMode === 'list' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
-            />
-            {t('targetPlan.listView')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('calendar')}
-            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
-              viewMode === 'calendar'
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-            data-testid="view-toggle-calendar"
-          >
-            <Icon
-              name="calendar_today"
-              size={14}
-              color={viewMode === 'calendar' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
-            />
-            {t('targetPlan.calendarView')}
-          </button>
-        </div>
-      )}
+      {/* Scrollable content area — only the list/calendar scrolls */}
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
+        {activeExecution ? (
+          <PlanExecutionView execution={activeExecution} />
+        ) : viewMode === 'calendar' ? (
+          <PlanCalendarView
+            templates={templates}
+            planArchetype={plan?.archetype}
+            onTemplateClick={(index, date) => {
+              setSelectedTemplateIndex(index);
+              setSelectedScheduledDate(date);
+            }}
+          />
+        ) : templates.length === 0 ? (
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20" data-testid="plan-templates-empty">
+            <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
+            <span className="text-base font-medium text-foreground">{t('targetPlan.noTemplates')}</span>
+            <span className="text-sm text-muted-foreground">{t('targetPlan.noTemplatesDesc')}</span>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2" data-testid="plan-templates-list">
+            {templates.map((template, index) => (
+              <PlanTemplateItem
+                key={template.id}
+                template={template}
+                index={index}
+                scheduledDate={scheduledDates[index]}
+                onClick={() => {
+                  setSelectedTemplateIndex(index);
+                  setSelectedScheduledDate(null);
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
-      {/* Content area */}
-      {activeExecution ? (
-        <PlanExecutionView execution={activeExecution} />
-      ) : viewMode === 'calendar' ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20" data-testid="calendar-placeholder">
-          <Icon name="calendar_today" size={48} color="var(--color-muted-foreground)" />
-          <span className="text-[15px] text-muted-foreground">{t('placeholder.comingSoon')}</span>
-        </div>
-      ) : templates.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20" data-testid="plan-templates-empty">
-          <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
-          <span className="text-base font-medium text-foreground">{t('targetPlan.noTemplates')}</span>
-          <span className="text-sm text-muted-foreground">{t('targetPlan.noTemplatesDesc')}</span>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2" data-testid="plan-templates-list">
-          {templates.map((template, index) => (
-            <PlanTemplateItem
-              key={template.id}
-              template={template}
-              index={index}
-              scheduledDate={scheduledDates[index]}
-              onClick={() => setSelectedTemplateIndex(index)}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Start Plan bottom bar — hidden during active execution */}
+      {/* Start Plan bottom bar — fixed at bottom, hidden during active execution */}
       {templates.length > 0 && !activeExecution && (
-        <div className="mt-auto border-t border-border bg-background px-4 py-3" data-testid="start-plan-bar">
+        <div className="shrink-0 border-t border-border bg-background px-4 py-3" data-testid="start-plan-bar">
           <button
             type="button"
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
@@ -298,8 +329,11 @@ export function PlanDetailPage() {
       {selectedTemplateIndex !== null && templates[selectedTemplateIndex] && (
         <PlanTemplateDetailPanel
           template={templates[selectedTemplateIndex]}
-          scheduledDate={scheduledDates[selectedTemplateIndex]}
-          onClose={() => setSelectedTemplateIndex(null)}
+          scheduledDate={selectedScheduledDate ?? scheduledDates[selectedTemplateIndex]}
+          onClose={() => {
+            setSelectedTemplateIndex(null);
+            setSelectedScheduledDate(null);
+          }}
         />
       )}
     </div>
