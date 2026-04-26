@@ -1331,7 +1331,7 @@
     "noTargets": "لا توجد أهداف بعد",
     "noTargetsDesc": "أنشئ هدفاً لبدء تتبع أهدافك",
     "noPlans": "لا توجد خطط بعد",
-    "noPlansDesc": "اضغط + لإنشاء خطة لأهدافك",
+    "noPlansDesc": "استخدم مخطط الذكاء الاصطناعي لإنشاء خطط لأهدافك",
     "template": "قالب",
     "templates": "قوالب",
     "targetNotFound": "الهدف غير موجود",
@@ -1381,7 +1381,14 @@
     "noSessions": "لا توجد محادثات بعد",
     "generalPlanning": "عام",
     "planReady": "الخطة جاهزة",
-    "plans": "خطة ودورة"
+    "plans": "خطة ودورة",
+    "inProgress": "قيد التنفيذ",
+    "planned": "مخطط",
+    "saved": "محفوظ",
+    "completed": "مكتمل",
+    "discovery": "اكتشاف",
+    "course": "دورة",
+    "noPlansFilterDesc": "لا توجد خطط تطابق هذا الفلتر"
   },
   "dashboard": {
     "greeting": {

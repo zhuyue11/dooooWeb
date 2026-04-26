@@ -1331,7 +1331,7 @@
     "noTargets": "Noch keine Ziele",
     "noTargetsDesc": "Erstellen Sie ein Ziel, um Ihre Fortschritte zu verfolgen",
     "noPlans": "Noch keine Pläne",
-    "noPlansDesc": "Tippen Sie auf +, um einen Plan für Ihre Ziele zu erstellen",
+    "noPlansDesc": "Nutze den KI-Planer, um Pläne für deine Ziele zu erstellen",
     "template": "Vorlage",
     "templates": "Vorlagen",
     "targetNotFound": "Ziel nicht gefunden",
@@ -1381,7 +1381,14 @@
     "noSessions": "Noch keine Unterhaltungen",
     "generalPlanning": "Allgemein",
     "planReady": "Plan bereit",
-    "plans": "Plan & Kurs"
+    "plans": "Plan & Kurs",
+    "inProgress": "In Bearbeitung",
+    "planned": "Geplant",
+    "saved": "Gespeichert",
+    "completed": "Abgeschlossen",
+    "discovery": "Entdecken",
+    "course": "Kurs",
+    "noPlansFilterDesc": "Keine Pläne entsprechen diesem Filter"
   },
   "dashboard": {
     "greeting": {

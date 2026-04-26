@@ -1331,7 +1331,7 @@
     "noTargets": "Henüz hedef yok",
     "noTargetsDesc": "Hedeflerinizi takip etmeye başlamak için bir hedef oluşturun",
     "noPlans": "Henüz plan yok",
-    "noPlansDesc": "Hedefleriniz için plan oluşturmak üzere +'ya dokunun",
+    "noPlansDesc": "Hedefleriniz için plan oluşturmak üzere yapay zeka planlayıcıyı kullanın",
     "template": "şablon",
     "templates": "şablonlar",
     "targetNotFound": "Hedef bulunamadı",
@@ -1381,7 +1381,14 @@
     "noSessions": "Henüz görüşme yok",
     "generalPlanning": "Genel",
     "planReady": "Plan Hazır",
-    "plans": "Plan ve Kurs"
+    "plans": "Plan ve Kurs",
+    "inProgress": "Devam Ediyor",
+    "planned": "Planlandı",
+    "saved": "Kaydedildi",
+    "completed": "Tamamlandı",
+    "discovery": "Keşfet",
+    "course": "Kurs",
+    "noPlansFilterDesc": "Bu filtreyle eşleşen plan yok"
   },
   "dashboard": {
     "greeting": {

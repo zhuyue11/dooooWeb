@@ -26,6 +26,7 @@ export interface Plan {
   isAiGenerated: boolean;
   archetype?: string | null;
   userPlanStatus?: UserPlanStatus | null;
+  executionStatuses?: string[];
   createdAt: string;
   updatedAt: string;
   taskTemplates?: TaskTemplate[];
@@ -85,6 +86,79 @@ export interface EventTemplate {
 }
 
 export type PlanTemplate = (TaskTemplate & { type: 'task' }) | (EventTemplate & { type: 'event' });
+
+// ===== Plan Execution History =====
+
+export interface PlanExecutionTaskInstance {
+  id: string;
+  taskId: string;
+  title: string;
+  description: string | null;
+  date: string;
+  status: string;
+  completedAt: string | null;
+}
+
+export interface PlanExecutionEventInstance {
+  id: string;
+  eventId: string;
+  title: string;
+  description: string | null;
+  date: string;
+  status: string;
+}
+
+export interface PlanExecutionTask {
+  id: string;
+  title: string;
+  status: string;
+  isCompleted: boolean;
+  isRecurring: boolean;
+  completedInstances: number;
+  totalOccurrences: number | null;
+  date: string | null;
+  hasTime: boolean;
+  duration: number | null;
+  priority: string | null;
+  categoryId: string | null;
+  instances: PlanExecutionTaskInstance[];
+}
+
+export interface PlanExecutionEvent {
+  id: string;
+  title: string;
+  status: string;
+  isRecurring: boolean;
+  totalOccurrences: number | null;
+  date: string | null;
+  hasTime: boolean;
+  duration: number | null;
+  instances: PlanExecutionEventInstance[];
+}
+
+export interface PlanExecution {
+  id: string;
+  planId: string;
+  planName: string;
+  planDescription: string | null;
+  isAiGenerated: boolean;
+  status: 'IN_PROGRESS' | 'COMPLETED';
+  startDate: string;
+  completedAt: string | null;
+  createdAt: string;
+  completedCount: number;
+  totalCount: number;
+  tasks: PlanExecutionTask[];
+  events: PlanExecutionEvent[];
+}
+
+// ===== Plan List Helpers =====
+
+export type PlanListItem =
+  | { kind: 'plan'; data: Plan }
+  | { kind: 'execution'; data: PlanExecution };
+
+export type PlanFilter = 'all' | 'in_progress' | 'planned' | 'saved' | 'completed' | 'discovery';
 
 // ===== Junction Tables =====
 

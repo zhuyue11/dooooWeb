@@ -1331,7 +1331,7 @@
     "noTargets": "Brak celów",
     "noTargetsDesc": "Utwórz cel, aby zacząć śledzić swoje postępy",
     "noPlans": "Brak planów",
-    "noPlansDesc": "Naciśnij +, aby utworzyć plan dla swoich celów",
+    "noPlansDesc": "Użyj planera AI, aby tworzyć plany dla swoich celów",
     "template": "szablon",
     "templates": "szablony",
     "targetNotFound": "Cel nie znaleziony",
@@ -1381,7 +1381,14 @@
     "noSessions": "Brak rozmów",
     "generalPlanning": "Ogólne",
     "planReady": "Plan gotowy",
-    "plans": "Plan i Kurs"
+    "plans": "Plan i Kurs",
+    "inProgress": "W trakcie",
+    "planned": "Zaplanowane",
+    "saved": "Zapisane",
+    "completed": "Ukończone",
+    "discovery": "Odkrywaj",
+    "course": "Kurs",
+    "noPlansFilterDesc": "Brak planów pasujących do tego filtra"
   },
   "dashboard": {
     "greeting": {

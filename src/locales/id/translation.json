@@ -1331,7 +1331,7 @@
     "noTargets": "Belum ada target",
     "noTargetsDesc": "Buat target untuk mulai melacak tujuan Anda",
     "noPlans": "Belum ada rencana",
-    "noPlansDesc": "Ketuk + untuk membuat rencana untuk tujuan Anda",
+    "noPlansDesc": "Gunakan perencana AI untuk membuat rencana untuk target Anda",
     "template": "templat",
     "templates": "templat",
     "targetNotFound": "Target tidak ditemukan",
@@ -1381,7 +1381,14 @@
     "noSessions": "Belum ada percakapan",
     "generalPlanning": "Umum",
     "planReady": "Rencana Siap",
-    "plans": "Rencana & Kursus"
+    "plans": "Rencana & Kursus",
+    "inProgress": "Sedang Berjalan",
+    "planned": "Direncanakan",
+    "saved": "Tersimpan",
+    "completed": "Selesai",
+    "discovery": "Jelajahi",
+    "course": "Kursus",
+    "noPlansFilterDesc": "Tidak ada rencana yang cocok dengan filter ini"
   },
   "dashboard": {
     "greeting": {

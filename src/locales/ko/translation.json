@@ -1337,7 +1337,7 @@
     "noTargets": "아직 목표가 없습니다",
     "noTargetsDesc": "목표를 만들어 진행 상황을 추적하세요",
     "noPlans": "아직 플랜이 없습니다",
-    "noPlansDesc": "+를 눌러 목표에 맞는 플랜을 만드세요",
+    "noPlansDesc": "AI 플래너를 사용하여 목표를 위한 플랜을 만드세요",
     "template": "템플릿",
     "templates": "템플릿",
     "targetNotFound": "목표를 찾을 수 없습니다",
@@ -1387,7 +1387,14 @@
     "noSessions": "아직 대화가 없습니다",
     "generalPlanning": "일반",
     "planReady": "플랜 준비 완료",
-    "plans": "플랜 & 코스"
+    "plans": "플랜 & 코스",
+    "inProgress": "진행 중",
+    "planned": "계획됨",
+    "saved": "저장됨",
+    "completed": "완료됨",
+    "discovery": "디스커버리",
+    "course": "코스",
+    "noPlansFilterDesc": "이 필터에 맞는 플랜이 없습니다"
   },
   "dashboard": {
     "greeting": {

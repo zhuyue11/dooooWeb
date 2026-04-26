@@ -1334,7 +1334,7 @@
     "noTargets": "Nog geen doelen",
     "noTargetsDesc": "Maak een doel aan om je voortgang bij te houden",
     "noPlans": "Nog geen plannen",
-    "noPlansDesc": "Tik op + om een plan voor je doelen te maken",
+    "noPlansDesc": "Gebruik de AI-planner om plannen voor je doelen te maken",
     "template": "sjabloon",
     "templates": "sjablonen",
     "targetNotFound": "Doel niet gevonden",
@@ -1384,7 +1384,14 @@
     "noSessions": "Nog geen gesprekken",
     "generalPlanning": "Algemeen",
     "planReady": "Plan klaar",
-    "plans": "Plan & Cursus"
+    "plans": "Plan & Cursus",
+    "inProgress": "In uitvoering",
+    "planned": "Gepland",
+    "saved": "Opgeslagen",
+    "completed": "Voltooid",
+    "discovery": "Ontdek",
+    "course": "Cursus",
+    "noPlansFilterDesc": "Geen plannen die overeenkomen met dit filter"
   },
   "dashboard": {
     "greeting": {

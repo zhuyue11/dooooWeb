@@ -1332,7 +1332,7 @@
     "noTargets": "尚無目標",
     "noTargetsDesc": "建立目標來開始追蹤你的進度",
     "noPlans": "尚無計畫",
-    "noPlansDesc": "點擊 + 為你的目標建立計畫",
+    "noPlansDesc": "使用 AI 規劃器為你的目標建立計畫",
     "template": "範本",
     "templates": "範本",
     "targetNotFound": "找不到目標",
@@ -1382,7 +1382,14 @@
     "noSessions": "暫無對話",
     "generalPlanning": "一般",
     "planReady": "計畫就緒",
-    "plans": "計畫與課程"
+    "plans": "計畫與課程",
+    "inProgress": "進行中",
+    "planned": "已規劃",
+    "saved": "已儲存",
+    "completed": "已完成",
+    "discovery": "發現",
+    "course": "課程",
+    "noPlansFilterDesc": "沒有符合此篩選條件的計畫"
   },
   "dashboard": {
     "greeting": {

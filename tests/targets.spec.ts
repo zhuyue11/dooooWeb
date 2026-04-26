@@ -32,12 +32,12 @@ test.describe('Target list + CRUD', () => {
     await expect(page.getByTestId('ai-fab')).toBeVisible();
   });
 
-  test('Plans route shows stub page', async ({ page }) => {
+  test('Plans route shows plan list page', async ({ page }) => {
     await page.goto('/plans');
 
-    // Stub content visible
-    await expect(page.getByText('Plan & Course')).toBeVisible();
-    await expect(page.getByText('Coming soon')).toBeVisible();
+    // Plan list page heading visible (no longer a stub)
+    await expect(page.getByRole('heading', { name: 'Plan & Course' })).toBeVisible();
+    await expect(page.getByTestId('plan-list-page')).toBeVisible();
   });
 
   test('targets page shows empty state initially', async ({ page }) => {

@@ -1337,7 +1337,7 @@
     "noTargets": "目標はまだありません",
     "noTargetsDesc": "目標を作成して進捗の追跡を始めましょう",
     "noPlans": "プランはまだありません",
-    "noPlansDesc": "+をタップして目標のプランを作成しましょう",
+    "noPlansDesc": "AIプランナーを使って目標のプランを作成しましょう",
     "template": "テンプレート",
     "templates": "テンプレート",
     "targetNotFound": "目標が見つかりません",
@@ -1387,7 +1387,14 @@
     "noSessions": "まだ会話がありません",
     "generalPlanning": "一般",
     "planReady": "プラン準備完了",
-    "plans": "プランとコース"
+    "plans": "プランとコース",
+    "inProgress": "進行中",
+    "planned": "計画済み",
+    "saved": "保存済み",
+    "completed": "完了",
+    "discovery": "ディスカバリー",
+    "course": "コース",
+    "noPlansFilterDesc": "このフィルターに一致するプランはありません"
   },
   "dashboard": {
     "greeting": {

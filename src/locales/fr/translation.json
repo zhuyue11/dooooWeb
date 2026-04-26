@@ -1331,7 +1331,7 @@
     "noTargets": "Aucun objectif pour le moment",
     "noTargetsDesc": "Créez un objectif pour commencer à suivre vos buts",
     "noPlans": "Aucun plan pour le moment",
-    "noPlansDesc": "Appuyez sur + pour créer un plan pour vos objectifs",
+    "noPlansDesc": "Utilisez le planificateur IA pour créer des plans pour vos objectifs",
     "template": "modèle",
     "templates": "modèles",
     "targetNotFound": "Objectif introuvable",
@@ -1381,7 +1381,14 @@
     "noSessions": "Aucune conversation pour le moment",
     "generalPlanning": "Général",
     "planReady": "Plan prêt",
-    "plans": "Plan et Cours"
+    "plans": "Plan et Cours",
+    "inProgress": "En cours",
+    "planned": "Planifié",
+    "saved": "Enregistré",
+    "completed": "Terminé",
+    "discovery": "Découverte",
+    "course": "Cours",
+    "noPlansFilterDesc": "Aucun plan ne correspond à ce filtre"
   },
   "dashboard": {
     "greeting": {

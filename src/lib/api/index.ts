@@ -50,6 +50,7 @@ import type {
   Target,
   Plan,
   PlanTemplate,
+  PlanExecution,
   TargetTask,
   TargetPlan,
   CreateTargetRequest,
@@ -645,6 +646,29 @@ export async function getPlanTemplates(planId: string): Promise<PlanTemplate[]> 
 export async function executePlan(planId: string, data: ExecutePlanInput): Promise<ExecutePlanResponse> {
   const res = await apiClient.post<{ success: boolean; data: ExecutePlanResponse }>(`/api/plans/${planId}/execute`, data);
   return res.data.data;
+}
+
+export async function getAllPlanExecutions(): Promise<PlanExecution[]> {
+  const res = await apiClient.get<{ success: boolean; data: PlanExecution[] }>('/api/plans/executions');
+  return res.data.data;
+}
+
+export async function getPlanExecutions(planId: string): Promise<PlanExecution[]> {
+  const res = await apiClient.get<{ success: boolean; data: PlanExecution[] }>(`/api/plans/${planId}/executions`);
+  return res.data.data;
+}
+
+export async function deletePlan(planId: string): Promise<void> {
+  await apiClient.delete(`/api/plans/${planId}`);
+}
+
+export async function savePlan(planId: string): Promise<UserPlan> {
+  const res = await apiClient.post<{ success: boolean; data: UserPlan }>(`/api/plans/${planId}/save`);
+  return res.data.data;
+}
+
+export async function unsavePlan(planId: string): Promise<void> {
+  await apiClient.delete(`/api/plans/${planId}/save`);
 }
 
 // ===== Notifications =====

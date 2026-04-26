@@ -1332,7 +1332,7 @@
     "noTargets": "暂无目标",
     "noTargetsDesc": "创建一个目标来开始追踪你的进度",
     "noPlans": "暂无计划",
-    "noPlansDesc": "点击 + 为你的目标创建计划",
+    "noPlansDesc": "使用 AI 规划器为你的目标创建计划",
     "template": "模板",
     "templates": "模板",
     "targetNotFound": "未找到目标",
@@ -1382,7 +1382,14 @@
     "noSessions": "暂无对话",
     "generalPlanning": "通用",
     "planReady": "计划就绪",
-    "plans": "计划与课程"
+    "plans": "计划与课程",
+    "inProgress": "进行中",
+    "planned": "已规划",
+    "saved": "已保存",
+    "completed": "已完成",
+    "discovery": "发现",
+    "course": "课程",
+    "noPlansFilterDesc": "没有匹配此筛选条件的计划"
   },
   "dashboard": {
     "greeting": {

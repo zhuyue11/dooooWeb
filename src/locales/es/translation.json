@@ -1331,7 +1331,7 @@
     "noTargets": "Aún no hay objetivos",
     "noTargetsDesc": "Crea un objetivo para empezar a seguir tus metas",
     "noPlans": "Aún no hay planes",
-    "noPlansDesc": "Toca + para crear un plan para tus metas",
+    "noPlansDesc": "Usa el planificador IA para crear planes para tus metas",
     "template": "plantilla",
     "templates": "plantillas",
     "targetNotFound": "Objetivo no encontrado",
@@ -1381,7 +1381,14 @@
     "noSessions": "Aún no hay conversaciones",
     "generalPlanning": "General",
     "planReady": "Plan listo",
-    "plans": "Plan y Curso"
+    "plans": "Plan y Curso",
+    "inProgress": "En progreso",
+    "planned": "Planificado",
+    "saved": "Guardado",
+    "completed": "Completado",
+    "discovery": "Descubrimiento",
+    "course": "Curso",
+    "noPlansFilterDesc": "No hay planes que coincidan con este filtro"
   },
   "dashboard": {
     "greeting": {
