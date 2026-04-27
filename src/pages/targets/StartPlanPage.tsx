@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePlan, usePlanTemplates } from '@/hooks/usePlans';
@@ -34,6 +34,8 @@ function getDefaultStartDate(archetype: string | null | undefined): Date {
 
 export function StartPlanPage() {
   const { planId } = useParams<{ planId: string }>();
+  const [searchParams] = useSearchParams();
+  const targetId = searchParams.get('targetId') || undefined;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -229,6 +231,7 @@ export function StartPlanPage() {
 
       const response = await executePlan(planId, {
         startDate: startDateStr,
+        targetId,
         tasks,
         events: events.length > 0 ? events : undefined,
       });

@@ -71,14 +71,14 @@ export function AIChatPage() {
   }, [planPreviewData]);
 
   const handleStartPlan = useCallback((planId: string, _planName: string) => {
-    navigate(`/plans/${planId}/start`);
-  }, [navigate]);
+    navigate(`/plans/${planId}/start${targetId ? `?targetId=${targetId}` : ''}`);
+  }, [navigate, targetId]);
 
   const handleStartPlanFromPreview = useCallback(() => {
     if (!planPreviewData) return;
     setShowPlanPreview(false);
-    navigate(`/plans/${planPreviewData.plan.id}/start`);
-  }, [planPreviewData, navigate]);
+    navigate(`/plans/${planPreviewData.plan.id}/start${targetId ? `?targetId=${targetId}` : ''}`);
+  }, [planPreviewData, navigate, targetId]);
 
   if (chat.isLoadingSession) {
     return (

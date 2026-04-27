@@ -20,6 +20,7 @@ export function PlanDetailPage() {
   const { planId } = useParams<{ planId: string }>();
   const [searchParams] = useSearchParams();
   const executionId = searchParams.get('executionId');
+  const targetNameParam = searchParams.get('targetName');
   const navigate = useNavigate();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -164,6 +165,12 @@ export function PlanDetailPage() {
               )}
             </div>
 
+            {(plan.targetPlans?.[0]?.target?.name ?? targetNameParam) && (
+              <span className="text-[14px] text-muted-foreground" data-testid="plan-target-subtitle">
+                {plan.targetPlans?.[0]?.target?.name ?? targetNameParam}
+              </span>
+            )}
+
             {plan.description && (
               sanitizedDescription ? (
                 <div
@@ -287,7 +294,10 @@ export function PlanDetailPage() {
         <div className="flex shrink-0 items-center justify-end bg-background px-4 py-2.5" data-testid="start-plan-bar">
           <button
             type="button"
-            onClick={() => navigate(`/plans/${planId}/start`)}
+            onClick={() => {
+              const tid = plan?.targetPlans?.[0]?.targetId;
+              navigate(`/plans/${planId}/start${tid ? `?targetId=${tid}` : ''}`);
+            }}
             className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             data-testid="start-plan-btn"
           >

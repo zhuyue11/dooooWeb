@@ -203,7 +203,7 @@ export function TargetDetailPage() {
               <LinkedPlanCard
                 key={lp.id}
                 targetPlan={lp}
-                onNavigate={(planId) => navigate(`/plans/${planId}`)}
+                onNavigate={(planId) => navigate(`/plans/${planId}?targetName=${encodeURIComponent(target.name)}`)}
                 onUnlink={(planId, planName) => setUnlinkingPlan({ id: planId, name: planName })}
               />
             ))}
