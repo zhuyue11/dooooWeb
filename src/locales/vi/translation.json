@@ -1596,5 +1596,26 @@
     "reminder": "Nhắc nhở",
     "addSecondReminder": "Nhắc nhở thứ hai",
     "secondReminder": "Nhắc nhở thứ hai"
+  },
+  "aiChat": {
+    "typeMessage": "Nhập tin nhắn...",
+    "aiGreetingFallback": "Xin chào! Bạn muốn lên kế hoạch gì hôm nay?",
+    "aiWelcomeNoTarget": "Xin chào! Tôi có thể giúp bạn tạo kế hoạch cá nhân cho:\n\n- Học kỹ năng mới (nhạc cụ, ngôn ngữ, lập trình...)\n- Xây dựng thói quen hàng ngày\n- Mục tiêu sức khỏe và thể dục\n- Dự án sáng tạo (viết lách, xây dựng, ra mắt)\n- Hình thành thói quen và kỷ luật\n- Lên kế hoạch sự kiện và hậu cần\n\nHãy cho tôi biết bạn muốn làm gì và tôi sẽ tạo kế hoạch cho bạn!",
+    "aiError": "Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại.",
+    "startOver": "Bắt đầu lại",
+    "startOverConfirm": "Thao tác này sẽ xóa cuộc trò chuyện hiện tại và bắt đầu phiên lập kế hoạch mới.",
+    "startNew": "Mới",
+    "resume": "Tiếp tục",
+    "resumeSessionMessage": "Bạn có một phiên lập kế hoạch chưa hoàn thành cho \"{{target}}\". Bạn muốn tiếp tục hay bắt đầu mới?",
+    "resumeSessionMessageNoTarget": "Bạn có một phiên lập kế hoạch chưa hoàn thành. Bạn muốn tiếp tục hay bắt đầu mới?",
+    "offTopicReply": "Có vẻ như chúng ta đã lạc đề. Bạn có muốn bắt đầu lại với kế hoạch mới không?",
+    "chatHistory": "Lịch sử trò chuyện",
+    "noSessions": "Chưa có cuộc trò chuyện nào",
+    "planReady": "Kế hoạch sẵn sàng",
+    "generatingPlan": "Đang tạo kế hoạch...",
+    "updatingPlan": "Đang cập nhật kế hoạch...",
+    "viewPlan": "Xem kế hoạch",
+    "startPlan": "Bắt đầu kế hoạch",
+    "newChat": "Trò chuyện mới"
   }
 }

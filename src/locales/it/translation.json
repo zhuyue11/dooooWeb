@@ -1596,5 +1596,26 @@
     "reminder": "Promemoria",
     "addSecondReminder": "Secondo promemoria",
     "secondReminder": "Secondo promemoria"
+  },
+  "aiChat": {
+    "typeMessage": "Scrivi un messaggio...",
+    "aiGreetingFallback": "Ciao! Cosa vorresti pianificare oggi?",
+    "aiWelcomeNoTarget": "Ciao! Posso aiutarti a creare piani personalizzati per:\n\n- Imparare nuove competenze (strumenti, lingue, programmazione...)\n- Creare routine quotidiane\n- Obiettivi di salute e fitness\n- Progetti creativi (scrittura, costruzione, lancio)\n- Formare abitudini e disciplina\n- Pianificazione eventi e logistica\n\nDimmi su cosa vuoi lavorare e creerò un piano per te!",
+    "aiError": "Spiacente, qualcosa è andato storto. Riprova.",
+    "startOver": "Ricominciare",
+    "startOverConfirm": "Questo cancellerà la conversazione attuale e avvierà una nuova sessione di pianificazione.",
+    "startNew": "Nuovo",
+    "resume": "Riprendi",
+    "resumeSessionMessage": "Hai una sessione di pianificazione non completata per \"{{target}}\". Vuoi riprenderla o iniziarne una nuova?",
+    "resumeSessionMessageNoTarget": "Hai una sessione di pianificazione non completata. Vuoi riprenderla o iniziarne una nuova?",
+    "offTopicReply": "Sembra che siamo andati fuori tema. Vuoi ricominciare con un nuovo piano?",
+    "chatHistory": "Cronologia chat",
+    "noSessions": "Nessuna conversazione ancora",
+    "planReady": "Piano pronto",
+    "generatingPlan": "Generazione piano...",
+    "updatingPlan": "Aggiornamento piano...",
+    "viewPlan": "Vedi piano",
+    "startPlan": "Avvia piano",
+    "newChat": "Nuova chat"
   }
 }

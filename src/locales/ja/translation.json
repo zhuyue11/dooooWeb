@@ -1602,5 +1602,26 @@
     "reminder": "リマインダー",
     "addSecondReminder": "2つ目のリマインダー",
     "secondReminder": "2つ目のリマインダー"
+  },
+  "aiChat": {
+    "typeMessage": "メッセージを入力...",
+    "aiGreetingFallback": "こんにちは！今日は何を計画しますか？",
+    "aiWelcomeNoTarget": "こんにちは！パーソナライズされた計画を作成できます：\n\n- 新しいスキルの習得（楽器、言語、プログラミング...）\n- 日課の構築\n- 健康とフィットネスの目標\n- クリエイティブプロジェクト（執筆、構築、リリース）\n- 習慣と規律の形成\n- イベント計画と物流\n\n何に取り組みたいか教えてください。計画を作成します！",
+    "aiError": "申し訳ありません。問題が発生しました。もう一度お試しください。",
+    "startOver": "やり直す",
+    "startOverConfirm": "現在の会話がクリアされ、新しい計画セッションが開始されます。",
+    "startNew": "新規作成",
+    "resume": "再開",
+    "resumeSessionMessage": "「{{target}}」の未完了の計画セッションがあります。再開しますか、それとも新しいセッションを開始しますか？",
+    "resumeSessionMessageNoTarget": "未完了の計画セッションがあります。再開しますか、それとも新しいセッションを開始しますか？",
+    "offTopicReply": "話がそれてしまったようです。新しい計画でやり直しますか？",
+    "chatHistory": "チャット履歴",
+    "noSessions": "まだ会話はありません",
+    "planReady": "計画準備完了",
+    "generatingPlan": "計画を生成中...",
+    "updatingPlan": "計画を更新中...",
+    "viewPlan": "計画を見る",
+    "startPlan": "計画を開始",
+    "newChat": "新しいチャット"
   }
 }

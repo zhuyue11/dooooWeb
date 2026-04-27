@@ -1597,5 +1597,26 @@
     "reminder": "提醒",
     "addSecondReminder": "第二個提醒",
     "secondReminder": "第二個提醒"
+  },
+  "aiChat": {
+    "typeMessage": "輸入訊息...",
+    "aiGreetingFallback": "你好！今天想做什麼計劃？",
+    "aiWelcomeNoTarget": "你好！我可以幫你制定個性化計劃：\n\n- 學習新技能（樂器、語言、程式設計...）\n- 制定日常作息\n- 健康和健身目標\n- 創意專案（寫作、構建、發布）\n- 養成習慣和紀律\n- 活動規劃和後勤\n\n告訴我你想做什麼，我來幫你制定計劃！",
+    "aiError": "抱歉，出了點問題。請重試。",
+    "startOver": "重新開始",
+    "startOverConfirm": "這將清除當前對話並開始新的規劃工作階段。",
+    "startNew": "新建",
+    "resume": "繼續",
+    "resumeSessionMessage": "你有一個關於「{{target}}」的未完成規劃工作階段。是否繼續？",
+    "resumeSessionMessageNoTarget": "你有一個未完成的規劃工作階段。是否繼續？",
+    "offTopicReply": "看起來我們偏題了。要重新開始制定新計劃嗎？",
+    "chatHistory": "聊天記錄",
+    "noSessions": "暫無對話",
+    "planReady": "計劃就緒",
+    "generatingPlan": "正在生成計劃...",
+    "updatingPlan": "正在更新計劃...",
+    "viewPlan": "查看計劃",
+    "startPlan": "開始計劃",
+    "newChat": "新建聊天"
   }
 }

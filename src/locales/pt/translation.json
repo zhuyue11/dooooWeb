@@ -1602,5 +1602,26 @@
     "reminder": "Lembrete",
     "addSecondReminder": "Segundo lembrete",
     "secondReminder": "Segundo lembrete"
+  },
+  "aiChat": {
+    "typeMessage": "Digite uma mensagem...",
+    "aiGreetingFallback": "Olá! O que você gostaria de planejar hoje?",
+    "aiWelcomeNoTarget": "Olá! Posso ajudá-lo a criar planos personalizados para:\n\n- Aprender novas habilidades (instrumentos, idiomas, programação...)\n- Criar rotinas diárias\n- Metas de saúde e fitness\n- Projetos criativos (escrita, construção, lançamento)\n- Formar hábitos e disciplina\n- Planejamento de eventos e logística\n\nDiga-me no que você quer trabalhar e criarei um plano para você!",
+    "aiError": "Desculpe, algo deu errado. Por favor, tente novamente.",
+    "startOver": "Recomeçar",
+    "startOverConfirm": "Isso limpará a conversa atual e iniciará uma nova sessão de planejamento.",
+    "startNew": "Novo",
+    "resume": "Continuar",
+    "resumeSessionMessage": "Você tem uma sessão de planejamento inacabada para \"{{target}}\". Deseja continuar ou iniciar uma nova?",
+    "resumeSessionMessageNoTarget": "Você tem uma sessão de planejamento inacabada. Deseja continuar ou iniciar uma nova?",
+    "offTopicReply": "Parece que saímos do assunto. Gostaria de recomeçar com um novo plano?",
+    "chatHistory": "Histórico de conversas",
+    "noSessions": "Nenhuma conversa ainda",
+    "planReady": "Plano pronto",
+    "generatingPlan": "Gerando plano...",
+    "updatingPlan": "Atualizando plano...",
+    "viewPlan": "Ver plano",
+    "startPlan": "Iniciar plano",
+    "newChat": "Nova conversa"
   }
 }

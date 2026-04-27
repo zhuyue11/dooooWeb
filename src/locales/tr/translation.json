@@ -1596,5 +1596,26 @@
     "reminder": "Hatırlatıcı",
     "addSecondReminder": "İkinci hatırlatıcı",
     "secondReminder": "İkinci hatırlatıcı"
+  },
+  "aiChat": {
+    "typeMessage": "Bir mesaj yazın...",
+    "aiGreetingFallback": "Merhaba! Bugün ne planlamak istersiniz?",
+    "aiWelcomeNoTarget": "Merhaba! Kişiselleştirilmiş planlar oluşturmanıza yardımcı olabilirim:\n\n- Yeni beceriler öğrenme (enstrümanlar, diller, kodlama...)\n- Günlük rutinler oluşturma\n- Sağlık ve fitness hedefleri\n- Yaratıcı projeler (yazma, inşa etme, lansman)\n- Alışkanlık ve disiplin oluşturma\n- Etkinlik planlama ve lojistik\n\nNe üzerinde çalışmak istediğinizi söyleyin, sizin için bir plan oluşturayım!",
+    "aiError": "Üzgünüm, bir hata oluştu. Lütfen tekrar deneyin.",
+    "startOver": "Yeniden başla",
+    "startOverConfirm": "Bu, mevcut konuşmayı silecek ve yeni bir planlama oturumu başlatacaktır.",
+    "startNew": "Yeni",
+    "resume": "Devam et",
+    "resumeSessionMessage": "\"{{target}}\" için tamamlanmamış bir planlama oturumunuz var. Devam etmek mi yoksa yeni bir tane başlatmak mı istersiniz?",
+    "resumeSessionMessageNoTarget": "Tamamlanmamış bir planlama oturumunuz var. Devam etmek mi yoksa yeni bir tane başlatmak mı istersiniz?",
+    "offTopicReply": "Konudan saptığımız görünüyor. Yeni bir planla yeniden başlamak ister misiniz?",
+    "chatHistory": "Sohbet geçmişi",
+    "noSessions": "Henüz konuşma yok",
+    "planReady": "Plan hazır",
+    "generatingPlan": "Plan oluşturuluyor...",
+    "updatingPlan": "Plan güncelleniyor...",
+    "viewPlan": "Planı gör",
+    "startPlan": "Planı başlat",
+    "newChat": "Yeni sohbet"
   }
 }

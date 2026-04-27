@@ -1599,5 +1599,26 @@
     "reminder": "Herinnering",
     "addSecondReminder": "Tweede herinnering",
     "secondReminder": "Tweede herinnering"
+  },
+  "aiChat": {
+    "typeMessage": "Typ een bericht...",
+    "aiGreetingFallback": "Hallo! Wat wil je vandaag plannen?",
+    "aiWelcomeNoTarget": "Hallo! Ik kan je helpen gepersonaliseerde plannen te maken voor:\n\n- Nieuwe vaardigheden leren (instrumenten, talen, programmeren...)\n- Dagelijkse routines opbouwen\n- Gezondheids- en fitnessdoelen\n- Creatieve projecten (schrijven, bouwen, lanceren)\n- Gewoontes en discipline vormen\n- Evenementenplanning en logistiek\n\nVertel me waar je aan wilt werken en ik maak een plan voor je!",
+    "aiError": "Sorry, er is iets misgegaan. Probeer het opnieuw.",
+    "startOver": "Opnieuw beginnen",
+    "startOverConfirm": "Dit wist het huidige gesprek en start een nieuwe planningssessie.",
+    "startNew": "Nieuw",
+    "resume": "Hervatten",
+    "resumeSessionMessage": "Je hebt een onafgemaakte planningssessie voor \"{{target}}\". Wil je deze hervatten of een nieuwe starten?",
+    "resumeSessionMessageNoTarget": "Je hebt een onafgemaakte planningssessie. Wil je deze hervatten of een nieuwe starten?",
+    "offTopicReply": "Het lijkt erop dat we van het onderwerp zijn afgedwaald. Wil je opnieuw beginnen met een nieuw plan?",
+    "chatHistory": "Chatgeschiedenis",
+    "noSessions": "Nog geen gesprekken",
+    "planReady": "Plan klaar",
+    "generatingPlan": "Plan wordt gegenereerd...",
+    "updatingPlan": "Plan wordt bijgewerkt...",
+    "viewPlan": "Plan bekijken",
+    "startPlan": "Plan starten",
+    "newChat": "Nieuw gesprek"
   }
 }

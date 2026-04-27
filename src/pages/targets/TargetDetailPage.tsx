@@ -183,7 +183,7 @@ export function TargetDetailPage() {
           <h2 className="text-lg font-bold text-foreground">{t('targetPlan.plans')}</h2>
           <button
             type="button"
-            onClick={() => navigate('/ai-chat')}
+            onClick={() => navigate(`/ai-chat?targetId=${targetId}&targetName=${encodeURIComponent(target.name)}`)}
             className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[13px] font-semibold text-primary hover:bg-primary/20"
             data-testid="generate-plan-button"
           >

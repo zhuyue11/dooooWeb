@@ -1596,5 +1596,26 @@
     "reminder": "Pengingat",
     "addSecondReminder": "Pengingat kedua",
     "secondReminder": "Pengingat kedua"
+  },
+  "aiChat": {
+    "typeMessage": "Ketik pesan...",
+    "aiGreetingFallback": "Halo! Apa yang ingin kamu rencanakan hari ini?",
+    "aiWelcomeNoTarget": "Halo! Saya bisa membantu kamu membuat rencana pribadi untuk:\n\n- Belajar keterampilan baru (alat musik, bahasa, pemrograman...)\n- Membuat rutinitas harian\n- Target kesehatan dan kebugaran\n- Proyek kreatif (menulis, membangun, meluncurkan)\n- Membentuk kebiasaan dan disiplin\n- Perencanaan acara dan logistik\n\nBeritahu saya apa yang ingin kamu kerjakan dan saya akan membuat rencana untukmu!",
+    "aiError": "Maaf, terjadi kesalahan. Silakan coba lagi.",
+    "startOver": "Mulai ulang",
+    "startOverConfirm": "Ini akan menghapus percakapan saat ini dan memulai sesi perencanaan baru.",
+    "startNew": "Baru",
+    "resume": "Lanjutkan",
+    "resumeSessionMessage": "Kamu memiliki sesi perencanaan yang belum selesai untuk \"{{target}}\". Ingin melanjutkan atau memulai yang baru?",
+    "resumeSessionMessageNoTarget": "Kamu memiliki sesi perencanaan yang belum selesai. Ingin melanjutkan atau memulai yang baru?",
+    "offTopicReply": "Sepertinya kita sudah keluar dari topik. Ingin memulai ulang dengan rencana baru?",
+    "chatHistory": "Riwayat percakapan",
+    "noSessions": "Belum ada percakapan",
+    "planReady": "Rencana siap",
+    "generatingPlan": "Membuat rencana...",
+    "updatingPlan": "Memperbarui rencana...",
+    "viewPlan": "Lihat rencana",
+    "startPlan": "Mulai rencana",
+    "newChat": "Percakapan baru"
   }
 }
