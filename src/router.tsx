@@ -28,6 +28,7 @@ import { TargetPlanHomePage } from '@/pages/targets/TargetPlanHomePage';
 import { TargetDetailPage } from '@/pages/targets/TargetDetailPage';
 import { PlanListPage } from '@/pages/targets/PlanListPage';
 import { PlanDetailPage } from '@/pages/targets/PlanDetailPage';
+import { StartPlanPage } from '@/pages/targets/StartPlanPage';
 import { AIChatPage } from '@/pages/targets/AIChatPage';
 
 // Items (view/edit)
@@ -94,6 +95,7 @@ export const router = createBrowserRouter([
           { path: '/targets/:targetId', element: <TargetDetailPage /> },
           { path: '/plans', element: <PlanListPage /> },
           { path: '/plans/:planId', element: <PlanDetailPage /> },
+          { path: '/plans/:planId/start', element: <StartPlanPage /> },
           { path: '/ai-chat', element: <AIChatPage /> },
 
           // Statistics

@@ -293,6 +293,8 @@ export const SEED_PLANS = {
   MORNING_ROUTINE: 'web-plan-morning-routine',
   /** AI-generated plan with 2 templates + HTML description */
   GUITAR_BASICS: 'web-plan-guitar-basics',
+  /** Plan with 3 templates, NO time fields (triggers TimePreferenceModal) */
+  WEEKLY_PLANNING: 'web-plan-weekly-planning',
   /** Plan with 0 templates (empty state testing) */
   EMPTY: 'web-plan-empty',
 } as const;
@@ -307,5 +309,10 @@ export const SEED_PLAN_TEMPLATES = {
   GUITAR_BASICS: [
     { title: 'Learn Proper Posture', time: '7 PM', duration: '20m', gapDays: 0, hasRepeat: true },
     { title: 'First Three Chords', time: '7:30 PM', duration: '25m', gapDays: 3, hasRepeat: false },
+  ],
+  WEEKLY_PLANNING: [
+    { title: 'Review Week Goals', duration: '20m', gapDays: 0 },
+    { title: 'Plan Next Week', duration: '30m', gapDays: 0 },
+    { title: 'Organize Tasks', duration: '15m', gapDays: 1 },
   ],
 } as const;

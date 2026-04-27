@@ -248,6 +248,7 @@ export function schedulePlanTasks(
   mode: ScheduleMode,
   preference: TimePreference,
   planArchetype: string | null | undefined,
+  useTimeOfDay: boolean = false,
 ): ScheduleResult {
   // 1. Calculate base dates
   const baseDates = calculateTemplateScheduledDates(templates, planArchetype, startDate);
@@ -268,7 +269,16 @@ export function schedulePlanTasks(
   const occupiedMap = buildOccupiedMap(scheduledTasks);
 
   // 4. Auto-suggest times for unscheduled tasks
-  if (mode === 'spread') {
+  if (useTimeOfDay) {
+    // timeOfDay mode: assign virtual time periods instead of exact times.
+    const defaultPeriod = preference.toUpperCase() as 'MORNING' | 'AFTERNOON' | 'EVENING';
+    for (const entry of unscheduledEntries) {
+      const task = templateToScheduledTask(entry.template, entry.baseDate, true);
+      task.hasTime = false;
+      task.timeOfDay = defaultPeriod;
+      scheduledTasks.push(task);
+    }
+  } else if (mode === 'spread') {
     // Group by date, cycle periods for multi-task days
     const byDate = new Map<string, { template: PlanTemplate; baseDate: Date }[]>();
     for (const entry of unscheduledEntries) {
@@ -482,4 +492,58 @@ export function getTasksForWeek(
   }
 
   return planTasksInWeek;
+}
+
+/**
+ * Check if the plan has multiple unscheduled tasks falling on the same day.
+ * Used to decide whether to show the "spread vs same period" option in the
+ * TimePreferenceModal.
+ */
+export function hasMultipleUnscheduledTasksPerDay(
+  templates: PlanTemplate[],
+  planArchetype: string | null | undefined,
+  startDate: Date,
+): boolean {
+  const unscheduled = templates.filter((t) => !t.time);
+  if (unscheduled.length <= 1) return false;
+
+  const baseDates = calculateTemplateScheduledDates(templates, planArchetype, startDate);
+  const dateCount = new Map<string, number>();
+
+  templates.forEach((template, index) => {
+    if (template.time) return;
+
+    const baseDate = baseDates[index];
+
+    if (!template.repeat) {
+      const key = toDateKey(baseDate);
+      dateCount.set(key, (dateCount.get(key) || 0) + 1);
+      return;
+    }
+
+    // Recurring: expand instances using the occurrence count
+    let repeat: Repeat;
+    try {
+      repeat = JSON.parse(template.repeat);
+    } catch {
+      const key = toDateKey(baseDate);
+      dateCount.set(key, (dateCount.get(key) || 0) + 1);
+      return;
+    }
+
+    const occurrences = repeat.endCondition?.occurrences || 1;
+    let current = new Date(baseDate);
+    current.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < occurrences; i++) {
+      const key = toDateKey(current);
+      dateCount.set(key, (dateCount.get(key) || 0) + 1);
+      current = getNextOccurrenceDate(current, repeat);
+    }
+  });
+
+  for (const count of dateCount.values()) {
+    if (count > 1) return true;
+  }
+  return false;
 }
