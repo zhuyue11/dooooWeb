@@ -8,6 +8,13 @@ export interface NotificationDataMap {
     assignedByName: string | null;
   };
 
+  TASK_DUE_SOON: {
+    taskId: string;
+    taskTitle: string;
+    dueDate: string;
+    hoursUntilDue: number;
+  };
+
   TASK_OVERDUE: {
     taskId: string;
     taskTitle: string;
@@ -92,6 +99,13 @@ export interface NotificationDataMap {
     newRole: string;
     changedByUserId: string;
     changedByName: string;
+  };
+
+  DEADLINE_REMINDER: {
+    taskId: string;
+    taskTitle: string;
+    dueDate: string;
+    hoursUntilDue: number;
   };
 
   DAILY_DIGEST: {

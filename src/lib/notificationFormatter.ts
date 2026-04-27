@@ -23,8 +23,12 @@ export const formatNotificationMessage = (
         return formatTaskCompleted(data, t);
       case NotificationType.TASK_COMMENT:
         return formatTaskComment(data, t);
+      case NotificationType.TASK_DUE_SOON:
+        return formatTaskDueSoon(data, t);
       case NotificationType.TASK_MENTION:
         return formatTaskMention(data, t);
+      case NotificationType.DEADLINE_REMINDER:
+        return formatDeadlineReminder(data, t);
       case NotificationType.PROJECT_INVITATION:
         return formatProjectInvitation(data, t);
       case NotificationType.GROUP_INVITATION:
@@ -161,6 +165,46 @@ function formatTaskMention(
       taskTitle: data.taskTitle,
       defaultValue: '{{userName}} mentioned you in a comment on task "{{taskTitle}}"',
     }),
+  };
+}
+
+function formatTaskDueSoon(
+  data: NotificationDataMap['TASK_DUE_SOON'],
+  t: TFunction
+): { title: string; message: string } {
+  const hours = Math.round(data.hoursUntilDue);
+  return {
+    title: t('notifications.types.TASK_DUE_SOON.title', { defaultValue: 'Task Due Soon' }),
+    message: hours < 1
+      ? t('notifications.types.TASK_DUE_SOON.messageLessThanHour', {
+          taskTitle: data.taskTitle,
+          defaultValue: 'Your task "{{taskTitle}}" is due in less than an hour',
+        })
+      : t('notifications.types.TASK_DUE_SOON.messageHours', {
+          taskTitle: data.taskTitle,
+          hours,
+          defaultValue: 'Your task "{{taskTitle}}" is due in {{hours}} hours',
+        }),
+  };
+}
+
+function formatDeadlineReminder(
+  data: NotificationDataMap['DEADLINE_REMINDER'],
+  t: TFunction
+): { title: string; message: string } {
+  const hours = Math.round(data.hoursUntilDue);
+  return {
+    title: t('notifications.types.DEADLINE_REMINDER.title', { defaultValue: 'Deadline Reminder' }),
+    message: hours < 1
+      ? t('notifications.types.DEADLINE_REMINDER.messageLessThanHour', {
+          taskTitle: data.taskTitle,
+          defaultValue: 'Reminder: "{{taskTitle}}" is due in less than an hour',
+        })
+      : t('notifications.types.DEADLINE_REMINDER.messageHours', {
+          taskTitle: data.taskTitle,
+          hours,
+          defaultValue: 'Reminder: "{{taskTitle}}" is due in {{hours}} hours',
+        }),
   };
 }
 

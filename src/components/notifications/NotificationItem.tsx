@@ -22,6 +22,13 @@ const ICON_MAP: Partial<Record<NotificationType, { name: string; bg: string; col
   [NotificationType.EVENT_INVITATION]: { name: 'event', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
   [NotificationType.EVENT_UPDATED]: { name: 'edit_calendar', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
   [NotificationType.EVENT_CANCELLED]: { name: 'event_busy', bg: 'bg-red-100 dark:bg-red-900/40', color: 'text-red-600 dark:text-red-400' },
+  [NotificationType.EVENT_RSVP_CHANGED]: { name: 'rsvp', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
+  [NotificationType.TASK_DUE_SOON]: { name: 'schedule', bg: 'bg-amber-100 dark:bg-amber-900/40', color: 'text-amber-600 dark:text-amber-400' },
+  [NotificationType.DEADLINE_REMINDER]: { name: 'alarm', bg: 'bg-amber-100 dark:bg-amber-900/40', color: 'text-amber-600 dark:text-amber-400' },
+  [NotificationType.PROJECT_INVITATION]: { name: 'folder_shared', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
+  [NotificationType.PROJECT_MEMBER_JOINED]: { name: 'person_add', bg: 'bg-emerald-100 dark:bg-emerald-900/40', color: 'text-emerald-600 dark:text-emerald-400' },
+  [NotificationType.DAILY_DIGEST]: { name: 'summarize', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
+  [NotificationType.WEEKLY_DIGEST]: { name: 'summarize', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
 };
 
 const DEFAULT_ICON = { name: 'notifications', bg: 'bg-gray-100 dark:bg-gray-800/40', color: 'text-gray-600 dark:text-gray-400' };

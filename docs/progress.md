@@ -2,7 +2,7 @@
 
 Tracks what has been completed, what's in progress, and what's remaining across all 7 phases to reach full dooooApp feature parity.
 
-Last updated: 2026-04-27
+Last updated: 2026-04-28
 
 ## Tech Stack
 
@@ -173,7 +173,7 @@ Last updated: 2026-04-27
 
 | Step | Status | Notes |
 |------|--------|-------|
-| 5.1 Notification inbox page | ⬜ | **Stub exists** (`NotificationPage.tsx`). **API ready:** `getNotifications`, `getUnreadCount`, `markNotificationAsRead`, `markAllNotificationsAsRead`, `deleteNotification`. **Build:** Notification list with type-based icons. **19 notification types:** TASK_ASSIGNED, TASK_OVERDUE, TASK_COMPLETED, TASK_COMMENT, TASK_MENTION, PROJECT_INVITATION, GROUP_INVITATION, PROJECT_MEMBER_JOINED, GROUP_MEMBER_JOINED, GROUP_MEMBER_LEFT, GROUP_MEMBER_REMOVED, GROUP_MEMBER_ROLE_CHANGED, DAILY_DIGEST, WEEKLY_DIGEST, SYSTEM_ALERT, EVENT_INVITATION, EVENT_UPDATED, EVENT_CANCELLED, EVENT_RSVP_CHANGED. **3 filter tabs:** Unread (default) / Invitations / All. Unread/read visual distinction (bold vs muted). Per-notification formatting via `notificationFormatter` (localized title + message). |
+| 5.1 Notification inbox page | ✅ Done | **Bulk delivered in Phase 3.8; gap-filled here.** Phase 3.8 built: `NotificationPage.tsx` (127 lines, 3-tab layout with Unread/Invitations/All, badge counts, mark-all-read, empty states), `GroupInvitationCard.tsx` (Accept/Decline with optimistic removal + toast), `NotificationItem.tsx` (mark-as-read on click, delete with confirmation), `useNotifications.ts` (7 hooks with optimistic mutations), `notificationFormatter.ts` (17/19 types), `types/notifications.ts` (NotificationDataMap), WebSocket real-time cache invalidation, sidebar unread badge, 13 E2E tests. **Gap-fill (this step):** added `NotificationDataMap` entries for `TASK_DUE_SOON` and `DEADLINE_REMINDER` types with `hoursUntilDue` field. Added `formatTaskDueSoon` and `formatDeadlineReminder` formatter functions using existing i18n keys (`messageLessThanHour` / `messageHours` conditional). Added 7 missing icon mappings to `ICON_MAP`: `TASK_DUE_SOON` (schedule/amber), `DEADLINE_REMINDER` (alarm/amber), `PROJECT_INVITATION` (folder_shared/blue), `PROJECT_MEMBER_JOINED` (person_add/emerald), `DAILY_DIGEST` (summarize/blue), `WEEKLY_DIGEST` (summarize/blue), `EVENT_RSVP_CHANGED` (rsvp/teal). All 21 enum values now have explicit icon + formatter coverage. No new translations needed (all 19 locale files already had TASK_DUE_SOON and DEADLINE_REMINDER keys). 13 E2E tests pass. |
 | 5.2 Notification actions | ⬜ | **Build:** Per-type actions: **Invitations** (GROUP_INVITATION, PROJECT_INVITATION, EVENT_INVITATION) — Accept/Decline buttons with `acceptGroupInvitation()` / `declineGroupInvitation()` / `rsvpEvent()`. **Regular notifications** — mark as read (single), delete (single). **Bulk action** — "Mark all as read" button in header. **Navigation** — click notification to navigate to relevant entity: TASK_* → task view, EVENT_* → event view, GROUP_* → group detail. Optimistic UI for mark-read and delete. dooooApp reference: `NotificationScreen.tsx` — `handleAcceptInvitation()` / `handleDeclineInvitation()` with iOS ActionSheetIOS / Android `InvitationBottomSheet`. |
 | 5.3 Unread notification badge | ⬜ | **API ready:** `getUnreadCount()`. **Build:** Badge on notification icon in Sidebar header showing unread count (number or dot for > 99). Polling interval (every 30s) or WebSocket push when Phase 7.2 is done. Update badge count on mark-read / mark-all-read actions (optimistic decrement). dooooApp reference: `ProfileScreen.tsx` shows unread badge on notification row. |
 | 5.4 Search page | ⬜ | **Stub exists** (`SearchPage.tsx`). **API ready:** `searchTasks(query, filters)` with pagination. **Build:** Search input (debounced 300ms) with results list below. **Filters:** priority dropdown (URGENT/HIGH/MEDIUM/LOW), category dropdown, date range (from/to date pickers), status toggle (overdueOnly, completedOnly). Active filter chips display with individual clear. "Clear all filters" option. Results as `ItemRow` cards with inline actions (toggle complete, click to view). **Scope gap:** dooooApp searches tasks, events, categories, plans, targets, and groups. Backend `searchTasks` may only cover tasks — check if additional search endpoints exist or need to be built for events/groups/targets. dooooApp reference: `SearchScreen.tsx` (972 lines) — multi-entity search via local SQLite + API, `DooooPanel` modal on result tap. |
@@ -256,11 +256,11 @@ Last updated: 2026-04-27
 | 2 — Personal Productivity | ✅ Complete | 16 | 16 | — |
 | 3 — Groups & Collaboration | 🔶 Partial | 7 | 9 | — |
 | 4 — Targets, Plans & AI | ✅ Complete | 11 | 11 | — |
-| 5 — Notifications, Search & Statistics | ⬜ Not Started | 0 | 6 | Backend aggregate endpoints for statistics |
+| 5 — Notifications, Search & Statistics | 🔶 Partial | 1 | 6 | Backend aggregate endpoints for statistics |
 | 6 — Settings & Account | 🔶 Partial | 3 | 15 | Backend preference endpoints for some settings |
 | 7 — Polish & Parity | 🔶 Partial | 1 | 13 | OAuth wiring, Google Calendar API setup |
 
-**Overall: 49 of 81 steps complete (~60%)**
+**Overall: 50 of 81 steps complete (~62%)**
 
 ---
 
