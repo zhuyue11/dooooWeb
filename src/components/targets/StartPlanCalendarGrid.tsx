@@ -1,5 +1,4 @@
-import { useMemo, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { getHoursArray, formatHourLabel, isSameDay } from '@/utils/date';
 import type { ScheduledPlanItem } from '@/utils/planScheduler';
@@ -8,11 +7,13 @@ interface StartPlanCalendarGridProps {
   weekDates: Date[];
   planTasks: ScheduledPlanItem[];
   onTaskClick: (task: ScheduledPlanItem) => void;
+  onDragEnd?: (task: ScheduledPlanItem, newDate: Date) => void;
 }
 
 const HOUR_HEIGHT = 60;
 const HOUR_LABEL_WIDTH = 48;
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+const SNAP_MINUTES = 15;
 
 const TIME_OF_DAY_ICONS: Record<string, string> = {
   MORNING: 'wb_sunny',
@@ -20,16 +21,47 @@ const TIME_OF_DAY_ICONS: Record<string, string> = {
   EVENING: 'nights_stay',
 };
 
-const TIME_OF_DAY_LABELS: Record<string, string> = {
-  MORNING: 'Morning',
-  AFTERNOON: 'Afternoon',
-  EVENING: 'Evening',
-};
+interface DragState {
+  task: ScheduledPlanItem;
+  startY: number;
+  blockTop: number; // original top position in the grid (px)
+  blockHeight: number;
+  colLeft: number; // left edge of the day column
+  colWidth: number;
+  pointerId: number;
+  element: HTMLElement;
+}
 
-export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: StartPlanCalendarGridProps) {
-  const { t } = useTranslation();
+function formatDragTime(date: Date): string {
+  const h = date.getHours();
+  const m = date.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
+function clampTime(date: Date, originalDate: Date): Date {
+  const d = new Date(date);
+  if (d.getDate() !== originalDate.getDate()) {
+    // Crossed midnight — clamp
+    if (d < originalDate) {
+      d.setFullYear(originalDate.getFullYear(), originalDate.getMonth(), originalDate.getDate());
+      d.setHours(0, 0, 0, 0);
+    } else {
+      d.setFullYear(originalDate.getFullYear(), originalDate.getMonth(), originalDate.getDate());
+      d.setHours(23, 30, 0, 0);
+    }
+  }
+  return d;
+}
+
+export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDragEnd }: StartPlanCalendarGridProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const hours = getHoursArray();
+
+  const [dragState, setDragState] = useState<DragState | null>(null);
+  const [dragOffsetY, setDragOffsetY] = useState(0);
 
   const today = useMemo(() => {
     const d = new Date();
@@ -83,7 +115,127 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: Sta
     scrollRef.current.scrollTop = Math.max(0, earliestHour - 1) * HOUR_HEIGHT;
   }, [planTasks]);
 
+  // Compute drag preview time (snapped)
+  const dragPreview = useMemo(() => {
+    if (!dragState) return null;
+    const rawMinuteOffset = (dragOffsetY / HOUR_HEIGHT) * 60;
+    const snappedOffset = Math.round(rawMinuteOffset / SNAP_MINUTES) * SNAP_MINUTES;
+    const originalMinutes = dragState.task.date.getHours() * 60 + dragState.task.date.getMinutes();
+    const newMinutes = originalMinutes + snappedOffset;
+    const newDate = new Date(dragState.task.date);
+    newDate.setHours(Math.floor(newMinutes / 60), newMinutes % 60, 0, 0);
+    const clamped = clampTime(newDate, dragState.task.date);
+    return { date: clamped, timeLabel: formatDragTime(clamped) };
+  }, [dragState, dragOffsetY]);
+
+  // Ref for cleanup of document listeners
+  const cleanupRef = useRef<(() => void) | null>(null);
+
+  // Drag handler — adds document-level listeners immediately (not via useEffect)
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>, task: ScheduledPlanItem, blockTop: number, blockHeight: number) => {
+      if (!onDragEnd || !task.hasTime) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const el = e.currentTarget;
+      const startY = e.clientY;
+
+      // Get the day column position for the floating block
+      const colEl = el.parentElement;
+      const colRect = colEl?.getBoundingClientRect() ?? { left: 0, width: 0 };
+
+      const state: DragState = {
+        task,
+        startY,
+        blockTop,
+        blockHeight,
+        colLeft: colRect.left,
+        colWidth: colRect.width,
+        pointerId: e.pointerId,
+        element: el,
+      };
+
+      setDragState(state);
+      setDragOffsetY(0);
+
+      // Prevent scroll during drag
+      if (scrollRef.current) {
+        scrollRef.current.style.overflowY = 'hidden';
+      }
+
+      // Immediately attach document-level listeners (no re-render delay)
+      const handleMove = (ev: PointerEvent) => {
+        const offset = ev.clientY - startY;
+        setDragOffsetY(offset);
+      };
+
+      const finishDrag = (offset: number) => {
+        // Remove listeners
+        document.removeEventListener('pointermove', handleMove);
+        document.removeEventListener('pointerup', handleUp);
+        document.removeEventListener('keydown', handleKeyDown);
+        cleanupRef.current = null;
+
+        // Restore scroll
+        if (scrollRef.current) {
+          scrollRef.current.style.overflowY = 'auto';
+        }
+
+        // Compute snapped new time
+        if (Math.abs(offset) > 5) {
+          const rawMinuteOffset = (offset / HOUR_HEIGHT) * 60;
+          const snappedOffset = Math.round(rawMinuteOffset / SNAP_MINUTES) * SNAP_MINUTES;
+          const originalMinutes = task.date.getHours() * 60 + task.date.getMinutes();
+          const newMinutes = originalMinutes + snappedOffset;
+          const newDate = new Date(task.date);
+          newDate.setHours(Math.floor(newMinutes / 60), newMinutes % 60, 0, 0);
+          onDragEnd(task, clampTime(newDate, task.date));
+        } else {
+          onTaskClick(task);
+        }
+
+        setDragState(null);
+        setDragOffsetY(0);
+      };
+
+      let lastOffset = 0;
+      const origHandleMove = handleMove;
+      const trackingHandleMove = (ev: PointerEvent) => {
+        lastOffset = ev.clientY - startY;
+        origHandleMove(ev);
+      };
+
+      const handleUp = () => finishDrag(lastOffset);
+
+      const handleKeyDown = (ev: KeyboardEvent) => {
+        if (ev.key === 'Escape') finishDrag(0);
+      };
+
+      // Replace handleMove reference with tracking version
+      document.addEventListener('pointermove', trackingHandleMove);
+      document.addEventListener('pointerup', handleUp);
+      document.addEventListener('keydown', handleKeyDown);
+
+      cleanupRef.current = () => {
+        document.removeEventListener('pointermove', trackingHandleMove);
+        document.removeEventListener('pointerup', handleUp);
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    },
+    [onDragEnd, onTaskClick],
+  );
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (cleanupRef.current) cleanupRef.current();
+    };
+  }, []);
+
   if (weekDates.length === 0) return null;
+
+  const isDragging = dragState !== null;
 
   return (
     <div
@@ -165,7 +317,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: Sta
           })}
 
         {/* Hour grid */}
-        <div className="relative flex">
+        <div ref={gridRef} className="relative flex">
           {/* Hour labels */}
           <div className="flex-shrink-0" style={{ width: HOUR_LABEL_WIDTH }}>
             {hours.map((hour) => (
@@ -205,21 +357,30 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: Sta
                     const startMinute = task.date.getMinutes();
                     const top = (startHour + startMinute / 60) * HOUR_HEIGHT;
                     const height = Math.max(24, (task.duration / 60) * HOUR_HEIGHT);
+                    const taskKey = task.instanceId || task.templateId;
+                    const isBeingDragged = isDragging && (dragState.task.instanceId || dragState.task.templateId) === taskKey;
 
                     return (
-                      <button
+                      <div
                         key={task.instanceId || task.templateId}
-                        type="button"
-                        className="absolute cursor-pointer overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left transition-opacity hover:opacity-80"
+                        className={`absolute overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left select-none ${
+                          isBeingDragged
+                            ? 'opacity-35'
+                            : onDragEnd
+                              ? 'cursor-grab hover:opacity-80'
+                              : 'cursor-pointer hover:opacity-80'
+                        }`}
                         style={{
                           top,
                           height,
                           left: '2px',
                           right: '2px',
-                          zIndex: 1,
+                          zIndex: isBeingDragged ? 0 : 1,
+                          touchAction: 'none',
                         }}
-                        onClick={() => onTaskClick(task)}
                         data-testid={`start-plan-task-${task.templateId}`}
+                        onPointerDown={(e) => handlePointerDown(e, task, top, height)}
+                        onClick={!onDragEnd ? () => onTaskClick(task) : undefined}
                       >
                         <div className="flex min-w-0 items-center gap-0.5">
                           {task.isEvent && (
@@ -234,7 +395,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: Sta
                             <Icon name="auto_awesome" size={8} color="var(--color-primary-foreground)" />
                           </div>
                         )}
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -243,6 +404,45 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick }: Sta
           </div>
         </div>
       </div>
+
+      {/* Drag overlay: floating block + time badge */}
+      {isDragging && dragPreview && (
+        <div className="pointer-events-none fixed inset-0 z-[100]" data-testid="drag-overlay">
+          {/* Time badge */}
+          <div
+            className="absolute rounded bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground shadow-md"
+            style={{
+              top: dragState.startY + dragOffsetY - dragState.blockHeight - 8,
+              left: dragState.colLeft,
+              width: dragState.colWidth,
+              textAlign: 'center',
+            }}
+            data-testid="drag-time-badge"
+          >
+            {dragPreview.timeLabel}
+          </div>
+
+          {/* Floating block */}
+          <div
+            className="absolute cursor-grabbing overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left shadow-lg"
+            style={{
+              top: dragState.startY + dragOffsetY - (dragState.startY - (dragState.element.getBoundingClientRect().top)),
+              left: dragState.colLeft + 2,
+              width: dragState.colWidth - 4,
+              height: dragState.blockHeight,
+            }}
+          >
+            <div className="flex min-w-0 items-center gap-0.5">
+              {dragState.task.isEvent && (
+                <Icon name="event" size={10} color="var(--color-primary-foreground)" />
+              )}
+              <span className="truncate text-[10px] font-medium leading-tight text-primary-foreground">
+                {dragState.task.title}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

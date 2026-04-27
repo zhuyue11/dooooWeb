@@ -284,7 +284,7 @@ export function PlanDetailPage() {
 
       {/* Start Plan bottom bar — fixed at bottom, hidden during active execution */}
       {templates.length > 0 && !activeExecution && (
-        <div className="flex shrink-0 items-center justify-end border-t border-border bg-background px-4 py-2.5" data-testid="start-plan-bar">
+        <div className="flex shrink-0 items-center justify-end bg-background px-4 py-2.5" data-testid="start-plan-bar">
           <button
             type="button"
             onClick={() => navigate(`/plans/${planId}/start`)}

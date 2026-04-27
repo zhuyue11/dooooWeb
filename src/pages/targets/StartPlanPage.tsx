@@ -61,6 +61,10 @@ export function StartPlanPage() {
     date: Date;
   } | null>(null);
 
+  // Drag-to-reschedule overrides for recurring instances
+  // Key: instanceId (templateId-YYYY-MM-DD), Value: "HH:mm"
+  const [instanceOverrides, setInstanceOverrides] = useState<Map<string, string>>(new Map());
+
   // Execution
   const [executing, setExecuting] = useState(false);
 
@@ -124,9 +128,38 @@ export function StartPlanPage() {
     (date: Date) => {
       setStartDate(date);
       setShowDatePicker(false);
+      setInstanceOverrides(new Map());
       runScheduler(date, lastPreference.mode, lastPreference.preference, lastPreference.useTimeOfDay);
     },
     [runScheduler, lastPreference],
+  );
+
+  // Drag-to-reschedule handler
+  const handleDragEnd = useCallback(
+    (task: ScheduledPlanItem, newDate: Date) => {
+      const newHH = String(newDate.getHours()).padStart(2, '0');
+      const newMM = String(newDate.getMinutes()).padStart(2, '0');
+      const newTime = `${newHH}:${newMM}`;
+
+      if (task.instanceId) {
+        // Recurring instance — store override in map
+        setInstanceOverrides((prev) => {
+          const next = new Map(prev);
+          next.set(task.instanceId!, newTime);
+          return next;
+        });
+      } else {
+        // Non-recurring — update scheduledTasks directly
+        setScheduledTasks((prev) =>
+          prev.map((st) =>
+            st.templateId === task.templateId
+              ? { ...st, date: newDate, isAutoSuggested: false }
+              : st,
+          ),
+        );
+      }
+    },
+    [],
   );
 
   const handleTaskClick = useCallback(
@@ -149,18 +182,34 @@ export function StartPlanPage() {
       const taskItems = scheduledTasks.filter((st) => !st.isEvent);
       const eventItems = scheduledTasks.filter((st) => st.isEvent);
 
-      const tasks = taskItems.map((st) => ({
-        templateId: st.templateId,
-        title: st.title,
-        description: st.description,
-        date: st.hasTime ? st.date.toISOString() : toNoonUTC(st.date).toISOString(),
-        duration: st.duration,
-        repeat: st.repeat,
-        firstReminderMinutes: st.firstReminderMinutes ?? undefined,
-        secondReminderMinutes: st.secondReminderMinutes ?? undefined,
-        timeOfDay: st.timeOfDay || undefined,
-        location: st.location || undefined,
-      }));
+      const tasks = taskItems.map((st) => {
+        // Collect instance overrides for recurring templates
+        let overrides: Array<{ date: string; time: string }> | undefined;
+        if (st.repeat && instanceOverrides.size > 0) {
+          const prefix = `${st.templateId}-`;
+          const entries: Array<{ date: string; time: string }> = [];
+          instanceOverrides.forEach((time, key) => {
+            if (key.startsWith(prefix)) {
+              entries.push({ date: key.slice(prefix.length), time });
+            }
+          });
+          if (entries.length > 0) overrides = entries;
+        }
+
+        return {
+          templateId: st.templateId,
+          title: st.title,
+          description: st.description,
+          date: st.hasTime ? st.date.toISOString() : toNoonUTC(st.date).toISOString(),
+          duration: st.duration,
+          repeat: st.repeat,
+          firstReminderMinutes: st.firstReminderMinutes ?? undefined,
+          secondReminderMinutes: st.secondReminderMinutes ?? undefined,
+          instanceOverrides: overrides,
+          timeOfDay: st.timeOfDay || undefined,
+          location: st.location || undefined,
+        };
+      });
 
       const events = eventItems.map((st) => ({
         templateId: st.templateId,
@@ -221,11 +270,21 @@ export function StartPlanPage() {
     });
   }, [weekStarts, currentWeekIndex]);
 
-  // Tasks for the current visible week
+  // Tasks for the current visible week, with drag overrides applied
   const weekTasks = useMemo(() => {
     if (weekStarts.length === 0 || !weekStarts[currentWeekIndex]) return [];
-    return getTasksForWeek(weekStarts[currentWeekIndex], scheduledTasks);
-  }, [weekStarts, currentWeekIndex, scheduledTasks]);
+    const tasks = getTasksForWeek(weekStarts[currentWeekIndex], scheduledTasks);
+    if (instanceOverrides.size === 0) return tasks;
+    return tasks.map((task) => {
+      if (task.instanceId && instanceOverrides.has(task.instanceId)) {
+        const [h, m] = instanceOverrides.get(task.instanceId)!.split(':').map(Number);
+        const newDate = new Date(task.date);
+        newDate.setHours(h, m, 0, 0);
+        return { ...task, date: newDate, isAutoSuggested: false };
+      }
+      return task;
+    });
+  }, [weekStarts, currentWeekIndex, scheduledTasks, instanceOverrides]);
 
   // Week label
   const weekLabel = useMemo(() => {
@@ -369,6 +428,7 @@ export function StartPlanPage() {
           weekDates={weekDates}
           planTasks={weekTasks}
           onTaskClick={handleTaskClick}
+          onDragEnd={handleDragEnd}
         />
       )}
 
@@ -381,7 +441,7 @@ export function StartPlanPage() {
 
       {/* Bottom bar */}
       {preferenceApplied && scheduledTasks.length > 0 && (
-        <div className="flex shrink-0 items-center justify-end gap-3 border-t border-border bg-background px-4 py-2.5" data-testid="confirm-bar">
+        <div className="flex shrink-0 items-center justify-end gap-3 bg-background px-4 py-2.5" data-testid="confirm-bar">
           <button
             type="button"
             onClick={() => navigate(`/plans/${planId}`)}

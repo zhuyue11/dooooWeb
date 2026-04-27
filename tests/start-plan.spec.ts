@@ -316,3 +316,96 @@ test.describe('Start Plan — multi-week navigation', () => {
     await expect(page.getByTestId('start-plan-name')).toHaveText('Learn Guitar Basics');
   });
 });
+
+test.describe('Start Plan — drag to reschedule', () => {
+  test('dragging a task block changes its position on the grid', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}/start`);
+    await page.waitForSelector('[data-testid="start-plan-page"]');
+
+    await expect(page.getByTestId('start-plan-calendar-grid')).toBeVisible();
+
+    // Find the first task block (Morning Stretch at 7:00 AM)
+    const taskBlock = page.locator('[data-testid^="start-plan-task-"]').first();
+    await expect(taskBlock).toBeVisible();
+
+    const box = await taskBlock.boundingBox();
+    expect(box).not.toBeNull();
+
+    // Drag down by 120px (2 hours at HOUR_HEIGHT=60)
+    await taskBlock.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2 + 120, { steps: 10 });
+
+    // Drag overlay should appear with time badge
+    await expect(page.getByTestId('drag-overlay')).toBeVisible();
+    await expect(page.getByTestId('drag-time-badge')).toBeVisible();
+
+    await page.mouse.up();
+
+    // Overlay should disappear after drop
+    await expect(page.getByTestId('drag-overlay')).not.toBeVisible();
+  });
+
+  test('dragging a task and executing creates it at the new time', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.WEEKLY_PLANNING}/start`);
+    await page.waitForSelector('[data-testid="start-plan-page"]');
+
+    // Complete preference flow: Spread → Specific times
+    await page.getByTestId('option-spread').click();
+    await page.getByTestId('option-specific-times').click();
+
+    await expect(page.getByTestId('start-plan-calendar-grid')).toBeVisible();
+    await expect(page.getByTestId('confirm-bar')).toBeVisible();
+
+    // Find "Review Week Goals" task block — it's placed at 8 AM by the spread scheduler
+    const taskBlock = page.locator('[data-testid^="start-plan-task-"]').first();
+    await expect(taskBlock).toBeVisible();
+
+    const box = await taskBlock.boundingBox();
+    expect(box).not.toBeNull();
+
+    // Read the time badge text during drag to know the new time
+    // Drag down by 120px (2 hours at HOUR_HEIGHT=60) — from 8 AM to 10 AM
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2 + 120, { steps: 10 });
+
+    // Verify the time badge shows the new time
+    const timeBadge = page.getByTestId('drag-time-badge');
+    await expect(timeBadge).toBeVisible();
+    const badgeText = await timeBadge.textContent();
+    // Should be 2 hours later than original (8 AM → 10 AM)
+    expect(badgeText).toContain('10:00 AM');
+
+    await page.mouse.up();
+
+    // Execute the plan
+    const confirmBtn = page.getByTestId('confirm-create-tasks');
+    await expect(confirmBtn).toBeEnabled();
+    await confirmBtn.click();
+
+    await expect(page).toHaveURL(`/plans/${SEED_PLANS.WEEKLY_PLANNING}`, { timeout: 15000 });
+
+    // Navigate to calendar and verify the task is at the new time (10 AM not 8 AM)
+    await page.goto('/calendar');
+    await page.waitForSelector('[data-testid="calendar-date-range"]', { timeout: 10000 });
+
+    // Verify the task was created at 10:00 AM (dragged from 8:00 AM)
+    // The side panel shows task name + time — check both appear together
+    const reviewGoalsEntry = page.getByText('Review Week Goals').first();
+    await expect(reviewGoalsEntry).toBeVisible();
+    // The time "10:00 AM" should appear near the task in the side panel
+    await expect(page.getByText('10:00 AM').first()).toBeVisible();
+  });
+
+  test('task blocks have grab cursor when drag is enabled', async ({ page }) => {
+    await page.goto(`/plans/${SEED_PLANS.MORNING_ROUTINE}/start`);
+    await page.waitForSelector('[data-testid="start-plan-page"]');
+
+    await expect(page.getByTestId('start-plan-calendar-grid')).toBeVisible();
+
+    const taskBlock = page.locator('[data-testid^="start-plan-task-"]').first();
+    const cursor = await taskBlock.evaluate((el) => window.getComputedStyle(el).cursor);
+    expect(cursor).toBe('grab');
+  });
+});
