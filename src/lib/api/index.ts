@@ -60,6 +60,12 @@ import type {
   ExecutePlanResponse,
 } from '@/types/target';
 import type { User, AuthResponse, UpdateProfileRequest } from '@/types/navigation';
+import type {
+  PlanningSession,
+  PlanningSessionListItem,
+  CreateSessionRequest,
+  SaveMessagesRequest,
+} from '@/types/ai';
 
 // ===== Auth =====
 
@@ -700,4 +706,38 @@ export async function deleteNotification(id: string): Promise<void> {
 export async function searchTasks(params: { query?: string; status?: string; priority?: string; categoryId?: string; fromDate?: string; toDate?: string; page?: number; limit?: number }): Promise<{ tasks: Task[]; total: number }> {
   const res = await apiClient.get<{ success: boolean; data: { tasks: Task[]; total: number } }>('/api/tasks/search', { params });
   return res.data.data;
+}
+
+// ===== AI Planning Sessions =====
+
+export async function listAISessions(): Promise<PlanningSessionListItem[]> {
+  const res = await apiClient.get<{ success: boolean; data: PlanningSessionListItem[] }>('/api/ai/sessions');
+  return res.data.data;
+}
+
+export async function getActiveAISession(): Promise<PlanningSession | null> {
+  const res = await apiClient.get<{ success: boolean; data: PlanningSession | null }>('/api/ai/sessions/active');
+  return res.data.data;
+}
+
+export async function getAISession(sessionId: string): Promise<PlanningSession> {
+  const res = await apiClient.get<{ success: boolean; data: PlanningSession }>(`/api/ai/sessions/${sessionId}`);
+  return res.data.data;
+}
+
+export async function createAISession(data: CreateSessionRequest): Promise<PlanningSession> {
+  const res = await apiClient.post<{ success: boolean; data: PlanningSession }>('/api/ai/sessions', data);
+  return res.data.data;
+}
+
+export async function saveAISessionMessages(sessionId: string, messages: SaveMessagesRequest['messages']): Promise<void> {
+  await apiClient.put(`/api/ai/sessions/${sessionId}/messages`, { messages });
+}
+
+export async function deleteAISession(sessionId: string): Promise<void> {
+  await apiClient.delete(`/api/ai/sessions/${sessionId}`);
+}
+
+export async function completeAISession(sessionId: string): Promise<void> {
+  await apiClient.post(`/api/ai/sessions/${sessionId}/complete`);
 }
