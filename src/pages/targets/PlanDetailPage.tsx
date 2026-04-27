@@ -5,11 +5,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import DOMPurify from 'dompurify';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { usePlan, usePlanTemplates, usePlanExecutionsForPlan } from '@/hooks/usePlans';
-import { deletePlan, unsavePlan } from '@/lib/api';
+import { deletePlan, unsavePlan, deletePlanExecutionData } from '@/lib/api';
 import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { PlanTemplateItem } from '@/components/targets/PlanTemplateItem';
 import { PlanExecutionView } from '@/components/targets/PlanExecutionView';
+import { PlanExecutionDeleteModal } from '@/components/targets/PlanExecutionDeleteModal';
 import { PlanTemplateDetailPanel } from '@/components/targets/PlanTemplateDetailPanel';
 import { PlanCalendarView } from '@/components/targets/PlanCalendarView';
 import { hasUnscheduledTasks } from '@/utils/planScheduler';
@@ -37,6 +38,7 @@ export function PlanDetailPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState<number | null>(null);
   const [selectedScheduledDate, setSelectedScheduledDate] = useState<Date | null>(null);
+  const [showExecutionDeleteModal, setShowExecutionDeleteModal] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -101,6 +103,19 @@ export function PlanDetailPage() {
       setIsDeleting(false);
     }
   }, [planId, queryClient, navigate]);
+
+  const handleDeleteExecution = useCallback(async () => {
+    if (!planId || !activeExecution) return;
+    setShowExecutionDeleteModal(false);
+    await deletePlanExecutionData(planId, activeExecution.id);
+    queryClient.invalidateQueries({ queryKey: ['planExecutions', planId] });
+    queryClient.invalidateQueries({ queryKey: ['planExecutions'] });
+    queryClient.invalidateQueries({ queryKey: ['plans'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+  }, [planId, activeExecution, queryClient]);
 
   // Loading state
   if (isLoading) {
@@ -255,7 +270,20 @@ export function PlanDetailPage() {
       {/* Scrollable content area — only the list/calendar scrolls */}
       <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
         {activeExecution ? (
-          <PlanExecutionView execution={activeExecution} />
+          <div className="flex flex-col gap-4">
+            <PlanExecutionView execution={activeExecution} />
+            <button
+              type="button"
+              onClick={() => setShowExecutionDeleteModal(true)}
+              className="flex items-center justify-center gap-1.5 self-start rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+              data-testid="execution-delete-btn"
+            >
+              <Icon name={activeExecution.status === 'COMPLETED' ? 'delete_outline' : 'stop_circle'} size={16} />
+              {activeExecution.status === 'COMPLETED'
+                ? t('tasks.clearPlanData', 'Clear Plan Data')
+                : t('tasks.deleteAllPlanTasks', 'Stop Plan')}
+            </button>
+          </div>
         ) : viewMode === 'calendar' ? (
           <PlanCalendarView
             templates={templates}
@@ -334,6 +362,18 @@ export function PlanDetailPage() {
         onConfirm={handleRemovePlan}
         onCancel={() => setShowRemoveConfirm(false)}
       />
+
+      {/* Execution delete/stop modal */}
+      {activeExecution && (
+        <PlanExecutionDeleteModal
+          open={showExecutionDeleteModal}
+          onClose={() => setShowExecutionDeleteModal(false)}
+          planId={activeExecution.planId}
+          executionId={activeExecution.id}
+          planName={plan.name}
+          onConfirm={handleDeleteExecution}
+        />
+      )}
 
       {/* Template detail panel */}
       {selectedTemplateIndex !== null && templates[selectedTemplateIndex] && (

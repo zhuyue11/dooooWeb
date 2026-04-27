@@ -181,6 +181,25 @@ export interface TargetTask {
   target?: Target;
 }
 
+// ===== Plan Review =====
+
+export interface PlanReview {
+  id: string;
+  userId: string;
+  planId: string;
+  score: number; // 1-5
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PlanExecutionCompleted {
+  planExecutionId: string;
+  planId: string;
+  planName: string;
+  existingReview: PlanReview | null;
+}
+
 // ===== API Request/Response Types =====
 
 export interface CreateTargetRequest {

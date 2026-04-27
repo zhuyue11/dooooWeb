@@ -4,6 +4,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { getTasks, getAssignedGroupTasks, getEvents, getAttendingEvents, toggleTask } from '@/lib/api';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useGroups } from '@/hooks/useGroups';
 import { useCategories } from '@/hooks/useCategories';
 import type { Event } from '@/types/api';
@@ -327,10 +328,12 @@ export function HomePage() {
     queryClient.invalidateQueries({ queryKey: ['dashboard-attending-events'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-past'] });
   }, [queryClient]);
+  const { showPlanReview } = usePlanReview();
   const handleToggle = async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    await toggleTask(item.id);
+    const { planExecutionCompleted } = await toggleTask(item.id);
     invalidateDashboard();
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   };
   const handleSaved = useCallback(() => {
     setShowCreateModal(false);

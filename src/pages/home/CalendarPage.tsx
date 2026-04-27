@@ -14,6 +14,7 @@ import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { toISODate } from '@/utils/date';
 import { toggleTask } from '@/lib/api';
 import { getParentId } from '@/utils/calendarItemId';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useQueryClient } from '@tanstack/react-query';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 
@@ -26,6 +27,7 @@ export function CalendarPage() {
   const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
 
   const queryClient = useQueryClient();
+  const { showPlanReview } = usePlanReview();
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => setShowCreateModal(false), []);
@@ -36,14 +38,15 @@ export function CalendarPage() {
     // For recurring instances, item.id is a virtual id (`${taskId}_${YYYY-MM-DD}`).
     // toggleTask must hit the parent task id; per-occurrence completion is a
     // separate flow not handled here.
-    await toggleTask(getParentId(item));
+    const { planExecutionCompleted } = await toggleTask(getParentId(item));
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-attending-events'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
-  }, [queryClient]);
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
+  }, [queryClient, showPlanReview]);
 
   const {
     currentDate,

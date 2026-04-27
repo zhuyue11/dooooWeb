@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { getTasks, getAssignedGroupTasks, toggleTask } from '@/lib/api';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useGroups } from '@/hooks/useGroups';
 import { useCategories } from '@/hooks/useCategories';
 import { Icon } from '@/components/ui/Icon';
@@ -151,15 +152,17 @@ export function TodoPage() {
 
   // ── Handlers ──
 
+  const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    await toggleTask(item.id);
+    const { planExecutionCompleted } = await toggleTask(item.id);
     queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['todo-assigned-group-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
-  }, [queryClient]);
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
+  }, [queryClient, showPlanReview]);
 
   const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
   const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);

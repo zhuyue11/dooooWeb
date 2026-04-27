@@ -58,6 +58,8 @@ import type {
   UserPlan,
   ExecutePlanInput,
   ExecutePlanResponse,
+  PlanReview,
+  PlanExecutionCompleted,
 } from '@/types/target';
 import type { User, AuthResponse, UpdateProfileRequest } from '@/types/navigation';
 import type {
@@ -138,9 +140,11 @@ export async function deleteTask(id: string): Promise<void> {
   await apiClient.delete(`/api/tasks/${id}`);
 }
 
-export async function toggleTask(id: string): Promise<Task> {
-  const res = await apiClient.patch<{ success: boolean; data: Task }>(`/api/tasks/${id}/toggle`);
-  return res.data.data;
+export async function toggleTask(id: string): Promise<{ task: Task; planExecutionCompleted: PlanExecutionCompleted | null }> {
+  const res = await apiClient.patch<{ success: boolean; data: Task; planExecutionCompleted?: PlanExecutionCompleted }>(
+    `/api/tasks/${id}/toggle`,
+  );
+  return { task: res.data.data, planExecutionCompleted: res.data.planExecutionCompleted ?? null };
 }
 
 // ===== Assigned Group Tasks =====
@@ -184,9 +188,12 @@ export async function deleteTaskInstance(taskId: string, date: string): Promise<
   return res.data.data;
 }
 
-export async function toggleTaskInstance(taskId: string, instanceId?: string, instanceDate?: string, currentStatus?: string): Promise<TaskInstance> {
-  const res = await apiClient.patch<{ success: boolean; data: TaskInstance }>(`/api/tasks/${taskId}/instances/toggle`, { instanceId, instanceDate, currentStatus });
-  return res.data.data;
+export async function toggleTaskInstance(taskId: string, instanceId?: string, instanceDate?: string, currentStatus?: string): Promise<{ instance: TaskInstance; planExecutionCompleted: PlanExecutionCompleted | null }> {
+  const res = await apiClient.patch<{ success: boolean; data: TaskInstance; planExecutionCompleted?: PlanExecutionCompleted }>(
+    `/api/tasks/${taskId}/instances/toggle`,
+    { instanceId, instanceDate, currentStatus },
+  );
+  return { instance: res.data.data, planExecutionCompleted: res.data.planExecutionCompleted ?? null };
 }
 
 /**
@@ -679,6 +686,23 @@ export async function unsavePlan(planId: string): Promise<void> {
 
 export async function getPublicPlan(planId: string): Promise<Plan> {
   const res = await apiClient.get<{ success: boolean; data: Plan }>(`/api/plans/public/${planId}`);
+  return res.data.data;
+}
+
+// ===== Plan Reviews & Execution Management =====
+
+export async function submitPlanReview(planId: string, score: number, note?: string): Promise<PlanReview> {
+  const res = await apiClient.post<{ success: boolean; data: PlanReview }>(`/api/plans/${planId}/review`, { score, note });
+  return res.data.data;
+}
+
+export async function getPlanExecutionStatus(planId: string, executionId: string): Promise<{ id: string; planId: string; status: 'IN_PROGRESS' | 'COMPLETED' }> {
+  const res = await apiClient.get<{ success: boolean; data: { id: string; planId: string; status: 'IN_PROGRESS' | 'COMPLETED' } }>(`/api/plans/${planId}/executions/${executionId}`);
+  return res.data.data;
+}
+
+export async function deletePlanExecutionData(planId: string, executionId: string): Promise<{ planId: string; executionId: string; deletedCount: number; deletedTaskIds: string[]; deletedEventIds: string[] }> {
+  const res = await apiClient.delete<{ success: boolean; data: { planId: string; executionId: string; deletedCount: number; deletedTaskIds: string[]; deletedEventIds: string[] } }>(`/api/plans/${planId}/executions/${executionId}`);
   return res.data.data;
 }
 

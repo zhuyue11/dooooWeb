@@ -15,6 +15,7 @@ import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { toISODate } from '@/utils/date';
 import { toggleTask, getGroup } from '@/lib/api';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { getParentId } from '@/utils/calendarItemId';
 
 export function GroupCalendarPage() {
@@ -59,13 +60,15 @@ export function GroupCalendarPage() {
   const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
   const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
 
+  const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    await toggleTask(getParentId(item));
+    const { planExecutionCompleted } = await toggleTask(getParentId(item));
     queryClient.invalidateQueries({ queryKey: ['group-calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['group-calendar-recurring-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['group-todo', groupId] });
-  }, [queryClient, groupId]);
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
+  }, [queryClient, groupId, showPlanReview]);
 
   return (
     <div className="flex h-full flex-col gap-5" style={{ fontFamily: 'Inter, sans-serif' }}>

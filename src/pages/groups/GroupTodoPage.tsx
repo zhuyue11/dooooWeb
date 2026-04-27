@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { toggleTask } from '@/lib/api';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useCategories } from '@/hooks/useCategories';
 import { useTodoListTasks } from '@/hooks/useTodoListTasks';
 import { Icon } from '@/components/ui/Icon';
@@ -73,11 +74,13 @@ export function GroupTodoPage() {
     return todoItems.filter((item) => item.title.toLowerCase().includes(q));
   }, [todoItems, search]);
 
+  const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    await toggleTask(getParentId(item));
+    const { planExecutionCompleted } = await toggleTask(getParentId(item));
     queryClient.invalidateQueries({ queryKey: ['group-todo', groupId] });
-  }, [queryClient, groupId]);
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
+  }, [queryClient, groupId, showPlanReview]);
 
   const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
 

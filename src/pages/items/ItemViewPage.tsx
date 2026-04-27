@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getTask, getEvent, toggleTask } from '@/lib/api';
+import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { useDisplay } from '@/lib/contexts/display-context';
@@ -80,15 +81,17 @@ export function ItemViewPage() {
     navigate(-1);
   }, [id, type, deleteTaskMutation, deleteEventMutation, navigate]);
 
+  const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async () => {
     if (!id || type === 'event') return;
-    await toggleTask(id);
+    const { planExecutionCompleted } = await toggleTask(id);
     queryClient.invalidateQueries({ queryKey: ['task', id] });
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
-  }, [id, type, queryClient]);
+    if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
+  }, [id, type, queryClient, showPlanReview]);
 
   if (isLoading) {
     return (

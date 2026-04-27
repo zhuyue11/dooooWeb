@@ -7,6 +7,7 @@ import { AuthProvider } from '@/lib/contexts/auth-context';
 import { WebSocketProvider } from '@/lib/contexts/websocket-context';
 import { UnreadMessagesProvider } from '@/lib/contexts/unread-messages-context';
 import { ToastProvider } from '@/lib/contexts/toast-context';
+import { PlanReviewProvider } from '@/lib/contexts/plan-review-context';
 import { router } from './router';
 
 const queryClient = new QueryClient({
@@ -28,7 +29,9 @@ export default function App() {
               <WebSocketProvider>
                 <UnreadMessagesProvider>
                   <ToastProvider>
-                    <RouterProvider router={router} />
+                    <PlanReviewProvider>
+                      <RouterProvider router={router} />
+                    </PlanReviewProvider>
                   </ToastProvider>
                 </UnreadMessagesProvider>
               </WebSocketProvider>
