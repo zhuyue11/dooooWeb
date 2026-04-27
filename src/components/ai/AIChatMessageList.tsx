@@ -18,6 +18,8 @@ interface AIChatMessageListProps {
   onResumeChoice: (choice: 'resume' | 'start_new') => void;
   onStartOver: () => void;
   onProposalResponse: (messageId: string, choice: 'confirm' | 'decline') => void;
+  onViewPlan?: (planId: string, type: 'generated' | 'recommended') => void;
+  onStartPlan?: (planId: string, planName: string) => void;
   isStreamingDisabled: boolean;
 }
 
@@ -31,6 +33,8 @@ export function AIChatMessageList({
   onResumeChoice,
   onStartOver,
   onProposalResponse,
+  onViewPlan,
+  onStartPlan,
   isStreamingDisabled,
 }: AIChatMessageListProps) {
   const { t } = useTranslation();
@@ -175,13 +179,14 @@ export function AIChatMessageList({
             );
           }
 
-          // Plan action buttons (placeholder for step 4.9)
+          // Plan action buttons
           if (message.planAction) {
             return (
               <div key={message.id} className="flex justify-start" data-testid="ai-plan-action">
                 <div className="flex gap-2">
                   <button
                     type="button"
+                    onClick={() => onViewPlan?.(message.planAction!.planId, message.planAction!.type)}
                     className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
                   >
                     <Icon name="visibility" size={16} color="var(--color-primary)" />
@@ -189,6 +194,7 @@ export function AIChatMessageList({
                   </button>
                   <button
                     type="button"
+                    onClick={() => onStartPlan?.(message.planAction!.planId, message.planAction!.planName)}
                     className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
                   >
                     <Icon name="play_arrow" size={16} />

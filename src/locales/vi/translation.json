@@ -1616,6 +1616,8 @@
     "updatingPlan": "Đang cập nhật kế hoạch...",
     "viewPlan": "Xem kế hoạch",
     "startPlan": "Bắt đầu kế hoạch",
-    "newChat": "Trò chuyện mới"
+    "newChat": "Trò chuyện mới",
+    "planPreviewNoTemplates": "Không có mẫu trong kế hoạch này",
+    "loadingPlan": "Đang tải kế hoạch..."
   }
 }

@@ -677,6 +677,11 @@ export async function unsavePlan(planId: string): Promise<void> {
   await apiClient.delete(`/api/plans/${planId}/save`);
 }
 
+export async function getPublicPlan(planId: string): Promise<Plan> {
+  const res = await apiClient.get<{ success: boolean; data: Plan }>(`/api/plans/public/${planId}`);
+  return res.data.data;
+}
+
 // ===== Notifications =====
 
 export async function getNotifications(): Promise<Notification[]> {

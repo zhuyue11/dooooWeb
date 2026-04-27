@@ -1617,6 +1617,8 @@
     "updatingPlan": "正在更新計劃...",
     "viewPlan": "查看計劃",
     "startPlan": "開始計劃",
-    "newChat": "新建聊天"
+    "newChat": "新建聊天",
+    "planPreviewNoTemplates": "此計劃中沒有模板",
+    "loadingPlan": "正在載入計劃..."
   }
 }

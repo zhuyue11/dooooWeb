@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { SEED_PLANS, SEED_PLAN_TEMPLATES } from './seed-data';
 
 /**
  * Phase 4.8 — AI Chat conversation UI E2E tests.
@@ -192,5 +193,195 @@ test.describe('AI Chat — conversation UI', () => {
     await page.getByTestId('ai-fab').click();
     await expect(page).toHaveURL('/ai-chat');
     await page.waitForSelector('[data-testid="ai-chat-page"]', { timeout: 10000 });
+  });
+});
+
+/**
+ * Phase 4.9 — AI Chat plan preview panel E2E tests.
+ *
+ * Uses a mock active session with a plan action message to test the
+ * plan preview panel without depending on real AI streaming.
+ */
+test.describe('AI Chat — plan preview', () => {
+  const MOCK_PLAN_ID = SEED_PLANS.MORNING_ROUTINE;
+  const MOCK_SESSION_ID = 'test-session-plan-preview';
+
+  // Set up route intercepts so the AI chat page shows a session with a plan action
+  async function setupPlanPreviewMocks(page: import('@playwright/test').Page) {
+    // Mock active session → returns session with plan action messages
+    await page.route('**/api/ai/sessions/active', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: true,
+          data: {
+            id: MOCK_SESSION_ID,
+            status: 'PLAN_GENERATED',
+            targetId: null,
+            targetName: null,
+            offTopic: false,
+            planIds: [MOCK_PLAN_ID],
+            messages: [
+              { id: 'msg-1', role: 'user', text: 'Help me build a morning routine' },
+              { id: 'msg-2', role: 'assistant', text: 'I have created a morning routine plan for you!\n\n✅ "Morning Routine" — 4 tasks' },
+              {
+                id: 'msg-plan-action',
+                role: 'assistant',
+                text: '',
+                planAction: { type: 'generated', planName: 'Morning Routine', planId: MOCK_PLAN_ID },
+              },
+            ],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        }),
+      });
+    });
+
+    // Mock session list (for history panel)
+    await page.route('**/api/ai/sessions', (route) => {
+      if (route.request().method() === 'GET') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true, data: [] }),
+        });
+      } else {
+        route.continue();
+      }
+    });
+
+    // Mock save messages (fire-and-forget from useAIChat)
+    await page.route(`**/api/ai/sessions/${MOCK_SESSION_ID}/messages`, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true }),
+      });
+    });
+  }
+
+  test('plan action buttons appear in chat messages', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-chat-page"]', { timeout: 10000 });
+
+    // Plan action row should be visible
+    const planAction = page.getByTestId('ai-plan-action');
+    await expect(planAction).toBeVisible({ timeout: 10000 });
+
+    // Both buttons should be present
+    await expect(planAction.getByText('View Plan')).toBeVisible();
+    await expect(planAction.getByText('Start Plan')).toBeVisible();
+  });
+
+  test('View Plan button opens preview panel with plan details', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Click View Plan
+    await page.getByTestId('ai-plan-action').getByText('View Plan').click();
+
+    // Preview panel should appear
+    const panel = page.getByTestId('plan-preview-panel');
+    await expect(panel).toBeVisible({ timeout: 10000 });
+
+    // Plan name should be in the header
+    await expect(panel.getByRole('heading', { name: 'Morning Routine' })).toBeVisible();
+
+    // Template items from seed data should appear
+    for (const tmpl of SEED_PLAN_TEMPLATES.MORNING_ROUTINE) {
+      await expect(panel.getByText(tmpl.title)).toBeVisible();
+    }
+
+    // Start Plan button should be visible
+    await expect(page.getByTestId('plan-preview-start')).toBeVisible();
+  });
+
+  test('plan preview panel closes on close button', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Open preview
+    await page.getByTestId('ai-plan-action').getByText('View Plan').click();
+    await expect(page.getByTestId('plan-preview-panel')).toBeVisible({ timeout: 10000 });
+
+    // Close via close button
+    await page.getByTestId('plan-preview-close').click();
+    await page.waitForTimeout(300); // animation
+    await expect(page.getByTestId('plan-preview-panel')).not.toBeVisible();
+  });
+
+  test('plan preview panel closes on Escape key', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Open preview
+    await page.getByTestId('ai-plan-action').getByText('View Plan').click();
+    await expect(page.getByTestId('plan-preview-panel')).toBeVisible({ timeout: 10000 });
+
+    // Close via Escape
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await expect(page.getByTestId('plan-preview-panel')).not.toBeVisible();
+  });
+
+  test('template click shows detail view with back button', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Open preview
+    await page.getByTestId('ai-plan-action').getByText('View Plan').click();
+    await expect(page.getByTestId('plan-preview-panel')).toBeVisible({ timeout: 10000 });
+
+    // Click first template
+    await page.getByTestId('plan-template-item-0').click();
+
+    // Detail view: back button should appear
+    await expect(page.getByTestId('plan-preview-back')).toBeVisible();
+
+    // Template title should be in the header
+    await expect(page.getByTestId('plan-preview-panel').getByText(SEED_PLAN_TEMPLATES.MORNING_ROUTINE[0].title)).toBeVisible();
+
+    // Go back to list view
+    await page.getByTestId('plan-preview-back').click();
+
+    // All templates should be visible again
+    for (const tmpl of SEED_PLAN_TEMPLATES.MORNING_ROUTINE) {
+      await expect(page.getByTestId('plan-preview-panel').getByText(tmpl.title)).toBeVisible();
+    }
+  });
+
+  test('Start Plan button from action row navigates to start page', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Click Start Plan button (from the chat action row)
+    await page.getByTestId('ai-plan-action').getByText('Start Plan').click();
+
+    // Should navigate to the start plan page
+    await expect(page).toHaveURL(`/plans/${MOCK_PLAN_ID}/start`);
+  });
+
+  test('Start Plan button from preview panel navigates to start page', async ({ page }) => {
+    await setupPlanPreviewMocks(page);
+    await page.goto('/ai-chat');
+    await page.waitForSelector('[data-testid="ai-plan-action"]', { timeout: 10000 });
+
+    // Open preview
+    await page.getByTestId('ai-plan-action').getByText('View Plan').click();
+    await expect(page.getByTestId('plan-preview-panel')).toBeVisible({ timeout: 10000 });
+
+    // Click Start Plan from the preview panel bottom
+    await page.getByTestId('plan-preview-start').click();
+
+    // Should navigate to the start plan page
+    await expect(page).toHaveURL(`/plans/${MOCK_PLAN_ID}/start`);
   });
 });

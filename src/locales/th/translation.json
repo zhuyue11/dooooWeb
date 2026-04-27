@@ -1616,6 +1616,8 @@
     "updatingPlan": "กำลังอัปเดตแผน...",
     "viewPlan": "ดูแผน",
     "startPlan": "เริ่มแผน",
-    "newChat": "แชทใหม่"
+    "newChat": "แชทใหม่",
+    "planPreviewNoTemplates": "ไม่มีเทมเพลตในแผนนี้",
+    "loadingPlan": "กำลังโหลดแผน..."
   }
 }

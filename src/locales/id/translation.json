@@ -1616,6 +1616,8 @@
     "updatingPlan": "Memperbarui rencana...",
     "viewPlan": "Lihat rencana",
     "startPlan": "Mulai rencana",
-    "newChat": "Percakapan baru"
+    "newChat": "Percakapan baru",
+    "planPreviewNoTemplates": "Tidak ada template dalam rencana ini",
+    "loadingPlan": "Memuat rencana..."
   }
 }

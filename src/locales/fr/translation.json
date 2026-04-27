@@ -1616,6 +1616,8 @@
     "updatingPlan": "Mise à jour du plan...",
     "viewPlan": "Voir le plan",
     "startPlan": "Démarrer le plan",
-    "newChat": "Nouvelle conversation"
+    "newChat": "Nouvelle conversation",
+    "planPreviewNoTemplates": "Aucun modèle dans ce plan",
+    "loadingPlan": "Chargement du plan..."
   }
 }

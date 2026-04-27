@@ -1619,6 +1619,8 @@
     "updatingPlan": "Plan wordt bijgewerkt...",
     "viewPlan": "Plan bekijken",
     "startPlan": "Plan starten",
-    "newChat": "Nieuw gesprek"
+    "newChat": "Nieuw gesprek",
+    "planPreviewNoTemplates": "Geen sjablonen in dit plan",
+    "loadingPlan": "Plan laden..."
   }
 }

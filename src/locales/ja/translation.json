@@ -1622,6 +1622,8 @@
     "updatingPlan": "計画を更新中...",
     "viewPlan": "計画を見る",
     "startPlan": "計画を開始",
-    "newChat": "新しいチャット"
+    "newChat": "新しいチャット",
+    "planPreviewNoTemplates": "このプランにはテンプレートがありません",
+    "loadingPlan": "プランを読み込み中..."
   }
 }

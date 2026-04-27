@@ -1622,6 +1622,8 @@
     "updatingPlan": "Atualizando plano...",
     "viewPlan": "Ver plano",
     "startPlan": "Iniciar plano",
-    "newChat": "Nova conversa"
+    "newChat": "Nova conversa",
+    "planPreviewNoTemplates": "Nenhum modelo neste plano",
+    "loadingPlan": "Carregando plano..."
   }
 }

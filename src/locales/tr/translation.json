@@ -1616,6 +1616,8 @@
     "updatingPlan": "Plan güncelleniyor...",
     "viewPlan": "Planı gör",
     "startPlan": "Planı başlat",
-    "newChat": "Yeni sohbet"
+    "newChat": "Yeni sohbet",
+    "planPreviewNoTemplates": "Bu planda şablon yok",
+    "loadingPlan": "Plan yükleniyor..."
   }
 }

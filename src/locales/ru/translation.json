@@ -1616,6 +1616,8 @@
     "updatingPlan": "Обновление плана...",
     "viewPlan": "Посмотреть план",
     "startPlan": "Начать план",
-    "newChat": "Новый чат"
+    "newChat": "Новый чат",
+    "planPreviewNoTemplates": "В этом плане нет шаблонов",
+    "loadingPlan": "Загрузка плана..."
   }
 }

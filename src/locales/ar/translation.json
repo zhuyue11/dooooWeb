@@ -1616,6 +1616,8 @@
     "updatingPlan": "جاري تحديث الخطة...",
     "viewPlan": "عرض الخطة",
     "startPlan": "بدء الخطة",
-    "newChat": "محادثة جديدة"
+    "newChat": "محادثة جديدة",
+    "planPreviewNoTemplates": "لا توجد قوالب في هذه الخطة",
+    "loadingPlan": "جارٍ تحميل الخطة..."
   }
 }

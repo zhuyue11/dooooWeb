@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
@@ -5,7 +6,10 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AIChatInputBar } from '@/components/ai/AIChatInputBar';
 import { AIChatMessageList } from '@/components/ai/AIChatMessageList';
 import { ChatHistoryPanel } from '@/components/ai/ChatHistoryPanel';
+import { PlanPreviewPanel } from '@/components/ai/PlanPreviewPanel';
 import { useAIChat } from '@/hooks/useAIChat';
+import { getPlan, getPlanTemplates, getPublicPlan } from '@/lib/api';
+import type { Plan, PlanTemplate } from '@/types/target';
 
 export function AIChatPage() {
   const { t } = useTranslation();
@@ -15,6 +19,66 @@ export function AIChatPage() {
   const targetName = searchParams.get('targetName') || undefined;
 
   const chat = useAIChat({ targetId, targetName });
+
+  // Plan preview state
+  const [planPreviewData, setPlanPreviewData] = useState<{ plan: Plan; templates: PlanTemplate[] } | null>(null);
+  const [planPreviewLoading, setPlanPreviewLoading] = useState(false);
+  const [showPlanPreview, setShowPlanPreview] = useState(false);
+
+  const loadPlanPreview = useCallback(async (planId: string, type: 'generated' | 'recommended') => {
+    // Cache hit — same planId already loaded, just show
+    if (planPreviewData?.plan?.id === planId) {
+      setShowPlanPreview(true);
+      return;
+    }
+    setPlanPreviewLoading(true);
+    setShowPlanPreview(true);
+    try {
+      if (type === 'recommended') {
+        const planData = await getPublicPlan(planId);
+        // Public plans include a flat templates array from the backend controller
+        const templates: PlanTemplate[] = ((planData as Record<string, unknown>).templates as Array<Record<string, unknown>> || []).map((tmpl) => ({
+          ...tmpl,
+          type: (tmpl.type as string) || 'task',
+          repeat: tmpl.repeat ?? undefined,
+          description: tmpl.description ?? undefined,
+        })) as PlanTemplate[];
+        setPlanPreviewData({
+          plan: {
+            id: planData.id,
+            name: planData.name,
+            description: planData.description ?? undefined,
+            isAiGenerated: planData.isAiGenerated,
+            archetype: planData.archetype ?? null,
+            createdAt: planData.createdAt,
+            updatedAt: planData.updatedAt,
+          },
+          templates,
+        });
+      } else {
+        const [planData, templateData] = await Promise.all([
+          getPlan(planId),
+          getPlanTemplates(planId),
+        ]);
+        setPlanPreviewData({ plan: planData, templates: templateData });
+      }
+    } catch (error) {
+      console.error('Failed to load plan preview:', error);
+      setShowPlanPreview(false);
+    } finally {
+      setPlanPreviewLoading(false);
+    }
+  }, [planPreviewData]);
+
+  const handleStartPlan = useCallback((planId: string, _planName: string) => {
+    navigate(`/plans/${planId}/start`);
+  }, [navigate]);
+
+  const handleStartPlanFromPreview = useCallback(() => {
+    if (!planPreviewData) return;
+    setShowPlanPreview(false);
+    navigate(`/plans/${planPreviewData.plan.id}/start`);
+  }, [planPreviewData, navigate]);
 
   if (chat.isLoadingSession) {
     return (
@@ -72,6 +136,8 @@ export function AIChatPage() {
         onResumeChoice={chat.handleResumeChoice}
         onStartOver={chat.confirmStartOver}
         onProposalResponse={chat.handleProposalResponse}
+        onViewPlan={loadPlanPreview}
+        onStartPlan={handleStartPlan}
         isStreamingDisabled={chat.isThinking}
       />
 
@@ -101,6 +167,16 @@ export function AIChatPage() {
         onSelectSession={chat.handleSelectSession}
         onStartNewChat={chat.handleStartNewChat}
         currentSessionId={chat.sessionId}
+      />
+
+      {/* Plan Preview panel */}
+      <PlanPreviewPanel
+        open={showPlanPreview}
+        onClose={() => setShowPlanPreview(false)}
+        plan={planPreviewData?.plan ?? null}
+        templates={planPreviewData?.templates ?? []}
+        loading={planPreviewLoading}
+        onStartPlan={handleStartPlanFromPreview}
       />
     </div>
   );

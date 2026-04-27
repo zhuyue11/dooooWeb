@@ -1624,6 +1624,8 @@
     "updatingPlan": "Updating plan...",
     "viewPlan": "View Plan",
     "startPlan": "Start Plan",
-    "newChat": "New Chat"
+    "newChat": "New Chat",
+    "planPreviewNoTemplates": "No templates in this plan",
+    "loadingPlan": "Loading plan..."
   }
 }

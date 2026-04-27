@@ -1622,6 +1622,8 @@
     "updatingPlan": "계획 업데이트 중...",
     "viewPlan": "계획 보기",
     "startPlan": "계획 시작",
-    "newChat": "새 채팅"
+    "newChat": "새 채팅",
+    "planPreviewNoTemplates": "이 플랜에 템플릿이 없습니다",
+    "loadingPlan": "플랜 로딩 중..."
   }
 }
