@@ -1,0 +1,54 @@
+/*
+ * WARM palette — Cream canvas with hot pink, lavender, ochre
+ * Inspired by Clay design system
+ *
+ * ── Color Palette ──────────────────────────────────────────────────────
+ *
+ * PRIMARY & CTA
+ *   Ink                #0a0a0a   — Primary CTA background, heading text.
+ *   Ink Active         #1f1f1f   — CTA hover/pressed state.
+ *   Ink Disabled       #e5e5e5   — Disabled CTA.
+ *   On Primary         #ffffff   — Text on ink-colored buttons.
+ *
+ * BRAND COLORS (7 saturated colors for feature cards/accents)
+ *   Brand Pink         #ff4d8b   — Hot pink. Primary accent, active states.
+ *   Brand Teal         #1a3a3a   — Deep teal. Dark section backgrounds.
+ *   Brand Lavender     #b8a4ed   — Soft purple. Secondary accent, tags.
+ *   Brand Peach        #ffb084   — Warm peach. Decorative, warm highlights.
+ *   Brand Ochre        #e8b94a   — Golden ochre. Premium/accent highlights.
+ *   Brand Mint         #a4d4c5   — Soft mint green. Success, positive states.
+ *   Brand Coral        #ff6b5a   — Warm coral. Error/destructive accent.
+ *
+ * SURFACE & BACKGROUND
+ *   Canvas             #fffaf0   — Warm cream page background.
+ *   Surface Soft       #faf5e8   — Light cream. Cards, sidebar.
+ *   Surface Card       #f5f0e0   — Slightly deeper cream. Popover, selected.
+ *   Surface Strong     #ebe6d6   — Deepest cream. Separators, tracks.
+ *   Surface Dark       #0a1a1a   — Dark sections (dark mode base).
+ *   Surface Dark Elev  #1a2a2a   — Elevated dark (dark mode cards).
+ *
+ * TEXT
+ *   Body               #3a3a3a   — Primary body text.
+ *   Body Strong        #1a1a1a   — Emphasized text.
+ *   Muted              #6a6a6a   — Secondary text, labels.
+ *   Muted Soft         #9a9a9a   — Placeholders, disabled text.
+ *   On Dark            #ffffff   — Text on dark surfaces.
+ *   On Dark Soft       #a0a0a0   — Secondary text on dark.
+ *
+ * STRUCTURAL
+ *   Hairline           #e5e5e5   — Borders, dividers.
+ *   Hairline Soft      #f0f0f0   — Subtle borders.
+ *
+ * SEMANTIC
+ *   Success            #22c55e   — Success state.
+ *   Warning            #f59e0b   — Warning state.
+ *   Error              #ef4444   — Error/destructive state.
+ *
+ * ── Dark Mode ──────────────────────────────────────────────────────────
+ *   Uses Surface Dark (#0a1a1a) as base, Surface Dark Elevated (#1a2a2a)
+ *   as cards, On Dark (#ffffff) / On Dark Soft (#a0a0a0) for text,
+ *   brightened brand colors for interactive elements.
+ * ───────────────────────────────────────────────────────────────────────
+ */
+
+/* (token assignments truncated for context — see full file) */

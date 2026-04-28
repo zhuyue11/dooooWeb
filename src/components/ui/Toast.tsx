@@ -3,21 +3,21 @@ import { useToast } from '@/lib/contexts/toast-context';
 
 const VARIANT_STYLES = {
   success: {
-    bg: 'bg-primary/10',
-    border: 'border-primary/30',
-    icon: 'text-primary',
+    bg: 'bg-(--el-toast-success-bg)',
+    border: 'border-(--el-toast-success-border)',
+    icon: 'text-(--el-toast-success-icon)',
     iconName: 'check_circle' as const,
   },
   error: {
-    bg: 'bg-destructive/10',
-    border: 'border-destructive/30',
-    icon: 'text-destructive',
+    bg: 'bg-(--el-toast-error-bg)',
+    border: 'border-(--el-toast-error-border)',
+    icon: 'text-(--el-toast-error-icon)',
     iconName: 'error' as const,
   },
   info: {
-    bg: 'bg-info/10',
-    border: 'border-info/30',
-    icon: 'text-info',
+    bg: 'bg-(--el-toast-info-bg)',
+    border: 'border-(--el-toast-info-border)',
+    icon: 'text-(--el-toast-info-icon)',
     iconName: 'info' as const,
   },
 };
@@ -40,12 +40,12 @@ export function Toast() {
           <span className={style.icon}>
             <Icon name={style.iconName} size={20} />
           </span>
-          <p className="min-w-0 flex-1 text-sm font-medium text-foreground">
+          <p className="min-w-0 flex-1 text-sm font-medium text-(--el-toast-text)">
             {toast.message}
           </p>
           <button
             onClick={dismissToast}
-            className="shrink-0 rounded p-0.5 text-muted-foreground hover:text-foreground"
+            className="shrink-0 rounded p-0.5 text-(--el-toast-close) hover:text-(--el-toast-text)"
           >
             <Icon name="close" size={16} />
           </button>

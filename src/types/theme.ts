@@ -4,8 +4,7 @@ export type ThemePattern = 'system' | 'auto' | 'light' | 'dark';
 
 export type ThemeColor = 'electric' | 'emerald' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink';
 
-export type ColorPalette = 'light' | 'dark' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink'
-  | 'airbnb' | 'clay' | 'notion' | 'starbucks' | 'mintlify';
+export type ColorPalette = 'ocean' | 'yellow' | 'pink' | 'warm' | 'earth' | 'fresh';
 
 export type DisplayStyle = 'default' | 'soft' | 'flat' | 'pill';
 

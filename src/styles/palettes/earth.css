@@ -1,0 +1,664 @@
+/*
+ * EARTH palette — Deep green with gold accents on warm cream
+ * Inspired by Starbucks design system
+ *
+ * ── Color Palette ──────────────────────────────────────────────────────
+ *
+ * PRIMARY
+ *   Starbucks Green    #006241   — Brand green. Headings, primary sections.
+ *   Green Accent       #00754A   — Brighter green. Filled CTAs, action buttons.
+ *   House Green        #1E3932   — Deep near-black green. Dark surfaces, footer.
+ *   Green Uplift       #2b5148   — Mid-dark green. Decorative accents.
+ *   Green Light        #d4e9e2   — Pale mint wash. Success tints, subtle surfaces.
+ *
+ * SECONDARY & ACCENT
+ *   Gold               #cba258   — Rewards/premium accent. Sparingly used.
+ *   Gold Light         #dfc49d   — Softer gold for background washes.
+ *   Gold Lightest      #faf6ee   — Cream-gold surface wash.
+ *
+ * SURFACE & BACKGROUND
+ *   White              #ffffff   — Card and modal surfaces.
+ *   Neutral Cool       #f9f9f9   — Subtle cool-gray. Dropdowns, form wraps.
+ *   Neutral Warm       #f2f0eb   — Warm cream page canvas.
+ *   Ceramic            #edebe9   — Warmer cream. Separators, section washes.
+ *   Black              #000000   — High-contrast dark CTAs.
+ *
+ * TEXT
+ *   Text Black         rgba(0,0,0,0.87)   — Primary text on light surfaces.
+ *   Text Black Soft    rgba(0,0,0,0.58)   — Secondary/metadata text.
+ *   Text White         #ffffff             — Text on dark green surfaces.
+ *   Text White Soft    rgba(255,255,255,0.70) — Secondary text on dark.
+ *   Rewards Green      #33443d            — Muted slate-green reading text.
+ *
+ * SEMANTIC
+ *   Red                #c82014   — Error, destructive actions.
+ *   Yellow             #fbbc05   — Warning state.
+ *   Red Tint           hsl(4 82% 43% / 5%)   — Invalid-field tint.
+ *
+ * ── Dark Mode ──────────────────────────────────────────────────────────
+ *   Not defined by the original design system. Dark variant uses:
+ *   House Green (#1E3932) as page bg, Green Uplift (#2b5148) as surfaces,
+ *   Gold Light (#dfc49d) as warm accent, brightened greens for interactive.
+ * ───────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Light Mode ── */
+
+[data-palette="earth"] {
+  /* Layout */
+  --el-page-bg: #f2f0eb;                /* Neutral Warm */
+  --el-page-text: rgba(0,0,0,0.87);     /* Text Black */
+  --el-logo-fill: #006241;              /* Starbucks Green */
+
+  /* Sidebar */
+  --el-sidebar-bg: #ffffff;             /* White */
+  --el-sidebar-border: #edebe9;         /* Ceramic */
+  --el-sidebar-item-text: rgba(0,0,0,0.58);  /* Text Black Soft */
+  --el-sidebar-item-hover-bg: #f9f9f9; /* Neutral Cool */
+  --el-sidebar-item-hover-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-sidebar-item-active-bg: #d4e9e2; /* Green Light */
+  --el-sidebar-item-active-text: #006241; /* Starbucks Green */
+  --el-sidebar-item-icon: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-sidebar-item-active-icon: #006241; /* Starbucks Green */
+  --el-sidebar-badge-bg: #c82014;       /* Red */
+  --el-sidebar-badge-text: #ffffff;     /* Text White */
+  --el-sidebar-avatar-bg: #006241;      /* Starbucks Green */
+  --el-sidebar-avatar-text: #ffffff;    /* Text White */
+  --el-sidebar-group-dot: #00754a;      /* Green Accent */
+  --el-sidebar-handle-bg: #ffffff;      /* White */
+  --el-sidebar-handle-border: #edebe9;  /* Ceramic */
+  --el-sidebar-footer-border: #edebe9;  /* Ceramic */
+
+  /* Header */
+  --el-header-bg: #ffffff;              /* White */
+  --el-header-border: #edebe9;          /* Ceramic */
+  --el-header-text: rgba(0,0,0,0.87);   /* Text Black */
+  --el-header-icon: rgba(0,0,0,0.58);   /* Text Black Soft */
+  --el-header-icon-hover-bg: #f9f9f9;  /* Neutral Cool */
+  --el-header-badge-bg: #c82014;        /* Red */
+  --el-header-badge-text: #ffffff;      /* Text White */
+
+  /* Calendar */
+  --el-cal-title: #006241;              /* Starbucks Green */
+  --el-cal-date-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-nav-border: #edebe9;         /* Ceramic */
+  --el-cal-nav-text: rgba(0,0,0,0.87);  /* Text Black */
+  --el-cal-nav-hover-bg: #f9f9f9;      /* Neutral Cool */
+  --el-cal-switcher-bg: #f9f9f9;       /* Neutral Cool */
+  --el-cal-tab-active-bg: #ffffff;      /* White */
+  --el-cal-tab-active-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-cal-tab-inactive-text: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-add-btn-bg: #00754a;         /* Green Accent */
+  --el-cal-add-btn-text: #ffffff;       /* Text White */
+  --el-cal-today-border: #edebe9;       /* Ceramic */
+  --el-cal-today-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-cal-grid-bg: #ffffff;            /* White */
+  --el-cal-grid-border: #edebe9;        /* Ceramic */
+  --el-cal-day-header: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-date-selected-bg: #00754a;   /* Green Accent */
+  --el-cal-date-selected-text: #ffffff; /* Text White */
+  --el-cal-date-today-border: #006241;  /* Starbucks Green */
+  --el-cal-date-today-text: #006241;    /* Starbucks Green */
+  --el-cal-date-normal: rgba(0,0,0,0.87); /* Text Black */
+  --el-cal-date-other: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-current-hour-bg: #faf6ee;    /* Gold Lightest */
+  --el-cal-hour-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-hour-label-current: #006241; /* Starbucks Green */
+  --el-cal-more-items: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-cal-task-bg: #d4e9e2;            /* Green Light */
+  --el-cal-task-text: #006241;          /* Starbucks Green */
+  --el-cal-event-bg: #faf6ee;           /* Gold Lightest */
+  --el-cal-event-text: #cba258;         /* Gold */
+
+  /* Item Row */
+  --el-item-bg: transparent;
+  --el-item-completed-bg: #f9f9f9;      /* Neutral Cool */
+  --el-item-title: rgba(0,0,0,0.87);    /* Text Black */
+  --el-item-title-completed: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-item-details: rgba(0,0,0,0.58);  /* Text Black Soft */
+  --el-item-checkbox-border: #00754a;   /* Green Accent */
+  --el-item-checkbox-bg: #00754a;       /* Green Accent */
+  --el-item-checkbox-mark: #ffffff;     /* Text White */
+  --el-item-priority-high: #c82014;     /* Red */
+  --el-item-priority-normal: #cba258;   /* Gold */
+  --el-item-group-border: #006241;      /* Starbucks Green */
+  --el-item-group-text: #006241;        /* Starbucks Green */
+  --el-item-plan-border: #00754a;       /* Green Accent */
+  --el-item-plan-text: #00754a;         /* Green Accent */
+  --el-item-invited-bg: #faf6ee;        /* Gold Lightest */
+  --el-item-invited-text: #cba258;      /* Gold */
+  --el-item-declined-bg: hsl(4 82% 43% / 5%); /* Red Tint */
+  --el-item-declined-text: #c82014;     /* Red */
+  --el-item-confirmed-bg: #d4e9e2;      /* Green Light */
+  --el-item-confirmed-text: #006241;    /* Starbucks Green */
+  --el-item-activity-bg: #d4e9e2;       /* Green Light */
+  --el-item-activity-text: #006241;     /* Starbucks Green */
+  --el-item-meta-icon: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-item-organizer-icon: #cba258;    /* Gold */
+
+  /* Item Side Panel */
+  --el-panel-bg: #ffffff;               /* White */
+  --el-panel-border: #edebe9;           /* Ceramic */
+  --el-panel-header-border: #edebe9;    /* Ceramic */
+  --el-panel-title: rgba(0,0,0,0.87);   /* Text Black */
+  --el-panel-title-completed: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-panel-icon-btn: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-panel-icon-hover-bg: #f9f9f9;   /* Neutral Cool */
+  --el-panel-detail-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-panel-detail-value: rgba(0,0,0,0.87); /* Text Black */
+  --el-panel-separator: #edebe9;        /* Ceramic */
+  --el-panel-description: #33443d;      /* Rewards Green */
+  --el-panel-guest-bg: #f9f9f9;         /* Neutral Cool */
+  --el-panel-guest-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-panel-priority-high-bg: hsl(4 82% 43% / 5%); /* Red Tint */
+  --el-panel-priority-high-text: #c82014; /* Red */
+  --el-panel-priority-normal-bg: #faf6ee; /* Gold Lightest */
+  --el-panel-priority-normal-text: #cba258; /* Gold */
+
+  /* Modals & Forms */
+  --el-modal-overlay: rgba(0,0,0,0.50);
+  --el-modal-bg: #ffffff;               /* White */
+  --el-modal-title-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-modal-title-placeholder: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-modal-type-active-bg: #00754a;   /* Green Accent */
+  --el-modal-type-active-text: #ffffff; /* Text White */
+  --el-modal-type-inactive-text: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-modal-schedule-border: #edebe9;  /* Ceramic */
+  --el-modal-icon-selected: #00754a;    /* Green Accent */
+  --el-modal-icon-unselected: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-modal-save-bg: #00754a;          /* Green Accent */
+  --el-modal-save-text: #ffffff;        /* Text White */
+  --el-modal-cancel-border: #edebe9;    /* Ceramic */
+  --el-modal-cancel-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-editor-card-bg: #ffffff;         /* White */
+  --el-editor-field-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-editor-field-value: rgba(0,0,0,0.87); /* Text Black */
+  --el-editor-tag-bg: #f9f9f9;          /* Neutral Cool */
+  --el-editor-tag-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-editor-error: #c82014;           /* Red */
+  --el-view-title: rgba(0,0,0,0.87);    /* Text Black */
+  --el-view-description: #33443d;       /* Rewards Green */
+  --el-view-detail-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-view-detail-value: rgba(0,0,0,0.87); /* Text Black */
+  --el-view-edit-border: #edebe9;       /* Ceramic */
+  --el-view-edit-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-view-delete-border: #edebe9;     /* Ceramic */
+  --el-view-delete-text: #c82014;       /* Red */
+
+  /* Buttons */
+  --el-btn-primary-bg: #00754a;         /* Green Accent */
+  --el-btn-primary-text: #ffffff;       /* Text White */
+  --el-btn-primary-hover: #006241;      /* Starbucks Green */
+  --el-btn-secondary-bg: #000000;       /* Black */
+  --el-btn-secondary-text: #ffffff;     /* Text White */
+  --el-btn-destructive-bg: #c82014;     /* Red */
+  --el-btn-destructive-text: #ffffff;   /* Text White */
+  --el-btn-ghost-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-btn-ghost-hover: #f9f9f9;       /* Neutral Cool */
+  --el-btn-outline-border: #edebe9;     /* Ceramic */
+  --el-btn-outline-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-btn-outline-hover: #f9f9f9;     /* Neutral Cool */
+
+  /* Inputs */
+  --el-input-bg: #ffffff;               /* White */
+  --el-input-text: rgba(0,0,0,0.87);    /* Text Black */
+  --el-input-placeholder: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-input-border: #edebe9;           /* Ceramic */
+  --el-input-focus: #00754a;            /* Green Accent */
+  --el-input-error-border: #c82014;     /* Red */
+  --el-input-error-text: #c82014;       /* Red */
+  --el-input-label: rgba(0,0,0,0.87);   /* Text Black */
+
+  /* Cards */
+  --el-card-bg: #ffffff;                /* White */
+  --el-card-border: #edebe9;            /* Ceramic */
+
+  /* Toast */
+  --el-toast-success-bg: #d4e9e2;       /* Green Light */
+  --el-toast-success-border: #00754a;   /* Green Accent */
+  --el-toast-success-icon: #006241;     /* Starbucks Green */
+  --el-toast-error-bg: hsl(4 82% 43% / 5%); /* Red Tint */
+  --el-toast-error-border: #c82014;     /* Red */
+  --el-toast-error-icon: #c82014;       /* Red */
+  --el-toast-info-bg: #faf6ee;          /* Gold Lightest */
+  --el-toast-info-border: #cba258;      /* Gold */
+  --el-toast-info-icon: #cba258;        /* Gold */
+  --el-toast-text: rgba(0,0,0,0.87);    /* Text Black */
+  --el-toast-close: rgba(0,0,0,0.58);   /* Text Black Soft */
+
+  /* Confirm Dialog */
+  --el-dialog-overlay: rgba(0,0,0,0.30);
+  --el-dialog-bg: #ffffff;              /* White */
+  --el-dialog-title: rgba(0,0,0,0.87);  /* Text Black */
+  --el-dialog-description: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-dialog-confirm-bg: #c82014;      /* Red */
+  --el-dialog-confirm-text: #ffffff;    /* Text White */
+  --el-dialog-cancel-border: #edebe9;   /* Ceramic */
+  --el-dialog-cancel-text: rgba(0,0,0,0.87); /* Text Black */
+
+  /* Popovers */
+  --el-popover-bg: #ffffff;             /* White */
+  --el-popover-border: #edebe9;         /* Ceramic */
+  --el-popover-item-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-popover-item-hover: #f9f9f9;    /* Neutral Cool */
+  --el-popover-item-selected-bg: #f9f9f9; /* Neutral Cool */
+  --el-popover-check: #00754a;          /* Green Accent */
+  --el-popover-apply-bg: #00754a;       /* Green Accent */
+  --el-popover-apply-text: #ffffff;     /* Text White */
+
+  /* Switch */
+  --el-switch-active: #00754a;          /* Green Accent */
+  --el-switch-inactive: #f9f9f9;       /* Neutral Cool */
+  --el-switch-thumb: #ffffff;           /* White */
+
+  /* Targets & Plans */
+  --el-target-bg: #ffffff;              /* White */
+  --el-target-title: rgba(0,0,0,0.87);  /* Text Black */
+  --el-target-description: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-target-chevron: #00754a;         /* Green Accent */
+  --el-target-status-active-bg: #d4e9e2; /* Green Light */
+  --el-target-status-active-text: #006241; /* Starbucks Green */
+  --el-target-status-complete-bg: #d4e9e2; /* Green Light */
+  --el-target-status-complete-text: #006241; /* Starbucks Green */
+  --el-target-status-archived-bg: #f9f9f9; /* Neutral Cool */
+  --el-target-status-archived-text: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-plan-bg: #ffffff;                /* White */
+  --el-plan-title: rgba(0,0,0,0.87);    /* Text Black */
+  --el-plan-description: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-plan-chevron: #00754a;           /* Green Accent */
+  --el-plan-progress-bar: #00754a;      /* Green Accent */
+  --el-plan-progress-track: #edebe9;    /* Ceramic */
+  --el-plan-progress-text: rgba(0,0,0,0.58); /* Text Black Soft */
+
+  /* Groups */
+  --el-group-bg: #ffffff;               /* White */
+  --el-group-title: rgba(0,0,0,0.87);   /* Text Black */
+  --el-group-description: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-group-star-filled: #cba258;      /* Gold */
+  --el-group-star-empty: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-group-member-icon: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-group-member-text: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-group-badge-bg: #00754a;         /* Green Accent */
+  --el-group-badge-text: #ffffff;       /* Text White */
+  --el-group-owner-border: #edebe9;     /* Ceramic */
+  --el-group-owner-text: rgba(0,0,0,0.58); /* Text Black Soft */
+
+  /* Chat */
+  --el-chat-own-bg: #1e3932;            /* House Green */
+  --el-chat-own-text: #ffffff;          /* Text White */
+  --el-chat-other-bg: #f9f9f9;         /* Neutral Cool */
+  --el-chat-other-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-chat-avatar-bg: #006241;         /* Starbucks Green */
+  --el-chat-avatar-text: #ffffff;       /* Text White */
+  --el-chat-sender: #006241;            /* Starbucks Green */
+  --el-chat-timestamp: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-ai-msg-bg: #ffffff;              /* White */
+  --el-ai-msg-text: rgba(0,0,0,0.87);   /* Text Black */
+  --el-ai-user-bg: #1e3932;             /* House Green */
+  --el-ai-user-text: #ffffff;           /* Text White */
+  --el-ai-session-bg: #d4e9e2;          /* Green Light */
+  --el-ai-session-text: #006241;        /* Starbucks Green */
+
+  /* Notifications */
+  --el-notif-unread-bg: #faf6ee;        /* Gold Lightest */
+  --el-notif-unread-border: #dfc49d;    /* Gold Light */
+  --el-notif-read-bg: #ffffff;          /* White */
+  --el-notif-read-border: #edebe9;      /* Ceramic */
+  --el-notif-title: rgba(0,0,0,0.87);   /* Text Black */
+  --el-notif-message: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-notif-time: rgba(0,0,0,0.38);
+  --el-notif-dot: #00754a;              /* Green Accent */
+  --el-notif-task-bg: #d4e9e2;          /* Green Light */
+  --el-notif-task-color: #006241;       /* Starbucks Green */
+  --el-notif-success-bg: #d4e9e2;       /* Green Light */
+  --el-notif-success-color: #006241;    /* Starbucks Green */
+  --el-notif-warning-bg: #faf6ee;       /* Gold Lightest */
+  --el-notif-warning-color: #cba258;    /* Gold */
+  --el-notif-danger-bg: hsl(4 82% 43% / 5%); /* Red Tint */
+  --el-notif-danger-color: #c82014;     /* Red */
+  --el-notif-neutral-bg: #f9f9f9;       /* Neutral Cool */
+  --el-notif-neutral-color: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-notif-event-bg: #faf6ee;         /* Gold Lightest */
+  --el-notif-event-color: #cba258;      /* Gold */
+  --el-invite-accept-bg: #00754a;       /* Green Accent */
+  --el-invite-accept-text: #ffffff;     /* Text White */
+  --el-invite-decline-border: #edebe9;  /* Ceramic */
+  --el-invite-decline-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-role-admin-bg: hsl(4 82% 43% / 5%); /* Red Tint */
+  --el-role-admin-text: #c82014;        /* Red */
+  --el-role-member-bg: #d4e9e2;         /* Green Light */
+  --el-role-member-text: #006241;       /* Starbucks Green */
+  --el-role-viewer-bg: #f9f9f9;         /* Neutral Cool */
+  --el-role-viewer-text: rgba(0,0,0,0.58); /* Text Black Soft */
+
+  /* Auth */
+  --el-auth-card-bg: #ffffff;           /* White */
+  --el-auth-title: rgba(0,0,0,0.87);    /* Text Black */
+  --el-auth-subtitle: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-auth-input-bg: #f2f0eb;          /* Neutral Warm */
+  --el-auth-input-border: #edebe9;      /* Ceramic */
+  --el-auth-input-focus: #00754a;       /* Green Accent */
+  --el-auth-submit-bg: #00754a;         /* Green Accent */
+  --el-auth-submit-text: #ffffff;       /* Text White */
+  --el-auth-link: #006241;              /* Starbucks Green */
+  --el-auth-google-bg: #ffffff;         /* White */
+  --el-auth-google-border: #edebe9;     /* Ceramic */
+  --el-auth-google-text: rgba(0,0,0,0.87); /* Text Black */
+  --el-auth-apple-bg: #000000;          /* Black */
+  --el-auth-apple-text: #ffffff;        /* Text White */
+  --el-auth-divider: #edebe9;           /* Ceramic */
+  --el-auth-divider-text: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-auth-error: #c82014;             /* Red */
+
+  /* Settings */
+  --el-settings-bg: #ffffff;            /* White */
+  --el-settings-border: #edebe9;        /* Ceramic */
+  --el-settings-label: rgba(0,0,0,0.58); /* Text Black Soft */
+  --el-settings-selected-border: #00754a; /* Green Accent */
+  --el-settings-selected-bg: #d4e9e2;   /* Green Light */
+  --el-settings-unselected-border: #edebe9; /* Ceramic */
+  --el-settings-hover: #f9f9f9;        /* Neutral Cool */
+  --el-settings-check: #00754a;         /* Green Accent */
+}
+
+/* ── Dark Mode ──
+ * Uses House Green (#1E3932) as base, Green Uplift (#2b5148) as elevated,
+ * Gold Light (#dfc49d) for warm accents, brightened greens for interactive.
+ */
+
+[data-palette="earth"][data-theme="dark"] {
+  --el-page-bg: #1e3932;               /* House Green */
+  --el-page-text: #ffffff;              /* Text White */
+  --el-logo-fill: #34d399;             /* Brightened green */
+
+  --el-sidebar-bg: #2b5148;            /* Green Uplift */
+  --el-sidebar-border: #33604e;
+  --el-sidebar-item-text: rgba(255,255,255,0.70); /* Text White Soft */
+  --el-sidebar-item-hover-bg: #33604e;
+  --el-sidebar-item-hover-text: #ffffff;
+  --el-sidebar-item-active-bg: rgba(52,211,153,0.15);
+  --el-sidebar-item-active-text: #34d399;
+  --el-sidebar-item-icon: rgba(255,255,255,0.70);
+  --el-sidebar-item-active-icon: #34d399;
+  --el-sidebar-badge-bg: #c82014;       /* Red */
+  --el-sidebar-badge-text: #ffffff;
+  --el-sidebar-avatar-bg: #34d399;
+  --el-sidebar-avatar-text: #1e3932;    /* House Green */
+  --el-sidebar-group-dot: #34d399;
+  --el-sidebar-handle-bg: #2b5148;
+  --el-sidebar-handle-border: #33604e;
+  --el-sidebar-footer-border: #33604e;
+
+  --el-header-bg: #2b5148;
+  --el-header-border: #33604e;
+  --el-header-text: #ffffff;
+  --el-header-icon: rgba(255,255,255,0.70);
+  --el-header-icon-hover-bg: #33604e;
+  --el-header-badge-bg: #c82014;
+  --el-header-badge-text: #ffffff;
+
+  --el-cal-title: #ffffff;
+  --el-cal-date-label: rgba(255,255,255,0.70);
+  --el-cal-nav-border: #33604e;
+  --el-cal-nav-text: #ffffff;
+  --el-cal-nav-hover-bg: #33604e;
+  --el-cal-switcher-bg: #33604e;
+  --el-cal-tab-active-bg: #2b5148;
+  --el-cal-tab-active-text: #ffffff;
+  --el-cal-tab-inactive-text: rgba(255,255,255,0.70);
+  --el-cal-add-btn-bg: #34d399;
+  --el-cal-add-btn-text: #1e3932;
+  --el-cal-today-border: #33604e;
+  --el-cal-today-text: #ffffff;
+  --el-cal-grid-bg: #2b5148;
+  --el-cal-grid-border: #33604e;
+  --el-cal-day-header: rgba(255,255,255,0.70);
+  --el-cal-date-selected-bg: #34d399;
+  --el-cal-date-selected-text: #1e3932;
+  --el-cal-date-today-border: #34d399;
+  --el-cal-date-today-text: #34d399;
+  --el-cal-date-normal: #ffffff;
+  --el-cal-date-other: rgba(255,255,255,0.70);
+  --el-cal-current-hour-bg: rgba(52,211,153,0.08);
+  --el-cal-hour-label: rgba(255,255,255,0.70);
+  --el-cal-hour-label-current: #34d399;
+  --el-cal-more-items: rgba(255,255,255,0.70);
+  --el-cal-task-bg: rgba(52,211,153,0.15);
+  --el-cal-task-text: #34d399;
+  --el-cal-event-bg: rgba(223,196,157,0.15); /* Gold Light tinted */
+  --el-cal-event-text: #dfc49d;         /* Gold Light */
+
+  --el-item-bg: transparent;
+  --el-item-completed-bg: #33604e;
+  --el-item-title: #ffffff;
+  --el-item-title-completed: rgba(255,255,255,0.70);
+  --el-item-details: rgba(255,255,255,0.70);
+  --el-item-checkbox-border: #34d399;
+  --el-item-checkbox-bg: #34d399;
+  --el-item-checkbox-mark: #1e3932;
+  --el-item-priority-high: #c82014;
+  --el-item-priority-normal: #dfc49d;   /* Gold Light */
+  --el-item-group-border: #34d399;
+  --el-item-group-text: #34d399;
+  --el-item-plan-border: #34d399;
+  --el-item-plan-text: #34d399;
+  --el-item-invited-bg: rgba(223,196,157,0.2);
+  --el-item-invited-text: #dfc49d;
+  --el-item-declined-bg: rgba(200,32,20,0.15);
+  --el-item-declined-text: #c82014;
+  --el-item-confirmed-bg: rgba(52,211,153,0.15);
+  --el-item-confirmed-text: #34d399;
+  --el-item-activity-bg: rgba(52,211,153,0.1);
+  --el-item-activity-text: #34d399;
+  --el-item-meta-icon: rgba(255,255,255,0.70);
+  --el-item-organizer-icon: #dfc49d;
+
+  --el-panel-bg: #2b5148;
+  --el-panel-border: #33604e;
+  --el-panel-header-border: #33604e;
+  --el-panel-title: #ffffff;
+  --el-panel-title-completed: rgba(255,255,255,0.70);
+  --el-panel-icon-btn: rgba(255,255,255,0.70);
+  --el-panel-icon-hover-bg: #33604e;
+  --el-panel-detail-label: rgba(255,255,255,0.70);
+  --el-panel-detail-value: #ffffff;
+  --el-panel-separator: #33604e;
+  --el-panel-description: #ffffff;
+  --el-panel-guest-bg: #33604e;
+  --el-panel-guest-text: #ffffff;
+  --el-panel-priority-high-bg: rgba(200,32,20,0.15);
+  --el-panel-priority-high-text: #c82014;
+  --el-panel-priority-normal-bg: rgba(223,196,157,0.15);
+  --el-panel-priority-normal-text: #dfc49d;
+
+  --el-modal-overlay: rgba(0,0,0,0.60);
+  --el-modal-bg: #2b5148;
+  --el-modal-title-text: #ffffff;
+  --el-modal-title-placeholder: rgba(255,255,255,0.70);
+  --el-modal-type-active-bg: #34d399;
+  --el-modal-type-active-text: #1e3932;
+  --el-modal-type-inactive-text: rgba(255,255,255,0.70);
+  --el-modal-schedule-border: #33604e;
+  --el-modal-icon-selected: #34d399;
+  --el-modal-icon-unselected: rgba(255,255,255,0.70);
+  --el-modal-save-bg: #34d399;
+  --el-modal-save-text: #1e3932;
+  --el-modal-cancel-border: #33604e;
+  --el-modal-cancel-text: #ffffff;
+  --el-editor-card-bg: #2b5148;
+  --el-editor-field-label: rgba(255,255,255,0.70);
+  --el-editor-field-value: #ffffff;
+  --el-editor-tag-bg: #33604e;
+  --el-editor-tag-text: #ffffff;
+  --el-editor-error: #c82014;
+  --el-view-title: #ffffff;
+  --el-view-description: #ffffff;
+  --el-view-detail-label: rgba(255,255,255,0.70);
+  --el-view-detail-value: #ffffff;
+  --el-view-edit-border: #33604e;
+  --el-view-edit-text: #ffffff;
+  --el-view-delete-border: #33604e;
+  --el-view-delete-text: #c82014;
+
+  --el-btn-primary-bg: #34d399;
+  --el-btn-primary-text: #1e3932;
+  --el-btn-primary-hover: #6ee7b7;
+  --el-btn-secondary-bg: #ffffff;
+  --el-btn-secondary-text: #1e3932;
+  --el-btn-destructive-bg: #c82014;
+  --el-btn-destructive-text: #ffffff;
+  --el-btn-ghost-text: #ffffff;
+  --el-btn-ghost-hover: #33604e;
+  --el-btn-outline-border: #33604e;
+  --el-btn-outline-text: #ffffff;
+  --el-btn-outline-hover: #33604e;
+
+  --el-input-bg: #2b5148;
+  --el-input-text: #ffffff;
+  --el-input-placeholder: rgba(255,255,255,0.70);
+  --el-input-border: #33604e;
+  --el-input-focus: #34d399;
+  --el-input-error-border: #c82014;
+  --el-input-error-text: #c82014;
+  --el-input-label: #ffffff;
+
+  --el-card-bg: #2b5148;
+  --el-card-border: #33604e;
+
+  --el-toast-success-bg: rgba(52,211,153,0.15);
+  --el-toast-success-border: #34d399;
+  --el-toast-success-icon: #34d399;
+  --el-toast-error-bg: rgba(200,32,20,0.15);
+  --el-toast-error-border: #c82014;
+  --el-toast-error-icon: #c82014;
+  --el-toast-info-bg: rgba(223,196,157,0.15);
+  --el-toast-info-border: #dfc49d;
+  --el-toast-info-icon: #dfc49d;
+  --el-toast-text: #ffffff;
+  --el-toast-close: rgba(255,255,255,0.70);
+
+  --el-dialog-overlay: rgba(0,0,0,0.50);
+  --el-dialog-bg: #2b5148;
+  --el-dialog-title: #ffffff;
+  --el-dialog-description: rgba(255,255,255,0.70);
+  --el-dialog-confirm-bg: #c82014;
+  --el-dialog-confirm-text: #ffffff;
+  --el-dialog-cancel-border: #33604e;
+  --el-dialog-cancel-text: #ffffff;
+
+  --el-popover-bg: #2b5148;
+  --el-popover-border: #33604e;
+  --el-popover-item-text: #ffffff;
+  --el-popover-item-hover: #33604e;
+  --el-popover-item-selected-bg: #33604e;
+  --el-popover-check: #34d399;
+  --el-popover-apply-bg: #34d399;
+  --el-popover-apply-text: #1e3932;
+
+  --el-switch-active: #34d399;
+  --el-switch-inactive: #33604e;
+  --el-switch-thumb: #ffffff;
+
+  --el-target-bg: #2b5148;
+  --el-target-title: #ffffff;
+  --el-target-description: rgba(255,255,255,0.70);
+  --el-target-chevron: #34d399;
+  --el-target-status-active-bg: rgba(52,211,153,0.15);
+  --el-target-status-active-text: #34d399;
+  --el-target-status-complete-bg: rgba(52,211,153,0.15);
+  --el-target-status-complete-text: #34d399;
+  --el-target-status-archived-bg: rgba(255,255,255,0.1);
+  --el-target-status-archived-text: rgba(255,255,255,0.70);
+  --el-plan-bg: #2b5148;
+  --el-plan-title: #ffffff;
+  --el-plan-description: rgba(255,255,255,0.70);
+  --el-plan-chevron: #34d399;
+  --el-plan-progress-bar: #34d399;
+  --el-plan-progress-track: #33604e;
+  --el-plan-progress-text: rgba(255,255,255,0.70);
+
+  --el-group-bg: #2b5148;
+  --el-group-title: #ffffff;
+  --el-group-description: rgba(255,255,255,0.70);
+  --el-group-star-filled: #dfc49d;      /* Gold Light */
+  --el-group-star-empty: rgba(255,255,255,0.70);
+  --el-group-member-icon: rgba(255,255,255,0.70);
+  --el-group-member-text: rgba(255,255,255,0.70);
+  --el-group-badge-bg: #34d399;
+  --el-group-badge-text: #1e3932;
+  --el-group-owner-border: #33604e;
+  --el-group-owner-text: rgba(255,255,255,0.70);
+
+  --el-chat-own-bg: #34d399;
+  --el-chat-own-text: #1e3932;
+  --el-chat-other-bg: #33604e;
+  --el-chat-other-text: #ffffff;
+  --el-chat-avatar-bg: #34d399;
+  --el-chat-avatar-text: #1e3932;
+  --el-chat-sender: #34d399;
+  --el-chat-timestamp: rgba(255,255,255,0.70);
+  --el-ai-msg-bg: #2b5148;
+  --el-ai-msg-text: #ffffff;
+  --el-ai-user-bg: #34d399;
+  --el-ai-user-text: #1e3932;
+  --el-ai-session-bg: rgba(52,211,153,0.15);
+  --el-ai-session-text: #34d399;
+
+  --el-notif-unread-bg: rgba(52,211,153,0.08);
+  --el-notif-unread-border: rgba(52,211,153,0.2);
+  --el-notif-read-bg: #2b5148;
+  --el-notif-read-border: #33604e;
+  --el-notif-title: #ffffff;
+  --el-notif-message: rgba(255,255,255,0.70);
+  --el-notif-time: rgba(255,255,255,0.50);
+  --el-notif-dot: #34d399;
+  --el-notif-task-bg: rgba(52,211,153,0.15);
+  --el-notif-task-color: #34d399;
+  --el-notif-success-bg: rgba(52,211,153,0.15);
+  --el-notif-success-color: #34d399;
+  --el-notif-warning-bg: rgba(223,196,157,0.2);
+  --el-notif-warning-color: #dfc49d;
+  --el-notif-danger-bg: rgba(200,32,20,0.15);
+  --el-notif-danger-color: #c82014;
+  --el-notif-neutral-bg: #33604e;
+  --el-notif-neutral-color: rgba(255,255,255,0.70);
+  --el-notif-event-bg: rgba(223,196,157,0.15);
+  --el-notif-event-color: #dfc49d;
+  --el-invite-accept-bg: #34d399;
+  --el-invite-accept-text: #1e3932;
+  --el-invite-decline-border: #33604e;
+  --el-invite-decline-text: #ffffff;
+  --el-role-admin-bg: rgba(200,32,20,0.15);
+  --el-role-admin-text: #c82014;
+  --el-role-member-bg: rgba(52,211,153,0.15);
+  --el-role-member-text: #34d399;
+  --el-role-viewer-bg: rgba(255,255,255,0.1);
+  --el-role-viewer-text: rgba(255,255,255,0.70);
+
+  --el-auth-card-bg: #2b5148;
+  --el-auth-title: #ffffff;
+  --el-auth-subtitle: rgba(255,255,255,0.70);
+  --el-auth-input-bg: #1e3932;
+  --el-auth-input-border: #33604e;
+  --el-auth-input-focus: #34d399;
+  --el-auth-submit-bg: #34d399;
+  --el-auth-submit-text: #1e3932;
+  --el-auth-link: #34d399;
+  --el-auth-google-bg: #2b5148;
+  --el-auth-google-border: #33604e;
+  --el-auth-google-text: #ffffff;
+  --el-auth-apple-bg: #ffffff;
+  --el-auth-apple-text: #1e3932;
+  --el-auth-divider: #33604e;
+  --el-auth-divider-text: rgba(255,255,255,0.70);
+  --el-auth-error: #c82014;
+
+  --el-settings-bg: #2b5148;
+  --el-settings-border: #33604e;
+  --el-settings-label: rgba(255,255,255,0.70);
+  --el-settings-selected-border: #34d399;
+  --el-settings-selected-bg: rgba(52,211,153,0.08);
+  --el-settings-unselected-border: #33604e;
+  --el-settings-hover: #33604e;
+  --el-settings-check: #34d399;
+}

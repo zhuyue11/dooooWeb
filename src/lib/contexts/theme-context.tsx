@@ -28,11 +28,11 @@ import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/typ
  */
 
 export const THEME_COLORS: ThemeColor[] = ['electric', 'emerald', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink'];
-export const COLOR_PALETTES: ColorPalette[] = ['light', 'dark', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink', 'airbnb', 'clay', 'notion', 'starbucks', 'mintlify'];
+export const COLOR_PALETTES: ColorPalette[] = ['ocean', 'yellow', 'pink', 'warm', 'earth', 'fresh'];
 export const DISPLAY_STYLES: DisplayStyle[] = ['default', 'soft', 'flat', 'pill'];
 
 /** Brand-inspired palettes that support both light and dark via ThemePattern. */
-export const SCHEMEABLE_PALETTES: ReadonlySet<ColorPalette> = new Set(['airbnb', 'clay', 'notion', 'starbucks', 'mintlify']);
+export const SCHEMEABLE_PALETTES: ReadonlySet<ColorPalette> = new Set(['warm', 'earth', 'fresh']);
 
 /** Hex values for each ThemeColor (light mode primary). Used for UI swatches. */
 export const THEME_COLOR_HEX: Record<ThemeColor, string> = {
@@ -49,20 +49,12 @@ export const THEME_COLOR_HEX: Record<ThemeColor, string> = {
 
 /** Representative colors for each palette (for preview chips in settings UI). */
 export const PALETTE_COLORS: Record<ColorPalette, { primary: string; secondary: string; accent: string; bg: string }> = {
-  light: { primary: '#360EFF', secondary: '#7C3AED', accent: '#F59E0B', bg: '#F2F3F5' },
-  dark: { primary: '#818CF8', secondary: '#A78BFA', accent: '#FBBF24', bg: '#0F0F0F' },
   ocean: { primary: '#3B82F6', secondary: '#14B8A6', accent: '#F97316', bg: '#F0F7FF' },
-  crimson: { primary: '#DC2626', secondary: '#B91C1C', accent: '#F97316', bg: '#E5E5E5' },
-  amber: { primary: '#EA580C', secondary: '#C2410C', accent: '#EA580C', bg: '#E5E5E5' },
   yellow: { primary: '#EDF060', secondary: '#D4C94F', accent: '#EDF060', bg: '#1A1A1A' },
-  cyan: { primary: '#00FFFF', secondary: '#00D4D4', accent: '#00FFFF', bg: '#1A1A1A' },
-  purple: { primary: '#8B5CF6', secondary: '#7C3AED', accent: '#8B5CF6', bg: '#E5E5E5' },
   pink: { primary: '#EC4899', secondary: '#DB2777', accent: '#EC4899', bg: '#FDF2F8' },
-  airbnb: { primary: '#FF385C', secondary: '#460479', accent: '#FF385C', bg: '#FFFFFF' },
-  clay: { primary: '#FF4D8B', secondary: '#B8A4ED', accent: '#E8B94A', bg: '#FFFAF0' },
-  notion: { primary: '#0075DE', secondary: '#213183', accent: '#2A9D99', bg: '#FFFFFF' },
-  starbucks: { primary: '#006241', secondary: '#00754A', accent: '#CBA258', bg: '#F2F0EB' },
-  mintlify: { primary: '#18E299', secondary: '#0FA76E', accent: '#3772CF', bg: '#FFFFFF' },
+  warm: { primary: '#FF4D8B', secondary: '#B8A4ED', accent: '#E8B94A', bg: '#FFFAF0' },
+  earth: { primary: '#006241', secondary: '#00754A', accent: '#CBA258', bg: '#F2F0EB' },
+  fresh: { primary: '#18E299', secondary: '#0FA76E', accent: '#3772CF', bg: '#FFFFFF' },
 };
 
 /** Preview data for display style UI cards. */

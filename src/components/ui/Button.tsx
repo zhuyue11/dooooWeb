@@ -10,11 +10,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-  secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
-  destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-  ghost: 'text-foreground hover:bg-muted',
-  outline: 'border border-border text-foreground hover:bg-muted',
+  primary: 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text) hover:bg-(--el-btn-primary-hover)',
+  secondary: 'bg-(--el-btn-secondary-bg) text-(--el-btn-secondary-text) hover:opacity-90',
+  destructive: 'bg-(--el-btn-destructive-bg) text-(--el-btn-destructive-text) hover:opacity-90',
+  ghost: 'text-(--el-btn-ghost-text) hover:bg-(--el-btn-ghost-hover)',
+  outline: 'border border-(--el-btn-outline-border) text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover)',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
