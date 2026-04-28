@@ -12,9 +12,9 @@ import type { TargetFormData } from '@/components/targets/TargetFormModal';
 import type { TargetStatus } from '@/types/target';
 
 const STATUS_CONFIG: Record<TargetStatus, { icon: string; colorVar: string; labelKey: string }> = {
-  active: { icon: 'flag', colorVar: 'var(--color-primary)', labelKey: 'targetPlan.statusActive' },
+  active: { icon: 'flag', colorVar: 'var(--el-target-status-active-text)', labelKey: 'targetPlan.statusActive' },
   completed: { icon: 'check_circle', colorVar: '#10B981', labelKey: 'targetPlan.statusCompleted' },
-  archived: { icon: 'archive', colorVar: 'var(--color-muted-foreground)', labelKey: 'targetPlan.statusArchived' },
+  archived: { icon: 'archive', colorVar: 'var(--el-target-status-archived-text)', labelKey: 'targetPlan.statusArchived' },
 };
 
 export function TargetDetailPage() {
@@ -69,7 +69,7 @@ export function TargetDetailPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
   }
@@ -78,12 +78,12 @@ export function TargetDetailPage() {
   if (!target) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-        <Icon name="flag" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-base font-medium text-foreground">{t('targetPlan.targetNotFound')}</span>
+        <Icon name="flag" size={48} color="var(--el-target-description)" />
+        <span className="text-base font-medium text-(--el-target-title)">{t('targetPlan.targetNotFound')}</span>
         <button
           type="button"
           onClick={() => navigate('/targets')}
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-(--el-target-chevron) hover:underline"
         >
           {t('targetPlan.targets')}
         </button>
@@ -101,7 +101,7 @@ export function TargetDetailPage() {
       <button
         type="button"
         onClick={() => navigate('/targets')}
-        className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        className="flex w-fit items-center gap-1 text-sm text-(--el-target-description) hover:text-(--el-target-title)"
         data-testid="target-detail-back"
       >
         <Icon name="arrow_back" size={18} />
@@ -112,7 +112,7 @@ export function TargetDetailPage() {
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex items-center gap-3">
-            <h1 className="text-[22px] font-bold text-foreground" data-testid="target-detail-name">
+            <h1 className="text-[22px] font-bold text-(--el-target-title)" data-testid="target-detail-name">
               {target.name}
             </h1>
             <div
@@ -126,7 +126,7 @@ export function TargetDetailPage() {
           </div>
 
           {target.description && (
-            <p className="text-[15px] leading-relaxed text-muted-foreground">{target.description}</p>
+            <p className="text-[15px] leading-relaxed text-(--el-target-description)">{target.description}</p>
           )}
         </div>
 
@@ -134,7 +134,7 @@ export function TargetDetailPage() {
           <button
             type="button"
             onClick={() => setShowEditModal(true)}
-            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-view-edit-border) px-3 py-1.5 text-[13px] font-medium text-(--el-view-edit-text) hover:bg-(--el-btn-outline-hover)"
             data-testid="target-detail-edit"
           >
             <Icon name="edit" size={16} />
@@ -143,7 +143,7 @@ export function TargetDetailPage() {
           <button
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
-            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-view-delete-border) px-3 py-1.5 text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-btn-destructive-bg)/10"
             data-testid="target-detail-delete"
           >
             <Icon name="delete" size={16} />
@@ -152,25 +152,25 @@ export function TargetDetailPage() {
         </div>
       </div>
 
-      <div className="border-t border-border" />
+      <div className="border-t border-(--el-card-border)" />
 
       {/* Linked Tasks Section */}
       <div data-testid="linked-tasks-section">
-        <h2 className="mb-3 text-lg font-bold text-foreground">{t('targetPlan.linkedTasks')}</h2>
+        <h2 className="mb-3 text-lg font-bold text-(--el-target-title)">{t('targetPlan.linkedTasks')}</h2>
 
         {linkedTasks.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-border py-10" data-testid="linked-tasks-empty">
-            <Icon name="task_alt" size={40} color="var(--color-muted-foreground)" />
-            <span className="text-[15px] text-muted-foreground">{t('targetPlan.noLinkedTasks')}</span>
-            <span className="text-[13px] text-muted-foreground">{t('targetPlan.linkTaskHint')}</span>
+          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-(--el-card-border) py-10" data-testid="linked-tasks-empty">
+            <Icon name="task_alt" size={40} color="var(--el-target-description)" />
+            <span className="text-[15px] text-(--el-target-description)">{t('targetPlan.noLinkedTasks')}</span>
+            <span className="text-[13px] text-(--el-target-description)">{t('targetPlan.linkTaskHint')}</span>
           </div>
         ) : (
           <div
-            className="flex items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-4 py-3.5"
+            className="flex items-center gap-3 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-target-bg) px-4 py-3.5"
             data-testid="linked-tasks-count"
           >
-            <Icon name="task_alt" size={24} color="var(--color-primary)" />
-            <span className="text-[15px] font-medium text-foreground">
+            <Icon name="task_alt" size={24} color="var(--el-target-chevron)" />
+            <span className="text-[15px] font-medium text-(--el-target-title)">
               {linkedTasks.length} {t('targetPlan.linkedTasksCount')}
             </span>
           </div>
@@ -180,22 +180,22 @@ export function TargetDetailPage() {
       {/* Plans Section */}
       <div data-testid="plans-section">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground">{t('targetPlan.plans')}</h2>
+          <h2 className="text-lg font-bold text-(--el-target-title)">{t('targetPlan.plans')}</h2>
           <button
             type="button"
             onClick={() => navigate(`/ai-chat?targetId=${targetId}&targetName=${encodeURIComponent(target.name)}`)}
-            className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[13px] font-semibold text-primary hover:bg-primary/20"
+            className="flex items-center gap-1.5 rounded-full bg-(--el-target-status-active-bg) px-3 py-1.5 text-[13px] font-semibold text-(--el-target-status-active-text) hover:bg-(--el-target-status-active-bg)"
             data-testid="generate-plan-button"
           >
-            <Icon name="auto_awesome" size={16} color="var(--color-primary)" />
+            <Icon name="auto_awesome" size={16} color="var(--el-target-chevron)" />
             {t('targetPlan.generatePlan')}
           </button>
         </div>
 
         {linkedPlans.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-border py-10" data-testid="plans-empty">
-            <Icon name="assignment" size={40} color="var(--color-muted-foreground)" />
-            <span className="text-[15px] text-muted-foreground">{t('targetPlan.noLinkedPlans')}</span>
+          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-(--el-card-border) py-10" data-testid="plans-empty">
+            <Icon name="assignment" size={40} color="var(--el-target-description)" />
+            <span className="text-[15px] text-(--el-target-description)">{t('targetPlan.noLinkedPlans')}</span>
           </div>
         ) : (
           <div className="flex flex-col gap-2">

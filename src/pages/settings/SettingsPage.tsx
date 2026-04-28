@@ -19,17 +19,17 @@ export function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-6 text-2xl font-bold text-foreground">
+      <h1 className="mb-6 text-2xl font-bold text-(--el-page-text)">
         {t('settings.title', 'Settings')}
       </h1>
-      <div className="divide-y divide-border rounded-(--radius-card) border border-border bg-surface">
+      <div className="divide-y divide-(--el-settings-border) rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg)">
         {SETTINGS_ITEMS.map(({ path, icon, labelKey }) => (
           <Link
             key={path}
             to={path}
-            className="flex items-center gap-3 px-4 py-3 text-sm text-foreground transition-colors hover:bg-muted"
+            className="flex items-center gap-3 px-4 py-3 text-sm text-(--el-page-text) transition-colors hover:bg-(--el-settings-hover)"
           >
-            <Icon name={icon} size={20} color="var(--color-muted-foreground)" />
+            <Icon name={icon} size={20} color="var(--el-settings-label)" />
             <span>{t(labelKey, labelKey.split('.').pop())}</span>
           </Link>
         ))}

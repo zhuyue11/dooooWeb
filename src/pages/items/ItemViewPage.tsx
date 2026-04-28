@@ -22,9 +22,9 @@ import { useState } from 'react';
 function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={16} color="var(--color-muted-foreground)" />
-      <span className="w-20 shrink-0 text-xs text-muted-foreground">{label}</span>
-      <span className="text-xs font-medium text-foreground">{value}</span>
+      <Icon name={icon} size={16} color="var(--el-view-detail-label)" />
+      <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{label}</span>
+      <span className="text-xs font-medium text-(--el-view-title)">{value}</span>
     </div>
   );
 }
@@ -95,7 +95,7 @@ export function ItemViewPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20 text-sm text-muted-foreground">
+      <div className="flex items-center justify-center py-20 text-sm text-(--el-view-detail-label)">
         {t('common.loading')}
       </div>
     );
@@ -104,8 +104,8 @@ export function ItemViewPage() {
   if (!item || isError) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-20">
-        <span className="text-sm text-muted-foreground">Item not found</span>
-        <button onClick={handleBack} className="text-sm font-medium text-primary hover:underline">
+        <span className="text-sm text-(--el-view-detail-label)">Item not found</span>
+        <button onClick={handleBack} className="text-sm font-medium text-(--el-modal-icon-selected) hover:underline">
           {t('itemView.backToCalendar')}
         </button>
       </div>
@@ -166,7 +166,7 @@ export function ItemViewPage() {
   return (
     <div className="animate-page-enter" style={{ fontFamily: 'Inter, sans-serif' }}>
       {/* Back row */}
-      <button onClick={handleBack} className="mb-6 flex items-center gap-2 text-[13px] font-medium text-muted-foreground hover:text-foreground">
+      <button onClick={handleBack} className="mb-6 flex items-center gap-2 text-[13px] font-medium text-(--el-view-detail-label) hover:text-(--el-view-title)">
         <Icon name="arrow_back" size={20} />
         {t('itemView.backToCalendar')}
       </button>
@@ -180,16 +180,16 @@ export function ItemViewPage() {
             {isTask && (
               <button onClick={handleToggle} className="shrink-0">
                 {isCompleted ? (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
-                    <Icon name="check" size={16} color="var(--color-primary-foreground)" weight={700} />
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-(--el-btn-primary-bg)">
+                    <Icon name="check" size={16} color="var(--el-btn-primary-text)" weight={700} />
                   </div>
                 ) : (
-                  <div className="h-6 w-6 rounded-full border-2 border-primary" />
+                  <div className="h-6 w-6 rounded-full border-2 border-(--el-btn-primary-bg)" />
                 )}
               </button>
             )}
             {!isTask && <Icon name="calendar_today" size={22} color="#5b21b6" />}
-            <h1 className={`text-[22px] font-bold ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
+            <h1 className={`text-[22px] font-bold ${isCompleted ? 'text-(--el-view-detail-label) line-through' : 'text-(--el-view-title)'}`}>
               {title}
             </h1>
           </div>
@@ -197,8 +197,8 @@ export function ItemViewPage() {
           {/* Meta row: pills + date summary */}
           <div className="flex flex-wrap items-center gap-2">
             {planId && (
-              <span className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 12%, transparent)', color: 'var(--color-primary)' }}>
-                <Icon name="stars" size={12} color="var(--color-primary)" />
+              <span className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'color-mix(in srgb, var(--el-modal-icon-selected) 12%, transparent)', color: 'var(--el-modal-icon-selected)' }}>
+                <Icon name="stars" size={12} color="var(--el-modal-icon-selected)" />
                 AI Planned
               </span>
             )}
@@ -212,7 +212,7 @@ export function ItemViewPage() {
               </span>
             )}
             {dateDisplay && (
-              <span className="text-[13px] text-muted-foreground">
+              <span className="text-[13px] text-(--el-view-detail-label)">
                 {dateDisplay}
                 {timeDisplay && ` · ${timeDisplay}`}
                 {!timeDisplay && timeOfDayValue && ` · ${t(TIME_OF_DAY_META[timeOfDayValue].i18nKey)}`}
@@ -227,7 +227,7 @@ export function ItemViewPage() {
           {canEdit && (
             <button
               onClick={handleEdit}
-              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-foreground hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-(--el-view-title) hover:bg-(--el-popover-item-hover)"
             >
               <Icon name="edit" size={16} />
               {t('itemView.edit')}
@@ -236,9 +236,9 @@ export function ItemViewPage() {
           {canDelete && (
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-destructive hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-popover-item-hover)"
             >
-              <Icon name="delete" size={16} color="var(--color-destructive)" />
+              <Icon name="delete" size={16} color="var(--el-view-delete-text)" />
               {t('itemView.delete')}
             </button>
           )}
@@ -246,19 +246,19 @@ export function ItemViewPage() {
       </div>
 
       {/* Divider */}
-      <div className="mb-6 border-t border-border" />
+      <div className="mb-6 border-t border-(--el-view-edit-border)" />
 
       {/* Content: two-column */}
       <div className="flex gap-8">
         {/* Left: article */}
         <div className="flex min-w-0 flex-1 flex-col gap-6">
           {description && (
-            <p className="text-[15px] leading-relaxed text-foreground" style={{ lineHeight: '1.7' }}>
+            <p className="text-[15px] leading-relaxed text-(--el-view-title)" style={{ lineHeight: '1.7' }}>
               {description}
             </p>
           )}
           {!description && (
-            <p className="text-sm text-muted-foreground italic">No description</p>
+            <p className="text-sm text-(--el-view-detail-label) italic">No description</p>
           )}
         </div>
 
@@ -266,19 +266,19 @@ export function ItemViewPage() {
         <div className="flex w-[300px] shrink-0 flex-col gap-4">
           {/* Info card */}
           {hasAnyDetail && (
-            <div className="rounded-(--radius-card) border border-border">
+            <div className="rounded-(--radius-card) border border-(--el-view-edit-border)">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}
               {timeDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                 </>
               )}
               {timeOfDayValue && TIME_OF_DAY_META[timeOfDayValue] && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow
                     icon={TIME_OF_DAY_META[timeOfDayValue].icon}
                     label={t('itemView.time')}
@@ -288,23 +288,23 @@ export function ItemViewPage() {
               )}
               {durationDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
                 </>
               )}
               {reminderDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                 </>
               )}
               {tzDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
                 </>
               )}
-              <div className="mx-4 border-t border-border" />
+              <div className="mx-4 border-t border-(--el-view-edit-border)" />
               <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
             </div>
           )}
@@ -313,15 +313,15 @@ export function ItemViewPage() {
           {planId && planName && (
             <div
               className="rounded-(--radius-card) p-(--spacing-card)"
-              style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--color-primary) 19%, transparent)' }}
+              style={{ backgroundColor: 'color-mix(in srgb, var(--el-modal-icon-selected) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--el-modal-icon-selected) 19%, transparent)' }}
             >
               <div className="mb-2 flex items-center gap-2">
-                <Icon name="stars" size={16} color="var(--color-primary)" />
-                <span className="text-[13px] font-semibold" style={{ color: 'var(--color-primary)' }}>
+                <Icon name="stars" size={16} color="var(--el-modal-icon-selected)" />
+                <span className="text-[13px] font-semibold" style={{ color: 'var(--el-modal-icon-selected)' }}>
                   Part of a Plan
                 </span>
               </div>
-              <p className="text-sm font-medium text-foreground">{planName}</p>
+              <p className="text-sm font-medium text-(--el-view-title)">{planName}</p>
             </div>
           )}
         </div>
@@ -329,7 +329,7 @@ export function ItemViewPage() {
 
       {/* Created timestamp */}
       {createdAt && (
-        <div className="mt-8 text-xs text-muted-foreground">
+        <div className="mt-8 text-xs text-(--el-view-detail-label)">
           {t('itemView.createdAt', {
             date: new Date(createdAt).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
           })}
@@ -338,21 +338,21 @@ export function ItemViewPage() {
 
       {/* Delete confirmation dialog */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-base font-semibold text-foreground">{t('itemView.confirmDelete')}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{t('itemView.deleteDescription')}</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-(--el-dialog-overlay)" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="w-full max-w-sm rounded-(--radius-modal) bg-(--el-editor-card-bg) p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-base font-semibold text-(--el-view-title)">{t('itemView.confirmDelete')}</h3>
+            <p className="mt-2 text-sm text-(--el-view-detail-label)">{t('itemView.deleteDescription')}</p>
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted"
+                className="rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-view-title) hover:bg-(--el-popover-item-hover)"
               >
                 {t('common.cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleteTaskMutation.isPending || deleteEventMutation.isPending}
-                className="rounded-(--radius-btn) bg-destructive px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+                className="rounded-(--radius-btn) bg-(--el-dialog-confirm-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-dialog-confirm-text) hover:opacity-90 disabled:opacity-50"
               >
                 {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
               </button>

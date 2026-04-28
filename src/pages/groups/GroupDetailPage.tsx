@@ -49,7 +49,7 @@ export function GroupDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <div className="flex h-full items-center justify-center text-sm text-(--el-group-description)">
         {t('common.loading')}
       </div>
     );
@@ -58,12 +58,12 @@ export function GroupDetailPage() {
   if (error || !group) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-3">
-        <Icon name="error_outline" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-base font-medium text-foreground">{t('groups.groupNotFound')}</span>
+        <Icon name="error_outline" size={48} color="var(--el-group-description)" />
+        <span className="text-base font-medium text-(--el-group-title)">{t('groups.groupNotFound')}</span>
         <button
           type="button"
           onClick={() => navigate('/groups')}
-          className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
+          className="rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90"
         >
           {t('groups.goBack')}
         </button>
@@ -80,10 +80,10 @@ export function GroupDetailPage() {
         <button
           type="button"
           onClick={() => navigate('/groups')}
-          className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) hover:bg-muted"
+          className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) hover:bg-(--el-popover-item-hover)"
           data-testid="back-to-groups"
         >
-          <Icon name="arrow_back" size={20} color="var(--color-foreground)" />
+          <Icon name="arrow_back" size={20} color="var(--el-group-title)" />
         </button>
 
         {/* Color dot + name */}
@@ -92,8 +92,8 @@ export function GroupDetailPage() {
           style={{ backgroundColor: group.color || '#3B82F6' }}
         />
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-xl font-bold text-foreground">{group.name}</h1>
-          <span className="text-[13px] text-muted-foreground">
+          <h1 className="truncate text-xl font-bold text-(--el-group-title)">{group.name}</h1>
+          <span className="text-[13px] text-(--el-group-description)">
             {memberCount} {memberCount === 1 ? t('groups.member') : t('groups.members')}
           </span>
         </div>
@@ -103,10 +103,10 @@ export function GroupDetailPage() {
           <button
             type="button"
             onClick={() => setShowEditModal(true)}
-            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-btn-outline-border) px-3 py-1.5 text-[13px] font-medium text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover)"
             data-testid="edit-group-button"
           >
-            <Icon name="edit" size={16} color="var(--color-foreground)" />
+            <Icon name="edit" size={16} color="var(--el-btn-outline-text)" />
             {t('groups.editGroup')}
           </button>
         )}
@@ -114,26 +114,26 @@ export function GroupDetailPage() {
 
       {/* Description */}
       {group.description && (
-        <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
-          <p className="text-sm leading-relaxed text-foreground">{group.description}</p>
+        <div className="rounded-(--radius-card) border border-(--el-card-border) bg-(--el-group-bg) p-(--spacing-card)">
+          <p className="text-sm leading-relaxed text-(--el-group-title)">{group.description}</p>
         </div>
       )}
 
       {/* Info section */}
-      <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">{t('groups.groupInfo')}</h3>
+      <div className="rounded-(--radius-card) border border-(--el-card-border) bg-(--el-group-bg) p-(--spacing-card)">
+        <h3 className="mb-3 text-sm font-semibold text-(--el-group-title)">{t('groups.groupInfo')}</h3>
         <div className="flex flex-col gap-2.5">
           {/* Members */}
           <div className="flex items-center gap-2.5">
-            <Icon name="group" size={18} color="var(--color-muted-foreground)" />
-            <span className="text-sm text-muted-foreground">
+            <Icon name="group" size={18} color="var(--el-group-member-icon)" />
+            <span className="text-sm text-(--el-group-member-text)">
               {memberCount} {memberCount === 1 ? t('groups.member') : t('groups.members')}
             </span>
           </div>
           {/* Created date */}
           <div className="flex items-center gap-2.5">
-            <Icon name="calendar_today" size={18} color="var(--color-muted-foreground)" />
-            <span className="text-sm text-muted-foreground">
+            <Icon name="calendar_today" size={18} color="var(--el-group-description)" />
+            <span className="text-sm text-(--el-group-description)">
               {t('groups.createdOn', {
                 date: new Date(group.createdAt).toLocaleDateString(),
               })}
@@ -145,8 +145,8 @@ export function GroupDetailPage() {
             if (!owner?.user) return null;
             return (
               <div className="flex items-center gap-2.5">
-                <Icon name="person" size={18} color="var(--color-muted-foreground)" />
-                <span className="text-sm text-muted-foreground">
+                <Icon name="person" size={18} color="var(--el-group-description)" />
+                <span className="text-sm text-(--el-group-description)">
                   {t('groups.ownedBy', { name: owner.user.name || owner.user.email })}
                 </span>
               </div>
@@ -156,7 +156,7 @@ export function GroupDetailPage() {
       </div>
 
       {/* Placeholder for future sections (calendar, chat, members list) */}
-      <div className="rounded-(--radius-card) border border-dashed border-border p-(--spacing-card) text-center text-sm text-muted-foreground">
+      <div className="rounded-(--radius-card) border border-dashed border-(--el-group-placeholder-border) p-(--spacing-card) text-center text-sm text-(--el-group-description)">
         {t('groups.moreFeaturesComing')}
       </div>
 

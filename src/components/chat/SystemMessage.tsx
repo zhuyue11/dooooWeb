@@ -35,7 +35,7 @@ export function SystemMessage({ message, groupColor }: SystemMessageProps) {
 
   const content = getTranslatedContent(message, t, user?.id);
   const iconName = getIconForContent(message.content);
-  const accentColor = groupColor || 'var(--color-primary)';
+  const accentColor = groupColor || 'var(--el-chat-sender)';
 
   const time = new Date(message.createdAt).toLocaleTimeString(undefined, {
     hour: 'numeric',
@@ -49,8 +49,8 @@ export function SystemMessage({ message, groupColor }: SystemMessageProps) {
         style={{ borderColor: `color-mix(in srgb, ${accentColor} 30%, transparent)` }}
       >
         <Icon name={iconName} size={16} color={accentColor} />
-        <span className="text-xs text-muted-foreground">{content}</span>
-        <span className="shrink-0 text-[10px] text-muted-foreground">{time}</span>
+        <span className="text-xs text-(--el-chat-timestamp)">{content}</span>
+        <span className="shrink-0 text-[10px] text-(--el-chat-timestamp)">{time}</span>
       </div>
     </div>
   );

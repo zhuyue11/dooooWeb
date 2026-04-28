@@ -54,32 +54,32 @@ export function PlanReviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30 animate-backdrop-in"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-(--el-modal-overlay) animate-backdrop-in"
       onClick={onClose}
       data-testid="plan-review-modal"
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal) animate-review-pop-in"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-(--el-modal-bg) p-(--spacing-card) shadow-(--shadow-modal) animate-review-pop-in"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center">
           {/* Trophy icon */}
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-            <Icon name="emoji_events" size={28} color="var(--color-primary)" />
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--el-target-status-active-bg)">
+            <Icon name="emoji_events" size={28} color="var(--el-target-chevron)" />
           </div>
 
           {/* Title */}
-          <h3 className="text-xl font-bold text-foreground">
+          <h3 className="text-xl font-bold text-(--el-modal-title-text)">
             {t('tasks.planReview.congratsTitle', 'Plan Complete!')}
           </h3>
 
           {/* Subtitle */}
-          <p className="mt-1.5 text-center text-sm leading-5 text-muted-foreground">
+          <p className="mt-1.5 text-center text-sm leading-5 text-(--el-plan-description)">
             {t('tasks.planReview.congratsSubtitle', 'How was "{{planName}}"?', { planName })}
           </p>
 
           {/* Prompt label */}
-          <span className="mt-5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="mt-5 text-xs font-medium uppercase tracking-wide text-(--el-plan-description)">
             {isUpdating
               ? t('tasks.planReview.updatePrompt', 'Update your rating')
               : t('tasks.planReview.ratePrompt', 'Rate this plan')}
@@ -100,7 +100,7 @@ export function PlanReviewModal({
                   name="star"
                   size={38}
                   filled={star <= score}
-                  color={star <= score ? 'var(--color-primary)' : 'var(--color-muted-foreground)'}
+                  color={star <= score ? 'var(--el-target-chevron)' : 'var(--el-plan-description)'}
                 />
               </button>
             ))}
@@ -108,7 +108,7 @@ export function PlanReviewModal({
 
           {/* Note textarea */}
           <textarea
-            className="mt-4 w-full resize-none rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            className="mt-4 w-full resize-none rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) py-2.5 text-sm text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:border-(--el-input-focus) focus:outline-none"
             placeholder={t('tasks.planReview.notePlaceholder', 'Share what worked (optional)') as string}
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -123,7 +123,7 @@ export function PlanReviewModal({
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="mt-4 flex w-full items-center justify-center rounded-(--radius-btn) bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="mt-4 flex w-full items-center justify-center rounded-(--radius-btn) bg-(--el-btn-primary-bg) py-3 text-[15px] font-semibold text-(--el-btn-primary-text) transition-opacity hover:opacity-90 disabled:opacity-50"
             data-testid="plan-review-submit"
           >
             {submitting ? (
@@ -140,7 +140,7 @@ export function PlanReviewModal({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="mt-2 w-full py-2.5 text-sm font-medium text-muted-foreground transition-opacity hover:opacity-70"
+            className="mt-2 w-full py-2.5 text-sm font-medium text-(--el-plan-description) transition-opacity hover:opacity-70"
             data-testid="plan-review-skip"
           >
             {t('tasks.planReview.skipButton', 'Skip')}

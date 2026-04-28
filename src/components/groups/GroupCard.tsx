@@ -22,7 +22,7 @@ export function GroupCard({ group, currentUserId, onClick, onStarToggle }: Group
 
   return (
     <div
-      className="cursor-pointer overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
+      className="cursor-pointer overflow-hidden rounded-(--radius-card) bg-(--el-group-bg) shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
       onClick={onClick}
     >
       {/* Color strip */}
@@ -37,7 +37,7 @@ export function GroupCard({ group, currentUserId, onClick, onStarToggle }: Group
               className="h-3 w-3 shrink-0 rounded-full"
               style={{ backgroundColor: group.color || '#3B82F6' }}
             />
-            <span className="text-base font-semibold text-foreground">{group.name}</span>
+            <span className="text-base font-semibold text-(--el-group-title)">{group.name}</span>
           </div>
           <button
             type="button"
@@ -52,35 +52,35 @@ export function GroupCard({ group, currentUserId, onClick, onStarToggle }: Group
               name="star"
               size={20}
               filled={isStarred}
-              color={isStarred ? 'var(--color-accent)' : 'var(--color-muted-foreground)'}
+              color={isStarred ? 'var(--el-group-star-filled)' : 'var(--el-group-star-empty)'}
             />
           </button>
         </div>
 
         {/* Description */}
         {group.description && (
-          <p className="line-clamp-2 text-[13px] text-muted-foreground">{group.description}</p>
+          <p className="line-clamp-2 text-[13px] text-(--el-group-description)">{group.description}</p>
         )}
 
         {/* Footer: member count + badge */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Icon name="group" size={16} color="var(--color-muted-foreground)" />
-            <span className="text-xs text-muted-foreground">
+            <Icon name="group" size={16} color="var(--el-group-member-icon)" />
+            <span className="text-xs text-(--el-group-member-text)">
               {memberCount} {memberCount === 1 ? t('groups.member') : t('groups.members')}
             </span>
           </div>
 
           {unreadCount > 0 ? (
-            <div className="flex items-center gap-1 rounded-full bg-primary px-2 py-0.5">
-              <Icon name="chat_bubble" size={12} color="var(--color-primary-foreground)" />
-              <span className="text-[11px] font-semibold text-primary-foreground">
+            <div className="flex items-center gap-1 rounded-full bg-(--el-group-badge-bg) px-2 py-0.5">
+              <Icon name="chat_bubble" size={12} color="var(--el-group-badge-text)" />
+              <span className="text-[11px] font-semibold text-(--el-group-badge-text)">
                 {t('groups.newMessages', { count: unreadCount })}
               </span>
             </div>
           ) : isOwner ? (
-            <div className="rounded-full border border-border px-2 py-0.5">
-              <span className="text-[11px] font-medium text-muted-foreground">
+            <div className="rounded-full border border-(--el-group-owner-border) px-2 py-0.5">
+              <span className="text-[11px] font-medium text-(--el-group-owner-text)">
                 {t('groups.owner')}
               </span>
             </div>

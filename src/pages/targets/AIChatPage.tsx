@@ -83,7 +83,7 @@ export function AIChatPage() {
   if (chat.isLoadingSession) {
     return (
       <div className="-m-4 flex h-full items-center justify-center lg:-m-6" data-testid="ai-chat-page">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
   }
@@ -91,11 +91,11 @@ export function AIChatPage() {
   return (
     <div className="-m-4 flex h-full flex-col overflow-hidden lg:-m-6" data-testid="ai-chat-page">
       {/* Header */}
-      <div className="flex h-12 shrink-0 items-center justify-between border-b border-border px-3">
+      <div className="flex h-12 shrink-0 items-center justify-between border-b border-(--el-card-border) px-3">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-chat-timestamp) hover:bg-(--el-popover-item-hover) hover:text-(--el-page-text)"
           data-testid="ai-chat-back"
         >
           <Icon name="arrow_back" size={20} />
@@ -107,7 +107,7 @@ export function AIChatPage() {
             <button
               type="button"
               onClick={chat.handleStartOver}
-              className="flex h-8 items-center gap-1 rounded-(--radius-card) px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-8 items-center gap-1 rounded-(--radius-card) px-2 text-(--el-chat-timestamp) hover:bg-(--el-popover-item-hover) hover:text-(--el-page-text)"
               data-testid="ai-chat-start-over"
             >
               <Icon name="refresh" size={18} />
@@ -117,7 +117,7 @@ export function AIChatPage() {
           <button
             type="button"
             onClick={() => chat.setShowChatHistory(true)}
-            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-chat-timestamp) hover:bg-(--el-popover-item-hover) hover:text-(--el-page-text)"
             data-testid="ai-chat-history-button"
           >
             <Icon name="segment" size={20} />

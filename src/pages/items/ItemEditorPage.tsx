@@ -78,10 +78,10 @@ function FieldRow({ icon, text, onClick, active, suffix }: {
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e) => { if (onClick && (e.key === 'Enter' || e.key === ' ')) onClick(); }}
-      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-(--el-popover-item-hover)"
     >
-      <Icon name={icon} size={20} color={active ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-      <span className={`flex-1 text-sm ${active ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>{text}</span>
+      <Icon name={icon} size={20} color={active ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
+      <span className={`flex-1 text-sm ${active ? 'font-medium text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'}`}>{text}</span>
       {suffix}
     </div>
   );
@@ -90,10 +90,10 @@ function FieldRow({ icon, text, onClick, active, suffix }: {
 // ── Priority popover ──
 
 const PRIORITY_OPTIONS = [
-  { value: 'URGENT', key: 'todoPage.priorityUrgent', color: 'text-destructive' },
+  { value: 'URGENT', key: 'todoPage.priorityUrgent', color: 'text-(--el-dialog-confirm-bg)' },
   { value: 'HIGH', key: 'todoPage.priorityHigh', color: 'text-accent' },
   { value: 'MEDIUM', key: 'todoPage.priorityMedium', color: 'text-yellow-500' },
-  { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-info' },
+  { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-(--el-item-group-text)' },
 ] as const;
 
 type PriorityValue = typeof PRIORITY_OPTIONS[number]['value'];
@@ -112,7 +112,7 @@ function PriorityPopover({ selected, onSelect, onClear, onClose }: {
           key={opt.value}
           type="button"
           onClick={() => onSelect(opt.value)}
-          className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === opt.value ? 'bg-muted font-medium' : ''}`}
+          className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-(--el-popover-item-hover) ${selected === opt.value ? 'bg-(--el-editor-tag-bg) font-medium' : ''}`}
         >
           <Icon name="flag" size={16} className={opt.color} />
           <span>{t(opt.key)}</span>
@@ -120,11 +120,11 @@ function PriorityPopover({ selected, onSelect, onClear, onClose }: {
       ))}
       {selected && (
         <>
-          <div className="mx-2 my-1 border-t border-border" />
+          <div className="mx-2 my-1 border-t border-(--el-input-border)" />
           <button
             type="button"
             onClick={onClear}
-            className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+            className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-(--el-editor-field-label) transition-colors hover:bg-(--el-popover-item-hover)"
           >
             <Icon name="close" size={16} />
             <span>{t('itemEditor.clear')}</span>
@@ -914,20 +914,20 @@ export function ItemEditorPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={handleClose}
-            className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) bg-surface shadow-(--shadow-card) text-muted-foreground hover:bg-muted"
+            className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) bg-(--el-editor-card-bg) shadow-(--shadow-card) text-(--el-editor-field-label) hover:bg-(--el-popover-item-hover)"
           >
             <Icon name="close" size={18} />
           </button>
-          <h1 className="text-xl font-bold text-foreground">{headerTitle}</h1>
+          <h1 className="text-xl font-bold text-(--el-editor-field-value)">{headerTitle}</h1>
         </div>
         <div className="flex items-center gap-3">
           {/* Type toggle */}
-          <div className="flex rounded-(--radius-card) bg-muted p-1">
+          <div className="flex rounded-(--radius-card) bg-(--el-editor-tag-bg) p-1">
             <button
               type="button"
               onClick={() => handleItemTypeChange('TASK')}
               className={`flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
-                isTask ? 'bg-surface shadow-(--shadow-card) text-foreground' : 'text-muted-foreground'
+                isTask ? 'bg-(--el-editor-card-bg) shadow-(--shadow-card) text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'
               }`}
             >
               <Icon name="check_circle" size={14} />
@@ -937,7 +937,7 @@ export function ItemEditorPage() {
               type="button"
               onClick={() => handleItemTypeChange('EVENT')}
               className={`flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
-                !isTask ? 'bg-surface shadow-(--shadow-card) text-foreground' : 'text-muted-foreground'
+                !isTask ? 'bg-(--el-editor-card-bg) shadow-(--shadow-card) text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'
               }`}
             >
               <Icon name="calendar_today" size={14} />
@@ -949,7 +949,7 @@ export function ItemEditorPage() {
             type="button"
             onClick={handleSubmit}
             disabled={saveDisabled}
-            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground shadow-(--shadow-card) transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-(--el-modal-save-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-modal-save-text) shadow-(--shadow-card) transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -961,14 +961,14 @@ export function ItemEditorPage() {
       </div>
 
       {/* ── Title + Description card ── */}
-      <div className="mb-4 rounded-(--radius-card) bg-surface p-(--spacing-card) shadow-(--shadow-card)">
+      <div className="mb-4 rounded-(--radius-card) bg-(--el-editor-card-bg) p-(--spacing-card) shadow-(--shadow-card)">
         <input
           ref={titleRef}
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder={t('itemEditor.addTitle')}
-          className="mb-3 w-full bg-transparent text-[22px] font-bold text-foreground placeholder:text-muted-foreground focus:outline-none"
+          className="mb-3 w-full bg-transparent text-[22px] font-bold text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.preventDefault();
           }}
@@ -978,14 +978,14 @@ export function ItemEditorPage() {
           onChange={(e) => setDescription(e.target.value)}
           placeholder={t('itemEditor.addDescription')}
           rows={3}
-          className="w-full resize-none bg-transparent text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none"
+          className="w-full resize-none bg-transparent text-sm leading-relaxed text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
         />
       </div>
 
       {/* ── Two-column layout ── */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_446px]">
         {/* Left column: Schedule card */}
-        <div className="rounded-(--radius-card) bg-surface p-1 shadow-(--shadow-card)">
+        <div className="rounded-(--radius-card) bg-(--el-editor-card-bg) p-1 shadow-(--shadow-card)">
           {/* Date */}
           <div className="relative">
             <div
@@ -993,22 +993,22 @@ export function ItemEditorPage() {
               tabIndex={0}
               onClick={() => togglePopover('date')}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') togglePopover('date'); }}
-              className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+              className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-(--el-popover-item-hover)"
             >
-              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
               {selectedDate ? (
                 <>
-                  <span className="flex-1 text-sm font-medium text-foreground">{dateDisplay}</span>
+                  <span className="flex-1 text-sm font-medium text-(--el-editor-field-value)">{dateDisplay}</span>
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleClearDate(); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
                 </>
               ) : (
-                <span className="text-sm text-muted-foreground">{t('itemEditor.addDate')}</span>
+                <span className="text-sm text-(--el-editor-field-label)">{t('itemEditor.addDate')}</span>
               )}
             </div>
             {activePopover === 'date' && (
@@ -1038,15 +1038,15 @@ export function ItemEditorPage() {
                   <Icon
                     name={timeOfDay === 'MORNING' ? 'wb_sunny' : timeOfDay === 'AFTERNOON' ? 'wb_cloudy' : 'nightlight'}
                     size={20}
-                    color="var(--color-primary)"
+                    color="var(--el-modal-icon-selected)"
                   />
-                  <span className="text-sm font-medium text-foreground">
+                  <span className="text-sm font-medium text-(--el-editor-field-value)">
                     {t(`tasks.timeOfDay.${timeOfDay.toLowerCase()}`)}
                   </span>
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setTimeOfDay(null); }}
-                    className="ml-auto text-muted-foreground hover:text-foreground"
+                    className="ml-auto text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1057,8 +1057,8 @@ export function ItemEditorPage() {
                   onClick={() => setShowTimeOfDayPicker(true)}
                   className="flex w-full items-center gap-3.5 text-left"
                 >
-                  <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                  <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
+                  <Icon name="schedule" size={20} color="var(--el-modal-icon-unselected)" />
+                  <span className="text-sm text-(--el-editor-field-label)">{t('calendarPage.form.addTime')}</span>
                 </button>
               )}
               {showTimeOfDayPicker && (
@@ -1077,7 +1077,7 @@ export function ItemEditorPage() {
             <div className="relative px-4 py-2.5">
               {/* Start time label when in end-time mode */}
               {hasStartTime && useEndTime && (
-                <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-(--el-editor-field-label)">
                   {t('calendarPage.form.startTime')}
                 </div>
               )}
@@ -1089,8 +1089,8 @@ export function ItemEditorPage() {
                 />
               ) : (
                 <button type="button" onClick={() => setHasStartTime(true)} className="flex w-full items-center gap-3.5 text-left">
-                  <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                  <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
+                  <Icon name="schedule" size={20} color="var(--el-modal-icon-unselected)" />
+                  <span className="text-sm text-(--el-editor-field-label)">{t('calendarPage.form.addTime')}</span>
                 </button>
               )}
             </div>
@@ -1104,8 +1104,8 @@ export function ItemEditorPage() {
                 onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
                 className="flex w-full items-center gap-3.5 text-left"
               >
-                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
+                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'}`}>
                   {(() => {
                     try {
                       const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
@@ -1117,7 +1117,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); }}
-                    className="ml-auto text-muted-foreground hover:text-foreground"
+                    className="ml-auto text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1145,7 +1145,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setDuration(null); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1164,7 +1164,7 @@ export function ItemEditorPage() {
                 <button
                   type="button"
                   onClick={handleSwitchToEndTime}
-                  className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-muted-foreground hover:text-primary"
+                  className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-(--el-editor-field-label) hover:text-(--el-modal-icon-selected)"
                 >
                   <span>{t('tasks.input.durationPicker.switchToEndTime')}</span>
                 </button>
@@ -1180,8 +1180,8 @@ export function ItemEditorPage() {
                 onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
                 className="flex w-full items-center gap-3.5 text-left"
               >
-                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
+                <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'}`}>
                   {(() => {
                     try {
                       const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
@@ -1204,8 +1204,8 @@ export function ItemEditorPage() {
           {selectedDate && hasExactTime && useEndTime && (
             <>
               {/* "Ends" section label */}
-              <div className="mx-4 mt-1 border-t border-border pt-2.5">
-                <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <div className="mx-4 mt-1 border-t border-(--el-input-border) pt-2.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-(--el-editor-field-label)">
                   {t('calendarPage.form.endTime')}
                 </span>
               </div>
@@ -1237,7 +1237,7 @@ export function ItemEditorPage() {
               {/* Separate timezones toggle */}
               <div className="px-4 py-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-(--el-editor-field-label)">
                     {t('tasks.panel.separateTimeZones', 'Use separate start and end time zones')}
                   </span>
                   <button
@@ -1249,7 +1249,7 @@ export function ItemEditorPage() {
                         return !v;
                       });
                     }}
-                    className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${useSeparateTimeZones ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                    className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${useSeparateTimeZones ? 'bg-(--el-modal-save-bg)' : 'bg-(--el-switch-inactive)'}`}
                   >
                     <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${useSeparateTimeZones ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                   </button>
@@ -1263,8 +1263,8 @@ export function ItemEditorPage() {
                     onClick={() => { setTimeZonePickerTarget('end'); setShowTimeZonePicker(true); }}
                     className="flex w-full items-center gap-3.5 text-left"
                   >
-                    <Icon name="public" size={20} color="var(--color-primary)" />
-                    <span className="text-sm font-medium text-foreground">
+                    <Icon name="public" size={20} color="var(--el-modal-icon-selected)" />
+                    <span className="text-sm font-medium text-(--el-editor-field-value)">
                       {t('itemEditor.endTimeZone')}: {(() => {
                         try {
                           const tz = eventEndTimeZone || selectedTimeZone;
@@ -1285,15 +1285,15 @@ export function ItemEditorPage() {
               )}
               {/* Validation: end can't be before start */}
               {effectiveDuration != null && effectiveDuration <= 0 && (
-                <div className="flex items-center gap-2 px-4 py-1.5 text-xs text-destructive">
-                  <Icon name="error" size={14} color="var(--color-destructive, #ef4444)" />
+                <div className="flex items-center gap-2 px-4 py-1.5 text-xs text-(--el-dialog-confirm-bg)">
+                  <Icon name="error" size={14} color="var(--el-item-priority-high, #ef4444)" />
                   <span>{t('tasks.validation.endTimeBeforeStart', 'End time must be after start time')}</span>
                 </div>
               )}
               <button
                 type="button"
                 onClick={handleSwitchToDuration}
-                className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-muted-foreground hover:text-primary"
+                className="flex w-full items-center gap-3.5 px-4 py-1.5 text-xs text-(--el-editor-field-label) hover:text-(--el-modal-icon-selected)"
               >
                 <span>{t('tasks.input.endTimePicker.switchToDuration')}</span>
               </button>
@@ -1315,7 +1315,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setEventEndDate(null); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1336,12 +1336,12 @@ export function ItemEditorPage() {
           {!isTask && (
             <div className="px-4 py-2.5">
               <div className="flex items-center gap-3.5">
-                <Icon name="group" size={20} color={guests.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <Icon name="group" size={20} color={guests.length > 0 ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
                 <div className="flex flex-1 flex-wrap items-center gap-1.5">
                   {guests.map((guest, idx) => (
-                    <span key={guest.email} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
+                    <span key={guest.email} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-(--el-editor-tag-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-editor-field-value)">
                       {guest.email}
-                      <button type="button" onClick={() => setGuests((prev) => prev.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-foreground">
+                      <button type="button" onClick={() => setGuests((prev) => prev.filter((_, i) => i !== idx))} className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)">
                         <Icon name="close" size={12} />
                       </button>
                     </span>
@@ -1358,7 +1358,7 @@ export function ItemEditorPage() {
                     }}
                     onBlur={handleAddGuest}
                     placeholder={guests.length === 0 ? t('calendarPage.form.addGuests') : ''}
-                    className="min-w-[120px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    className="min-w-[120px] flex-1 bg-transparent text-sm text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
                   />
                 </div>
               </div>
@@ -1369,7 +1369,7 @@ export function ItemEditorPage() {
           {!isTask && (
             editingMeetingLink ? (
               <div className="flex items-center gap-3.5 px-4 py-2.5">
-                <Icon name="link" size={20} color="var(--color-primary)" />
+                <Icon name="link" size={20} color="var(--el-modal-icon-selected)" />
                 <input
                   ref={meetingLinkRef}
                   type="url"
@@ -1378,13 +1378,13 @@ export function ItemEditorPage() {
                   onBlur={() => setEditingMeetingLink(false)}
                   onKeyDown={(e) => { if (e.key === 'Enter') setEditingMeetingLink(false); if (e.key === 'Escape') { setMeetingLink(''); setEditingMeetingLink(false); } }}
                   placeholder="https://meet.google.com/..."
-                  className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  className="flex-1 bg-transparent text-sm text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
                 />
                 {meetingLink && (
                   <button
                     type="button"
                     onMouseDown={(e) => { e.preventDefault(); setMeetingLink(''); setEditingMeetingLink(false); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1400,7 +1400,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setMeetingLink(''); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1421,7 +1421,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setFirstReminder(undefined); setSecondReminder(undefined); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1450,7 +1450,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setSecondReminder(undefined); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1485,7 +1485,7 @@ export function ItemEditorPage() {
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); setSelectedRepeat(null); }}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                 >
                   <Icon name="close" size={16} />
                 </button>
@@ -1524,8 +1524,8 @@ export function ItemEditorPage() {
               />
             )}
             {repeatInfoMessage && (
-              <div className="flex items-center gap-2 px-4 py-2 text-xs text-primary">
-                <Icon name="info" size={16} color="var(--color-primary)" className="shrink-0" />
+              <div className="flex items-center gap-2 px-4 py-2 text-xs text-(--el-modal-icon-selected)">
+                <Icon name="info" size={16} color="var(--el-modal-icon-selected)" className="shrink-0" />
                 <span>{repeatInfoMessage}</span>
               </div>
             )}
@@ -1534,7 +1534,7 @@ export function ItemEditorPage() {
           {/* Location */}
           {editingLocation ? (
             <div className="flex items-center gap-3.5 px-4 py-2.5">
-              <Icon name="location_on" size={20} color="var(--color-primary)" />
+              <Icon name="location_on" size={20} color="var(--el-modal-icon-selected)" />
               <input
                 ref={locationRef}
                 type="text"
@@ -1543,13 +1543,13 @@ export function ItemEditorPage() {
                 onBlur={() => setEditingLocation(false)}
                 onKeyDown={(e) => { if (e.key === 'Enter') setEditingLocation(false); if (e.key === 'Escape') { setLocationValue(''); setEditingLocation(false); } }}
                 placeholder={t('itemEditor.addLocation')}
-                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                className="flex-1 bg-transparent text-sm text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
               />
               {locationValue && (
                 <button
                   type="button"
                   onMouseDown={(e) => { e.preventDefault(); setLocationValue(''); setEditingLocation(false); }}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                 >
                   <Icon name="close" size={16} />
                 </button>
@@ -1571,7 +1571,7 @@ export function ItemEditorPage() {
               <button
                 type="button"
                 onClick={() => setShowMoreOptions((v) => !v)}
-                className="flex w-full items-center gap-3.5 px-4 py-2.5 text-muted-foreground transition-colors hover:bg-muted/50"
+                className="flex w-full items-center gap-3.5 px-4 py-2.5 text-(--el-editor-field-label) transition-colors hover:bg-(--el-popover-item-hover)"
               >
                 <Icon name={showMoreOptions ? 'expand_less' : 'expand_more'} size={20} />
                 <span className="text-sm font-medium">
@@ -1589,8 +1589,8 @@ export function ItemEditorPage() {
                         onClick={() => { setTimeZonePickerTarget('start'); setShowTimeZonePicker(true); }}
                         className="flex w-full items-center gap-3.5 text-left"
                       >
-                        <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
-                        <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                        <Icon name="public" size={20} color={selectedTimeZone !== browserTimeZone ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
+                        <span className={`text-sm ${selectedTimeZone !== browserTimeZone ? 'font-medium text-(--el-editor-field-value)' : 'text-(--el-editor-field-label)'}`}>
                           {(() => {
                             try {
                               const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: selectedTimeZone, timeZoneName: 'long' }).formatToParts(new Date());
@@ -1602,7 +1602,7 @@ export function ItemEditorPage() {
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); setSelectedTimeZone(browserTimeZone); }}
-                            className="ml-auto text-muted-foreground hover:text-foreground"
+                            className="ml-auto text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                           >
                             <Icon name="close" size={16} />
                           </button>
@@ -1623,14 +1623,14 @@ export function ItemEditorPage() {
                     <div className="relative px-4 py-2.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Icon name="event_available" size={20} color="var(--color-primary)" />
-                          <span className="text-sm text-foreground">
+                          <Icon name="event_available" size={20} color="var(--el-modal-icon-selected)" />
+                          <span className="text-sm text-(--el-editor-field-value)">
                             {t(hasTime ? 'tasks.input.dueAtThisTime' : 'tasks.input.dueAtThisDate')}
                           </span>
                           <button
                             type="button"
                             onClick={() => setActiveInfoPanel((v) => v === 'dateType' ? null : 'dateType')}
-                            className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                            className="flex h-5 w-5 items-center justify-center rounded-full text-(--el-editor-field-label) hover:bg-(--el-popover-item-hover)"
                           >
                             <Icon name="info" size={14} />
                           </button>
@@ -1638,15 +1638,15 @@ export function ItemEditorPage() {
                         <button
                           type="button"
                           onClick={() => setDateType((v) => v === 'SCHEDULED' ? 'DUE' : 'SCHEDULED')}
-                          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${dateType === 'DUE' ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${dateType === 'DUE' ? 'bg-(--el-modal-save-bg)' : 'bg-(--el-switch-inactive)'}`}
                         >
                           <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${dateType === 'DUE' ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                         </button>
                       </div>
                       {activeInfoPanel === 'dateType' && (
                         <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
-                          <p className="text-xs font-semibold text-foreground">{t('tasks.input.dueToggleInfoTitle')}</p>
-                          <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.input.dueToggleInfoContent')}</p>
+                          <p className="text-xs font-semibold text-(--el-editor-field-value)">{t('tasks.input.dueToggleInfoTitle')}</p>
+                          <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-(--el-editor-field-label)">{t('tasks.input.dueToggleInfoContent')}</p>
                         </PopoverWrapper>
                       )}
                     </div>
@@ -1656,12 +1656,12 @@ export function ItemEditorPage() {
                   <div className="relative px-4 py-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Icon name="visibility" size={20} color="var(--color-primary)" />
-                        <span className="text-sm text-foreground">{t('tasks.panel.showInTodoWhenOverdue')}</span>
+                        <Icon name="visibility" size={20} color="var(--el-modal-icon-selected)" />
+                        <span className="text-sm text-(--el-editor-field-value)">{t('tasks.panel.showInTodoWhenOverdue')}</span>
                         <button
                           type="button"
                           onClick={() => setActiveInfoPanel((v) => v === 'overdue' ? null : 'overdue')}
-                          className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                          className="flex h-5 w-5 items-center justify-center rounded-full text-(--el-editor-field-label) hover:bg-(--el-popover-item-hover)"
                         >
                           <Icon name="info" size={14} />
                         </button>
@@ -1669,15 +1669,15 @@ export function ItemEditorPage() {
                       <button
                         type="button"
                         onClick={() => setShowInTodoWhenOverdue((v) => !v)}
-                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${showInTodoWhenOverdue ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${showInTodoWhenOverdue ? 'bg-(--el-modal-save-bg)' : 'bg-(--el-switch-inactive)'}`}
                       >
                         <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${showInTodoWhenOverdue ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                       </button>
                     </div>
                     {activeInfoPanel === 'overdue' && (
                       <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
-                        <p className="text-xs font-semibold text-foreground">{t('tasks.panel.overdueInfoTitle')}</p>
-                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.panel.overdueInfoContent')}</p>
+                        <p className="text-xs font-semibold text-(--el-editor-field-value)">{t('tasks.panel.overdueInfoTitle')}</p>
+                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-(--el-editor-field-label)">{t('tasks.panel.overdueInfoContent')}</p>
                       </PopoverWrapper>
                     )}
                   </div>
@@ -1686,12 +1686,12 @@ export function ItemEditorPage() {
                   <div className="relative px-4 py-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Icon name="done_all" size={20} color="var(--color-primary)" />
-                        <span className="text-sm text-foreground">{t('tasks.panel.setToDoneAutomatically')}</span>
+                        <Icon name="done_all" size={20} color="var(--el-modal-icon-selected)" />
+                        <span className="text-sm text-(--el-editor-field-value)">{t('tasks.panel.setToDoneAutomatically')}</span>
                         <button
                           type="button"
                           onClick={() => setActiveInfoPanel((v) => v === 'autoDone' ? null : 'autoDone')}
-                          className="flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+                          className="flex h-5 w-5 items-center justify-center rounded-full text-(--el-editor-field-label) hover:bg-(--el-popover-item-hover)"
                         >
                           <Icon name="info" size={14} />
                         </button>
@@ -1699,15 +1699,15 @@ export function ItemEditorPage() {
                       <button
                         type="button"
                         onClick={() => setSetToDoneAutomatically((v) => !v)}
-                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${setToDoneAutomatically ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${setToDoneAutomatically ? 'bg-(--el-modal-save-bg)' : 'bg-(--el-switch-inactive)'}`}
                       >
                         <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${setToDoneAutomatically ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                       </button>
                     </div>
                     {activeInfoPanel === 'autoDone' && (
                       <PopoverWrapper onClose={() => setActiveInfoPanel(null)} className="w-[320px] p-4">
-                        <p className="text-xs font-semibold text-foreground">{t('tasks.panel.autoDoneInfoTitle')}</p>
-                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-muted-foreground">{t('tasks.panel.autoDoneInfoContent')}</p>
+                        <p className="text-xs font-semibold text-(--el-editor-field-value)">{t('tasks.panel.autoDoneInfoTitle')}</p>
+                        <p className="mt-1 whitespace-pre-line text-xs leading-relaxed text-(--el-editor-field-label)">{t('tasks.panel.autoDoneInfoContent')}</p>
                       </PopoverWrapper>
                     )}
                   </div>
@@ -1720,7 +1720,7 @@ export function ItemEditorPage() {
         {/* Right column */}
         <div className="flex flex-col gap-4">
           {/* Classification card */}
-          <div className="rounded-(--radius-card) bg-surface p-1 shadow-(--shadow-card)">
+          <div className="rounded-(--radius-card) bg-(--el-editor-card-bg) p-1 shadow-(--shadow-card)">
             {/* Priority */}
             <div className="relative">
               <FieldRow
@@ -1732,7 +1732,7 @@ export function ItemEditorPage() {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setPriority(''); }}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                   >
                     <Icon name="close" size={16} />
                   </button>
@@ -1764,7 +1764,7 @@ export function ItemEditorPage() {
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setCategoryId(''); }}
-                      className="text-muted-foreground hover:text-foreground"
+                      className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)"
                     >
                       <Icon name="close" size={16} />
                     </button>
@@ -1785,7 +1785,7 @@ export function ItemEditorPage() {
 
             {/* Group Assignment (only for group tasks) */}
             {isTask && draft?.groupId && (
-              <div className="border-t border-border" data-testid="group-assignment-section">
+              <div className="border-t border-(--el-input-border)" data-testid="group-assignment-section">
                 <ForAllMembersToggle
                   value={isForAllMembers}
                   onChange={(v) => {
@@ -1814,14 +1814,14 @@ export function ItemEditorPage() {
                       tabIndex={0}
                       onClick={() => setParticipateMyself((v) => !v)}
                       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setParticipateMyself((v) => !v); }}
-                      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-muted/50"
+                      className="flex w-full cursor-pointer items-center gap-3.5 px-4 py-2.5 text-left transition-colors hover:bg-(--el-popover-item-hover)"
                     >
-                      <Icon name="person" size={20} color="var(--color-primary)" />
-                      <span className="flex-1 text-sm font-medium text-foreground">{t('tasks.input.participateMyself')}</span>
+                      <Icon name="person" size={20} color="var(--el-modal-icon-selected)" />
+                      <span className="flex-1 text-sm font-medium text-(--el-editor-field-value)">{t('tasks.input.participateMyself')}</span>
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); setParticipateMyself((v) => !v); }}
-                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${participateMyself ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${participateMyself ? 'bg-(--el-modal-save-bg)' : 'bg-(--el-switch-inactive)'}`}
                         data-testid="participate-myself-switch"
                       >
                         <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${participateMyself ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
@@ -1845,12 +1845,12 @@ export function ItemEditorPage() {
             {/* Tags */}
             <div className="px-4 py-2.5">
               <div className="flex items-center gap-3.5">
-                <Icon name="label" size={20} color={tags.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+                <Icon name="label" size={20} color={tags.length > 0 ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
                 <div className="flex flex-1 flex-wrap items-center gap-1.5">
                   {tags.map((tag) => (
-                    <span key={tag} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
+                    <span key={tag} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-(--el-editor-tag-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-editor-field-value)">
                       {tag}
-                      <button type="button" onClick={() => handleRemoveTag(tag)} className="text-muted-foreground hover:text-foreground">
+                      <button type="button" onClick={() => handleRemoveTag(tag)} className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)">
                         <Icon name="close" size={12} />
                       </button>
                     </span>
@@ -1867,7 +1867,7 @@ export function ItemEditorPage() {
                     }}
                     onBlur={handleAddTag}
                     placeholder={tags.length === 0 ? t('itemEditor.addTags') : ''}
-                    className="min-w-[80px] flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    className="min-w-[80px] flex-1 bg-transparent text-sm text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
                   />
                 </div>
               </div>
@@ -1876,9 +1876,9 @@ export function ItemEditorPage() {
 
           {/* Info card */}
           {!selectedDate && (
-            <div className="flex items-start gap-2.5 rounded-(--radius-card) bg-muted p-(--spacing-card)">
-              <Icon name="info" size={18} color="var(--color-muted-foreground)" className="mt-0.5 shrink-0" />
-              <p className="text-xs leading-relaxed text-muted-foreground">
+            <div className="flex items-start gap-2.5 rounded-(--radius-card) bg-(--el-editor-tag-bg) p-(--spacing-card)">
+              <Icon name="info" size={18} color="var(--el-modal-icon-unselected)" className="mt-0.5 shrink-0" />
+              <p className="text-xs leading-relaxed text-(--el-editor-field-label)">
                 {t('itemEditor.infoText')}
               </p>
             </div>

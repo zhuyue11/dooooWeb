@@ -21,7 +21,7 @@ export function MessageBubble({ message, isOwnMessage, groupColor }: MessageBubb
   if (isOwnMessage) {
     return (
       <div className="flex justify-end" data-testid="message-bubble">
-        <div className="max-w-[70%] rounded-(--radius-card) rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">
+        <div className="max-w-[70%] rounded-(--radius-card) rounded-br-md bg-(--el-chat-own-bg) px-3.5 py-2 text-(--el-chat-own-text)">
           <p className="whitespace-pre-wrap break-words text-sm">{message.content}</p>
           <div className="mt-1 flex items-center justify-end gap-1.5">
             {message.isEdited && (
@@ -37,24 +37,24 @@ export function MessageBubble({ message, isOwnMessage, groupColor }: MessageBubb
   return (
     <div className="flex gap-2" data-testid="message-bubble">
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white"
-        style={{ backgroundColor: groupColor || 'var(--color-primary)' }}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-(--el-chat-avatar-text)"
+        style={{ backgroundColor: groupColor || 'var(--el-chat-avatar-bg)' }}
       >
         {initial}
       </div>
-      <div className="max-w-[70%] rounded-(--radius-card) rounded-bl-md bg-muted px-3.5 py-2">
+      <div className="max-w-[70%] rounded-(--radius-card) rounded-bl-md bg-(--el-chat-other-bg) px-3.5 py-2">
         <p
           className="text-xs font-semibold"
-          style={{ color: groupColor || 'var(--color-primary)' }}
+          style={{ color: groupColor || 'var(--el-chat-sender)' }}
         >
           {senderName}
         </p>
-        <p className="whitespace-pre-wrap break-words text-sm text-foreground">{message.content}</p>
+        <p className="whitespace-pre-wrap break-words text-sm text-(--el-chat-other-text)">{message.content}</p>
         <div className="mt-1 flex items-center gap-1.5">
           {message.isEdited && (
-            <span className="text-[10px] italic text-muted-foreground">{t('chat.edited')}</span>
+            <span className="text-[10px] italic text-(--el-chat-timestamp)">{t('chat.edited')}</span>
           )}
-          <span className="text-[10px] text-muted-foreground">{time}</span>
+          <span className="text-[10px] text-(--el-chat-timestamp)">{time}</span>
         </div>
       </div>
     </div>

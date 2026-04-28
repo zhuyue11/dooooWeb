@@ -55,7 +55,7 @@ export function NotificationPage() {
     <div className="flex h-full flex-col gap-5 overflow-y-auto p-1" data-testid="notifications-page">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-foreground" data-testid="notifications-heading">
+        <h1 className="text-xl font-bold text-(--el-notif-title)" data-testid="notifications-heading">
           {t('notifications.notifications')}
         </h1>
         {unreadCount > 0 && (
@@ -64,7 +64,7 @@ export function NotificationPage() {
             data-testid="mark-all-read-button"
             onClick={() => markAllAsRead.mutate()}
             disabled={markAllAsRead.isPending}
-            className="flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary hover:bg-primary/10 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-notif-dot) hover:bg-(--el-notif-unread-bg) disabled:opacity-50"
           >
             <Icon name="done_all" size={18} />
             {t('notifications.markAllRead')}
@@ -73,7 +73,7 @@ export function NotificationPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-(--el-notif-read-border)">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -82,18 +82,18 @@ export function NotificationPage() {
             onClick={() => setActiveTab(tab.key)}
             className={`relative flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition-colors ${
               activeTab === tab.key
-                ? 'text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'text-(--el-notif-dot)'
+                : 'text-(--el-notif-message) hover:text-(--el-notif-title)'
             }`}
           >
             {tab.label}
             {tab.count != null && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[10px] font-bold text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-(--el-notif-danger-bg) px-1.5 text-[10px] font-bold text-(--el-notif-danger-color)">
                 {tab.count > 99 ? '99+' : tab.count}
               </span>
             )}
             {activeTab === tab.key && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-(--el-notif-dot)" />
             )}
           </button>
         ))}
@@ -102,13 +102,13 @@ export function NotificationPage() {
       {/* Content */}
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-notif-dot) border-t-transparent" />
         </div>
       ) : filteredNotifications.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16" data-testid="empty-state">
-          <Icon name="notifications_none" size={48} color="var(--color-muted-foreground)" />
-          <p className="text-sm font-medium text-foreground">{emptyState.title}</p>
-          <p className="text-xs text-muted-foreground">{emptyState.sub}</p>
+          <Icon name="notifications_none" size={48} color="var(--el-notif-message)" />
+          <p className="text-sm font-medium text-(--el-notif-title)">{emptyState.title}</p>
+          <p className="text-xs text-(--el-notif-message)">{emptyState.sub}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-2" data-testid="notifications-list">

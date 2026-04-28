@@ -197,8 +197,8 @@ export function TodoPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">{t('todoPage.title')}</h1>
-          <span className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-bold text-(--el-page-text)">{t('todoPage.title')}</h1>
+          <span className="text-sm text-(--el-page-text) opacity-60">
             {todoItems.length === 1
               ? t('todoPage.taskCountOne')
               : t('todoPage.taskCount', { count: todoItems.length })}
@@ -206,14 +206,14 @@ export function TodoPage() {
         </div>
         <div className="flex items-center gap-2">
           {/* Search */}
-          <div className="flex h-9 w-60 items-center gap-2 rounded-(--radius-card) border border-border px-3">
-            <Icon name="search" size={16} color="var(--color-muted-foreground)" />
+          <div className="flex h-9 w-60 items-center gap-2 rounded-(--radius-card) border border-(--el-input-border) px-3">
+            <Icon name="search" size={16} color="var(--el-input-placeholder)" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('todoPage.searchPlaceholder')}
-              className="w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full bg-transparent text-[13px] text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:outline-none"
             />
           </div>
 
@@ -223,8 +223,8 @@ export function TodoPage() {
               onClick={() => setShowFilter(!showFilter)}
               className={`flex h-9 items-center gap-1.5 rounded-(--radius-card) border px-3.5 text-[13px] font-medium transition-colors ${
                 hasActiveFilters
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border text-foreground hover:bg-muted'
+                  ? 'border-(--el-settings-selected-border) bg-(--el-settings-selected-bg) text-(--el-settings-check)'
+                  : 'border-(--el-input-border) text-(--el-page-text) hover:bg-(--el-settings-hover)'
               }`}
             >
               <Icon name="filter_list" size={16} />
@@ -232,16 +232,16 @@ export function TodoPage() {
             </button>
 
             {showFilter && (
-              <div className="absolute right-0 top-full z-10 mt-1 w-56 rounded-(--radius-card) border border-border bg-surface p-(--spacing-card) shadow-(--shadow-elevated)">
+              <div className="absolute right-0 top-full z-10 mt-1 w-56 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
                 {/* Category filter */}
                 <div className="mb-2">
-                  <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-(--el-page-text) opacity-60">
                     {t('todoPage.filterCategory')}
                   </label>
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="w-full rounded-(--radius-btn) border border-border bg-background px-(--spacing-btn-x-sm) py-1.5 text-xs text-foreground"
+                    className="w-full rounded-(--radius-btn) border border-(--el-input-border) bg-(--el-input-bg) px-(--spacing-btn-x-sm) py-1.5 text-xs text-(--el-input-text)"
                   >
                     <option value="">{t('todoPage.filterAll')}</option>
                     {categoryOptions.map((c) => (
@@ -252,13 +252,13 @@ export function TodoPage() {
 
                 {/* Priority filter */}
                 <div className="mb-2">
-                  <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-(--el-page-text) opacity-60">
                     {t('todoPage.filterPriority')}
                   </label>
                   <select
                     value={filterPriority}
                     onChange={(e) => setFilterPriority(e.target.value)}
-                    className="w-full rounded-(--radius-btn) border border-border bg-background px-(--spacing-btn-x-sm) py-1.5 text-xs text-foreground"
+                    className="w-full rounded-(--radius-btn) border border-(--el-input-border) bg-(--el-input-bg) px-(--spacing-btn-x-sm) py-1.5 text-xs text-(--el-input-text)"
                   >
                     <option value="">{t('todoPage.filterAll')}</option>
                     <option value="URGENT">{t('todoPage.priorityUrgent')}</option>
@@ -271,7 +271,7 @@ export function TodoPage() {
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="mt-1 text-xs font-medium text-primary hover:underline"
+                    className="mt-1 text-xs font-medium text-(--el-btn-primary-bg) hover:underline"
                   >
                     {t('todoPage.clearFilters')}
                   </button>
@@ -283,7 +283,7 @@ export function TodoPage() {
           {/* Add task */}
           <button
             onClick={handleAddClick}
-            className="flex h-(--btn-height-sm) items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="flex h-(--btn-height-sm) items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x-sm) text-[13px] font-semibold text-(--el-btn-primary-text) transition-opacity hover:opacity-90"
           >
             <Icon name="add" size={16} />
             {t('todoPage.addTask')}
@@ -292,20 +292,20 @@ export function TodoPage() {
       </div>
 
       {/* Task list card */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-page-text) opacity-60">
             {t('common.loading')}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-page-text) opacity-60">
             {search || hasActiveFilters ? t('todoPage.noResults') : t('todoPage.noTasks')}
           </div>
         ) : (
           filteredItems.map((item, i) => (
             <div
               key={item.id}
-              className={`px-5 py-0.5 ${i < filteredItems.length - 1 ? 'border-b border-border' : ''}`}
+              className={`px-5 py-0.5 ${i < filteredItems.length - 1 ? 'border-b border-(--el-card-border)' : ''}`}
             >
               <ItemRow
                 item={item}

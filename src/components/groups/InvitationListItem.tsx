@@ -5,10 +5,10 @@ import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { GroupInvitation } from '@/types/api';
 
-const ROLE_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
-  ADMIN: { bg: 'rgba(239, 68, 68, 0.15)', text: '#dc2626' },
-  MEMBER: { bg: 'rgba(59, 130, 246, 0.15)', text: '#2563eb' },
-  VIEWER: { bg: 'rgba(107, 114, 128, 0.15)', text: '#6b7280' },
+const ROLE_BADGE_TOKENS: Record<string, { bg: string; text: string }> = {
+  ADMIN: { bg: 'var(--el-role-admin-bg)', text: 'var(--el-role-admin-text)' },
+  MEMBER: { bg: 'var(--el-role-member-bg)', text: 'var(--el-role-member-text)' },
+  VIEWER: { bg: 'var(--el-role-viewer-bg)', text: 'var(--el-role-viewer-text)' },
 };
 
 const ROLE_KEYS: Record<string, string> = {
@@ -74,22 +74,22 @@ export function InvitationListItem({
     <>
       <div className="flex items-center gap-3 px-4 py-3">
         {/* Mail icon */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted/40">
-          <Icon name="mail" size={20} color="var(--color-muted-foreground)" />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--el-group-option-icon-inactive-bg)">
+          <Icon name="mail" size={20} color="var(--el-group-description)" />
         </div>
 
         {/* Content */}
         <div className="min-w-0 flex-1">
           {/* Email + role badge */}
           <div className="flex items-center gap-2">
-            <span className="truncate text-sm font-medium text-foreground">
+            <span className="truncate text-sm font-medium text-(--el-group-title)">
               {invitation.invitedEmail || '—'}
             </span>
             <span
               className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase"
               style={{
-                backgroundColor: (ROLE_BADGE_COLORS[invitation.role] || ROLE_BADGE_COLORS.MEMBER).bg,
-                color: (ROLE_BADGE_COLORS[invitation.role] || ROLE_BADGE_COLORS.MEMBER).text,
+                backgroundColor: (ROLE_BADGE_TOKENS[invitation.role] || ROLE_BADGE_TOKENS.MEMBER).bg,
+                color: (ROLE_BADGE_TOKENS[invitation.role] || ROLE_BADGE_TOKENS.MEMBER).text,
               }}
             >
               {t(ROLE_KEYS[invitation.role] || ROLE_KEYS.MEMBER)}
@@ -97,7 +97,7 @@ export function InvitationListItem({
           </div>
 
           {/* Invited by + time ago */}
-          <div className="mt-0.5 text-xs text-muted-foreground">
+          <div className="mt-0.5 text-xs text-(--el-group-description)">
             {inviterName && (
               <>
                 {t('groups.invitedBy')} {inviterName} · {' '}
@@ -108,7 +108,7 @@ export function InvitationListItem({
 
           {/* Expires soon warning */}
           {expiringSoon && (
-            <div className="mt-0.5 text-xs font-medium text-destructive">
+            <div className="mt-0.5 text-xs font-medium text-(--el-group-expire-text)">
               {t('groups.expiresSoon')}
             </div>
           )}
@@ -120,7 +120,7 @@ export function InvitationListItem({
             type="button"
             onClick={() => setShowConfirm(true)}
             disabled={isCanceling}
-            className="shrink-0 rounded-(--radius-btn) border border-destructive/30 px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
+            className="shrink-0 rounded-(--radius-btn) border border-(--el-group-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-(--el-group-cancel-text) hover:bg-(--el-group-cancel-hover) disabled:opacity-50"
           >
             {isCanceling ? t('groups.canceling') : t('groups.cancelInvitation')}
           </button>

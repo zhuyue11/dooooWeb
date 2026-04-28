@@ -14,9 +14,9 @@ interface PlanTemplateDetailPanelProps {
 function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={18} color="var(--color-muted-foreground)" />
-      <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{label}</span>
-      <span className="text-[13px] font-medium text-foreground">{value}</span>
+      <Icon name={icon} size={18} color="var(--el-panel-detail-label)" />
+      <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{label}</span>
+      <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{value}</span>
     </div>
   );
 }
@@ -134,24 +134,24 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
   return createPortal(
     <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
       {/* Backdrop */}
-      <div className={`absolute inset-0 bg-black/20 ${isClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`} />
+      <div className={`absolute inset-0 bg-(--el-modal-overlay) ${isClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`} />
 
       {/* Panel */}
       <div
         data-testid="template-detail-panel"
-        className={`relative flex h-full w-[420px] max-w-full flex-col bg-surface shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
-        style={{ borderLeft: '1px solid var(--color-border)' }}
+        className={`relative flex h-full w-[420px] max-w-full flex-col bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
+        style={{ borderLeft: '1px solid var(--el-panel-border)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between border-b border-(--el-panel-header-border) px-6 py-4">
           <div className="flex min-w-0 items-center gap-3">
             {isEvent ? (
               <Icon name="event" size={20} color="#5b21b6" className="shrink-0" />
             ) : (
-              <Icon name="task_alt" size={20} color="var(--color-primary)" className="shrink-0" />
+              <Icon name="task_alt" size={20} color="var(--el-target-chevron)" className="shrink-0" />
             )}
-            <span className="truncate text-lg font-semibold text-foreground" data-testid="template-detail-title">
+            <span className="truncate text-lg font-semibold text-(--el-panel-title)" data-testid="template-detail-title">
               {template.title}
             </span>
           </div>
@@ -159,7 +159,7 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
           <button
             data-testid="template-detail-close"
             onClick={handleClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
             title={t('common.close')}
           >
             <Icon name="close" size={18} />
@@ -170,43 +170,43 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
         <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-6 py-6">
           {/* Description */}
           {template.description && (
-            <p className="text-sm leading-relaxed text-foreground">{template.description}</p>
+            <p className="text-sm leading-relaxed text-(--el-panel-description)">{template.description}</p>
           )}
 
           {/* Details card */}
           {hasAnyDetail && (
-            <div className="rounded-(--radius-card) border border-border" data-testid="template-detail-card">
+            <div className="rounded-(--radius-card) border border-(--el-panel-separator)" data-testid="template-detail-card">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}
               {timeDisplay && (
                 <>
-                  {dateDisplay && <div className="mx-4 border-t border-border" />}
+                  {dateDisplay && <div className="mx-4 border-t border-(--el-panel-separator)" />}
                   <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                 </>
               )}
               {durationDisplay && (
                 <>
-                  {(dateDisplay || timeDisplay) && <div className="mx-4 border-t border-border" />}
+                  {(dateDisplay || timeDisplay) && <div className="mx-4 border-t border-(--el-panel-separator)" />}
                   <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
                 </>
               )}
               {template.gapDays > 0 && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="schedule" label={t('targetPlan.gapDays', 'Gap')} value={`+${template.gapDays} day${template.gapDays > 1 ? 's' : ''}`} />
                 </>
               )}
               {repeatDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <div className="flex items-start gap-3 px-4 py-3">
-                    <Icon name="repeat" size={18} color="var(--color-muted-foreground)" className="mt-0.5" />
-                    <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.repeat')}</span>
+                    <Icon name="repeat" size={18} color="var(--el-panel-detail-label)" className="mt-0.5" />
+                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.repeat')}</span>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[13px] font-medium text-foreground">{repeatDisplay}</span>
+                      <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{repeatDisplay}</span>
                       {occurrenceDisplay && (
-                        <span className="text-[12px] text-muted-foreground">{occurrenceDisplay}</span>
+                        <span className="text-[12px] text-(--el-panel-detail-label)">{occurrenceDisplay}</span>
                       )}
                     </div>
                   </div>
@@ -214,29 +214,29 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
               )}
               {reminderDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                 </>
               )}
               {secondReminderDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
                 </>
               )}
               {locationDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
                 </>
               )}
               {meetingLinkDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="videocam" size={18} color="var(--color-muted-foreground)" />
-                    <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.meetingLink')}</span>
-                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-primary hover:underline">
+                    <Icon name="videocam" size={18} color="var(--el-panel-detail-label)" />
+                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.meetingLink')}</span>
+                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-(--el-target-chevron) hover:underline">
                       {meetingLinkDisplay}
                     </a>
                   </div>

@@ -5,11 +5,11 @@ import { PopoverWrapper } from '@/components/ui/PopoverWrapper';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import type { GroupMember } from '@/types/api';
 
-const ROLE_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
-  OWNER: { bg: 'rgba(245, 158, 11, 0.15)', text: '#d97706' },
-  ADMIN: { bg: 'rgba(239, 68, 68, 0.15)', text: '#dc2626' },
-  MEMBER: { bg: 'rgba(59, 130, 246, 0.15)', text: '#2563eb' },
-  VIEWER: { bg: 'rgba(107, 114, 128, 0.15)', text: '#6b7280' },
+const ROLE_BADGE_TOKENS: Record<string, { bg: string; text: string }> = {
+  OWNER: { bg: 'var(--el-role-admin-bg)', text: 'var(--el-group-star-filled)' },
+  ADMIN: { bg: 'var(--el-role-admin-bg)', text: 'var(--el-role-admin-text)' },
+  MEMBER: { bg: 'var(--el-role-member-bg)', text: 'var(--el-role-member-text)' },
+  VIEWER: { bg: 'var(--el-role-viewer-bg)', text: 'var(--el-role-viewer-text)' },
 };
 
 const ROLE_KEYS: Record<string, string> = {
@@ -81,15 +81,15 @@ export function MemberListItem({
     <>
       <div className="flex items-center gap-3 px-4 py-3" data-testid={`member-row-${member.userId}`}>
         {/* Avatar */}
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--el-group-avatar-bg) text-sm font-semibold text-(--el-group-avatar-text)">
           {initial}
         </div>
 
         {/* Name + Email */}
         <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-medium text-foreground">{memberName}</div>
+          <div className="truncate text-sm font-medium text-(--el-group-title)">{memberName}</div>
           {memberEmail && (
-            <div className="truncate text-xs text-muted-foreground">{memberEmail}</div>
+            <div className="truncate text-xs text-(--el-group-description)">{memberEmail}</div>
           )}
         </div>
 
@@ -98,8 +98,8 @@ export function MemberListItem({
           data-testid={`role-badge-${member.userId}`}
           className="shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase"
           style={{
-            backgroundColor: (ROLE_BADGE_COLORS[member.role] || ROLE_BADGE_COLORS.VIEWER).bg,
-            color: (ROLE_BADGE_COLORS[member.role] || ROLE_BADGE_COLORS.VIEWER).text,
+            backgroundColor: (ROLE_BADGE_TOKENS[member.role] || ROLE_BADGE_TOKENS.VIEWER).bg,
+            color: (ROLE_BADGE_TOKENS[member.role] || ROLE_BADGE_TOKENS.VIEWER).text,
           }}
         >
           {t(ROLE_KEYS[member.role] || ROLE_KEYS.VIEWER)}
@@ -112,9 +112,9 @@ export function MemberListItem({
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
               data-testid={`member-actions-${member.userId}`}
-              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) hover:bg-(--el-popover-item-hover)"
             >
-              <Icon name="more_vert" size={20} color="var(--color-muted-foreground)" />
+              <Icon name="more_vert" size={20} color="var(--el-group-description)" />
             </button>
 
             {menuOpen && (
@@ -130,13 +130,13 @@ export function MemberListItem({
                       setMenuOpen(false);
                       setConfirmAction({ type: 'role', newRole: item.role });
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-muted"
+                    className="w-full px-4 py-2 text-left text-sm text-(--el-popover-item-text) hover:bg-(--el-popover-item-hover)"
                   >
                     {item.label}
                   </button>
                 ))}
                 {canRemove && roleMenuItems.length > 0 && (
-                  <div className="my-1 border-t border-border" />
+                  <div className="my-1 border-t border-(--el-card-border)" />
                 )}
                 {canRemove && (
                   <button
@@ -145,7 +145,7 @@ export function MemberListItem({
                       setMenuOpen(false);
                       setConfirmAction({ type: 'remove' });
                     }}
-                    className="w-full px-4 py-2 text-left text-sm text-destructive hover:bg-muted"
+                    className="w-full px-4 py-2 text-left text-sm text-(--el-view-delete-text) hover:bg-(--el-popover-item-hover)"
                   >
                     {t('groups.removeMember')}
                   </button>

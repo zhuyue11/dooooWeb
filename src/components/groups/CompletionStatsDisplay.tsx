@@ -19,7 +19,7 @@ function MiniAvatar({ name }: { name: string }) {
     .join('')
     .toUpperCase();
   return (
-    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary">
+    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-(--el-group-avatar-bg) text-[10px] font-semibold text-(--el-group-avatar-text)">
       {initials}
     </div>
   );
@@ -31,12 +31,12 @@ function AvatarStack({ names }: { names: string[] }) {
   return (
     <div className="flex items-center -space-x-2">
       {visible.map((name, i) => (
-        <div key={i} className="ring-2 ring-surface rounded-full">
+        <div key={i} className="ring-2 ring-(--el-group-bg) rounded-full">
           <MiniAvatar name={name} />
         </div>
       ))}
       {remaining > 0 && (
-        <span className="ml-2 text-xs text-muted-foreground">+{remaining}</span>
+        <span className="ml-2 text-xs text-(--el-group-description)">+{remaining}</span>
       )}
     </div>
   );
@@ -64,16 +64,16 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
   const displayParticipants = showAll ? participants : participants.slice(0, 5);
 
   return (
-    <div className="mx-4 my-2 rounded-(--radius-card) border border-border" data-testid="completion-stats">
+    <div className="mx-4 my-2 rounded-(--radius-card) border border-(--el-card-border)" data-testid="completion-stats">
       {/* Participants section */}
       {hasParticipants && (
         <div className="p-3">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-semibold text-foreground">
+            <span className="text-xs font-semibold text-(--el-group-title)">
               {t('groups.participate.participating')}
             </span>
             {trackCompletion && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-(--el-group-description)">
                 {stats.completedCount}/{stats.totalParticipants}
               </span>
             )}
@@ -83,19 +83,19 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
               <div key={p.id} className="flex items-center gap-2.5">
                 <MiniAvatar name={p.name} />
                 <div className="flex-1 min-w-0">
-                  <span className="truncate text-xs font-medium text-foreground">{p.name}</span>
+                  <span className="truncate text-xs font-medium text-(--el-group-title)">{p.name}</span>
                   {p.id === currentUserId && (
-                    <span className="ml-1 text-[10px] text-muted-foreground">({t('common.you')})</span>
+                    <span className="ml-1 text-[10px] text-(--el-group-description)">({t('common.you')})</span>
                   )}
                   {p.id === organizerId && (
-                    <span className="ml-1 text-[10px] text-muted-foreground">({t('groups.itemRow.organizer')})</span>
+                    <span className="ml-1 text-[10px] text-(--el-group-description)">({t('groups.itemRow.organizer')})</span>
                   )}
                 </div>
                 {trackCompletion && (
                   p.isCompleted ? (
-                    <Icon name="check_circle" size={16} color="var(--color-primary)" />
+                    <Icon name="check_circle" size={16} color="var(--el-group-status-text)" />
                   ) : (
-                    <Icon name="radio_button_unchecked" size={16} color="var(--color-muted-foreground)" />
+                    <Icon name="radio_button_unchecked" size={16} color="var(--el-group-description)" />
                   )
                 )}
               </div>
@@ -105,7 +105,7 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
             <button
               type="button"
               onClick={() => setShowAll(true)}
-              className="mt-2 text-xs font-medium text-primary"
+              className="mt-2 text-xs font-medium text-(--el-group-status-text)"
               data-testid="completion-stats-see-all"
             >
               {t('groups.participate.seeAll')}
@@ -116,9 +116,9 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
 
       {/* Invited section */}
       {hasInvited && (
-        <div className={`flex items-center gap-3 p-3 ${hasParticipants ? 'border-t border-border' : ''}`}>
-          <Icon name="mail" size={16} color="var(--color-secondary)" />
-          <span className="text-xs text-muted-foreground">{t('groups.participate.invited')}</span>
+        <div className={`flex items-center gap-3 p-3 ${hasParticipants ? 'border-t border-(--el-card-border)' : ''}`}>
+          <Icon name="mail" size={16} color="var(--el-btn-secondary-bg)" />
+          <span className="text-xs text-(--el-group-description)">{t('groups.participate.invited')}</span>
           <div className="flex-1" />
           <AvatarStack names={stats.invitedParticipants!.map((p) => p.name)} />
         </div>
@@ -126,9 +126,9 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
 
       {/* Not going section */}
       {hasNotGoing && (
-        <div className={`flex items-center gap-3 p-3 ${hasParticipants || hasInvited ? 'border-t border-border' : ''}`}>
-          <Icon name="close" size={16} color="var(--color-destructive)" />
-          <span className="text-xs text-muted-foreground">{t('groups.participate.notGoingList')}</span>
+        <div className={`flex items-center gap-3 p-3 ${hasParticipants || hasInvited ? 'border-t border-(--el-card-border)' : ''}`}>
+          <Icon name="close" size={16} color="var(--el-group-cancel-text)" />
+          <span className="text-xs text-(--el-group-description)">{t('groups.participate.notGoingList')}</span>
           <div className="flex-1" />
           <AvatarStack names={stats.notGoingParticipants!.map((p) => p.name)} />
         </div>

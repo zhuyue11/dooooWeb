@@ -96,14 +96,14 @@ export function GroupListPage() {
 
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20">
-        <Icon name="group" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-base font-medium text-foreground">{title}</span>
-        <span className="text-sm text-muted-foreground">{subtitle}</span>
+        <Icon name="group" size={48} color="var(--el-group-description)" />
+        <span className="text-base font-medium text-(--el-group-title)">{title}</span>
+        <span className="text-sm text-(--el-group-description)">{subtitle}</span>
         {showCreate && (
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="mt-2 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="mt-2 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90"
           >
             {t('groups.createGroup')}
           </button>
@@ -122,9 +122,9 @@ export function GroupListPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">{t('groups.groups')}</h1>
+          <h1 className="text-2xl font-bold text-(--el-group-title)">{t('groups.groups')}</h1>
           {!isLoading && (
-            <span className="text-sm text-muted-foreground">{groupCountText}</span>
+            <span className="text-sm text-(--el-group-description)">{groupCountText}</span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -136,8 +136,8 @@ export function GroupListPage() {
               onClick={() => setFilter(f.key)}
               className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 filter === f.key
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border border-border text-foreground hover:bg-muted'
+                  ? 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text)'
+                  : 'border border-(--el-btn-outline-border) text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover)'
               }`}
             >
               {f.label}
@@ -148,9 +148,9 @@ export function GroupListPage() {
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="ml-2 flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground hover:opacity-90"
+            className="ml-2 flex items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-(--el-btn-primary-text) hover:opacity-90"
           >
-            <Icon name="add" size={16} color="var(--color-primary-foreground)" />
+            <Icon name="add" size={16} color="var(--el-btn-primary-text)" />
             {t('groups.newGroup')}
           </button>
         </div>
@@ -158,7 +158,7 @@ export function GroupListPage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center text-sm text-(--el-group-description)">
           {t('common.loading')}
         </div>
       ) : sortedAndFiltered.length === 0 ? (

@@ -98,9 +98,9 @@ function formatOccurrenceDisplay(repeatJson: string): string | null {
 function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={18} color="var(--color-muted-foreground)" />
-      <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{label}</span>
-      <span className="text-[13px] font-medium text-foreground">{value}</span>
+      <Icon name={icon} size={18} color="var(--el-panel-detail-label)" />
+      <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{label}</span>
+      <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{value}</span>
     </div>
   );
 }
@@ -183,28 +183,28 @@ export function PlanPreviewPanel({
       onClick={handleClose}
     >
       {/* Backdrop */}
-      <div className={`absolute inset-0 bg-black/20 ${isClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`} />
+      <div className={`absolute inset-0 bg-(--el-dialog-overlay) ${isClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`} />
 
       {/* Panel */}
       <div
-        className={`relative flex h-full w-[420px] max-w-full flex-col bg-surface shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
-        style={{ borderLeft: '1px solid var(--color-border)' }}
+        className={`relative flex h-full w-[420px] max-w-full flex-col bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
+        style={{ borderLeft: '1px solid var(--el-panel-border)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="plan-preview-panel"
       >
         {loading ? (
           <div className="flex flex-1 items-center justify-center" data-testid="plan-preview-loading">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
           </div>
         ) : !plan ? null : selectedTemplate ? (
           /* ── Detail view ── */
           <>
             {/* Header */}
-            <div className="flex items-center gap-3 border-b border-border px-4 py-3">
+            <div className="flex items-center gap-3 border-b border-(--el-panel-header-border) px-4 py-3">
               <button
                 type="button"
                 onClick={() => setSelectedTemplate(null)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg) hover:text-(--el-panel-title)"
                 data-testid="plan-preview-back"
               >
                 <Icon name="arrow_back" size={20} />
@@ -213,16 +213,16 @@ export function PlanPreviewPanel({
                 {isEvent ? (
                   <Icon name="event" size={18} color="#5b21b6" className="shrink-0" />
                 ) : (
-                  <Icon name="task_alt" size={18} color="var(--color-primary)" className="shrink-0" />
+                  <Icon name="task_alt" size={18} color="var(--el-ai-session-text)" className="shrink-0" />
                 )}
-                <span className="truncate text-base font-semibold text-foreground">
+                <span className="truncate text-base font-semibold text-(--el-panel-title)">
                   {selectedTemplate.title}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg) hover:text-(--el-panel-title)"
                 data-testid="plan-preview-close"
               >
                 <Icon name="close" size={18} />
@@ -232,29 +232,29 @@ export function PlanPreviewPanel({
             {/* Detail body */}
             <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-6 py-6">
               {selectedTemplate.description && (
-                <p className="text-sm leading-relaxed text-foreground">{selectedTemplate.description}</p>
+                <p className="text-sm leading-relaxed text-(--el-panel-description)">{selectedTemplate.description}</p>
               )}
 
               {hasAnyDetail && (
-                <div className="rounded-(--radius-card) border border-border">
+                <div className="rounded-(--radius-card) border border-(--el-panel-border)">
                   {dateDisplay && (
                     <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
                   )}
                   {timeDisplay && (
                     <>
-                      {dateDisplay && <div className="mx-4 border-t border-border" />}
+                      {dateDisplay && <div className="mx-4 border-t border-(--el-panel-separator)" />}
                       <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                     </>
                   )}
                   {durationDisplay && (
                     <>
-                      {(dateDisplay || timeDisplay) && <div className="mx-4 border-t border-border" />}
+                      {(dateDisplay || timeDisplay) && <div className="mx-4 border-t border-(--el-panel-separator)" />}
                       <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
                     </>
                   )}
                   {selectedTemplate.gapDays > 0 && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <DetailRow
                         icon="schedule"
                         label={t('targetPlan.gapDays', 'Gap')}
@@ -264,14 +264,14 @@ export function PlanPreviewPanel({
                   )}
                   {repeatDisplay && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <div className="flex items-start gap-3 px-4 py-3">
-                        <Icon name="repeat" size={18} color="var(--color-muted-foreground)" className="mt-0.5" />
-                        <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.repeat')}</span>
+                        <Icon name="repeat" size={18} color="var(--el-panel-detail-label)" className="mt-0.5" />
+                        <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.repeat')}</span>
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-[13px] font-medium text-foreground">{repeatDisplay}</span>
+                          <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{repeatDisplay}</span>
                           {occurrenceDisplay && (
-                            <span className="text-[12px] text-muted-foreground">{occurrenceDisplay}</span>
+                            <span className="text-[12px] text-(--el-panel-detail-label)">{occurrenceDisplay}</span>
                           )}
                         </div>
                       </div>
@@ -279,33 +279,33 @@ export function PlanPreviewPanel({
                   )}
                   {reminderDisplay && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                     </>
                   )}
                   {secondReminderDisplay && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
                     </>
                   )}
                   {locationDisplay && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
                     </>
                   )}
                   {meetingLinkDisplay && (
                     <>
-                      <div className="mx-4 border-t border-border" />
+                      <div className="mx-4 border-t border-(--el-panel-separator)" />
                       <div className="flex items-center gap-3 px-4 py-3">
-                        <Icon name="videocam" size={18} color="var(--color-muted-foreground)" />
-                        <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.meetingLink')}</span>
+                        <Icon name="videocam" size={18} color="var(--el-panel-detail-label)" />
+                        <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.meetingLink')}</span>
                         <a
                           href={meetingLinkDisplay}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="truncate text-[13px] font-medium text-primary hover:underline"
+                          className="truncate text-[13px] font-medium text-(--el-ai-session-text) hover:underline"
                         >
                           {meetingLinkDisplay}
                         </a>
@@ -320,12 +320,12 @@ export function PlanPreviewPanel({
           /* ── List view ── */
           <>
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
-              <h2 className="truncate text-lg font-semibold text-foreground">{plan.name}</h2>
+            <div className="flex items-center justify-between border-b border-(--el-panel-header-border) px-4 py-3">
+              <h2 className="truncate text-lg font-semibold text-(--el-panel-title)">{plan.name}</h2>
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg) hover:text-(--el-panel-title)"
                 data-testid="plan-preview-close"
               >
                 <Icon name="close" size={18} />
@@ -337,18 +337,18 @@ export function PlanPreviewPanel({
               {/* Description — HTML content is sanitized via DOMPurify before rendering */}
               {sanitizedDescription ? (
                 <div
-                  className="prose prose-sm px-4 py-3 text-muted-foreground dark:prose-invert"
+                  className="prose prose-sm px-4 py-3 text-(--el-plan-description) dark:prose-invert"
                   dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
                 />
               ) : plan.description ? (
-                <p className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">{plan.description}</p>
+                <p className="px-4 py-3 text-sm leading-relaxed text-(--el-plan-description)">{plan.description}</p>
               ) : null}
 
               {/* Template list */}
               {templates.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <Icon name="assignment" size={32} color="var(--color-muted-foreground)" />
-                  <p className="mt-2 text-sm text-muted-foreground">{t('aiChat.planPreviewNoTemplates')}</p>
+                  <Icon name="assignment" size={32} color="var(--el-panel-detail-label)" />
+                  <p className="mt-2 text-sm text-(--el-panel-detail-label)">{t('aiChat.planPreviewNoTemplates')}</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-2 px-4 py-2">
@@ -367,11 +367,11 @@ export function PlanPreviewPanel({
 
             {/* Start Plan button */}
             {templates.length > 0 && (
-              <div className="border-t border-border px-4 py-3">
+              <div className="border-t border-(--el-panel-separator) px-4 py-3">
                 <button
                   type="button"
                   onClick={onStartPlan}
-                  className="flex w-full items-center justify-center gap-2 rounded-(--radius-card) bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  className="flex w-full items-center justify-center gap-2 rounded-(--radius-card) bg-(--el-btn-primary-bg) px-4 py-3 text-sm font-semibold text-(--el-btn-primary-text) hover:opacity-90"
                   data-testid="plan-preview-start"
                 >
                   <Icon name="play_arrow" size={20} />

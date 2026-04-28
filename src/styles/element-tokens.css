@@ -254,6 +254,30 @@
   --el-group-badge-text: #ffffff;
   --el-group-owner-border: #e5e7eb;
   --el-group-owner-text: #6b7280;
+  --el-group-avatar-bg: rgba(16, 185, 129, 0.15);
+  --el-group-avatar-text: #10b981;
+  --el-group-info-bg: rgba(59, 130, 246, 0.1);
+  --el-group-info-icon: #3b82f6;
+  --el-group-success-bg: rgba(16, 185, 129, 0.1);
+  --el-group-success-icon: #10b981;
+  --el-group-section-header-bg: rgba(243, 244, 246, 0.3);
+  --el-group-section-header-text: #6b7280;
+  --el-group-radio-active-bg: #10b981;
+  --el-group-radio-active-border: #10b981;
+  --el-group-radio-inactive-border: rgba(107, 114, 128, 0.4);
+  --el-group-option-active-border: #10b981;
+  --el-group-option-active-bg: rgba(16, 185, 129, 0.05);
+  --el-group-option-inactive-border: #e5e7eb;
+  --el-group-option-icon-active-bg: rgba(16, 185, 129, 0.15);
+  --el-group-option-icon-inactive-bg: rgba(243, 244, 246, 0.4);
+  --el-group-option-icon-active: #10b981;
+  --el-group-option-icon-inactive: #6b7280;
+  --el-group-status-text: #10b981;
+  --el-group-placeholder-border: #e5e7eb;
+  --el-group-expire-text: #ef4444;
+  --el-group-cancel-border: rgba(239, 68, 68, 0.3);
+  --el-group-cancel-text: #ef4444;
+  --el-group-cancel-hover: rgba(239, 68, 68, 0.1);
 
   /* ── Chat ── */
   --el-chat-own-bg: #10b981;
@@ -573,6 +597,30 @@
   --el-group-badge-text: #0f172a;
   --el-group-owner-border: #333333;
   --el-group-owner-text: #9ca3af;
+  --el-group-avatar-bg: rgba(52, 211, 153, 0.15);
+  --el-group-avatar-text: #34d399;
+  --el-group-info-bg: rgba(96, 165, 250, 0.1);
+  --el-group-info-icon: #60a5fa;
+  --el-group-success-bg: rgba(52, 211, 153, 0.1);
+  --el-group-success-icon: #34d399;
+  --el-group-section-header-bg: rgba(38, 38, 38, 0.3);
+  --el-group-section-header-text: #9ca3af;
+  --el-group-radio-active-bg: #34d399;
+  --el-group-radio-active-border: #34d399;
+  --el-group-radio-inactive-border: rgba(156, 163, 175, 0.4);
+  --el-group-option-active-border: #34d399;
+  --el-group-option-active-bg: rgba(52, 211, 153, 0.05);
+  --el-group-option-inactive-border: #333333;
+  --el-group-option-icon-active-bg: rgba(52, 211, 153, 0.15);
+  --el-group-option-icon-inactive-bg: rgba(38, 38, 38, 0.4);
+  --el-group-option-icon-active: #34d399;
+  --el-group-option-icon-inactive: #9ca3af;
+  --el-group-status-text: #34d399;
+  --el-group-placeholder-border: #333333;
+  --el-group-expire-text: #f87171;
+  --el-group-cancel-border: rgba(248, 113, 113, 0.3);
+  --el-group-cancel-text: #f87171;
+  --el-group-cancel-hover: rgba(248, 113, 113, 0.1);
 
   /* ── Chat ── */
   --el-chat-own-bg: #34d399;

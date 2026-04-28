@@ -121,7 +121,7 @@ export function PlanDetailPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
   }
@@ -130,12 +130,12 @@ export function PlanDetailPage() {
   if (!plan) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="plan-detail-page">
-        <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-base font-medium text-foreground">{t('targetPlan.planNotFound')}</span>
+        <Icon name="assignment" size={48} color="var(--el-plan-description)" />
+        <span className="text-base font-medium text-(--el-plan-title)">{t('targetPlan.planNotFound')}</span>
         <button
           type="button"
           onClick={() => navigate('/plans')}
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-(--el-plan-chevron) hover:underline"
         >
           {t('targetPlan.plans')}
         </button>
@@ -156,7 +156,7 @@ export function PlanDetailPage() {
         <button
           type="button"
           onClick={() => navigate('/plans')}
-          className="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className="flex w-fit items-center gap-1 text-sm text-(--el-plan-description) hover:text-(--el-plan-title)"
           data-testid="plan-detail-back"
         >
           <Icon name="arrow_back" size={18} />
@@ -167,21 +167,21 @@ export function PlanDetailPage() {
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-1 flex-col gap-1.5">
             <div className="flex items-center gap-2">
-              <h1 className="text-[22px] font-bold text-foreground" data-testid="plan-detail-name">
+              <h1 className="text-[22px] font-bold text-(--el-plan-title)" data-testid="plan-detail-name">
                 {plan.name}
               </h1>
               {plan.isAiGenerated && (
                 <div
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10"
+                  className="flex h-6 w-6 items-center justify-center rounded-full bg-(--el-target-status-active-bg)"
                   data-testid="plan-ai-badge"
                 >
-                  <Icon name="auto_awesome" size={16} color="var(--color-primary)" />
+                  <Icon name="auto_awesome" size={16} color="var(--el-plan-chevron)" />
                 </div>
               )}
             </div>
 
             {(plan.targetPlans?.[0]?.target?.name ?? targetNameParam) && (
-              <span className="text-[14px] text-muted-foreground" data-testid="plan-target-subtitle">
+              <span className="text-[14px] text-(--el-plan-description)" data-testid="plan-target-subtitle">
                 {plan.targetPlans?.[0]?.target?.name ?? targetNameParam}
               </span>
             )}
@@ -189,11 +189,11 @@ export function PlanDetailPage() {
             {plan.description && (
               sanitizedDescription ? (
                 <div
-                  className="text-[14px] leading-relaxed text-muted-foreground [&_*]:inline [&_br]:hidden [&_li]:before:content-['·_']"
+                  className="text-[14px] leading-relaxed text-(--el-plan-description) [&_*]:inline [&_br]:hidden [&_li]:before:content-['·_']"
                   dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
                 />
               ) : (
-                <p className="text-[14px] leading-relaxed text-muted-foreground">{plan.description}</p>
+                <p className="text-[14px] leading-relaxed text-(--el-plan-description)">{plan.description}</p>
               )
             )}
           </div>
@@ -205,7 +205,7 @@ export function PlanDetailPage() {
                 <button
                   type="button"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-view-delete-border) px-3 py-1.5 text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-btn-destructive-bg)/10"
                   data-testid="plan-delete-btn"
                 >
                   <Icon name="delete" size={16} />
@@ -215,7 +215,7 @@ export function PlanDetailPage() {
                 <button
                   type="button"
                   onClick={() => setShowRemoveConfirm(true)}
-                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-view-delete-border) px-3 py-1.5 text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-btn-destructive-bg)/10"
                   data-testid="plan-remove-btn"
                 >
                   <Icon name="bookmark_remove" size={16} />
@@ -234,15 +234,15 @@ export function PlanDetailPage() {
               onClick={() => setViewMode('list')}
               className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text)'
+                  : 'text-(--el-plan-description) hover:text-(--el-plan-title)'
               }`}
               data-testid="view-toggle-list"
             >
               <Icon
                 name="format_list_bulleted"
                 size={14}
-                color={viewMode === 'list' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
+                color={viewMode === 'list' ? 'var(--el-btn-primary-text)' : 'var(--el-plan-description)'}
               />
               {t('targetPlan.listView')}
             </button>
@@ -251,15 +251,15 @@ export function PlanDetailPage() {
               onClick={() => setViewMode('calendar')}
               className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 viewMode === 'calendar'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text)'
+                  : 'text-(--el-plan-description) hover:text-(--el-plan-title)'
               }`}
               data-testid="view-toggle-calendar"
             >
               <Icon
                 name="calendar_today"
                 size={14}
-                color={viewMode === 'calendar' ? 'var(--color-primary-foreground)' : 'var(--color-muted-foreground)'}
+                color={viewMode === 'calendar' ? 'var(--el-btn-primary-text)' : 'var(--el-plan-description)'}
               />
               {t('targetPlan.calendarView')}
             </button>
@@ -275,7 +275,7 @@ export function PlanDetailPage() {
             <button
               type="button"
               onClick={() => setShowExecutionDeleteModal(true)}
-              className="flex items-center justify-center gap-1.5 self-start rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+              className="flex items-center justify-center gap-1.5 self-start rounded-(--radius-card) border border-(--el-view-delete-border) px-3 py-1.5 text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-btn-destructive-bg)/10"
               data-testid="execution-delete-btn"
             >
               <Icon name={activeExecution.status === 'COMPLETED' ? 'delete_outline' : 'stop_circle'} size={16} />
@@ -295,9 +295,9 @@ export function PlanDetailPage() {
           />
         ) : templates.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20" data-testid="plan-templates-empty">
-            <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
-            <span className="text-base font-medium text-foreground">{t('targetPlan.noTemplates')}</span>
-            <span className="text-sm text-muted-foreground">{t('targetPlan.noTemplatesDesc')}</span>
+            <Icon name="assignment" size={48} color="var(--el-plan-description)" />
+            <span className="text-base font-medium text-(--el-plan-title)">{t('targetPlan.noTemplates')}</span>
+            <span className="text-sm text-(--el-plan-description)">{t('targetPlan.noTemplatesDesc')}</span>
           </div>
         ) : (
           <div className="flex flex-col gap-2" data-testid="plan-templates-list">
@@ -319,20 +319,20 @@ export function PlanDetailPage() {
 
       {/* Start Plan bottom bar — fixed at bottom, hidden during active execution */}
       {templates.length > 0 && !activeExecution && (
-        <div className="flex shrink-0 items-center justify-end bg-background px-4 py-2.5" data-testid="start-plan-bar">
+        <div className="flex shrink-0 items-center justify-end bg-(--el-page-bg) px-4 py-2.5" data-testid="start-plan-bar">
           <button
             type="button"
             onClick={() => {
               const tid = plan?.targetPlans?.[0]?.targetId;
               navigate(`/plans/${planId}/start${tid ? `?targetId=${tid}` : ''}`);
             }}
-            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-(--el-btn-primary-text) transition-opacity hover:opacity-90"
             data-testid="start-plan-btn"
           >
             <Icon
               name={hasBeenExecuted ? 'replay' : 'play_arrow'}
               size={16}
-              color="var(--color-primary-foreground)"
+              color="var(--el-btn-primary-text)"
             />
             {hasBeenExecuted ? t('targetPlan.startPlanAgain') : t('targetPlan.startPlan')}
           </button>

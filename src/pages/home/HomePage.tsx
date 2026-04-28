@@ -353,15 +353,15 @@ export function HomePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-2xl font-bold text-(--el-page-text)">
             {getGreeting(t)}, {firstName}
           </h1>
-          <p className="text-sm font-medium text-muted-foreground">{formatDate()}</p>
+          <p className="text-sm font-medium text-(--el-page-text) opacity-60">{formatDate()}</p>
         </div>
         <button
           data-testid="dashboard-add-button"
           onClick={handleAddClick}
-          className="flex h-(--btn-height-sm) w-9 items-center justify-center rounded-(--radius-btn) bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex h-(--btn-height-sm) w-9 items-center justify-center rounded-(--radius-btn) bg-(--el-btn-primary-bg) text-(--el-btn-primary-text) transition-opacity hover:opacity-90"
         >
           <Icon name="add" size={20} />
         </button>
@@ -372,13 +372,13 @@ export function HomePage() {
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="flex flex-1 flex-col gap-2 rounded-(--radius-card) bg-surface p-(--spacing-card) shadow-(--shadow-card)"
+            className="flex flex-1 flex-col gap-2 rounded-(--radius-card) bg-(--el-card-bg) p-(--spacing-card) shadow-(--shadow-card)"
           >
-            <span className="text-[13px] font-medium text-muted-foreground">{m.label}</span>
+            <span className="text-[13px] font-medium text-(--el-page-text) opacity-60">{m.label}</span>
             <div className="flex items-end gap-2">
               <span
                 className="text-[32px] font-bold leading-none"
-                style={{ color: m.valueColor || 'var(--color-foreground)' }}
+                style={{ color: m.valueColor || 'var(--el-page-text)' }}
                 data-testid={`metric-value-${m.label}`}
               >
                 {isLoading ? '—' : m.value}
@@ -394,18 +394,18 @@ export function HomePage() {
       {/* Body: Today | Overdue | To-do | Upcoming */}
       <div className="flex min-h-0 flex-1 gap-4">
         {/* 1. Today */}
-        <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.today')}</span>
-            <Link to="/calendar" className="text-[13px] font-medium text-primary hover:underline">
+        <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
+          <div className="flex items-center justify-between border-b border-(--el-card-border) px-5 py-4">
+            <span className="text-base font-semibold text-(--el-page-text)">{t('dashboard.panels.today')}</span>
+            <Link to="/calendar" className="text-[13px] font-medium text-(--el-btn-primary-bg) hover:underline">
               {t('dashboard.panels.openCalendar')}
             </Link>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('common.loading')}</div>
             ) : todayItems.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.nothingForToday')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('dashboard.panels.nothingForToday')}</div>
             ) : (
               todayItems.map((item) => (
                 <ItemRow key={item.id} item={item} categories={categories} currentUserId={user?.id} onToggle={handleToggle} onClick={handleItemClick} />
@@ -416,9 +416,9 @@ export function HomePage() {
 
         {/* 2. Overdue */}
         {overdueItems.length > 0 && (
-          <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <span className="text-base font-semibold text-destructive">{t('dashboard.panels.overdue')}</span>
+          <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
+            <div className="flex items-center justify-between border-b border-(--el-card-border) px-5 py-4">
+              <span className="text-base font-semibold text-(--el-btn-destructive-bg)">{t('dashboard.panels.overdue')}</span>
             </div>
             <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
               {overdueItems.map((item) => (
@@ -429,18 +429,18 @@ export function HomePage() {
         )}
 
         {/* 3. To-do */}
-        <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.todo')}</span>
-            <Link to="/todo" className="text-[13px] font-medium text-primary hover:underline">
+        <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
+          <div className="flex items-center justify-between border-b border-(--el-card-border) px-5 py-4">
+            <span className="text-base font-semibold text-(--el-page-text)">{t('dashboard.panels.todo')}</span>
+            <Link to="/todo" className="text-[13px] font-medium text-(--el-btn-primary-bg) hover:underline">
               {t('dashboard.panels.viewAll')}
             </Link>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('common.loading')}</div>
             ) : todoListItems.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noTodoItems')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('dashboard.panels.noTodoItems')}</div>
             ) : (
               todoListItems.map((item) => (
                 <ItemRow key={item.id} item={item} categories={categories} currentUserId={user?.id} onToggle={handleToggle} onClick={handleItemClick} />
@@ -450,15 +450,15 @@ export function HomePage() {
         </div>
 
         {/* 4. Upcoming */}
-        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <span className="text-base font-semibold text-foreground">{t('dashboard.panels.upcoming')}</span>
+        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
+          <div className="flex items-center justify-between border-b border-(--el-card-border) px-5 py-4">
+            <span className="text-base font-semibold text-(--el-page-text)">{t('dashboard.panels.upcoming')}</span>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('common.loading')}</div>
             ) : upcomingTasks.length === 0 ? (
-              <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('dashboard.panels.noUpcomingTasks')}</div>
+              <div className="flex items-center justify-center py-8 text-sm text-(--el-page-text) opacity-60">{t('dashboard.panels.noUpcomingTasks')}</div>
             ) : (
               upcomingTasks.map((item) => (
                 <ItemRow key={item.id} item={item} categories={categories} showDate currentUserId={user?.id} onClick={handleItemClick} />

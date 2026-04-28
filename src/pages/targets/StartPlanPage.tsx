@@ -319,7 +319,7 @@ export function StartPlanPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
   }
@@ -328,12 +328,12 @@ export function StartPlanPage() {
   if (!plan) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="start-plan-page">
-        <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
-        <span className="text-base font-medium text-foreground">{t('targetPlan.planNotFound')}</span>
+        <Icon name="assignment" size={48} color="var(--el-plan-description)" />
+        <span className="text-base font-medium text-(--el-plan-title)">{t('targetPlan.planNotFound')}</span>
         <button
           type="button"
           onClick={() => navigate('/plans')}
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-(--el-target-chevron) hover:underline"
         >
           {t('targetPlan.plans')}
         </button>
@@ -350,12 +350,12 @@ export function StartPlanPage() {
           <button
             type="button"
             onClick={() => navigate(`/plans/${planId}`)}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-(--el-plan-description) hover:bg-(--el-popover-item-hover)"
             data-testid="start-plan-back"
           >
             <Icon name="arrow_back" size={20} />
           </button>
-          <h1 className="flex-1 truncate text-lg font-bold text-foreground" data-testid="start-plan-name">
+          <h1 className="flex-1 truncate text-lg font-bold text-(--el-plan-title)" data-testid="start-plan-name">
             {plan.name}
           </h1>
         </div>
@@ -366,10 +366,10 @@ export function StartPlanPage() {
             <button
               type="button"
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="flex w-full items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-2 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-plan-bg) px-4 py-3 text-left transition-colors hover:bg-(--el-popover-item-hover)"
             >
-              <Icon name="event" size={18} color="var(--color-primary)" />
-              <span className="flex-1 text-[13px] text-foreground">
+              <Icon name="event" size={18} color="var(--el-target-chevron)" />
+              <span className="flex-1 text-[13px] text-(--el-plan-title)">
                 {t('targetPlan.planStartsOn')}{' '}
                 <span className="font-semibold">
                   {startDate.toLocaleDateString(undefined, {
@@ -383,7 +383,7 @@ export function StartPlanPage() {
               <Icon
                 name={showDatePicker ? 'expand_less' : 'expand_more'}
                 size={20}
-                color="var(--color-muted-foreground)"
+                color="var(--el-plan-description)"
               />
             </button>
             {showDatePicker && (
@@ -406,18 +406,18 @@ export function StartPlanPage() {
               type="button"
               disabled={currentWeekIndex === 0}
               onClick={() => setCurrentWeekIndex((i) => i - 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
+              className="flex h-7 w-7 items-center justify-center rounded-full text-(--el-plan-description) transition-colors hover:bg-(--el-popover-item-hover) disabled:opacity-30"
             >
               <Icon name="chevron_left" size={18} />
             </button>
-            <span className="text-[13px] text-muted-foreground" data-testid="week-indicator">
+            <span className="text-[13px] text-(--el-plan-description)" data-testid="week-indicator">
               {weekLabel} · {t('targetPlan.weekIndicator', { current: currentWeekIndex + 1, total: weekStarts.length })}
             </span>
             <button
               type="button"
               disabled={currentWeekIndex === weekStarts.length - 1}
               onClick={() => setCurrentWeekIndex((i) => i + 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
+              className="flex h-7 w-7 items-center justify-center rounded-full text-(--el-plan-description) transition-colors hover:bg-(--el-popover-item-hover) disabled:opacity-30"
             >
               <Icon name="chevron_right" size={18} />
             </button>
@@ -438,17 +438,17 @@ export function StartPlanPage() {
       {/* Waiting for preference — show loading state */}
       {!preferenceApplied && !showPreferenceModal && (
         <div className="flex flex-1 items-center justify-center">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
         </div>
       )}
 
       {/* Bottom bar */}
       {preferenceApplied && scheduledTasks.length > 0 && (
-        <div className="flex shrink-0 items-center justify-end gap-3 bg-background px-4 py-2.5" data-testid="confirm-bar">
+        <div className="flex shrink-0 items-center justify-end gap-3 bg-(--el-page-bg) px-4 py-2.5" data-testid="confirm-bar">
           <button
             type="button"
             onClick={() => navigate(`/plans/${planId}`)}
-            className="rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-(--el-plan-description) transition-colors hover:bg-(--el-popover-item-hover) hover:text-(--el-plan-title)"
             data-testid="start-plan-cancel"
           >
             {t('common.cancel', 'Cancel')}
@@ -457,14 +457,14 @@ export function StartPlanPage() {
             type="button"
             onClick={handleConfirm}
             disabled={executing}
-            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-(--el-btn-primary-text) transition-opacity hover:opacity-90 disabled:opacity-50"
             data-testid="confirm-create-tasks"
           >
             {executing ? (
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-(--el-btn-primary-text) border-t-transparent" />
             ) : (
               <>
-                <Icon name="check" size={16} color="var(--color-primary-foreground)" />
+                <Icon name="check" size={16} color="var(--el-btn-primary-text)" />
                 {t('targetPlan.confirmCreateTasks', 'Confirm & Create Tasks')}
               </>
             )}

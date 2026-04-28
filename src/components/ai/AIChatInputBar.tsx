@@ -43,7 +43,7 @@ export function AIChatInputBar({ value, onChange, onSend, disabled }: AIChatInpu
   }, []);
 
   return (
-    <div className="flex items-end gap-2 border-t border-border bg-background px-3 py-2" data-testid="ai-chat-input-bar">
+    <div className="flex items-end gap-2 border-t border-(--el-card-border) bg-background px-3 py-2" data-testid="ai-chat-input-bar">
       <textarea
         ref={textareaRef}
         value={value}
@@ -53,13 +53,13 @@ export function AIChatInputBar({ value, onChange, onSend, disabled }: AIChatInpu
         placeholder={t('aiChat.typeMessage')}
         rows={1}
         disabled={disabled}
-        className="flex-1 resize-none bg-transparent py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+        className="flex-1 resize-none bg-transparent py-2 text-sm text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:outline-none"
         data-testid="ai-chat-input"
       />
       <button
         onClick={handleSend}
         disabled={!canSend}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity disabled:opacity-40"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--el-btn-primary-bg) text-(--el-btn-primary-text) transition-opacity disabled:opacity-40"
         data-testid="ai-chat-send-button"
       >
         <Icon name="send" size={20} />

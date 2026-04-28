@@ -199,9 +199,9 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
   ]);
 
   return createPortal(
-    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${isClosing ? 'animate-backdrop-out' : ''}`} onClick={onClose}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-(--el-modal-overlay) ${isClosing ? 'animate-backdrop-out' : ''}`} onClick={onClose}>
       <div
-        className={`relative w-full max-w-[560px] rounded-(--radius-modal) bg-surface shadow-(--shadow-modal) ${isClosing ? 'animate-modal-exit' : 'animate-modal-enter'}`}
+        className={`relative w-full max-w-[560px] rounded-(--radius-modal) bg-(--el-modal-bg) shadow-(--shadow-modal) ${isClosing ? 'animate-modal-exit' : 'animate-modal-enter'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header: type toggle + close */}
@@ -212,8 +212,8 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
               onClick={() => handleItemTypeChange('TASK')}
               className={`flex items-center gap-2 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
                 isTask
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border border-border text-muted-foreground hover:bg-muted'
+                  ? 'bg-(--el-modal-type-active-bg) text-(--el-modal-type-active-text)'
+                  : 'border border-(--el-modal-schedule-border) text-(--el-modal-type-inactive-text) hover:opacity-80'
               }`}
             >
               <Icon name="check_circle" size={16} />
@@ -224,8 +224,8 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
               onClick={() => handleItemTypeChange('EVENT')}
               className={`flex items-center gap-2 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
                 !isTask
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border border-border text-muted-foreground hover:bg-muted'
+                  ? 'bg-(--el-modal-type-active-bg) text-(--el-modal-type-active-text)'
+                  : 'border border-(--el-modal-schedule-border) text-(--el-modal-type-inactive-text) hover:opacity-80'
               }`}
             >
               <Icon name="calendar_today" size={16} />
@@ -235,7 +235,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-modal-icon-unselected) hover:bg-(--el-popover-item-hover)"
           >
             <Icon name="close" size={20} />
           </button>
@@ -250,35 +250,35 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={t('calendarPage.form.titlePlaceholder')}
-            className="bg-transparent text-xl font-semibold text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="bg-transparent text-xl font-semibold text-(--el-modal-title-text) placeholder:text-(--el-modal-title-placeholder) focus:outline-none"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !saveDisabled) handleSubmit();
             }}
           />
 
           {/* Schedule card */}
-          <div className="rounded-(--radius-card) border border-border">
+          <div className="rounded-(--radius-card) border border-(--el-modal-schedule-border)">
             {/* Date row */}
             <div className="relative">
             <button
               type="button"
               onClick={() => setShowCalendar(!showCalendar)}
-              className="flex w-full items-center gap-3.5 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors"
+              className="flex w-full items-center gap-3.5 px-4 py-2.5 text-left hover:bg-(--el-popover-item-hover) transition-colors"
             >
-              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+              <Icon name="calendar_today" size={20} color={selectedDate ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
               {selectedDate ? (
                 <>
-                  <span className="text-sm font-medium text-foreground">{formatDateDisplay(selectedDate)}</span>
+                  <span className="text-sm font-medium text-(--el-modal-title-text)">{formatDateDisplay(selectedDate)}</span>
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleClearDate(); }}
-                    className="ml-auto text-muted-foreground hover:text-foreground"
+                    className="ml-auto text-(--el-modal-icon-unselected) hover:text-(--el-modal-title-text)"
                   >
                     <Icon name="close" size={16} />
                   </button>
                 </>
               ) : (
-                <span className="text-sm text-muted-foreground">{t('calendarPage.form.addDate')}</span>
+                <span className="text-sm text-(--el-modal-type-inactive-text)">{t('calendarPage.form.addDate')}</span>
               )}
             </button>
 
@@ -310,15 +310,15 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
                     <Icon
                       name={timeOfDay === 'MORNING' ? 'wb_sunny' : timeOfDay === 'AFTERNOON' ? 'wb_cloudy' : 'nightlight'}
                       size={20}
-                      color="var(--color-primary)"
+                      color="var(--el-modal-icon-selected)"
                     />
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="text-sm font-medium text-(--el-modal-title-text)">
                       {t(`tasks.timeOfDay.${timeOfDay.toLowerCase()}`)}
                     </span>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setTimeOfDay(null); }}
-                      className="ml-auto text-muted-foreground hover:text-foreground"
+                      className="ml-auto text-(--el-modal-icon-unselected) hover:text-(--el-modal-title-text)"
                     >
                       <Icon name="close" size={16} />
                     </button>
@@ -329,8 +329,8 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
                     onClick={() => setShowTimeOfDayPicker(true)}
                     className="flex w-full items-center gap-3.5 text-left"
                   >
-                    <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                    <span className="text-sm text-muted-foreground">{t('calendarPage.form.addTime')}</span>
+                    <Icon name="schedule" size={20} color="var(--el-modal-icon-unselected)" />
+                    <span className="text-sm text-(--el-modal-type-inactive-text)">{t('calendarPage.form.addTime')}</span>
                   </button>
                 )}
                 {showTimeOfDayPicker && (
@@ -360,8 +360,8 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
                       onClick={() => setHasStartTime(true)}
                       className="flex w-full items-center gap-3.5 text-left"
                     >
-                      <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                      <span className="text-sm text-muted-foreground">{t('calendarPage.form.startTime')}</span>
+                      <Icon name="schedule" size={20} color="var(--el-modal-icon-unselected)" />
+                      <span className="text-sm text-(--el-modal-type-inactive-text)">{t('calendarPage.form.startTime')}</span>
                     </button>
                   )}
                 </div>
@@ -378,8 +378,8 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
                       onClick={() => setHasEndTime(true)}
                       className="flex w-full items-center gap-3.5 text-left"
                     >
-                      <Icon name="schedule" size={20} color="var(--color-muted-foreground)" />
-                      <span className="text-sm text-muted-foreground">{t('calendarPage.form.endTime')}</span>
+                      <Icon name="schedule" size={20} color="var(--el-modal-icon-unselected)" />
+                      <span className="text-sm text-(--el-modal-type-inactive-text)">{t('calendarPage.form.endTime')}</span>
                     </button>
                   )}
                 </div>
@@ -389,15 +389,15 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             {/* Event: placeholder rows */}
             {!isTask && (
               <>
-                <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
+                <div className="flex items-center gap-3.5 px-4 py-2.5 text-(--el-modal-icon-unselected) opacity-50">
                   <Icon name="person_add" size={20} />
                   <span className="text-sm">{t('calendarPage.form.addGuests')}</span>
                 </div>
-                <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
+                <div className="flex items-center gap-3.5 px-4 py-2.5 text-(--el-modal-icon-unselected) opacity-50">
                   <Icon name="videocam" size={20} />
                   <span className="text-sm">{t('calendarPage.form.addMeetingLink')}</span>
                 </div>
-                <div className="flex items-center gap-3.5 px-4 py-2.5 text-muted-foreground opacity-50">
+                <div className="flex items-center gap-3.5 px-4 py-2.5 text-(--el-modal-icon-unselected) opacity-50">
                   <Icon name="location_on" size={20} />
                   <span className="text-sm">{t('calendarPage.form.addLocation')}</span>
                 </div>
@@ -408,7 +408,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             <button
               type="button"
               onClick={handleMoreOptions}
-              className="flex w-full items-center gap-3.5 px-4 py-2.5 text-muted-foreground transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-3.5 px-4 py-2.5 text-(--el-modal-icon-unselected) transition-colors hover:bg-(--el-popover-item-hover)"
             >
               <Icon name="tune" size={20} />
               <span className="text-sm font-medium">{t('calendarPage.form.moreOptions')}</span>
@@ -419,11 +419,11 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 border-t border-border px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-(--el-modal-schedule-border) px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-(--radius-card) border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className="rounded-(--radius-card) border border-(--el-modal-cancel-border) px-5 py-2.5 text-sm font-medium text-(--el-modal-cancel-text) transition-colors hover:opacity-80"
           >
             {t('calendarPage.form.cancel')}
           </button>
@@ -431,7 +431,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             type="button"
             onClick={handleSubmit}
             disabled={saveDisabled}
-            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-(--el-modal-save-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-modal-save-text) transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

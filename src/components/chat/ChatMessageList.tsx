@@ -179,8 +179,8 @@ export function ChatMessageList({
   // --- Empty state ---
   if (!isLoading && messages.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 text-muted-foreground">
-        <Icon name="chat" size={48} color="var(--color-muted-foreground)" />
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 text-(--el-chat-timestamp)">
+        <Icon name="chat" size={48} color="var(--el-chat-timestamp)" />
         <span className="text-sm">{t('groupInvitation.noMessages')}</span>
       </div>
     );
@@ -223,7 +223,7 @@ export function ChatMessageList({
         {hasMore && (
           <div ref={sentinelRef} className="flex justify-center py-3">
             {isFetchingMore && (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-(--el-chat-timestamp) border-t-transparent" />
             )}
           </div>
         )}
@@ -233,7 +233,7 @@ export function ChatMessageList({
       {unreadAboveCount > 0 && (
         <button
           onClick={scrollToFirstUnread}
-          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-(--shadow-elevated) transition-transform hover:scale-105"
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-(--el-btn-primary-bg) px-4 py-1.5 text-xs font-medium text-(--el-btn-primary-text) shadow-(--shadow-elevated) transition-transform hover:scale-105"
           data-testid="unread-above-indicator"
         >
           {unreadAboveCount === 1
@@ -246,7 +246,7 @@ export function ChatMessageList({
       {newMessageCount > 0 && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-(--shadow-elevated) transition-transform hover:scale-105"
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-(--el-btn-primary-bg) px-4 py-1.5 text-xs font-medium text-(--el-btn-primary-text) shadow-(--shadow-elevated) transition-transform hover:scale-105"
         >
           {newMessageCount === 1
             ? t('chat.newMessageSingular')
@@ -257,7 +257,7 @@ export function ChatMessageList({
       {/* Loading state */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
         </div>
       )}
     </div>

@@ -31,9 +31,9 @@ export function ParticipationActions({ taskId, isRecurring, date, onActionComple
     onActionComplete?.();
   };
 
-  const btnPrimary = 'rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50';
-  const btnOutline = 'rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50';
-  const btnDestructive = 'rounded-(--radius-btn) border border-destructive/30 px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50';
+  const btnPrimary = 'rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-(--el-btn-primary-text) hover:opacity-90 disabled:opacity-50';
+  const btnOutline = 'rounded-(--radius-btn) border border-(--el-btn-outline-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover) disabled:opacity-50';
+  const btnDestructive = 'rounded-(--radius-btn) border border-(--el-group-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-(--el-group-cancel-text) hover:bg-(--el-group-cancel-hover) disabled:opacity-50';
 
   return (
     <div className="flex flex-wrap items-center gap-2 px-4 py-3" data-testid="participation-actions">
@@ -64,7 +64,7 @@ export function ParticipationActions({ taskId, isRecurring, date, onActionComple
 
       {status === 'CONFIRMED' && (
         <>
-          <span className="text-xs font-medium text-primary">{t('groups.participate.alreadyParticipating')}</span>
+          <span className="text-xs font-medium text-(--el-group-status-text)">{t('groups.participate.alreadyParticipating')}</span>
           {date && (
             <button
               type="button"

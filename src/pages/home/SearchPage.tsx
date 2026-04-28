@@ -240,7 +240,7 @@ export function SearchPage() {
       chips.push({
         key: 'priority',
         label: p ? t(p.labelKey) : selectedPriority,
-        color: p?.color || 'var(--color-primary)',
+        color: p?.color || 'var(--el-btn-primary-bg)',
         onRemove: () => handlePriorityChange(null),
       });
     }
@@ -249,7 +249,7 @@ export function SearchPage() {
       chips.push({
         key: 'category',
         label: c?.name || '',
-        color: c?.color || 'var(--color-primary)',
+        color: c?.color || 'var(--el-btn-primary-bg)',
         onRemove: () => handleCategoryChange(null),
       });
     }
@@ -258,7 +258,7 @@ export function SearchPage() {
       chips.push({
         key: 'group',
         label: g?.name || '',
-        color: g?.color || 'var(--color-primary)',
+        color: g?.color || 'var(--el-btn-primary-bg)',
         onRemove: () => handleGroupChange(null),
       });
     }
@@ -267,7 +267,7 @@ export function SearchPage() {
       chips.push({
         key: 'plan',
         label: p?.name || '',
-        color: 'var(--color-secondary)',
+        color: 'var(--el-btn-secondary-bg)',
         onRemove: () => handlePlanChange(null),
       });
     }
@@ -276,7 +276,7 @@ export function SearchPage() {
       chips.push({
         key: 'target',
         label: tgt?.name || '',
-        color: 'var(--color-info)',
+        color: 'var(--el-notif-task-color)',
         onRemove: () => handleTargetChange(null),
       });
     }
@@ -284,7 +284,7 @@ export function SearchPage() {
       chips.push({
         key: 'overdue',
         label: t('search.overdue'),
-        color: 'var(--color-destructive)',
+        color: 'var(--el-btn-destructive-bg)',
         onRemove: () => handleOverdueChange(false),
       });
     }
@@ -292,7 +292,7 @@ export function SearchPage() {
       chips.push({
         key: 'completed',
         label: t('search.completed'),
-        color: 'var(--color-secondary)',
+        color: 'var(--el-btn-secondary-bg)',
         onRemove: () => handleCompletedChange(false),
       });
     }
@@ -302,7 +302,7 @@ export function SearchPage() {
       chips.push({
         key: 'dateRange',
         label: `${fromStr} – ${toStr}`,
-        color: 'var(--color-primary)',
+        color: 'var(--el-btn-primary-bg)',
         onRemove: () => { handleDateFromChange(null); handleDateToChange(null); },
       });
     }
@@ -342,12 +342,12 @@ export function SearchPage() {
     <div className="flex h-full flex-col gap-4" style={{ fontFamily: 'Inter, sans-serif' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">{t('search.title')}</h1>
+        <h1 className="text-2xl font-bold text-(--el-page-text)">{t('search.title')}</h1>
         {(searchResults.length > 0 || isSearching) && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-(--el-page-text) opacity-60">
             {isSearching ? (
               <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
               </span>
             ) : (
               t('search.resultCount', { count: searchResults.length })
@@ -358,18 +358,18 @@ export function SearchPage() {
 
       {/* Search bar + filter toggle */}
       <div className="flex items-center gap-2">
-        <div className="flex h-10 flex-1 items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4">
-          <Icon name="search" size={18} color="var(--color-muted-foreground)" />
+        <div className="flex h-10 flex-1 items-center gap-2 rounded-(--radius-card) border border-(--el-input-border) bg-(--el-input-bg) px-4">
+          <Icon name="search" size={18} color="var(--el-input-placeholder)" />
           <input
             type="text"
             value={searchText}
             onChange={(e) => handleTextChange(e.target.value)}
             placeholder={t('search.placeholder')}
-            className="w-full bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="w-full bg-transparent text-[14px] text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:outline-none"
             autoFocus
           />
           {searchText && (
-            <button onClick={() => handleTextChange('')} className="text-muted-foreground hover:text-foreground">
+            <button onClick={() => handleTextChange('')} className="text-(--el-input-placeholder) hover:text-(--el-input-text)">
               <Icon name="close" size={16} />
             </button>
           )}
@@ -379,14 +379,14 @@ export function SearchPage() {
           onClick={() => setShowFilters(!showFilters)}
           className={`flex h-10 items-center gap-1.5 rounded-(--radius-card) border px-4 text-[13px] font-medium transition-colors ${
             showFilters || activeFilterCount > 0
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border text-foreground hover:bg-muted'
+              ? 'border-(--el-settings-selected-border) bg-(--el-settings-selected-bg) text-(--el-settings-check)'
+              : 'border-(--el-input-border) text-(--el-page-text) hover:bg-(--el-settings-hover)'
           }`}
         >
           <Icon name="tune" size={18} />
           {t('search.filters')}
           {activeFilterCount > 0 && !showFilters && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-white">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-(--el-btn-primary-bg) px-1 text-[11px] font-bold text-(--el-btn-primary-text)">
               {activeFilterCount}
             </span>
           )}
@@ -423,17 +423,17 @@ export function SearchPage() {
       )}
 
       {/* Results list */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-(--el-card-bg) shadow-(--shadow-card)">
         {isSearching ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-page-text) opacity-60">
+            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
             {t('common.loading')}
           </div>
         ) : searchResults.length > 0 ? (
           searchResults.map((item, i) => (
             <div
               key={item.id}
-              className={`px-5 py-0.5 ${i < searchResults.length - 1 ? 'border-b border-border' : ''}`}
+              className={`px-5 py-0.5 ${i < searchResults.length - 1 ? 'border-b border-(--el-card-border)' : ''}`}
             >
               <ItemRow
                 item={item}
@@ -446,13 +446,13 @@ export function SearchPage() {
             </div>
           ))
         ) : hasAnyFilter ? (
-          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <Icon name="search_off" size={40} color="var(--color-muted-foreground)" />
+          <div className="flex flex-col items-center justify-center py-12 text-(--el-page-text) opacity-60">
+            <Icon name="search_off" size={40} color="var(--el-input-placeholder)" />
             <p className="mt-2 text-sm">{t('search.noResults')}</p>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-            <Icon name="search" size={48} color="var(--color-muted-foreground)" />
+          <div className="flex flex-col items-center justify-center py-16 text-(--el-page-text) opacity-60">
+            <Icon name="search" size={48} color="var(--el-input-placeholder)" />
             <p className="mt-3 text-sm">{t('search.placeholder')}</p>
           </div>
         )}

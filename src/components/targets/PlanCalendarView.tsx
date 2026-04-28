@@ -141,10 +141,10 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
         <button
           type="button"
           onClick={() => setShowDatePicker(!showDatePicker)}
-          className="flex w-full items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
+          className="flex w-full items-center gap-2 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-plan-bg) px-4 py-3 text-left transition-colors hover:bg-(--el-popover-item-hover)"
         >
-          <Icon name="event" size={18} color="var(--color-primary)" />
-          <span className="flex-1 text-[13px] text-foreground">
+          <Icon name="event" size={18} color="var(--el-target-chevron)" />
+          <span className="flex-1 text-[13px] text-(--el-plan-title)">
             {t('targetPlan.planStartsOn')}{' '}
             <span className="font-semibold">
               {startDate.toLocaleDateString(undefined, {
@@ -158,7 +158,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
           <Icon
             name={showDatePicker ? 'expand_less' : 'expand_more'}
             size={20}
-            color="var(--color-muted-foreground)"
+            color="var(--el-plan-description)"
           />
         </button>
         {showDatePicker && (
@@ -180,19 +180,19 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
             type="button"
             disabled={currentWeekIndex === 0}
             onClick={() => setCurrentWeekIndex((i) => i - 1)}
-            className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-(--el-plan-description) transition-colors hover:bg-(--el-popover-item-hover) disabled:opacity-30"
             data-testid="week-nav-prev"
           >
             <Icon name="chevron_left" size={18} />
           </button>
-          <span className="text-[13px] text-muted-foreground" data-testid="week-indicator">
+          <span className="text-[13px] text-(--el-plan-description)" data-testid="week-indicator">
             {weekLabel} · {t('targetPlan.weekIndicator', { current: currentWeekIndex + 1, total: weekStarts.length })}
           </span>
           <button
             type="button"
             disabled={currentWeekIndex === weekStarts.length - 1}
             onClick={() => setCurrentWeekIndex((i) => i + 1)}
-            className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-(--el-plan-description) transition-colors hover:bg-(--el-popover-item-hover) disabled:opacity-30"
             data-testid="week-nav-next"
           >
             <Icon name="chevron_right" size={18} />
@@ -201,9 +201,9 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
       )}
 
       {/* Calendar grid — fills remaining height */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-plan-bg) shadow-(--shadow-card)">
         {/* Fixed: Day headers */}
-        <div className="flex shrink-0 border-b border-border">
+        <div className="flex shrink-0 border-b border-(--el-card-border)">
           <div style={{ width: HOUR_LABEL_WIDTH }} className="flex-shrink-0" />
           <div className="grid flex-1 grid-cols-7">
             {weekDates.map((date, i) => {
@@ -211,13 +211,13 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
               return (
                 <div key={i} className="flex flex-col items-center py-2">
                   <span
-                    className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? 'text-primary' : 'text-muted-foreground'}`}
+                    className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? 'text-(--el-cal-date-today-text)' : 'text-(--el-cal-day-header)'}`}
                   >
                     {DAY_NAMES[date.getDay()]}
                   </span>
                   <div
                     className={`mt-0.5 flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium ${
-                      isToday ? 'bg-primary text-primary-foreground' : 'text-foreground'
+                      isToday ? 'bg-(--el-cal-date-today-border) text-(--el-cal-date-selected-text)' : 'text-(--el-cal-date-normal)'
                     }`}
                     data-testid={isToday ? 'plan-cal-today' : undefined}
                   >
@@ -240,7 +240,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                   className="flex items-start justify-end pr-2 pt-0"
                   style={{ height: HOUR_HEIGHT }}
                 >
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-[10px] text-(--el-cal-hour-label)">
                     {formatHourLabel(hour)}
                   </span>
                 </div>
@@ -255,13 +255,13 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                 const currentHour = new Date().getHours();
 
                 return (
-                  <div key={dayIndex} className="relative border-l border-border" data-testid={`plan-day-col-${dayIndex}`}>
+                  <div key={dayIndex} className="relative border-l border-(--el-cal-grid-border)" data-testid={`plan-day-col-${dayIndex}`}>
                     {/* Hour row backgrounds */}
                     {hours.map((hour) => (
                       <div
                         key={hour}
-                        className={`border-b border-border/50 ${
-                          isToday && hour === currentHour ? 'bg-primary/5' : ''
+                        className={`border-b border-(--el-cal-grid-border)/50 ${
+                          isToday && hour === currentHour ? 'bg-(--el-cal-current-hour-bg)' : ''
                         }`}
                         style={{ height: HOUR_HEIGHT }}
                       />
@@ -278,7 +278,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                         <button
                           key={task.instanceId || task.templateId}
                           type="button"
-                          className="absolute cursor-pointer overflow-hidden rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) py-1 text-left transition-opacity hover:opacity-80"
+                          className="absolute cursor-pointer overflow-hidden rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x-sm) py-1 text-left transition-opacity hover:opacity-80"
                           style={{
                             top,
                             height,
@@ -291,9 +291,9 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                         >
                           <div className="flex min-w-0 items-center gap-0.5">
                             {task.isEvent && (
-                              <Icon name="event" size={10} color="var(--color-primary-foreground)" />
+                              <Icon name="event" size={10} color="var(--el-btn-primary-text)" />
                             )}
-                            <span className="truncate text-[10px] font-medium leading-tight text-primary-foreground">
+                            <span className="truncate text-[10px] font-medium leading-tight text-(--el-btn-primary-text)">
                               {task.title}
                             </span>
                           </div>

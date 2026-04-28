@@ -10,9 +10,9 @@ import type { Notification } from '@/types/api';
 import type { NotificationDataMap } from '@/types/notifications';
 
 const ROLE_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
-  ADMIN: { bg: 'rgba(239, 68, 68, 0.15)', text: '#dc2626' },
-  MEMBER: { bg: 'rgba(59, 130, 246, 0.15)', text: '#2563eb' },
-  VIEWER: { bg: 'rgba(107, 114, 128, 0.15)', text: '#6b7280' },
+  ADMIN: { bg: 'var(--el-role-admin-bg)', text: 'var(--el-role-admin-text)' },
+  MEMBER: { bg: 'var(--el-role-member-bg)', text: 'var(--el-role-member-text)' },
+  VIEWER: { bg: 'var(--el-role-viewer-bg)', text: 'var(--el-role-viewer-text)' },
 };
 
 const ROLE_KEYS: Record<string, string> = {
@@ -71,20 +71,20 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
         data-testid={`invitation-card-${notification.id}`}
         className={`rounded-(--radius-card) border p-(--spacing-card) transition-colors ${
           notification.isRead
-            ? 'border-border bg-surface'
-            : 'border-primary/20 bg-primary/5'
+            ? 'border-(--el-notif-read-border) bg-(--el-notif-read-bg)'
+            : 'border-(--el-notif-unread-border) bg-(--el-notif-unread-bg)'
         }`}
       >
         <div className="flex items-start gap-3">
           {/* Icon */}
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-            <Icon name="group_add" size={20} color="var(--color-primary)" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--el-notif-success-bg)">
+            <Icon name="group_add" size={20} color="var(--el-notif-success-color)" />
           </div>
 
           {/* Content */}
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-foreground">{title}</span>
+              <span className="text-sm font-semibold text-(--el-notif-title)">{title}</span>
               <span
                 className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase"
                 style={{ backgroundColor: roleBadge.bg, color: roleBadge.text }}
@@ -92,8 +92,8 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
                 {roleLabel}
               </span>
             </div>
-            <p className="mt-0.5 text-sm text-muted-foreground">{message}</p>
-            <span className="mt-1 block text-xs text-muted-foreground/70">{timeAgo}</span>
+            <p className="mt-0.5 text-sm text-(--el-notif-message)">{message}</p>
+            <span className="mt-1 block text-xs text-(--el-notif-time)">{timeAgo}</span>
 
             {/* Actions */}
             <div className="mt-3 flex items-center gap-2">
@@ -102,7 +102,7 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
                 data-testid="accept-invitation-button"
                 onClick={handleAccept}
                 disabled={isActing}
-                className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                className="rounded-(--radius-btn) bg-(--el-invite-accept-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-invite-accept-text) hover:opacity-90 disabled:opacity-50"
               >
                 {acceptMutation.isPending ? (
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -115,7 +115,7 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
                 data-testid="decline-invitation-button"
                 onClick={() => setShowDeclineConfirm(true)}
                 disabled={isActing}
-                className="rounded-(--radius-card) border border-border px-4 py-1.5 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+                className="rounded-(--radius-card) border border-(--el-invite-decline-border) px-4 py-1.5 text-sm font-medium text-(--el-invite-decline-text) hover:bg-(--el-settings-hover) disabled:opacity-50"
               >
                 {t('groupInvitation.decline')}
               </button>

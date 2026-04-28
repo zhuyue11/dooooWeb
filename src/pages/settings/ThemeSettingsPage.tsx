@@ -16,7 +16,7 @@ import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/typ
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    <p className="text-xs font-semibold uppercase tracking-wider text-(--el-settings-label)">
       {children}
     </p>
   );
@@ -30,7 +30,7 @@ function ThemeMiniPreview({ type }: { type: 'light' | 'dark' | 'split' }) {
       <div className="flex h-[72px] flex-col gap-1.5 rounded-(--radius-card) bg-[#f2f3f5] p-2.5">
         <div className="h-2 w-3/4 rounded bg-white" />
         <div className="h-2 flex-1 rounded bg-white" />
-        <div className="h-2 w-2/5 rounded bg-[var(--color-primary)]" />
+        <div className="h-2 w-2/5 rounded bg-(--el-settings-check)" />
       </div>
     );
   }
@@ -39,7 +39,7 @@ function ThemeMiniPreview({ type }: { type: 'light' | 'dark' | 'split' }) {
       <div className="flex h-[72px] flex-col gap-1.5 rounded-(--radius-card) bg-[#0f0f0f] p-2.5">
         <div className="h-2 w-3/4 rounded bg-[#1a1a1a]" />
         <div className="h-2 flex-1 rounded bg-[#1a1a1a]" />
-        <div className="h-2 w-2/5 rounded bg-[var(--color-primary)]" />
+        <div className="h-2 w-2/5 rounded bg-(--el-settings-check)" />
       </div>
     );
   }
@@ -56,15 +56,15 @@ function ThemeMiniPreview({ type }: { type: 'light' | 'dark' | 'split' }) {
 function DisplayStylePreview({ style }: { style: DisplayStyle }) {
   const shapes = DISPLAY_STYLE_SHAPES[style];
   return (
-    <div className="flex h-[72px] flex-col justify-between rounded-(--radius-card) bg-muted/50 p-2.5">
+    <div className="flex h-[72px] flex-col justify-between rounded-(--radius-card) bg-(--el-settings-hover) p-2.5">
       {/* Mini card */}
       <div
-        className="flex-1 border border-border bg-surface"
+        className="flex-1 border border-(--el-settings-border) bg-(--el-settings-bg)"
         style={{ borderRadius: shapes.cardRadius, boxShadow: shapes.shadow }}
       />
       {/* Mini button */}
       <div
-        className="mt-1.5 h-3.5 w-3/5 bg-primary"
+        className="mt-1.5 h-3.5 w-3/5 bg-(--el-settings-check)"
         style={{ borderRadius: shapes.btnRadius }}
       />
     </div>
@@ -104,15 +104,15 @@ function ThemePatternSection() {
               className={[
                 'flex flex-col items-center gap-2 rounded-(--radius-card) p-(--spacing-card) transition-colors',
                 isSelected
-                  ? 'border-2 border-primary bg-primary/5'
-                  : 'border border-border hover:bg-muted',
+                  ? 'border-2 border-(--el-settings-selected-border) bg-(--el-settings-selected-bg)'
+                  : 'border border-(--el-settings-unselected-border) hover:bg-(--el-settings-hover)',
                 isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
               ].join(' ')}
             >
               <ThemeMiniPreview type={preview} />
               <div className="flex items-center gap-1">
-                <Icon name={icon} size={16} className="text-muted-foreground" />
-                <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'} text-foreground`}>
+                <Icon name={icon} size={16} className="text-(--el-settings-label)" />
+                <span className={`text-xs ${isSelected ? 'font-bold' : 'font-medium'} text-(--el-page-text)`}>
                   {t(labelKey)}
                 </span>
               </div>
@@ -121,7 +121,7 @@ function ThemePatternSection() {
         })}
       </div>
       {themePattern === 'auto' && !isDisabled && (
-        <p className="text-xs text-muted-foreground">{t('themeSettings.autoDescription')}</p>
+        <p className="text-xs text-(--el-settings-label)">{t('themeSettings.autoDescription')}</p>
       )}
     </div>
   );
@@ -137,7 +137,7 @@ function ThemeColorSection() {
     <div className="flex flex-col gap-3">
       <div>
         <SectionLabel>{t('themeSettings.themeColorTitle')}</SectionLabel>
-        <p className="mt-0.5 text-xs text-muted-foreground">{t('themeSettings.themeColorSubtitle')}</p>
+        <p className="mt-0.5 text-xs text-(--el-settings-label)">{t('themeSettings.themeColorSubtitle')}</p>
       </div>
       <div className="grid grid-cols-5 gap-x-2 gap-y-3 sm:flex sm:flex-wrap sm:gap-4">
         {THEME_COLORS.map((color: ThemeColor) => {
@@ -155,7 +155,7 @@ function ThemeColorSection() {
               <div
                 className={[
                   'flex h-9 w-9 items-center justify-center rounded-full transition-shadow',
-                  isSelected ? 'ring-2 ring-offset-2 ring-offset-surface' : '',
+                  isSelected ? 'ring-2 ring-offset-2 ring-offset-(--el-settings-bg)' : '',
                 ].join(' ')}
                 style={{
                   backgroundColor: hex,
@@ -166,7 +166,7 @@ function ThemeColorSection() {
                   <Icon name="check" size={16} className="text-white" weight={700} />
                 )}
               </div>
-              <span className="text-[10px] font-medium text-muted-foreground">
+              <span className="text-[10px] font-medium text-(--el-settings-label)">
                 {t(labelKey)}
               </span>
             </button>
@@ -187,7 +187,7 @@ function ColorPaletteSection() {
     <div className="flex flex-col gap-3">
       <div>
         <SectionLabel>{t('themeSettings.colorPalettesTitle')}</SectionLabel>
-        <p className="mt-0.5 text-xs text-muted-foreground">{t('themeSettings.colorPalettesSubtitle')}</p>
+        <p className="mt-0.5 text-xs text-(--el-settings-label)">{t('themeSettings.colorPalettesSubtitle')}</p>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {COLOR_PALETTES.map((palette: ColorPalette) => {
@@ -203,8 +203,8 @@ function ColorPaletteSection() {
               className={[
                 'flex items-center gap-3 rounded-(--radius-card) px-3.5 py-3 transition-colors',
                 isSelected
-                  ? 'border-2 border-primary bg-primary/5'
-                  : 'border border-border hover:bg-muted',
+                  ? 'border-2 border-(--el-settings-selected-border) bg-(--el-settings-selected-bg)'
+                  : 'border border-(--el-settings-unselected-border) hover:bg-(--el-settings-hover)',
               ].join(' ')}
             >
               {/* Multi-color indicator */}
@@ -212,16 +212,16 @@ function ColorPaletteSection() {
                 {[colors.primary, colors.secondary, colors.accent].map((c, i) => (
                   <div
                     key={i}
-                    className="h-5 w-5 rounded-full border-2 border-surface"
+                    className="h-5 w-5 rounded-full border-2 border-(--el-settings-bg)"
                     style={{ backgroundColor: c, zIndex: 3 - i }}
                   />
                 ))}
               </div>
-              <span className={`text-xs ${isSelected ? 'font-bold' : 'font-semibold'} text-foreground`}>
+              <span className={`text-xs ${isSelected ? 'font-bold' : 'font-semibold'} text-(--el-page-text)`}>
                 {t(labelKey)}
               </span>
               {isSelected && (
-                <Icon name="check" size={16} className="ml-auto text-primary" weight={700} />
+                <Icon name="check" size={16} className="ml-auto text-(--el-settings-check)" weight={700} />
               )}
             </button>
           );
@@ -241,7 +241,7 @@ function DisplayStyleSection() {
     <div className="flex flex-col gap-3">
       <div>
         <SectionLabel>{t('themeSettings.displayStyleTitle')}</SectionLabel>
-        <p className="mt-0.5 text-xs text-muted-foreground">{t('themeSettings.displayStyleSubtitle')}</p>
+        <p className="mt-0.5 text-xs text-(--el-settings-label)">{t('themeSettings.displayStyleSubtitle')}</p>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
         {DISPLAY_STYLES.map((style: DisplayStyle) => {
@@ -258,20 +258,20 @@ function DisplayStyleSection() {
               className={[
                 'flex flex-col gap-2 rounded-(--radius-card) p-(--spacing-card) transition-colors',
                 isSelected
-                  ? 'border-2 border-primary bg-primary/5'
-                  : 'border border-border hover:bg-muted',
+                  ? 'border-2 border-(--el-settings-selected-border) bg-(--el-settings-selected-bg)'
+                  : 'border border-(--el-settings-unselected-border) hover:bg-(--el-settings-hover)',
               ].join(' ')}
             >
               <DisplayStylePreview style={style} />
               <div className="flex items-center gap-1.5">
                 {isSelected && (
-                  <Icon name="check" size={14} className="text-primary" weight={700} />
+                  <Icon name="check" size={14} className="text-(--el-settings-check)" weight={700} />
                 )}
-                <span className={`text-xs ${isSelected ? 'font-bold' : 'font-semibold'} text-foreground`}>
+                <span className={`text-xs ${isSelected ? 'font-bold' : 'font-semibold'} text-(--el-page-text)`}>
                   {t(labelKey)}
                 </span>
               </div>
-              <span className="text-[10px] leading-tight text-muted-foreground">
+              <span className="text-[10px] leading-tight text-(--el-settings-label)">
                 {t(descKey)}
               </span>
             </button>
@@ -289,27 +289,27 @@ export function ThemeSettingsPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold text-foreground">
+      <h1 className="mb-6 text-2xl font-bold text-(--el-page-text)">
         {t('settings.theme', 'Theme')}
       </h1>
 
       {/* Pattern + Color — side by side at wider viewports */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
+        <div className="rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
           <ThemePatternSection />
         </div>
-        <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
+        <div className="rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
           <ThemeColorSection />
         </div>
       </div>
 
       {/* Palettes — full width below */}
-      <div className="mt-4 rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
+      <div className="mt-4 rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
         <ColorPaletteSection />
       </div>
 
       {/* Display Style — full width below */}
-      <div className="mt-4 rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
+      <div className="mt-4 rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
         <DisplayStyleSection />
       </div>
     </div>

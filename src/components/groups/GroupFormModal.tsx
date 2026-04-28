@@ -84,26 +84,26 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-(--el-modal-overlay)"
       onClick={onClose}
     >
       <div
-        className="mx-6 w-full max-w-md rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
+        className="mx-6 w-full max-w-md rounded-(--radius-modal) bg-(--el-modal-bg) p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <h2 className="text-lg font-semibold text-foreground">
+        <h2 className="text-lg font-semibold text-(--el-modal-title-text)">
           {isCreate ? t('groups.createGroup') : t('groups.editGroup')}
         </h2>
         {isCreate && (
-          <p className="mt-1 text-[13px] text-muted-foreground">{t('groups.ownerInfo')}</p>
+          <p className="mt-1 text-[13px] text-(--el-group-description)">{t('groups.ownerInfo')}</p>
         )}
 
         {/* Form */}
         <div className="mt-5 flex flex-col gap-4">
           {/* Name */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground">
+            <label className="text-sm font-medium text-(--el-input-label)">
               {t('groups.groupNameLabel')}
             </label>
             <input
@@ -114,14 +114,14 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
                 if (e.target.value.length <= 100) setName(e.target.value);
               }}
               placeholder={t('groups.groupNamePlaceholder')}
-              className="rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              className="rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:border-(--el-input-focus) focus:outline-none"
             />
-            <span className="text-right text-xs text-muted-foreground">{name.length}/100</span>
+            <span className="text-right text-xs text-(--el-group-description)">{name.length}/100</span>
           </div>
 
           {/* Description */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground">
+            <label className="text-sm font-medium text-(--el-input-label)">
               {t('groups.descriptionLabel')}
             </label>
             <textarea
@@ -131,16 +131,16 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
               }}
               placeholder={t('groups.descriptionPlaceholder')}
               rows={3}
-              className="resize-none rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              className="resize-none rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:border-(--el-input-focus) focus:outline-none"
             />
-            <span className="text-right text-xs text-muted-foreground">
+            <span className="text-right text-xs text-(--el-group-description)">
               {description.length}/500
             </span>
           </div>
 
           {/* Color */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground">
+            <label className="text-sm font-medium text-(--el-input-label)">
               {t('groups.colorLabel')}
             </label>
             <div className="flex gap-2">
@@ -163,9 +163,9 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
 
         {/* Error */}
         {error && (
-          <div className="mt-4 flex items-center gap-2 rounded-(--radius-card) bg-destructive/10 px-3 py-2">
-            <Icon name="error" size={16} color="var(--color-destructive)" />
-            <span className="text-sm text-destructive">{error}</span>
+          <div className="mt-4 flex items-center gap-2 rounded-(--radius-card) bg-(--el-editor-error)/10 px-3 py-2">
+            <Icon name="error" size={16} color="var(--el-editor-error)" />
+            <span className="text-sm text-(--el-editor-error)">{error}</span>
           </div>
         )}
 
@@ -175,7 +175,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-(--radius-btn) border border-(--el-modal-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-modal-cancel-text) hover:bg-(--el-popover-item-hover) disabled:opacity-50"
           >
             {t('common.cancel')}
           </button>
@@ -183,7 +183,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
             type="button"
             onClick={handleSubmit}
             disabled={!name.trim() || submitting}
-            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

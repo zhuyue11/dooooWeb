@@ -128,20 +128,20 @@ export function AIChatMessageList({
             const isPending = proposal.status === 'pending';
             return (
               <div key={message.id} className="flex justify-start" data-testid="ai-proposal-card">
-                <div className="max-w-[75%] rounded-(--radius-card) rounded-bl-sm border border-border bg-surface px-3.5 py-2.5">
+                <div className="max-w-[75%] rounded-(--radius-card) rounded-bl-sm border border-(--el-card-border) bg-(--el-ai-msg-bg) px-3.5 py-2.5">
                   <div className="mb-1 flex items-center gap-1.5">
                     <Icon
                       name={proposal.kind === 'target' ? 'flag' : 'assignment'}
                       size={16}
-                      color="var(--color-primary)"
+                      color="var(--el-ai-session-text)"
                     />
-                    <span className="text-xs font-semibold text-primary">
+                    <span className="text-xs font-semibold text-(--el-ai-session-text)">
                       {proposal.kind === 'target' ? 'Target' : 'Plan Scope'}
                     </span>
                   </div>
-                  <p className="text-sm font-medium text-foreground">{proposal.name}</p>
+                  <p className="text-sm font-medium text-(--el-ai-msg-text)">{proposal.name}</p>
                   {proposal.description && (
-                    <p className="mt-1 text-xs text-muted-foreground">{proposal.description}</p>
+                    <p className="mt-1 text-xs text-(--el-chat-timestamp)">{proposal.description}</p>
                   )}
                   {isPending ? (
                     <div className="mt-2.5 flex gap-2">
@@ -149,7 +149,7 @@ export function AIChatMessageList({
                         type="button"
                         onClick={() => onProposalResponse(message.id, 'decline')}
                         disabled={isStreamingDisabled}
-                        className="rounded-(--radius-card) border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-50"
+                        className="rounded-(--radius-card) border border-(--el-card-border) px-3 py-1.5 text-xs font-medium text-(--el-ai-msg-text) hover:bg-(--el-popover-item-hover) disabled:opacity-50"
                       >
                         Decline
                       </button>
@@ -157,7 +157,7 @@ export function AIChatMessageList({
                         type="button"
                         onClick={() => onProposalResponse(message.id, 'confirm')}
                         disabled={isStreamingDisabled}
-                        className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                        className="rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-(--el-btn-primary-text) hover:opacity-90 disabled:opacity-50"
                       >
                         Confirm
                       </button>
@@ -167,9 +167,9 @@ export function AIChatMessageList({
                       <Icon
                         name={proposal.status === 'confirmed' ? 'check_circle' : 'cancel'}
                         size={14}
-                        color={proposal.status === 'confirmed' ? '#22c55e' : 'var(--color-muted-foreground)'}
+                        color={proposal.status === 'confirmed' ? '#22c55e' : 'var(--el-chat-timestamp)'}
                       />
-                      <span className={`text-xs font-medium ${proposal.status === 'confirmed' ? 'text-primary' : 'text-muted-foreground'}`}>
+                      <span className={`text-xs font-medium ${proposal.status === 'confirmed' ? 'text-(--el-ai-session-text)' : 'text-(--el-chat-timestamp)'}`}>
                         {proposal.status === 'confirmed' ? 'Confirmed' : 'Declined'}
                       </span>
                     </div>
@@ -187,15 +187,15 @@ export function AIChatMessageList({
                   <button
                     type="button"
                     onClick={() => onViewPlan?.(message.planAction!.planId, message.planAction!.type)}
-                    className="flex items-center gap-1.5 rounded-(--radius-card) border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                    className="flex items-center gap-1.5 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-ai-msg-bg) px-3 py-2 text-sm font-medium text-(--el-ai-msg-text) hover:bg-(--el-popover-item-hover)"
                   >
-                    <Icon name="visibility" size={16} color="var(--color-primary)" />
+                    <Icon name="visibility" size={16} color="var(--el-ai-session-text)" />
                     {t('aiChat.viewPlan')}
                   </button>
                   <button
                     type="button"
                     onClick={() => onStartPlan?.(message.planAction!.planId, message.planAction!.planName)}
-                    className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
+                    className="flex items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90"
                   >
                     <Icon name="play_arrow" size={16} />
                     {t('aiChat.startPlan')}
@@ -212,8 +212,8 @@ export function AIChatMessageList({
         {/* Typing / thinking indicator */}
         {isAwaitingGreeting && visibleMessages.length === 0 && (
           <div className="flex items-center gap-2.5 py-2" data-testid="ai-greeting-loading">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-              <Icon name="auto_awesome" size={18} color="var(--color-primary)" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--el-ai-session-bg)">
+              <Icon name="auto_awesome" size={18} color="var(--el-ai-session-text)" />
             </div>
             <PulsingDots />
           </div>
@@ -221,13 +221,13 @@ export function AIChatMessageList({
 
         {showThinkingIndicator && (
           <div className="flex items-center gap-2.5 py-2" data-testid="ai-thinking-indicator">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
-              <Icon name="auto_awesome" size={18} color="var(--color-primary)" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--el-ai-session-bg)">
+              <Icon name="auto_awesome" size={18} color="var(--el-ai-session-text)" />
             </div>
             {(isGeneratingPlan || isUpdatingPlan) ? (
               <div className="flex items-center gap-2">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                <span className="text-xs text-muted-foreground">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-(--el-ai-session-text) border-t-transparent" />
+                <span className="text-xs text-(--el-chat-timestamp)">
                   {isUpdatingPlan ? t('aiChat.updatingPlan') : t('aiChat.generatingPlan')}
                 </span>
               </div>

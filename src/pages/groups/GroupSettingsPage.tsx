@@ -58,15 +58,15 @@ export function GroupSettingsPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center" data-testid="preferences-loading">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
-        <Icon name="error" size={32} color="var(--color-destructive)" />
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-(--el-group-description)">
+        <Icon name="error" size={32} color="var(--el-editor-error)" />
         <span className="text-sm">{t('groups.failedToLoadPreferences')}</span>
       </div>
     );
@@ -74,20 +74,20 @@ export function GroupSettingsPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl p-6">
-      <h1 className="mb-6 text-xl font-semibold text-foreground">{t('groups.navSettings')}</h1>
+      <h1 className="mb-6 text-xl font-semibold text-(--el-group-title)">{t('groups.navSettings')}</h1>
 
-      <div className="divide-y divide-border rounded-(--radius-card) border border-border bg-surface">
+      <div className="divide-y divide-(--el-card-border) rounded-(--radius-card) border border-(--el-card-border) bg-(--el-group-bg)">
         {/* Mute Messages */}
         <div className="flex items-center justify-between gap-4 px-5 py-4" data-testid="preference-mute-messages">
           <div className="flex items-center gap-4">
             <Icon
               name={muteMessages ? 'notifications_off' : 'chat'}
               size={24}
-              color="var(--color-foreground)"
+              color="var(--el-group-title)"
             />
             <div>
-              <div className="text-sm font-medium text-foreground">{t('groups.muteMessages')}</div>
-              <div className="text-xs text-muted-foreground">{t('groups.muteMessagesDesc')}</div>
+              <div className="text-sm font-medium text-(--el-group-title)">{t('groups.muteMessages')}</div>
+              <div className="text-xs text-(--el-group-description)">{t('groups.muteMessagesDesc')}</div>
             </div>
           </div>
           <Switch
@@ -103,11 +103,11 @@ export function GroupSettingsPage() {
             <Icon
               name={muteTasks ? 'notifications_off' : 'task_alt'}
               size={24}
-              color="var(--color-foreground)"
+              color="var(--el-group-title)"
             />
             <div>
-              <div className="text-sm font-medium text-foreground">{t('groups.muteTasks')}</div>
-              <div className="text-xs text-muted-foreground">{t('groups.muteTasksDesc')}</div>
+              <div className="text-sm font-medium text-(--el-group-title)">{t('groups.muteTasks')}</div>
+              <div className="text-xs text-(--el-group-description)">{t('groups.muteTasksDesc')}</div>
             </div>
           </div>
           <Switch
@@ -124,25 +124,25 @@ export function GroupSettingsPage() {
               name="star"
               size={24}
               filled={isStarred}
-              color={isStarred ? 'var(--color-accent)' : 'var(--color-foreground)'}
+              color={isStarred ? 'var(--el-group-star-filled)' : 'var(--el-group-title)'}
             />
             <div>
-              <div className="text-sm font-medium text-foreground">{t('groups.starGroup')}</div>
-              <div className="text-xs text-muted-foreground">{t('groups.starGroupDesc')}</div>
+              <div className="text-sm font-medium text-(--el-group-title)">{t('groups.starGroup')}</div>
+              <div className="text-xs text-(--el-group-description)">{t('groups.starGroupDesc')}</div>
             </div>
           </div>
           <Switch
             checked={isStarred}
             onChange={(v) => handleToggle('isStarred', v, setIsStarred)}
-            activeColor="var(--color-accent)"
+            activeColor="var(--el-group-star-filled)"
           />
         </div>
       </div>
 
       {/* Info callout */}
-      <div className="mt-4 flex items-start gap-3 rounded-(--radius-card) bg-muted/50 px-4 py-3" data-testid="preferences-info">
-        <Icon name="info" size={18} color="var(--color-muted-foreground)" />
-        <span className="text-xs text-muted-foreground">{t('groups.preferencesInfo')}</span>
+      <div className="mt-4 flex items-start gap-3 rounded-(--radius-card) bg-(--el-editor-tag-bg) px-4 py-3" data-testid="preferences-info">
+        <Icon name="info" size={18} color="var(--el-group-description)" />
+        <span className="text-xs text-(--el-group-description)">{t('groups.preferencesInfo')}</span>
       </div>
     </div>
   );

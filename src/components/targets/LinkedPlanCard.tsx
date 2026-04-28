@@ -17,16 +17,16 @@ export function LinkedPlanCard({ targetPlan, onNavigate, onUnlink }: LinkedPlanC
 
   return (
     <div
-      className="group flex cursor-pointer items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-(--spacing-card) py-3.5 transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)"
+      className="group flex cursor-pointer items-center gap-3 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-plan-bg) px-(--spacing-card) py-3.5 transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)"
       onClick={() => onNavigate(targetPlan.planId)}
       data-testid={`plan-card-${targetPlan.planId}`}
     >
       <div className="flex flex-1 flex-col gap-0.5 overflow-hidden">
-        <span className="truncate text-[15px] font-semibold text-foreground">{planName}</span>
+        <span className="truncate text-[15px] font-semibold text-(--el-plan-title)">{planName}</span>
         {plan?.description && (
-          <span className="truncate text-[13px] text-muted-foreground">{plan.description}</span>
+          <span className="truncate text-[13px] text-(--el-plan-description)">{plan.description}</span>
         )}
-        <span className="text-[13px] text-muted-foreground">
+        <span className="text-[13px] text-(--el-plan-description)">
           {templateCount} {t('targetPlan.templates')}
         </span>
       </div>
@@ -37,14 +37,14 @@ export function LinkedPlanCard({ targetPlan, onNavigate, onUnlink }: LinkedPlanC
           e.stopPropagation();
           onUnlink(targetPlan.planId, planName);
         }}
-        className="flex h-(--btn-height-sm) w-8 shrink-0 items-center justify-center rounded-(--radius-btn) text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+        className="flex h-(--btn-height-sm) w-8 shrink-0 items-center justify-center rounded-(--radius-btn) text-(--el-plan-description) opacity-0 transition-opacity hover:bg-(--el-btn-destructive-bg)/10 hover:text-(--el-view-delete-text) group-hover:opacity-100"
         data-testid={`unlink-plan-${targetPlan.planId}`}
         title={t('targetPlan.unlinkPlan')}
       >
         <Icon name="link_off" size={18} />
       </button>
 
-      <Icon name="chevron_right" size={20} color="var(--color-muted-foreground)" />
+      <Icon name="chevron_right" size={20} color="var(--el-plan-chevron)" />
     </div>
   );
 }

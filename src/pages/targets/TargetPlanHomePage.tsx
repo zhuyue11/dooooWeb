@@ -76,9 +76,9 @@ export function TargetPlanHomePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">{t('targetPlan.targets')}</h1>
+          <h1 className="text-2xl font-bold text-(--el-target-title)">{t('targetPlan.targets')}</h1>
           {!isLoading && filteredTargets.length > 0 && (
-            <span className="text-sm text-muted-foreground">{filteredTargets.length}</span>
+            <span className="text-sm text-(--el-target-description)">{filteredTargets.length}</span>
           )}
         </div>
 
@@ -90,8 +90,8 @@ export function TargetPlanHomePage() {
               onClick={() => setStatusFilter(f.value)}
               className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 statusFilter === f.value
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border border-border text-foreground hover:bg-muted'
+                  ? 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text)'
+                  : 'border border-(--el-btn-outline-border) text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover)'
               }`}
             >
               {f.label}
@@ -105,9 +105,9 @@ export function TargetPlanHomePage() {
               setEditingTarget(null);
               setShowCreateModal(true);
             }}
-            className="ml-2 flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground hover:opacity-90"
+            className="ml-2 flex items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-(--el-btn-primary-text) hover:opacity-90"
           >
-            <Icon name="add" size={16} color="var(--color-primary-foreground)" />
+            <Icon name="add" size={16} color="var(--el-btn-primary-text)" />
             {t('targetPlan.createTarget')}
           </button>
         </div>
@@ -115,21 +115,21 @@ export function TargetPlanHomePage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center text-sm text-(--el-target-description)">
           {t('common.loading')}
         </div>
       ) : filteredTargets.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20">
-          <Icon name="flag" size={48} color="var(--color-muted-foreground)" />
-          <span className="text-base font-medium text-foreground">{t('targetPlan.noTargets')}</span>
-          <span className="text-sm text-muted-foreground">{t('targetPlan.noTargetsDesc')}</span>
+          <Icon name="flag" size={48} color="var(--el-target-description)" />
+          <span className="text-base font-medium text-(--el-target-title)">{t('targetPlan.noTargets')}</span>
+          <span className="text-sm text-(--el-target-description)">{t('targetPlan.noTargetsDesc')}</span>
           <button
             type="button"
             onClick={() => {
               setEditingTarget(null);
               setShowCreateModal(true);
             }}
-            className="mt-2 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="mt-2 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90"
           >
             {t('targetPlan.createTarget')}
           </button>
@@ -150,10 +150,10 @@ export function TargetPlanHomePage() {
       <button
         type="button"
         onClick={() => navigate('/ai-chat')}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-surface shadow-(--shadow-elevated) transition-shadow hover:shadow-(--shadow-elevated)"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-(--el-card-border) bg-(--el-target-bg) shadow-(--shadow-elevated) transition-shadow hover:shadow-(--shadow-elevated)"
         data-testid="ai-fab"
       >
-        <Icon name="auto_awesome" size={28} color="var(--color-primary)" />
+        <Icon name="auto_awesome" size={28} color="var(--el-target-chevron)" />
       </button>
 
       {/* Target form modal */}

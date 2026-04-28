@@ -70,10 +70,10 @@ export function SearchFilterPanel({
   const activeTargets = targets?.filter((t) => t.status === 'active') ?? [];
 
   return (
-    <div className="max-h-[320px] space-y-4 overflow-y-auto rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
+    <div className="max-h-[320px] space-y-4 overflow-y-auto rounded-(--radius-card) border border-(--el-card-border) bg-(--el-card-bg) p-(--spacing-card)">
       {/* Priority */}
       <div>
-        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
           {t('search.priorities')}
         </h4>
         <div className="flex flex-wrap gap-2">
@@ -92,7 +92,7 @@ export function SearchFilterPanel({
       {/* Categories */}
       {categories && categories.length > 0 && (
         <div>
-          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
             {t('search.categories')}
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@ export function SearchFilterPanel({
       {/* Groups */}
       {groups && groups.length > 0 && (
         <div>
-          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
             {t('search.groups')}
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -121,10 +121,10 @@ export function SearchFilterPanel({
               <FilterChip
                 key={g.id}
                 label={g.name}
-                color={g.color || 'var(--color-primary)'}
+                color={g.color || 'var(--el-btn-primary-bg)'}
                 isActive={selectedGroup === g.id}
                 onClick={() => onGroupChange(selectedGroup === g.id ? null : g.id)}
-                dotColor={g.color || 'var(--color-primary)'}
+                dotColor={g.color || 'var(--el-btn-primary-bg)'}
               />
             ))}
           </div>
@@ -134,7 +134,7 @@ export function SearchFilterPanel({
       {/* Plans */}
       {plans && plans.length > 0 && (
         <div>
-          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
             {t('search.plans')}
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -142,7 +142,7 @@ export function SearchFilterPanel({
               <FilterChip
                 key={p.id}
                 label={p.name}
-                color="var(--color-secondary)"
+                color="var(--el-btn-secondary-bg)"
                 isActive={selectedPlan === p.id}
                 onClick={() => onPlanChange(selectedPlan === p.id ? null : p.id)}
                 icon="assignment"
@@ -155,7 +155,7 @@ export function SearchFilterPanel({
       {/* Targets */}
       {activeTargets.length > 0 && (
         <div>
-          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
             {t('search.targets')}
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export function SearchFilterPanel({
               <FilterChip
                 key={tgt.id}
                 label={tgt.name}
-                color="var(--color-info)"
+                color="var(--el-notif-task-color)"
                 isActive={selectedTarget === tgt.id}
                 onClick={() => onTargetChange(selectedTarget === tgt.id ? null : tgt.id)}
                 icon="flag"
@@ -175,13 +175,13 @@ export function SearchFilterPanel({
 
       {/* Status */}
       <div>
-        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
           {t('search.status')}
         </h4>
         <div className="flex flex-wrap gap-2">
           <FilterChip
             label={t('search.overdue')}
-            color="var(--color-destructive)"
+            color="var(--el-btn-destructive-bg)"
             isActive={overdueOnly}
             onClick={() => {
               const newVal = !overdueOnly;
@@ -192,7 +192,7 @@ export function SearchFilterPanel({
           />
           <FilterChip
             label={t('search.completed')}
-            color="var(--color-secondary)"
+            color="var(--el-btn-secondary-bg)"
             isActive={completedOnly}
             onClick={() => {
               const newVal = !completedOnly;
@@ -206,7 +206,7 @@ export function SearchFilterPanel({
 
       {/* Date Range */}
       <div>
-        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-(--el-page-text) opacity-60">
           {t('search.dateRange')}
         </h4>
         <div className="flex items-center gap-2">
@@ -215,17 +215,17 @@ export function SearchFilterPanel({
             <button
               onClick={() => setShowDateFromPicker(!showDateFromPicker)}
               className={`flex items-center gap-1.5 rounded-(--radius-card) border px-3 py-1.5 text-[13px] transition-colors ${
-                dateFrom ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'
+                dateFrom ? 'border-(--el-settings-selected-border) text-(--el-settings-check)' : 'border-(--el-input-border) text-(--el-input-placeholder) hover:bg-(--el-settings-hover)'
               }`}
             >
-              <Icon name="event" size={16} color={dateFrom ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+              <Icon name="event" size={16} color={dateFrom ? 'var(--el-btn-primary-bg)' : 'var(--el-input-placeholder)'} />
               <span>{dateFrom ? new Date(dateFrom + 'T00:00:00').toLocaleDateString() : t('search.from')}</span>
               {dateFrom && (
                 <span
                   onClick={(e) => { e.stopPropagation(); onDateFromChange(null); }}
                   className="ml-1 cursor-pointer"
                 >
-                  <Icon name="close" size={14} color="var(--color-muted-foreground)" />
+                  <Icon name="close" size={14} color="var(--el-input-placeholder)" />
                 </span>
               )}
             </button>
@@ -243,24 +243,24 @@ export function SearchFilterPanel({
             )}
           </div>
 
-          <span className="text-muted-foreground">–</span>
+          <span className="text-(--el-input-placeholder)">–</span>
 
           {/* To */}
           <div className="relative" ref={dateToRef}>
             <button
               onClick={() => setShowDateToPicker(!showDateToPicker)}
               className={`flex items-center gap-1.5 rounded-(--radius-card) border px-3 py-1.5 text-[13px] transition-colors ${
-                dateTo ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'
+                dateTo ? 'border-(--el-settings-selected-border) text-(--el-settings-check)' : 'border-(--el-input-border) text-(--el-input-placeholder) hover:bg-(--el-settings-hover)'
               }`}
             >
-              <Icon name="event" size={16} color={dateTo ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
+              <Icon name="event" size={16} color={dateTo ? 'var(--el-btn-primary-bg)' : 'var(--el-input-placeholder)'} />
               <span>{dateTo ? new Date(dateTo + 'T00:00:00').toLocaleDateString() : t('search.to')}</span>
               {dateTo && (
                 <span
                   onClick={(e) => { e.stopPropagation(); onDateToChange(null); }}
                   className="ml-1 cursor-pointer"
                 >
-                  <Icon name="close" size={14} color="var(--color-muted-foreground)" />
+                  <Icon name="close" size={14} color="var(--el-input-placeholder)" />
                 </span>
               )}
             </button>

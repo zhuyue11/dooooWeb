@@ -89,27 +89,27 @@ export function GroupTodoPage() {
       {/* Header — matches TodoPage */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">{t('todoPage.title')}</h1>
-          <span className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-bold text-(--el-group-title)">{t('todoPage.title')}</h1>
+          <span className="text-sm text-(--el-group-description)">
             {todoItems.length === 1
               ? t('todoPage.taskCountOne')
               : t('todoPage.taskCount', { count: todoItems.length })}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-60 items-center gap-2 rounded-(--radius-card) border border-border px-3">
-            <Icon name="search" size={16} color="var(--color-muted-foreground)" />
+          <div className="flex h-9 w-60 items-center gap-2 rounded-(--radius-card) border border-(--el-input-border) px-3">
+            <Icon name="search" size={16} color="var(--el-input-placeholder)" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('todoPage.searchPlaceholder')}
-              className="w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full bg-transparent text-[13px] text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:outline-none"
             />
           </div>
           <button
             type="button"
-            className="flex h-(--btn-height-sm) items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="flex h-(--btn-height-sm) items-center gap-1.5 rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x-sm) text-[13px] font-semibold text-(--el-btn-primary-text) transition-opacity hover:opacity-90"
           >
             <Icon name="add" size={16} />
             {t('todoPage.addTask')}
@@ -118,20 +118,20 @@ export function GroupTodoPage() {
       </div>
 
       {/* Task list card — matches TodoPage */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-(--el-group-bg) shadow-(--shadow-card)">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-group-description)">
             {t('common.loading')}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-group-description)">
             {search ? t('todoPage.noResults') : t('todoPage.noTasks')}
           </div>
         ) : (
           filteredItems.map((item, i) => (
             <div
               key={item.id}
-              className={`px-5 py-0.5 ${i < filteredItems.length - 1 ? 'border-b border-border' : ''}`}
+              className={`px-5 py-0.5 ${i < filteredItems.length - 1 ? 'border-b border-(--el-card-border)' : ''}`}
             >
               <ItemRow
                 item={item}

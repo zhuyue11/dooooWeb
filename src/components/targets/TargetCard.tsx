@@ -8,9 +8,9 @@ interface TargetCardProps {
 }
 
 const STATUS_CONFIG: Record<TargetStatus, { icon: string; colorVar: string }> = {
-  active: { icon: 'flag', colorVar: 'var(--color-primary)' },
+  active: { icon: 'flag', colorVar: 'var(--el-target-status-active-text)' },
   completed: { icon: 'check_circle', colorVar: '#10B981' },
-  archived: { icon: 'archive', colorVar: 'var(--color-muted-foreground)' },
+  archived: { icon: 'archive', colorVar: 'var(--el-target-status-archived-text)' },
 };
 
 export function TargetCard({ target, onClick }: TargetCardProps) {
@@ -26,14 +26,14 @@ export function TargetCard({ target, onClick }: TargetCardProps) {
 
   return (
     <div
-      className="flex cursor-pointer items-center gap-3 rounded-(--radius-card) bg-surface px-5 py-4 shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
+      className="flex cursor-pointer items-center gap-3 rounded-(--radius-card) bg-(--el-target-bg) px-5 py-4 shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
       onClick={onClick}
       data-testid={`target-card-${target.id}`}
     >
       <div className="flex flex-1 flex-col gap-1.5">
         {/* Header: name + status badge */}
         <div className="flex items-center justify-between gap-3">
-          <span className="flex-1 text-base font-semibold text-foreground">{target.name}</span>
+          <span className="flex-1 text-base font-semibold text-(--el-target-title)">{target.name}</span>
           <div
             className="flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
             style={{ backgroundColor: config.colorVar + '18', color: config.colorVar }}
@@ -45,11 +45,11 @@ export function TargetCard({ target, onClick }: TargetCardProps) {
 
         {/* Description */}
         {target.description && (
-          <p className="line-clamp-2 text-[13px] text-muted-foreground">{target.description}</p>
+          <p className="line-clamp-2 text-[13px] text-(--el-target-description)">{target.description}</p>
         )}
       </div>
 
-      <Icon name="chevron_right" size={22} color="var(--color-primary)" />
+      <Icon name="chevron_right" size={22} color="var(--el-target-chevron)" />
     </div>
   );
 }

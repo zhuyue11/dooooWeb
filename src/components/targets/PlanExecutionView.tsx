@@ -77,12 +77,12 @@ export function PlanExecutionView({ execution }: PlanExecutionViewProps) {
       {/* Progress section */}
       <div data-testid="plan-execution-progress">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-[15px] font-bold text-foreground">{t('targetPlan.progress')}</span>
-          <span className="text-[13px] font-semibold text-muted-foreground">{pct}%</span>
+          <span className="text-[15px] font-bold text-(--el-plan-title)">{t('targetPlan.progress')}</span>
+          <span className="text-[13px] font-semibold text-(--el-plan-progress-text)">{pct}%</span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-border">
+        <div className="h-1.5 overflow-hidden rounded-full bg-(--el-plan-progress-track)">
           <div
-            className="h-full rounded-full bg-primary transition-[width] duration-300"
+            className="h-full rounded-full bg-(--el-plan-progress-bar) transition-[width] duration-300"
             style={{ width: `${pct}%` }}
             role="progressbar"
             aria-valuenow={completedCount}
@@ -93,7 +93,7 @@ export function PlanExecutionView({ execution }: PlanExecutionViewProps) {
 
       {/* Activities list */}
       <div data-testid="plan-activities-list">
-        <span className="mb-3 block text-[15px] font-bold text-foreground">
+        <span className="mb-3 block text-[15px] font-bold text-(--el-plan-title)">
           {t('targetPlan.activities')}
         </span>
 
@@ -107,7 +107,7 @@ export function PlanExecutionView({ execution }: PlanExecutionViewProps) {
             return (
               <div key={item.key}>
                 {showDateHeader && (
-                  <div className={`pb-1 pt-3 text-[13px] font-semibold first:pt-0 ${isToday ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <div className={`pb-1 pt-3 text-[13px] font-semibold first:pt-0 ${isToday ? 'text-(--el-target-status-active-text)' : 'text-(--el-plan-description)'}`}>
                     {isToday ? t('tasks.item.today') : dateLabel}
                   </div>
                 )}
@@ -124,14 +124,14 @@ export function PlanExecutionView({ execution }: PlanExecutionViewProps) {
                     color={
                       item.isCompleted
                         ? '#10B981'
-                        : 'var(--color-muted-foreground)'
+                        : 'var(--el-plan-description)'
                     }
                   />
                   <span
                     className={`text-[14px] ${
                       item.isCompleted
-                        ? 'text-muted-foreground line-through'
-                        : 'text-foreground'
+                        ? 'text-(--el-plan-description) line-through'
+                        : 'text-(--el-plan-title)'
                     }`}
                   >
                     {item.title}

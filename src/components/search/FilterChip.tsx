@@ -33,7 +33,7 @@ export function FilterChip({ label, color, isActive, onClick, icon, dotColor }: 
           color={isActive ? '#fff' : color}
         />
       )}
-      <span className={isActive ? '' : 'text-foreground'}>{label}</span>
+      <span className={isActive ? '' : 'text-(--el-page-text)'}>{label}</span>
     </button>
   );
 }

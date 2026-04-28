@@ -96,34 +96,34 @@ export function PlanTemplateItem({ template, index, scheduledDate, onClick }: Pl
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-(--spacing-card) py-3.5${onClick ? ' cursor-pointer transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)' : ''}`}
+      className={`flex items-center gap-3 rounded-(--radius-card) border border-(--el-card-border) bg-(--el-plan-bg) px-(--spacing-card) py-3.5${onClick ? ' cursor-pointer transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)' : ''}`}
       data-testid={`plan-template-item-${index}`}
       onClick={onClick}
     >
       {/* Order badge */}
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10">
-        <span className="text-[13px] font-bold text-primary">{index + 1}</span>
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-(--el-target-status-active-bg)">
+        <span className="text-[13px] font-bold text-(--el-target-status-active-text)">{index + 1}</span>
       </div>
 
       {/* Content */}
       <div className="flex flex-1 flex-col gap-1">
         <div className="flex items-center gap-1">
-          {isEvent && <Icon name="event" size={15} color="var(--color-primary)" />}
-          <span className="text-[15px] font-semibold text-foreground">{template.title}</span>
+          {isEvent && <Icon name="event" size={15} color="var(--el-target-chevron)" />}
+          <span className="text-[15px] font-semibold text-(--el-plan-title)">{template.title}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           {template.time && (
             <div className="flex items-center gap-1">
-              <Icon name="schedule" size={12} color="var(--color-primary)" />
-              <span className="text-xs font-medium text-primary">{formatTime(template.time)}</span>
+              <Icon name="schedule" size={12} color="var(--el-target-status-active-text)" />
+              <span className="text-xs font-medium text-(--el-target-status-active-text)">{formatTime(template.time)}</span>
             </div>
           )}
 
           {scheduledDate && (
             <div className="flex items-center gap-1">
-              <Icon name="event" size={12} color="var(--color-primary)" />
-              <span className="text-xs font-medium text-primary">
+              <Icon name="event" size={12} color="var(--el-target-status-active-text)" />
+              <span className="text-xs font-medium text-(--el-target-status-active-text)">
                 {formatScheduledDate(scheduledDate, t)}
               </span>
             </div>
@@ -131,15 +131,15 @@ export function PlanTemplateItem({ template, index, scheduledDate, onClick }: Pl
 
           {template.gapDays > 0 && (
             <div className="flex items-center gap-1">
-              <Icon name="schedule" size={12} color="var(--color-muted-foreground)" />
-              <span className="text-xs text-muted-foreground">+{template.gapDays}d</span>
+              <Icon name="schedule" size={12} color="var(--el-plan-description)" />
+              <span className="text-xs text-(--el-plan-description)">+{template.gapDays}d</span>
             </div>
           )}
 
           {template.repeat && (
             <div className="flex items-center gap-1">
-              <Icon name="repeat" size={12} color="var(--color-muted-foreground)" />
-              <span className="text-xs text-muted-foreground">
+              <Icon name="repeat" size={12} color="var(--el-plan-description)" />
+              <span className="text-xs text-(--el-plan-description)">
                 {formatRepeatLabel(template.repeat, t) || t('tasks.input.repeat')}
                 {formatOccurrences(template.repeat) ? ` ${formatOccurrences(template.repeat)}` : ''}
               </span>
@@ -148,8 +148,8 @@ export function PlanTemplateItem({ template, index, scheduledDate, onClick }: Pl
 
           {template.duration != null && template.duration > 0 && (
             <div className="flex items-center gap-1">
-              <Icon name="timer" size={12} color="var(--color-muted-foreground)" />
-              <span className="text-xs text-muted-foreground">{formatDuration(template.duration)}</span>
+              <Icon name="timer" size={12} color="var(--el-plan-description)" />
+              <span className="text-xs text-(--el-plan-description)">{formatDuration(template.duration)}</span>
             </div>
           )}
         </div>

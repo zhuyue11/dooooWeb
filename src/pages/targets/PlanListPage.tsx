@@ -80,9 +80,9 @@ export function PlanListPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-foreground">{t('targetPlan.plans')}</h1>
+          <h1 className="text-2xl font-bold text-(--el-plan-title)">{t('targetPlan.plans')}</h1>
           {!isLoading && filteredPlanItems.length > 0 && (
-            <span className="text-sm text-muted-foreground">{filteredPlanItems.length}</span>
+            <span className="text-sm text-(--el-plan-description)">{filteredPlanItems.length}</span>
           )}
         </div>
 
@@ -95,8 +95,8 @@ export function PlanListPage() {
               onClick={() => setPlanFilter(f)}
               className={`whitespace-nowrap rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
                 planFilter === f
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border border-border text-foreground hover:bg-muted'
+                  ? 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text)'
+                  : 'border border-(--el-btn-outline-border) text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover)'
               }`}
             >
               {t(FILTER_LABELS[f])}
@@ -107,16 +107,16 @@ export function PlanListPage() {
 
       {/* Content */}
       {isLoading ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+        <div className="flex flex-1 items-center justify-center text-sm text-(--el-plan-description)">
           {t('common.loading')}
         </div>
       ) : filteredPlanItems.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20" data-testid="plan-list-empty">
-          <Icon name="assignment" size={48} color="var(--color-muted-foreground)" />
-          <span className="text-base font-medium text-foreground">
+          <Icon name="assignment" size={48} color="var(--el-plan-description)" />
+          <span className="text-base font-medium text-(--el-plan-title)">
             {t('targetPlan.noPlans')}
           </span>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-(--el-plan-description)">
             {planFilter === 'all' || planFilter === 'discovery'
               ? t('targetPlan.noPlansDesc')
               : t('targetPlan.noPlansFilterDesc', 'No plans match this filter')}
@@ -146,10 +146,10 @@ export function PlanListPage() {
       <button
         type="button"
         onClick={() => navigate('/ai-chat')}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-surface shadow-(--shadow-elevated) transition-shadow hover:shadow-(--shadow-elevated)"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-(--el-card-border) bg-(--el-plan-bg) shadow-(--shadow-elevated) transition-shadow hover:shadow-(--shadow-elevated)"
         data-testid="ai-fab"
       >
-        <Icon name="auto_awesome" size={28} color="var(--color-primary)" />
+        <Icon name="auto_awesome" size={28} color="var(--el-plan-chevron)" />
       </button>
     </div>
   );
