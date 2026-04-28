@@ -52,16 +52,16 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
   return (
     <div
       data-testid="task-panel"
-      className="flex w-full flex-col overflow-hidden rounded-(--radius-card) border-t border-border bg-surface shadow-(--shadow-card) lg:w-80 lg:border-l lg:border-t-0"
+      className="flex w-full flex-col overflow-hidden rounded-(--radius-card) border-t border-(--el-panel-border) bg-(--el-panel-bg) shadow-(--shadow-card) lg:w-80 lg:border-l lg:border-t-0"
     >
       {/* Panel header */}
-      <div className="flex items-center justify-between border-b border-border px-5 py-4">
-        <span data-testid="task-panel-date" className="text-base font-semibold text-foreground">
+      <div className="flex items-center justify-between border-b border-(--el-panel-header-border) px-5 py-4">
+        <span data-testid="task-panel-date" className="text-base font-semibold text-(--el-panel-title)">
           {formatPanelDate(selectedDate, today, visibleDates, viewMode, t)}
         </span>
         <button
           onClick={onAddClick}
-          className="flex items-center gap-1 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex items-center gap-1 rounded-(--radius-btn) bg-(--el-cal-add-btn-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-(--el-cal-add-btn-text) transition-opacity hover:opacity-90"
         >
           <Icon name="add" size={16} />
           <span>{t('calendarPage.panel.add')}</span>
@@ -71,9 +71,9 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
       {/* Task list */}
       <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
         {isLoading ? (
-          <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">{t('common.loading')}</div>
+          <div className="flex items-center justify-center py-8 text-sm text-(--el-panel-detail-label)">{t('common.loading')}</div>
         ) : items.length === 0 ? (
-          <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center py-8 text-sm text-(--el-panel-detail-label)">
             {selectedDate ? t('calendarPage.panel.noItemsForDay') : t('calendarPage.panel.noItemsInRange')}
           </div>
         ) : (

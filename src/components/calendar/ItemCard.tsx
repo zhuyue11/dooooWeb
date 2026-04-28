@@ -17,7 +17,7 @@ export function ItemCard({ item, categories, onClick }: ItemCardProps) {
   const { t } = useTranslation();
   const { timeFormat } = useDisplay();
   const colors = item.itemType === 'EVENT'
-    ? { bg: '#ede9fe', text: '#5b21b6' } // purple tint for events
+    ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
     : getCategoryColor(item.categoryId, categories);
 
   return (

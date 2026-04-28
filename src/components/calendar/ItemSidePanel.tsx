@@ -30,9 +30,9 @@ interface ItemSidePanelProps {
 function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={18} color="var(--color-muted-foreground)" />
-      <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{label}</span>
-      <span className="text-[13px] font-medium text-foreground">{value}</span>
+      <Icon name={icon} size={18} color="var(--el-panel-detail-label)" />
+      <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{label}</span>
+      <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{value}</span>
     </div>
   );
 }
@@ -42,8 +42,8 @@ function DetailRow({ icon, label, value }: { icon: string; label: string; value:
 function PriorityPill({ priority }: { priority: string }) {
   const p = priority.toLowerCase();
   const isHigh = p === 'high' || p === 'urgent';
-  const bg = isHigh ? '#ef444420' : '#f59e0b20';
-  const text = isHigh ? '#ef4444' : '#f59e0b';
+  const bg = isHigh ? 'var(--el-panel-priority-high-bg)' : 'var(--el-panel-priority-normal-bg)';
+  const text = isHigh ? 'var(--el-panel-priority-high-text)' : 'var(--el-panel-priority-normal-text)';
   const label = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   return (
     <span
@@ -290,28 +290,28 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
       <div
         ref={panelRef}
         data-testid="item-side-panel"
-        className={`relative flex h-full w-[420px] max-w-full flex-col bg-surface shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
-        style={{ borderLeft: '1px solid var(--color-border)' }}
+        className={`relative flex h-full w-[420px] max-w-full flex-col bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
+        style={{ borderLeft: '1px solid var(--el-panel-border)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Header ── */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+        <div className="flex items-center justify-between border-b border-(--el-panel-header-border) px-6 py-4">
           {/* Left: checkbox + title */}
           <div className="flex min-w-0 items-center gap-3">
             {shouldShowToggle ? (
               <button onClick={handleToggle} className="shrink-0">
                 {isChecked ? (
-                  <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-primary">
-                    <Icon name="check" size={14} color="var(--color-primary-foreground)" weight={700} />
+                  <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-(--el-item-checkbox-bg)">
+                    <Icon name="check" size={14} color="var(--el-item-checkbox-mark)" weight={700} />
                   </div>
                 ) : (
-                  <div className="h-[22px] w-[22px] rounded-full border-2 border-primary" />
+                  <div className="h-[22px] w-[22px] rounded-full border-2 border-(--el-item-checkbox-border)" />
                 )}
               </button>
             ) : !isTask ? (
-              <Icon name="calendar_today" size={20} color="#5b21b6" className="shrink-0" />
+              <Icon name="calendar_today" size={20} color="var(--el-cal-event-text)" className="shrink-0" />
             ) : null}
-            <span className={`truncate text-lg font-semibold ${isChecked ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
+            <span className={`truncate text-lg font-semibold ${isChecked ? 'text-(--el-panel-title-completed) line-through' : 'text-(--el-panel-title)'}`}>
               {item.title}
             </span>
           </div>
@@ -322,7 +322,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               <button
                 data-testid="side-panel-edit"
                 onClick={handleEdit}
-                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
                 title={t('itemView.edit')}
               >
                 <Icon name="edit" size={18} />
@@ -331,7 +331,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             <button
               data-testid="side-panel-expand"
               onClick={handleExpand}
-              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
               title={t('itemView.expand')}
             >
               <Icon name="open_in_full" size={18} />
@@ -340,7 +340,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               <button
                 data-testid="side-panel-delete"
                 onClick={handleDeleteClick}
-                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
                 title={t('itemView.delete')}
               >
                 <Icon name="delete" size={18} />
@@ -349,7 +349,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             <button
               data-testid="side-panel-close"
               onClick={handleClose}
-              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
               title={t('common.close')}
             >
               <Icon name="close" size={18} />
@@ -369,24 +369,24 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
           {/* Description */}
           {item.description && (
-            <p className="text-sm leading-relaxed text-foreground">{item.description}</p>
+            <p className="text-sm leading-relaxed text-(--el-panel-description)">{item.description}</p>
           )}
 
           {/* Details card */}
           {hasAnyDetail && (
-            <div className="rounded-(--radius-card) border border-border">
+            <div className="rounded-(--radius-card) border border-(--el-panel-border)">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}
               {timeDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
                 </>
               )}
               {timeOfDayDisplay && TIME_OF_DAY_META[timeOfDayDisplay] && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow
                     icon={TIME_OF_DAY_META[timeOfDayDisplay].icon}
                     label={t('itemView.time')}
@@ -396,38 +396,38 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               )}
               {durationDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
                 </>
               )}
               {reminderDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                 </>
               )}
               {secondReminderDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
                 </>
               )}
               {locationDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
                 </>
               )}
               {guestsDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <div className="flex items-start gap-3 px-4 py-3">
-                    <Icon name="group" size={18} color="var(--color-muted-foreground)" className="mt-0.5" />
+                    <Icon name="group" size={18} color="var(--el-panel-detail-label)" className="mt-0.5" />
                     <div className="flex-1">
-                      <span className="text-[13px] text-muted-foreground">{t('itemView.guests')}</span>
+                      <span className="text-[13px] text-(--el-panel-detail-label)">{t('itemView.guests')}</span>
                       <div className="mt-1 flex flex-wrap gap-1">
                         {guestsDisplay.map((g) => (
-                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
+                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-(--el-panel-guest-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-panel-guest-text)">
                             {g.email}
                           </span>
                         ))}
@@ -438,11 +438,11 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               )}
               {meetingLinkDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="videocam" size={18} color="var(--color-muted-foreground)" />
-                    <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{t('itemView.meetingLink')}</span>
-                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-primary hover:underline">
+                    <Icon name="videocam" size={18} color="var(--el-panel-detail-label)" />
+                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.meetingLink')}</span>
+                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-(--el-panel-detail-value) hover:underline">
                       {meetingLinkDisplay}
                     </a>
                   </div>
@@ -450,13 +450,13 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               )}
               {tzDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
                 </>
               )}
               {repeatDisplay && (
                 <>
-                  <div className="mx-4 border-t border-border" />
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
                   <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
                 </>
               )}
@@ -493,7 +493,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
           {/* Created/updated timestamp */}
           {(item.sourceTask?.createdAt || item.sourceEvent?.createdAt) && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-(--el-panel-detail-label)">
               {t('itemView.createdAt', {
                 date: new Date((item.sourceTask?.createdAt || item.sourceEvent?.createdAt)!).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
               })}
@@ -503,21 +503,21 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
         {/* ── Delete confirmation overlay ── */}
         {showDeleteConfirm && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
-            <div className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-base font-semibold text-foreground">{t('itemView.confirmDelete')}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{t('itemView.deleteDescription')}</p>
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-(--el-dialog-overlay)">
+            <div className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-(--el-dialog-bg) p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
+              <h3 className="text-base font-semibold text-(--el-dialog-title)">{t('itemView.confirmDelete')}</h3>
+              <p className="mt-2 text-sm text-(--el-dialog-description)">{t('itemView.deleteDescription')}</p>
               <div className="mt-4 flex justify-end gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted"
+                  className="rounded-(--radius-btn) border border-(--el-dialog-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-dialog-cancel-text) hover:opacity-80"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={deleteTaskMutation.isPending}
-                  className="rounded-(--radius-btn) bg-destructive px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+                  className="rounded-(--radius-btn) bg-(--el-dialog-confirm-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-dialog-confirm-text) hover:opacity-90 disabled:opacity-50"
                 >
                   {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
                 </button>

@@ -31,12 +31,12 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
   return (
     <div
       data-testid="calendar-month-grid"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-cal-grid-bg) shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Day headers */}
-      <div className="grid grid-cols-7 border-b border-border px-2">
+      <div className="grid grid-cols-7 border-b border-(--el-cal-grid-border) px-2">
         {SHORT_DAY_KEYS.map((key) => (
-          <div key={key} className="py-3 text-center text-xs font-semibold text-muted-foreground">
+          <div key={key} className="py-3 text-center text-xs font-semibold text-(--el-cal-day-header)">
             {t(`calendarPage.weekdaysShort.${key}`)}
           </div>
         ))}
@@ -45,7 +45,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
       {/* Week rows */}
       <div className="flex flex-1 flex-col">
         {weeks.map((week, wi) => (
-          <div key={wi} className={`grid flex-1 grid-cols-7 ${wi < weeks.length - 1 ? 'border-b border-border' : ''}`}>
+          <div key={wi} className={`grid flex-1 grid-cols-7 ${wi < weeks.length - 1 ? 'border-b border-(--el-cal-grid-border)' : ''}`}>
             {week.map((date, di) => {
               const dateKey = toISODate(date);
               const isToday = isSameDay(date, today);
@@ -58,20 +58,20 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                   key={di}
                   data-testid={`month-cell-${dateKey}`}
                   onClick={() => onSelectDate(date)}
-                  className={`flex flex-col gap-1 p-2 text-left transition-colors hover:bg-muted ${
-                    di < 6 ? 'border-r border-border' : ''
-                  } ${isToday ? 'bg-primary/5' : ''}`}
+                  className={`flex flex-col gap-1 p-2 text-left transition-colors hover:bg-(--el-cal-nav-hover-bg) ${
+                    di < 6 ? 'border-r border-(--el-cal-grid-border)' : ''
+                  } ${isToday ? 'bg-(--el-cal-current-hour-bg)' : ''}`}
                 >
                   {/* Date number */}
                   <span
                     className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[13px] ${
                       isSelected
-                        ? 'bg-primary text-primary-foreground font-semibold'
+                        ? 'bg-(--el-cal-date-selected-bg) text-(--el-cal-date-selected-text) font-semibold'
                         : isToday
-                          ? 'border-2 border-primary text-primary font-semibold'
+                          ? 'border-2 border-(--el-cal-date-today-border) text-(--el-cal-date-today-text) font-semibold'
                           : isCurrentMonth
-                            ? 'text-foreground font-medium'
-                            : 'text-muted-foreground'
+                            ? 'text-(--el-cal-date-normal) font-medium'
+                            : 'text-(--el-cal-date-other)'
                     }`}
                   >
                     {date.getDate()}
@@ -82,7 +82,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                     <div className="flex flex-col gap-0.5 overflow-hidden">
                       {items.slice(0, 3).map((item) => {
                         const colors = item.itemType === 'EVENT'
-                          ? { bg: '#ede9fe', text: '#5b21b6' }
+                          ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                           : getCategoryColor(item.categoryId, categories);
                         return (
                           <div
@@ -95,8 +95,8 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                               {item.title}
                             </div>
                             {item.groupName && !hideGroupTag && (
-                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
-                                <Icon name="group" size={7} color="#3b82f6" />
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-(--el-item-group-border) px-1 text-[7px] font-medium leading-tight text-(--el-item-group-text)">
+                                <Icon name="group" size={7} color="var(--el-item-group-text)" />
                                 {item.groupName}
                               </span>
                             )}
@@ -104,7 +104,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                         );
                       })}
                       {items.length > 3 && (
-                        <span className="text-[9px] leading-none text-muted-foreground">+{items.length - 3}</span>
+                        <span className="text-[9px] leading-none text-(--el-cal-more-items)">+{items.length - 3}</span>
                       )}
                     </div>
                   )}

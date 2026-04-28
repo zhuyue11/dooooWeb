@@ -57,16 +57,16 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
   return (
     <div
       data-testid="calendar-day-timeline"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-cal-grid-bg) shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Untimed items — no time-of-day */}
       {noTimeOfDayItems.length > 0 && (
-        <div className="flex border-b border-border" style={{ maxHeight: 120 }}>
+        <div className="flex border-b border-(--el-cal-grid-border)" style={{ maxHeight: 120 }}>
           <div className="flex w-[60px] flex-shrink-0 items-start px-4 pt-2" />
           <div className="flex flex-1 flex-col gap-1 overflow-y-auto py-1 pr-4">
             {noTimeOfDayItems.map((item) => {
               const colors = item.itemType === 'EVENT'
-                ? { bg: '#ede9fe', text: '#5b21b6' }
+                ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                 : getCategoryColor(item.categoryId, categories);
               return (
                 <div
@@ -89,16 +89,16 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
         const sectionItems = itemsByTimeOfDay[section.key];
         if (sectionItems.length === 0) return null;
         return (
-          <div key={section.key} className="flex border-b border-border" style={{ maxHeight: 120 }}>
+          <div key={section.key} className="flex border-b border-(--el-cal-grid-border)" style={{ maxHeight: 120 }}>
             <div className="flex w-[60px] flex-shrink-0 items-start px-4 pt-2">
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="text-xs font-medium text-(--el-cal-hour-label)">
                 <Icon name={section.icon} size={14} />
               </span>
             </div>
             <div className="flex flex-1 flex-col gap-1 overflow-y-auto py-1 pr-4">
               {sectionItems.map((item) => {
                 const colors = item.itemType === 'EVENT'
-                  ? { bg: '#ede9fe', text: '#5b21b6' }
+                  ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                   : getCategoryColor(item.categoryId, categories);
                 return (
                   <div
@@ -120,7 +120,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
       {/* Hour grid — fixed rows with absolutely positioned items */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">{t('common.loading')}</div>
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-cal-hour-label)">{t('common.loading')}</div>
         ) : (
           <div className="relative flex">
             {/* Hour labels column */}
@@ -129,7 +129,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                 const isCurrentHour = hour === currentHour;
                 return (
                   <div key={hour} className="flex items-start justify-start px-4 pt-2" style={{ height: HOUR_HEIGHT }}>
-                    <span className={`text-xs font-medium ${isCurrentHour ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
+                    <span className={`text-xs font-medium ${isCurrentHour ? 'text-(--el-cal-hour-label-current) font-semibold' : 'text-(--el-cal-hour-label)'}`}>
                       {formatHourLabel(hour)}
                     </span>
                   </div>
@@ -146,7 +146,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   <div
                     key={hour}
                     data-testid={`hour-row-${hour}`}
-                    className={`border-b border-border/50 ${isCurrentHour ? 'bg-primary/5' : ''}`}
+                    className={`border-b border-(--el-cal-grid-border)/50 ${isCurrentHour ? 'bg-(--el-cal-current-hour-bg)' : ''}`}
                     style={{ height: HOUR_HEIGHT }}
                   />
                 );
@@ -163,7 +163,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   const duration = item.duration || 60;
                   const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
                   const colors = item.itemType === 'EVENT'
-                    ? { bg: '#ede9fe', text: '#5b21b6' }
+                    ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                     : getCategoryColor(item.categoryId, categories);
                   const info = layout.get(item.id)!;
                   const widthPct = `calc(${100 / info.totalColumns}% - 4px)`;
@@ -206,7 +206,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                         >
                           {item.title}
                         </span>
-                        {isHighPriority && <Icon name="flag" size={11} color="var(--color-destructive)" />}
+                        {isHighPriority && <Icon name="flag" size={11} color="var(--el-item-priority-high)" />}
                       </div>
                       {/* Meta line */}
                       <div className="flex items-center gap-1.5 text-[11px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
@@ -218,13 +218,13 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                       {/* Tags line */}
                       <div className="flex flex-wrap items-center gap-1" style={{ color: colors.text }}>
                         {item.groupId && !hideGroupTag && (
-                          <span className="inline-flex items-center gap-px rounded-full border border-info px-1 text-[9px] font-medium text-info">
-                            <Icon name="group" size={8} color="#3b82f6" />
+                          <span className="inline-flex items-center gap-px rounded-full border border-(--el-item-group-border) px-1 text-[9px] font-medium text-(--el-item-group-text)">
+                            <Icon name="group" size={8} color="var(--el-item-group-text)" />
                             {item.groupName || t('calendarPage.itemRow.group')}
                           </span>
                         )}
                         {item.planName && (
-                          <span className="inline-flex items-center gap-px rounded-full border border-secondary px-1 text-[9px] font-medium text-secondary">
+                          <span className="inline-flex items-center gap-px rounded-full border border-(--el-item-plan-border) px-1 text-[9px] font-medium text-(--el-item-plan-text)">
                             {item.planName}
                           </span>
                         )}
@@ -246,7 +246,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                         )}
                       </div>
                       {info.overflowCount > 0 && (
-                        <span className="mt-0.5 block text-[9px] font-medium text-muted-foreground">
+                        <span className="mt-0.5 block text-[9px] font-medium text-(--el-cal-hour-label)">
                           +{info.overflowCount} more
                         </span>
                       )}

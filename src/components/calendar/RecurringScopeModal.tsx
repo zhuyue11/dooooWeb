@@ -39,11 +39,11 @@ export function RecurringScopeModal({
 
   const isEdit = mode === 'edit';
   const buttonClassPrimary =
-    'w-full rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50';
+    'w-full rounded-(--radius-btn) bg-(--el-btn-primary-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-(--el-btn-primary-text) hover:opacity-90 disabled:opacity-50';
   const buttonClassNeutral =
-    'w-full rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50';
+    'w-full rounded-(--radius-btn) border border-(--el-dialog-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-(--el-dialog-cancel-text) hover:opacity-80 disabled:opacity-50';
   const destructiveClass =
-    'w-full rounded-(--radius-btn) bg-destructive px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-destructive-foreground hover:opacity-90 disabled:opacity-50';
+    'w-full rounded-(--radius-btn) bg-(--el-dialog-confirm-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-left text-sm font-medium text-(--el-dialog-confirm-text) hover:opacity-90 disabled:opacity-50';
 
   // For delete, the destructive style applies to all three buttons since each is
   // a destructive action. For edit, primary style is used.
@@ -51,12 +51,12 @@ export function RecurringScopeModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-(--el-dialog-overlay)"
       onClick={onClose}
       data-testid="recurring-scope-modal"
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-(--el-dialog-bg) p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col gap-2">
@@ -94,7 +94,7 @@ export function RecurringScopeModal({
             type="button"
             onClick={onClose}
             disabled={pending}
-            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-(--radius-btn) border border-(--el-dialog-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-dialog-cancel-text) hover:opacity-80 disabled:opacity-50"
             data-testid="scope-cancel"
           >
             {t('common.cancel')}

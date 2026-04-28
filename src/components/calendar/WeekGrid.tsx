@@ -89,16 +89,16 @@ function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLa
   return (
     <div className="flex" style={{ maxHeight: 60 }}>
       <div style={{ width: hourLabelWidth }} className="flex flex-shrink-0 items-start justify-end pr-2 pt-1">
-        {icon && <Icon name={icon} size={10} className="text-muted-foreground" />}
+        {icon && <Icon name={icon} size={10} className="text-(--el-cal-day-header)" />}
       </div>
-      <div className="grid flex-1 grid-cols-7 border-b border-border" style={{ maxHeight: 60, overflowY: 'auto' }}>
+      <div className="grid flex-1 grid-cols-7 border-b border-(--el-cal-grid-border)" style={{ maxHeight: 60, overflowY: 'auto' }}>
         {weekDates.map((date, i) => {
           const items = getItems(toISODate(date));
           return (
-            <div key={i} className="flex flex-col gap-0.5 border-l border-border px-0.5 py-1">
+            <div key={i} className="flex flex-col gap-0.5 border-l border-(--el-cal-grid-border) px-0.5 py-1">
               {items.map((item) => {
                 const colors = item.itemType === 'EVENT'
-                  ? { bg: '#ede9fe', text: '#5b21b6' }
+                  ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                   : getCategoryColor(item.categoryId, categories);
                 return (
                   <div
@@ -112,8 +112,8 @@ function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLa
                       {item.title}
                     </div>
                     {item.groupName && !hideGroupTag && (
-                      <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
-                        <Icon name="group" size={7} color="#3b82f6" />
+                      <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-(--el-item-group-border) px-1 text-[7px] font-medium leading-tight text-(--el-item-group-text)">
+                        <Icon name="group" size={7} color="var(--el-item-group-text)" />
                         {item.groupName}
                       </span>
                     )}
@@ -188,10 +188,10 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
   return (
     <div
       data-testid="calendar-week-grid"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-(--el-cal-grid-bg) shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Day labels + date numbers header */}
-      <div className="flex border-b border-border">
+      <div className="flex border-b border-(--el-cal-grid-border)">
         {/* Spacer for hour label column */}
         <div style={{ width: HOUR_LABEL_WIDTH }} className="flex-shrink-0" />
         {/* Day columns header */}
@@ -201,7 +201,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
             const isSelected = selectedDate !== null && isSameDay(date, selectedDate);
             return (
               <div key={i} className="flex flex-col items-center py-2">
-                <span className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? 'text-primary' : 'text-muted-foreground'}`}>
+                <span className={`text-[10px] font-semibold uppercase tracking-wide ${isToday ? 'text-(--el-cal-date-today-text)' : 'text-(--el-cal-day-header)'}`}>
                   <span className="hidden md:inline">{t(`calendarPage.weekdaysShort.${SHORT_DAY_KEYS[i]}`)}</span>
                   <span className="md:hidden">{t(`calendarPage.weekdaysNarrow.${SHORT_DAY_KEYS[i]}`)}</span>
                 </span>
@@ -209,10 +209,10 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                   onClick={() => onSelectDate(date)}
                   className={`mt-0.5 flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors ${
                     isSelected
-                      ? 'bg-primary text-primary-foreground'
+                      ? 'bg-(--el-cal-date-selected-bg) text-(--el-cal-date-selected-text)'
                       : isToday
-                        ? 'border-2 border-primary text-primary'
-                        : 'text-foreground hover:bg-muted'
+                        ? 'border-2 border-(--el-cal-date-today-border) text-(--el-cal-date-today-text)'
+                        : 'text-(--el-cal-date-normal) hover:bg-(--el-cal-nav-hover-bg)'
                   }`}
                   data-testid={isToday ? 'today-indicator' : undefined}
                 >
@@ -255,7 +255,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
       {/* Time grid */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">{t('common.loading')}</div>
+          <div className="flex items-center justify-center py-12 text-sm text-(--el-cal-hour-label)">{t('common.loading')}</div>
         ) : (
           <div className="relative flex">
             {/* Hour labels column */}
@@ -266,7 +266,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                   className="flex items-start justify-end pr-2 pt-0"
                   style={{ height: HOUR_HEIGHT }}
                 >
-                  <span className={`text-[10px] ${hour === currentHour ? 'font-semibold text-primary' : 'text-muted-foreground'}`}>
+                  <span className={`text-[10px] ${hour === currentHour ? 'font-semibold text-(--el-cal-hour-label-current)' : 'text-(--el-cal-hour-label)'}`}>
                     {formatHourLabel(hour)}
                   </span>
                 </div>
@@ -284,15 +284,15 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                   <div
                     key={i}
                     data-testid={`day-column-${dateKey}`}
-                    className="relative border-l border-border"
+                    className="relative border-l border-(--el-cal-grid-border)"
                   >
                     {/* Hour row backgrounds */}
                     {hours.map((hour) => (
                       <div
                         key={hour}
                         data-testid={i === 0 ? `hour-row-${hour}` : undefined}
-                        className={`border-b border-border/50 ${
-                          isToday && hour === currentHour ? 'bg-primary/5' : ''
+                        className={`border-b border-(--el-cal-grid-border)/50 ${
+                          isToday && hour === currentHour ? 'bg-(--el-cal-current-hour-bg)' : ''
                         }`}
                         style={{ height: HOUR_HEIGHT }}
                       />
@@ -309,7 +309,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                         const duration = item.duration || 60;
                         const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
                         const colors = item.itemType === 'EVENT'
-                          ? { bg: '#ede9fe', text: '#5b21b6' }
+                          ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                           : getCategoryColor(item.categoryId, categories);
                         const info = layout.get(item.id)!;
                         const col = info.column;
@@ -345,13 +345,13 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                               </span>
                             </div>
                             {item.groupName && !hideGroupTag && (
-                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
-                                <Icon name="group" size={7} color="#3b82f6" />
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-(--el-item-group-border) px-1 text-[7px] font-medium leading-tight text-(--el-item-group-text)">
+                                <Icon name="group" size={7} color="var(--el-item-group-text)" />
                                 {item.groupName}
                               </span>
                             )}
                             {info.overflowCount > 0 && (
-                              <span className="mt-0.5 block text-[8px] font-medium text-muted-foreground">
+                              <span className="mt-0.5 block text-[8px] font-medium text-(--el-cal-more-items)">
                                 +{info.overflowCount} more
                               </span>
                             )}
