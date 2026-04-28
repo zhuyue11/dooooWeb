@@ -20,15 +20,15 @@ export function Logo({ size = 36, className = '' }: LogoProps) {
           />
         </clipPath>
       </defs>
-      <g clipPath="url(#eye-cutout)" fill="var(--color-primary)">
+      <g clipPath="url(#eye-cutout)" fill="var(--el-logo-fill)">
         <ellipse cx="128.5" cy="128.5" rx="128" ry="128" />
         <ellipse cx="128.5" cy="384.5" rx="128" ry="128" />
         <ellipse cx="128.5" cy="640.5" rx="128" ry="128" />
         <ellipse cx="128.5" cy="896.5" rx="128" ry="128" />
         <path d="M 128.5 0.5 Q 1024.5 0.5 1024.5 512.5 Q 1024.5 1024.5 128.5 1024.5 Z" />
       </g>
-      <ellipse cx="768.5" cy="640.5" rx="32" ry="32" fill="var(--color-primary)" />
-      <ellipse cx="768.5" cy="736.5" rx="40" ry="64" fill="var(--color-primary)" />
+      <ellipse cx="768.5" cy="640.5" rx="32" ry="32" fill="var(--el-logo-fill)" />
+      <ellipse cx="768.5" cy="736.5" rx="40" ry="64" fill="var(--el-logo-fill)" />
     </svg>
   );
 }

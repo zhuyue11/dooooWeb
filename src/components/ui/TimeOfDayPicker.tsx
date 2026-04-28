@@ -51,7 +51,7 @@ export function TimeOfDayPicker({ selectedTimeOfDay, onSelect, onAtTimePress, on
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full z-50 mt-1 w-56 rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated)"
+      className="absolute left-0 top-full z-50 mt-1 w-56 rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) shadow-(--shadow-elevated)"
     >
       <div className="py-1">
         {OPTIONS.map((option) => {
@@ -61,19 +61,19 @@ export function TimeOfDayPicker({ selectedTimeOfDay, onSelect, onAtTimePress, on
               key={option.value}
               type="button"
               onClick={() => handlePress(option.value)}
-              className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-muted/50 ${
-                isSelected ? 'text-primary' : 'text-foreground'
+              className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-(--el-popover-item-hover) ${
+                isSelected ? 'text-(--el-popover-check)' : 'text-(--el-popover-item-text)'
               }`}
             >
               <Icon
                 name={option.icon}
                 size={18}
-                color={isSelected ? 'var(--color-primary)' : undefined}
+                color={isSelected ? 'var(--el-popover-check)' : undefined}
               />
               <span className={`flex-1 text-sm ${isSelected ? 'font-semibold' : 'font-medium'}`}>
                 {t(option.i18nKey)}
               </span>
-              {isSelected && <Icon name="check" size={18} color="var(--color-primary)" />}
+              {isSelected && <Icon name="check" size={18} color="var(--el-popover-check)" />}
             </button>
           );
         })}

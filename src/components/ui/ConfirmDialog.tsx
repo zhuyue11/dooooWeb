@@ -29,26 +29,26 @@ export function ConfirmDialog({
 
   const confirmClass =
     variant === 'destructive'
-      ? 'bg-destructive text-destructive-foreground hover:opacity-90'
-      : 'bg-primary text-primary-foreground hover:opacity-90';
+      ? 'bg-(--el-dialog-confirm-bg) text-(--el-dialog-confirm-text) hover:opacity-90'
+      : 'bg-(--el-btn-primary-bg) text-(--el-btn-primary-text) hover:opacity-90';
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-(--el-dialog-overlay)"
       onClick={onCancel}
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-(--el-dialog-bg) p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-base font-semibold text-foreground">{title}</h3>
-        <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+        <h3 className="text-base font-semibold text-(--el-dialog-title)">{title}</h3>
+        <p className="mt-2 text-sm text-(--el-dialog-description)">{description}</p>
         <div className="mt-4 flex justify-end gap-3">
           <button
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 transition-all duration-(--transition-duration)"
+            className="rounded-(--radius-btn) border border-(--el-dialog-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-dialog-cancel-text) hover:opacity-80 disabled:opacity-50 transition-all duration-(--transition-duration)"
           >
             {cancelLabel || t('common.cancel')}
           </button>

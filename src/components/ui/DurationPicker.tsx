@@ -73,33 +73,33 @@ export function DurationPopover({ value, onSelect, onClear, onClose }: DurationP
   // ── List view ──
   if (view === 'list') {
     return (
-      <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[220px] rounded-(--radius-modal) border border-border bg-surface p-1 shadow-(--shadow-elevated)">
+      <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[220px] rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) p-1 shadow-(--shadow-elevated)">
         {STANDARD_DURATIONS.map((mins) => (
           <button
             key={mins}
             type="button"
             onClick={() => handlePresetSelect(mins)}
-            className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${value === mins ? 'bg-muted font-medium' : ''}`}
+            className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-(--el-popover-item-hover) ${value === mins ? 'bg-(--el-popover-item-selected-bg) font-medium' : ''}`}
           >
             <span className="flex-1">{t(`tasks.input.durationPicker.${mins === 15 ? '15min' : mins === 30 ? '30min' : '1hour'}`)}</span>
-            {value === mins && <Icon name="check" size={16} color="var(--color-primary)" />}
+            {value === mins && <Icon name="check" size={16} color="var(--el-popover-check)" />}
           </button>
         ))}
         <button
           type="button"
           onClick={handleCustomSelect}
-          className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${isCustomValue ? 'bg-muted font-medium' : ''}`}
+          className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-(--el-popover-item-hover) ${isCustomValue ? 'bg-(--el-popover-item-selected-bg) font-medium' : ''}`}
         >
           <span className="flex-1">{t('tasks.input.reminderPicker.custom')}</span>
-          {isCustomValue && <Icon name="check" size={16} color="var(--color-primary)" />}
+          {isCustomValue && <Icon name="check" size={16} color="var(--el-popover-check)" />}
         </button>
         {value != null && (
           <>
-            <div className="mx-2 my-1 border-t border-border" />
+            <div className="mx-2 my-1 border-t border-(--el-popover-border)" />
             <button
               type="button"
               onClick={handleClear}
-              className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-(--el-popover-item-text) opacity-70 transition-colors hover:bg-(--el-popover-item-hover)"
             >
               <Icon name="close" size={16} />
               <span>{t('itemEditor.clear')}</span>
@@ -112,15 +112,15 @@ export function DurationPopover({ value, onSelect, onClear, onClose }: DurationP
 
   // ── Custom view ──
   return (
-    <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[280px] rounded-(--radius-modal) border border-border bg-surface p-(--spacing-card) shadow-(--shadow-elevated)">
+    <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[280px] rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
       {/* Back button */}
       <button
         type="button"
         onClick={() => setView('list')}
         className="mb-3 flex items-center gap-2 text-left"
       >
-        <Icon name="arrow_back" size={18} color="var(--color-foreground)" />
-        <span className="text-sm font-semibold text-foreground">{t('tasks.input.reminderPicker.custom')}</span>
+        <Icon name="arrow_back" size={18} color="var(--el-popover-item-text)" />
+        <span className="text-sm font-semibold text-(--el-popover-item-text)">{t('tasks.input.reminderPicker.custom')}</span>
       </button>
 
       {/* Hour / Minute inputs */}
@@ -132,9 +132,9 @@ export function DurationPopover({ value, onSelect, onClear, onClose }: DurationP
             max={23}
             value={durHour}
             onChange={(e) => setDurHour(Math.max(0, Math.min(23, parseInt(e.target.value) || 0)))}
-            className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-8 w-16 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-popover-item-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
           />
-          <span className="text-sm font-medium text-muted-foreground">{t('tasks.input.durationPicker.hour')}</span>
+          <span className="text-sm font-medium text-(--el-popover-item-text) opacity-70">{t('tasks.input.durationPicker.hour')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <input
@@ -143,9 +143,9 @@ export function DurationPopover({ value, onSelect, onClear, onClose }: DurationP
             max={59}
             value={durMinute}
             onChange={(e) => setDurMinute(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
-            className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-8 w-16 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-popover-item-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
           />
-          <span className="text-sm font-medium text-muted-foreground">{t('tasks.input.durationPicker.minute')}</span>
+          <span className="text-sm font-medium text-(--el-popover-item-text) opacity-70">{t('tasks.input.durationPicker.minute')}</span>
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export function DurationPopover({ value, onSelect, onClear, onClose }: DurationP
       <button
         type="button"
         onClick={handleCustomApply}
-        className="w-full rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        className="w-full rounded-(--radius-btn) bg-(--el-popover-apply-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-popover-apply-text) transition-opacity hover:opacity-90"
       >
         {t('itemEditor.save')}
       </button>

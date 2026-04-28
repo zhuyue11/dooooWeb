@@ -15,7 +15,7 @@ export function PopoverWrapper({ children, onClose, className }: {
   }, [onClose]);
 
   return (
-    <div ref={ref} className={`absolute left-0 top-full mt-1 z-50 rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated) ${className || ''}`}>
+    <div ref={ref} className={`absolute left-0 top-full mt-1 z-50 rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) shadow-(--shadow-elevated) ${className || ''}`}>
       {children}
     </div>
   );

@@ -45,7 +45,7 @@ export function AppShell() {
   }, [isGroupSubRoute, groupData?.group]);
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-(--el-page-bg)">
       <ChatToast />
       <Toast />
       {/* Sidebar — always visible on desktop (lg+), toggleable on mobile */}

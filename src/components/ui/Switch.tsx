@@ -16,12 +16,12 @@ export function Switch({ checked, onChange, disabled, activeColor }: SwitchProps
       className="relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-50"
       style={{
         backgroundColor: checked
-          ? activeColor || 'var(--color-primary)'
-          : 'var(--color-muted)',
+          ? activeColor || 'var(--el-switch-active)'
+          : 'var(--el-switch-inactive)',
       }}
     >
       <span
-        className="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-(--shadow-card) transition-transform"
+        className="pointer-events-none inline-block h-5 w-5 rounded-full bg-(--el-switch-thumb) shadow-(--shadow-card) transition-transform"
         style={{
           transform: checked ? 'translateX(22px)' : 'translateX(2px)',
         }}

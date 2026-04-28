@@ -87,7 +87,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full mt-2 z-50 w-[300px] rounded-(--radius-modal) border border-border bg-surface p-(--spacing-card) shadow-(--shadow-elevated)"
+      className="absolute left-0 top-full mt-2 z-50 w-[300px] rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) p-(--spacing-card) shadow-(--shadow-elevated)"
       data-testid="calendar-popover"
     >
       {/* Header */}
@@ -96,7 +96,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
           <button
             type="button"
             onClick={() => setViewMonth(new Date(year, month - 1, 1))}
-            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
+            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-(--el-popover-item-text) opacity-60 hover:bg-(--el-popover-item-hover)"
           >
             <Icon name="chevron_left" size={18} />
           </button>
@@ -104,16 +104,16 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
         <button
           type="button"
           onClick={() => setShowMonthYearPicker((v) => !v)}
-          className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary"
+          className="flex items-center gap-1 text-sm font-semibold text-(--el-popover-item-text) hover:text-(--el-popover-check)"
         >
           <span>{viewMonth.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' })}</span>
-          <Icon name={showMonthYearPicker ? 'expand_more' : 'chevron_right'} size={18} color="var(--color-primary)" />
+          <Icon name={showMonthYearPicker ? 'expand_more' : 'chevron_right'} size={18} color="var(--el-popover-check)" />
         </button>
         {!showMonthYearPicker && (
           <button
             type="button"
             onClick={() => setViewMonth(new Date(year, month + 1, 1))}
-            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
+            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-(--el-popover-item-text) opacity-60 hover:bg-(--el-popover-item-hover)"
           >
             <Icon name="chevron_right" size={18} />
           </button>
@@ -127,15 +127,15 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
             <button
               type="button"
               onClick={() => setPickerYear((y) => y - 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
+              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-(--el-popover-item-text) opacity-60 hover:bg-(--el-popover-item-hover)"
             >
               <Icon name="chevron_left" size={18} />
             </button>
-            <span className="text-sm font-semibold text-foreground">{pickerYear}</span>
+            <span className="text-sm font-semibold text-(--el-popover-item-text)">{pickerYear}</span>
             <button
               type="button"
               onClick={() => setPickerYear((y) => y + 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
+              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-(--el-popover-item-text) opacity-60 hover:bg-(--el-popover-item-hover)"
             >
               <Icon name="chevron_right" size={18} />
             </button>
@@ -152,8 +152,8 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
                   onClick={() => handleMonthSelect(i)}
                   className={`rounded-(--radius-btn) py-2 text-[13px] font-medium transition-colors ${
                     isCurrent
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-foreground hover:bg-muted'
+                      ? 'bg-(--el-popover-apply-bg) text-(--el-popover-apply-text)'
+                      : 'text-(--el-popover-item-text) hover:bg-(--el-popover-item-hover)'
                   }`}
                 >
                   {name}
@@ -165,7 +165,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
       ) : (
         <>
           {/* Weekday headers */}
-          <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium text-muted-foreground">
+          <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium text-(--el-popover-item-text) opacity-60">
             {WEEKDAY_KEYS.map((key) => (
               <span key={key}>{t(`calendarPage.weekdaysTwoChar.${key}`)}</span>
             ))}
@@ -183,12 +183,12 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
                   d === null
                     ? ''
                     : isBeforeMinDate(d)
-                      ? 'cursor-not-allowed text-muted-foreground/40'
+                      ? 'cursor-not-allowed text-(--el-popover-item-text) opacity-30'
                       : isSelected(d)
-                        ? 'bg-primary font-semibold text-primary-foreground'
+                        ? 'bg-(--el-popover-apply-bg) font-semibold text-(--el-popover-apply-text)'
                         : isToday(d)
-                          ? 'font-semibold text-primary'
-                          : 'text-foreground hover:bg-muted'
+                          ? 'font-semibold text-(--el-popover-check)'
+                          : 'text-(--el-popover-item-text) hover:bg-(--el-popover-item-hover)'
                 }`}
               >
                 {d}

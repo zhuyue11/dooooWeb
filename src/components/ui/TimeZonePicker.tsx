@@ -114,17 +114,17 @@ export function TimeZonePicker({ selectedTimeZone, onSelect, onClose }: TimeZone
         key={item.id}
         type="button"
         onClick={() => handleSelect(item.id)}
-        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-muted/50 ${
-          isSelected ? 'bg-primary/5' : ''
+        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-(--el-popover-item-hover) ${
+          isSelected ? 'bg-(--el-popover-item-selected-bg)' : ''
         }`}
       >
         <div className="min-w-0 flex-1">
-          <div className={`text-sm ${isSelected ? 'font-semibold text-primary' : 'font-medium text-foreground'}`}>
+          <div className={`text-sm ${isSelected ? 'font-semibold text-(--el-popover-check)' : 'font-medium text-(--el-popover-item-text)'}`}>
             {item.displayName}
           </div>
-          <div className="text-xs text-muted-foreground">{item.utcOffset} · {item.id}</div>
+          <div className="text-xs text-(--el-popover-item-text) opacity-60">{item.utcOffset} · {item.id}</div>
         </div>
-        {isSelected && <Icon name="check" size={18} color="var(--color-primary)" />}
+        {isSelected && <Icon name="check" size={18} color="var(--el-popover-check)" />}
       </button>
     );
   };
@@ -132,22 +132,22 @@ export function TimeZonePicker({ selectedTimeZone, onSelect, onClose }: TimeZone
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full z-50 mt-1 w-[340px] rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated)"
+      className="absolute left-0 top-full z-50 mt-1 w-[340px] rounded-(--radius-modal) border border-(--el-popover-border) bg-(--el-popover-bg) shadow-(--shadow-elevated)"
     >
       {/* Search */}
-      <div className="border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2 rounded-(--radius-card) border border-border px-3 py-1.5">
-          <Icon name="search" size={16} color="var(--color-muted-foreground)" />
+      <div className="border-b border-(--el-popover-border) px-4 py-3">
+        <div className="flex items-center gap-2 rounded-(--radius-card) border border-(--el-input-border) px-3 py-1.5">
+          <Icon name="search" size={16} color="var(--el-popover-item-text)" style={{ opacity: 0.6 }} />
           <input
             ref={searchRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search timezones..."
-            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="flex-1 bg-transparent text-sm text-(--el-input-text) placeholder:text-(--el-input-placeholder) focus:outline-none"
           />
           {searchQuery && (
-            <button type="button" onClick={() => setSearchQuery('')} className="text-muted-foreground hover:text-foreground">
+            <button type="button" onClick={() => setSearchQuery('')} className="text-(--el-popover-item-text) opacity-60 hover:opacity-100">
               <Icon name="close" size={14} />
             </button>
           )}
@@ -159,11 +159,11 @@ export function TimeZonePicker({ selectedTimeZone, onSelect, onClose }: TimeZone
         {/* Device timezone pinned at top */}
         {deviceTzItem && !searchQuery.trim() && (
           <>
-            <div className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-(--el-popover-item-text) opacity-60">
               Device
             </div>
             {renderRow(deviceTzItem)}
-            <div className="mx-4 border-t border-border" />
+            <div className="mx-4 border-t border-(--el-popover-border)" />
           </>
         )}
 
@@ -171,7 +171,7 @@ export function TimeZonePicker({ selectedTimeZone, onSelect, onClose }: TimeZone
         {filteredTimeZones.map(renderRow)}
 
         {filteredTimeZones.length === 0 && (
-          <div className="px-4 py-6 text-center text-sm text-muted-foreground">No timezones found</div>
+          <div className="px-4 py-6 text-center text-sm text-(--el-popover-item-text) opacity-60">No timezones found</div>
         )}
       </div>
     </div>
