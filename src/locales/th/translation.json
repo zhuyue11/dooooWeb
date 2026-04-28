@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "ควบคุมรูปร่าง เงา และระยะห่าง — ใช้ได้กับทุกชุดสี",
     "styleDefault": "ค่าเริ่มต้น",
     "styleDefaultDesc": "มุมโค้งสมดุลและระยะห่างมาตรฐาน",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "เส้นโค้งนุ่มนวล เงาอบอุ่น ระยะห่างเหลือเฟือ",
-    "styleClay": "Clay",
-    "styleClayDesc": "โค้งมนและแบน ให้ความลึกด้วยคอนทราสต์สี",
-    "styleStarbucks": "สตาร์บัคส์",
-    "styleStarbucksDesc": "ปุ่มเม็ดยา พื้นผิวแบน"
+    "styleSoft": "นุ่มนวล",
+    "styleSoftDesc": "เส้นโค้งนุ่มนวล เงาอบอุ่น ระยะห่างเหลือเฟือ",
+    "styleFlat": "แบน",
+    "styleFlatDesc": "ไม่มีเงา ทรงกลม ให้ความลึกด้วยสี",
+    "stylePill": "แคปซูล",
+    "stylePillDesc": "ปุ่มทรงแคปซูล การ์ดกะทัดรัด เงาน้อยที่สุด"
   },
   "languageSettings": {
     "title": "ตั้งค่าภาษา",

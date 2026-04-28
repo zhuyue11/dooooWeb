@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Kontroluje kształt, cienie i odstępy — działa z każdą paletą kolorów",
     "styleDefault": "Domyślny",
     "styleDefaultDesc": "Zrównoważone zaokrąglone rogi i standardowe odstępy",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Łagodne krzywe, ciepłe cienie, duże odstępy",
-    "styleClay": "Clay",
-    "styleClayDesc": "Zaokrąglony i płaski, głębia przez kontrast kolorów",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Przyciski pigułki, płaskie powierzchnie"
+    "styleSoft": "Miękki",
+    "styleSoftDesc": "Łagodne krzywe, ciepłe cienie, duże odstępy",
+    "styleFlat": "Płaski",
+    "styleFlatDesc": "Bez cieni, zaokrąglone kształty, głębia przez kolor",
+    "stylePill": "Pigułka",
+    "stylePillDesc": "Przyciski kapsułowe, kompaktowe karty, minimalne cienie"
   },
   "languageSettings": {
     "title": "Ustawienia języka",

@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Mengontrol bentuk, bayangan, dan jarak — cocok dengan semua palet warna",
     "styleDefault": "Default",
     "styleDefaultDesc": "Sudut membulat seimbang dan jarak standar",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Lekukan lembut, bayangan hangat, jarak longgar",
-    "styleClay": "Clay",
-    "styleClayDesc": "Bulat dan datar, kedalaman lewat kontras warna",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Tombol pil, permukaan datar"
+    "styleSoft": "Lembut",
+    "styleSoftDesc": "Lekukan lembut, bayangan hangat, jarak longgar",
+    "styleFlat": "Datar",
+    "styleFlatDesc": "Tanpa bayangan, bentuk membulat, kedalaman lewat warna",
+    "stylePill": "Pil",
+    "stylePillDesc": "Tombol kapsul, kartu ringkas, bayangan minimal"
   },
   "languageSettings": {
     "title": "Pengaturan Bahasa",

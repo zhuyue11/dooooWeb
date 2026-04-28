@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Contrôle la forme, les ombres et l'espacement — compatible avec toute palette",
     "styleDefault": "Par défaut",
     "styleDefaultDesc": "Coins arrondis équilibrés et espacement standard",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Courbes douces, ombres chaudes, espacement généreux",
-    "styleClay": "Clay",
-    "styleClayDesc": "Arrondi et plat, profondeur par contraste de couleur",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Boutons pilule, surfaces plates"
+    "styleSoft": "Doux",
+    "styleSoftDesc": "Courbes douces, ombres chaudes, espacement généreux",
+    "styleFlat": "Plat",
+    "styleFlatDesc": "Sans ombres, formes arrondies, profondeur par la couleur",
+    "stylePill": "Pilule",
+    "stylePillDesc": "Boutons capsule, cartes compactes, ombres minimales"
   },
   "languageSettings": {
     "title": "Paramètres de langue",

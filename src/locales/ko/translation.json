@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "모양, 그림자, 간격 제어 — 모든 색상 팔레트와 호환",
     "styleDefault": "기본",
     "styleDefaultDesc": "균형 잡힌 둥근 모서리와 표준 간격",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "부드러운 곡선, 따뜻한 그림자",
-    "styleClay": "Clay",
-    "styleClayDesc": "둥글고 평면적, 색상 대비로 깊이감",
-    "styleStarbucks": "스타벅스",
-    "styleStarbucksDesc": "알약 버튼, 평면 디자인, 여유로운 간격"
+    "styleSoft": "소프트",
+    "styleSoftDesc": "부드러운 곡선, 따뜻한 그림자, 여유로운 간격",
+    "styleFlat": "플랫",
+    "styleFlatDesc": "그림자 없음, 둥근 형태, 색상으로 깊이감 표현",
+    "stylePill": "필",
+    "stylePillDesc": "캡슐 모양 버튼, 컴팩트 카드, 최소 그림자"
   },
   "languageSettings": {
     "title": "언어 설정",

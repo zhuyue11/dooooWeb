@@ -29,7 +29,7 @@ import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/typ
 
 export const THEME_COLORS: ThemeColor[] = ['electric', 'emerald', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink'];
 export const COLOR_PALETTES: ColorPalette[] = ['light', 'dark', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink', 'airbnb', 'clay', 'notion', 'starbucks', 'mintlify'];
-export const DISPLAY_STYLES: DisplayStyle[] = ['default', 'airbnb', 'clay', 'starbucks'];
+export const DISPLAY_STYLES: DisplayStyle[] = ['default', 'soft', 'flat', 'pill'];
 
 /** Brand-inspired palettes that support both light and dark via ThemePattern. */
 export const SCHEMEABLE_PALETTES: ReadonlySet<ColorPalette> = new Set(['airbnb', 'clay', 'notion', 'starbucks', 'mintlify']);
@@ -68,9 +68,9 @@ export const PALETTE_COLORS: Record<ColorPalette, { primary: string; secondary: 
 /** Preview data for display style UI cards. */
 export const DISPLAY_STYLE_SHAPES: Record<DisplayStyle, { btnRadius: string; cardRadius: string; shadow: string }> = {
   default: { btnRadius: '8px', cardRadius: '12px', shadow: '0 1px 3px rgba(0,0,0,0.04)' },
-  airbnb: { btnRadius: '8px', cardRadius: '14px', shadow: '0 2px 8px rgba(0,0,0,0.06)' },
-  clay: { btnRadius: '12px', cardRadius: '16px', shadow: 'none' },
-  starbucks: { btnRadius: '50px', cardRadius: '8px', shadow: '0 1px 2px rgba(0,0,0,0.03)' },
+  soft: { btnRadius: '8px', cardRadius: '14px', shadow: '0 2px 8px rgba(0,0,0,0.06)' },
+  flat: { btnRadius: '12px', cardRadius: '16px', shadow: 'none' },
+  pill: { btnRadius: '50px', cardRadius: '8px', shadow: '0 1px 2px rgba(0,0,0,0.03)' },
 };
 
 type ResolvedTheme = 'light' | 'dark';

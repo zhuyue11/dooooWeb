@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Steuert Form, Schatten und Abstände — mit jeder Farbpalette kombinierbar",
     "styleDefault": "Standard",
     "styleDefaultDesc": "Ausgewogene Rundungen und Standardabstände",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Weiche Kurven, warme Schatten, großzügige Abstände",
-    "styleClay": "Clay",
-    "styleClayDesc": "Abgerundet und flach, Tiefe durch Farbkontrast",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Pillen-Buttons, flache Oberflächen"
+    "styleSoft": "Weich",
+    "styleSoftDesc": "Sanfte Kurven, warme Schatten, großzügige Abstände",
+    "styleFlat": "Flach",
+    "styleFlatDesc": "Keine Schatten, runde Formen, Tiefe durch Farbe",
+    "stylePill": "Pille",
+    "stylePillDesc": "Kapselförmige Buttons, kompakte Karten, minimale Schatten"
   },
   "languageSettings": {
     "title": "Spracheinstellungen",

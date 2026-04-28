@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Управляет формой, тенями и отступами — совместим с любой палитрой",
     "styleDefault": "По умолчанию",
     "styleDefaultDesc": "Сбалансированные скругления и стандартные отступы",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Мягкие изгибы, тёплые тени, просторная компоновка",
-    "styleClay": "Clay",
-    "styleClayDesc": "Округлый и плоский, глубина через цветовой контраст",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Кнопки-таблетки, плоские поверхности"
+    "styleSoft": "Мягкий",
+    "styleSoftDesc": "Плавные изгибы, тёплые тени, просторная компоновка",
+    "styleFlat": "Плоский",
+    "styleFlatDesc": "Без теней, округлые формы, глубина через цвет",
+    "stylePill": "Капсула",
+    "stylePillDesc": "Капсульные кнопки, компактные карточки, минимальные тени"
   },
   "languageSettings": {
     "title": "Настройки языка",

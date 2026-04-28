@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "شکل، سایه‌ها و فاصله‌ها را کنترل می‌کند — با هر پالت رنگی سازگار",
     "styleDefault": "پیش‌فرض",
     "styleDefaultDesc": "گوشه‌های گرد متعادل و فاصله‌گذاری استاندارد",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "خمیدگی‌های نرم، سایه‌های گرم، فاصله‌گذاری سخاوتمندانه",
-    "styleClay": "Clay",
-    "styleClayDesc": "گرد و مسطح، عمق از طریق تضاد رنگ",
-    "styleStarbucks": "استارباکس",
-    "styleStarbucksDesc": "دکمه‌های کپسولی، سطوح مسطح"
+    "styleSoft": "نرم",
+    "styleSoftDesc": "خمیدگی‌های نرم، سایه‌های گرم، فاصله‌گذاری سخاوتمندانه",
+    "styleFlat": "مسطح",
+    "styleFlatDesc": "بدون سایه، اشکال گرد، عمق از طریق رنگ",
+    "stylePill": "کپسول",
+    "stylePillDesc": "دکمه‌های کپسولی، کارت‌های فشرده، سایه‌های حداقلی"
   },
   "languageSettings": {
     "title": "تنظیمات زبان",

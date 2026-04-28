@@ -741,12 +741,12 @@
     "displayStyleSubtitle": "Beheert vorm, schaduwen en afstanden — werkt met elk kleurenpalet",
     "styleDefault": "Standaard",
     "styleDefaultDesc": "Gebalanceerde afgeronde hoeken en standaard afstanden",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Zachte rondingen, warme schaduwen, ruime opmaak",
-    "styleClay": "Clay",
-    "styleClayDesc": "Rond en vlak, diepte door kleurcontrast",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Pilvormige knoppen, vlakke oppervlakken"
+    "styleSoft": "Zacht",
+    "styleSoftDesc": "Zachte rondingen, warme schaduwen, ruime opmaak",
+    "styleFlat": "Vlak",
+    "styleFlatDesc": "Geen schaduwen, ronde vormen, diepte door kleur",
+    "stylePill": "Pil",
+    "stylePillDesc": "Capsulevormige knoppen, compacte kaarten, minimale schaduwen"
   },
   "languageSettings": {
     "title": "Taalinstellingen",

@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "يتحكم في الشكل والظلال والتباعد — يعمل مع أي لوحة ألوان",
     "styleDefault": "افتراضي",
     "styleDefaultDesc": "زوايا مستديرة متوازنة وتباعد قياسي",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "منحنيات ناعمة وظلال دافئة وتباعد واسع",
-    "styleClay": "Clay",
-    "styleClayDesc": "مستدير ومسطح، عمق من خلال تباين الألوان",
-    "styleStarbucks": "ستاربكس",
-    "styleStarbucksDesc": "أزرار كبسولة، أسطح مسطحة"
+    "styleSoft": "ناعم",
+    "styleSoftDesc": "منحنيات ناعمة، ظلال دافئة، تباعد واسع",
+    "styleFlat": "مسطح",
+    "styleFlatDesc": "بدون ظلال، أشكال مستديرة، عمق من خلال الألوان",
+    "stylePill": "كبسولة",
+    "stylePillDesc": "أزرار كبسولية، بطاقات مدمجة، ظلال بسيطة"
   },
   "languageSettings": {
     "title": "إعدادات اللغة",

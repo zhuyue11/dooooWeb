@@ -745,12 +745,12 @@
     "displayStyleSubtitle": "Controls shape, shadows, and spacing — works with any color palette",
     "styleDefault": "Default",
     "styleDefaultDesc": "Balanced rounded corners and standard spacing",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Soft curves, warm shadows, generous spacing",
-    "styleClay": "Clay",
-    "styleClayDesc": "Rounded and flat, depth through color contrast",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Pill buttons, flat surfaces, café spaciousness"
+    "styleSoft": "Soft",
+    "styleSoftDesc": "Gentle curves, warm shadows, generous breathing room",
+    "styleFlat": "Flat",
+    "styleFlatDesc": "No shadows, rounded shapes, depth through color",
+    "stylePill": "Pill",
+    "stylePillDesc": "Capsule-shaped buttons, compact cards, minimal shadows"
   },
   "fontSettings": {
     "title": "Font",

@@ -7,7 +7,7 @@ export type ThemeColor = 'electric' | 'emerald' | 'ocean' | 'crimson' | 'amber' 
 export type ColorPalette = 'light' | 'dark' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink'
   | 'airbnb' | 'clay' | 'notion' | 'starbucks' | 'mintlify';
 
-export type DisplayStyle = 'default' | 'airbnb' | 'clay' | 'starbucks';
+export type DisplayStyle = 'default' | 'soft' | 'flat' | 'pill';
 
 export interface ThemeColors {
   background: string;

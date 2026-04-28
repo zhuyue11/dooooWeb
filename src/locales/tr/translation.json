@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Şekil, gölge ve boşlukları kontrol eder — tüm paletlerle uyumlu",
     "styleDefault": "Varsayılan",
     "styleDefaultDesc": "Dengeli yuvarlak köşeler ve standart boşluk",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Yumuşak eğriler, sıcak gölgeler, geniş aralıklar",
-    "styleClay": "Clay",
-    "styleClayDesc": "Yuvarlak ve düz, renk kontrastıyla derinlik",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Hap düğmeler, düz yüzeyler"
+    "styleSoft": "Yumuşak",
+    "styleSoftDesc": "Yumuşak eğriler, sıcak gölgeler, geniş aralıklar",
+    "styleFlat": "Düz",
+    "styleFlatDesc": "Gölgesiz, yuvarlak şekiller, renkle derinlik",
+    "stylePill": "Hap",
+    "stylePillDesc": "Kapsül düğmeler, kompakt kartlar, minimal gölgeler"
   },
   "languageSettings": {
     "title": "Dil Ayarları",

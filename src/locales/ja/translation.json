@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "形状、影、余白を制御 — カラーパレットと組み合わせ自由",
     "styleDefault": "デフォルト",
     "styleDefaultDesc": "バランスの取れた角丸と標準的な余白",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "柔らかな曲線、温かみのある影",
-    "styleClay": "Clay",
-    "styleClayDesc": "丸みのあるフラット、色のコントラストで奥行き",
-    "styleStarbucks": "スターバックス",
-    "styleStarbucksDesc": "ピルボタン、フラットな表面"
+    "styleSoft": "ソフト",
+    "styleSoftDesc": "柔らかな曲線、温かみのある影、ゆとりのある配置",
+    "styleFlat": "フラット",
+    "styleFlatDesc": "影なし、丸みのある形状、色のコントラストで奥行き",
+    "stylePill": "ピル",
+    "stylePillDesc": "カプセル型ボタン、コンパクトなカード、最小限の影"
   },
   "languageSettings": {
     "title": "言語設定",

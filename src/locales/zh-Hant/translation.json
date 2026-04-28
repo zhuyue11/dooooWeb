@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "控制形狀、陰影和間距 — 與任何調色板相容",
     "styleDefault": "預設",
     "styleDefaultDesc": "均衡的圓角和標準間距",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "柔和曲線，溫暖陰影，寬敞佈局",
-    "styleClay": "Clay",
-    "styleClayDesc": "圓潤平面，透過色彩對比營造層次",
-    "styleStarbucks": "星巴克",
-    "styleStarbucksDesc": "膠囊按鈕，平面設計，咖啡館般的寬敞感"
+    "styleSoft": "柔和",
+    "styleSoftDesc": "柔和曲線、溫暖陰影、寬敞佈局",
+    "styleFlat": "扁平",
+    "styleFlatDesc": "無陰影、圓潤形狀、透過色彩營造層次",
+    "stylePill": "膠囊",
+    "stylePillDesc": "膠囊形按鈕、緊湊卡片、極簡陰影"
   },
   "languageSettings": {
     "title": "語言設定",

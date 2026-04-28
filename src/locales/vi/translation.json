@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Điều khiển hình dạng, bóng đổ và khoảng cách — tương thích với mọi bảng màu",
     "styleDefault": "Mặc định",
     "styleDefaultDesc": "Góc bo tròn cân đối và khoảng cách tiêu chuẩn",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Đường cong mềm mại, bóng ấm, khoảng cách rộng rãi",
-    "styleClay": "Clay",
-    "styleClayDesc": "Tròn và phẳng, chiều sâu qua tương phản màu",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Nút viên thuốc, bề mặt phẳng"
+    "styleSoft": "Mềm mại",
+    "styleSoftDesc": "Đường cong mềm mại, bóng ấm, khoảng cách rộng rãi",
+    "styleFlat": "Phẳng",
+    "styleFlatDesc": "Không bóng, hình dạng tròn, chiều sâu qua màu sắc",
+    "stylePill": "Viên thuốc",
+    "stylePillDesc": "Nút hình viên thuốc, thẻ nhỏ gọn, bóng tối thiểu"
   },
   "languageSettings": {
     "title": "Cài đặt ngôn ngữ",

@@ -738,12 +738,12 @@
     "displayStyleSubtitle": "Controla forma, sombras e espaçamento — compatível com qualquer paleta",
     "styleDefault": "Padrão",
     "styleDefaultDesc": "Cantos arredondados equilibrados e espaçamento padrão",
-    "styleAirbnb": "Airbnb",
-    "styleAirbnbDesc": "Curvas suaves, sombras quentes, espaçamento generoso",
-    "styleClay": "Clay",
-    "styleClayDesc": "Arredondado e plano, profundidade por contraste de cor",
-    "styleStarbucks": "Starbucks",
-    "styleStarbucksDesc": "Botões pílula, superfícies planas"
+    "styleSoft": "Suave",
+    "styleSoftDesc": "Curvas suaves, sombras quentes, espaçamento generoso",
+    "styleFlat": "Plano",
+    "styleFlatDesc": "Sem sombras, formas arredondadas, profundidade pela cor",
+    "stylePill": "Pílula",
+    "stylePillDesc": "Botões cápsula, cartões compactos, sombras mínimas"
   },
   "languageSettings": {
     "title": "Configurações de Idioma",
