@@ -8,16 +8,20 @@
 @import "./palettes/fresh.css";
 
 /*
- * Theme tokens — three-tier system ported from dooooHub/dooooApp.
+ * Theme system — two independent axes:
  *
- * Tier 1 — ThemePattern: data-theme="light|dark" on <html>
- * Tier 2 — ThemeColor:   data-color="ocean" etc. — overrides primary/secondary/accent only
- * Tier 3 — ColorPalette: data-palette="ocean" etc. — overrides ALL tokens
+ * Axis 1 — COLOR
+ *   Base variables (--color-primary, etc.) defined in @theme below.
+ *   Tier 1 — ThemePattern: data-theme="light|dark" — controls light/dark base vars.
+ *   Tier 2 — ThemeColor:   data-color="ocean" etc. — overrides --color-primary/secondary/accent.
+ *   Element tokens (--el-*) in element-tokens.css reference var(--color-primary),
+ *   so Tier 2 changes flow through automatically.
+ *   Color Palettes (data-palette="ocean") override ALL --el-* tokens via palettes/*.css.
  *
- * Priority: palette > (pattern + color)
- * When a palette is active, data-theme is removed — palette controls everything.
+ * Axis 2 — SHAPE (Display Style)
+ *   data-display-style="soft" etc. — overrides radius, shadow, spacing tokens.
  *
- * Default accent = emerald (base CSS). Electric is opt-in via data-color="electric".
+ * Default accent = emerald. Palettes override everything including primary.
  */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
@@ -147,124 +151,6 @@
 [data-color="pink"] { --color-primary: #ec4899; --color-primary-foreground: #ffffff; --color-secondary: #db2777; --color-accent: #f59e0b; }
 [data-theme="dark"][data-color="pink"] { --color-primary: #f472b6; --color-primary-foreground: #0f172a; --color-secondary: #ec4899; --color-accent: #fbbf24; }
 
-/* ── Tier 3: Full palette overrides (ALL tokens) ───────────────────── */
-
-[data-palette="ocean"] {
-  color-scheme: light;
-  --color-background: #f0f7ff; --color-foreground: #1e3a5f; --color-surface: #ffffff; --color-input-bg: #ffffff;
-  --color-primary: #3b82f6; --color-primary-foreground: #ffffff;
-  --color-secondary: #14b8a6; --color-secondary-foreground: #ffffff;
-  --color-muted: #eff6ff; --color-muted-foreground: #64748b;
-  --color-accent: #f97316;
-  --color-destructive: #ef4444; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
-  --color-info: #3b82f6;
-  --color-border: #bfdbfe;
-}
-
-[data-palette="yellow"] {
-  color-scheme: dark;
-  --color-background: #1a1a1a; --color-foreground: #f0f0f0; --color-surface: #2a2a2a; --color-input-bg: #2a2a2a;
-  --color-primary: #edf060; --color-primary-foreground: #1f2937;
-  --color-secondary: #d4c94f; --color-secondary-foreground: #1f2937;
-  --color-muted: #4a4a4a; --color-muted-foreground: #9ca3af;
-  --color-accent: #edf060;
-  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
-  --color-info: #60a5fa;
-  --color-border: #404040;
-}
-
-[data-palette="pink"] {
-  color-scheme: light;
-  --color-background: #fdf2f8; --color-foreground: #1f2937; --color-surface: #fce7f3; --color-input-bg: #fce7f3;
-  --color-primary: #ec4899; --color-primary-foreground: #ffffff;
-  --color-secondary: #db2777; --color-secondary-foreground: #ffffff;
-  --color-muted: #f3e8ff; --color-muted-foreground: #6b7280;
-  --color-accent: #ec4899;
-  --color-destructive: #dc2626; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
-  --color-info: #3b82f6;
-  --color-border: #f9a8d4;
-}
-
-/* ── Tier 3: Brand-inspired palettes (schemeable — respect data-theme) ─ */
-
-[data-palette="warm"] {
-  color-scheme: light;
-  --color-background: #fffaf0; --color-foreground: #0a0a0a; --color-surface: #faf5e8; --color-input-bg: #ffffff;
-  --color-primary: #ff4d8b; --color-primary-foreground: #ffffff;
-  --color-secondary: #b8a4ed; --color-secondary-foreground: #1a1a1a;
-  --color-muted: #f5f0e0; --color-muted-foreground: #6a6a6a;
-  --color-accent: #e8b94a;
-  --color-destructive: #ef4444; --color-destructive-foreground: #ffffff;
-  --color-warning: #f59e0b; --color-warning-foreground: #0a0a0a;
-  --color-info: #3b82f6;
-  --color-border: #e5e5e5;
-}
-[data-palette="warm"][data-theme="dark"] {
-  color-scheme: dark;
-  --color-background: #1a1a1a; --color-foreground: #f0f0f0; --color-surface: #2a2a2a; --color-input-bg: #2a2a2a;
-  --color-primary: #ff6fa3; --color-primary-foreground: #0f0f0f;
-  --color-secondary: #c4b4f0; --color-secondary-foreground: #0f0f0f;
-  --color-muted: #3a3a3a; --color-muted-foreground: #9a9a9a;
-  --color-accent: #f0c85e;
-  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #1a1a1a;
-  --color-info: #60a5fa;
-  --color-border: #404040;
-}
-
-[data-palette="earth"] {
-  color-scheme: light;
-  --color-background: #f2f0eb; --color-foreground: #222222; --color-surface: #ffffff; --color-input-bg: #ffffff;
-  --color-primary: #006241; --color-primary-foreground: #ffffff;
-  --color-secondary: #00754a; --color-secondary-foreground: #ffffff;
-  --color-muted: #edebe9; --color-muted-foreground: #6a6a6a;
-  --color-accent: #cba258;
-  --color-destructive: #c82014; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbc05; --color-warning-foreground: #222222;
-  --color-info: #3b82f6;
-  --color-border: #edebe9;
-}
-[data-palette="earth"][data-theme="dark"] {
-  color-scheme: dark;
-  --color-background: #1e3932; --color-foreground: #f3f4f6; --color-surface: #253d36; --color-input-bg: #253d36;
-  --color-primary: #00a862; --color-primary-foreground: #0f0f0f;
-  --color-secondary: #34d399; --color-secondary-foreground: #0f0f0f;
-  --color-muted: #2b4a42; --color-muted-foreground: #a0a0a0;
-  --color-accent: #dfc49d;
-  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #222222;
-  --color-info: #60a5fa;
-  --color-border: #3a5a50;
-}
-
-[data-palette="fresh"] {
-  color-scheme: light;
-  --color-background: #ffffff; --color-foreground: #0d0d0d; --color-surface: #fafafa; --color-input-bg: #ffffff;
-  --color-primary: #18e299; --color-primary-foreground: #0d0d0d;
-  --color-secondary: #0fa76e; --color-secondary-foreground: #ffffff;
-  --color-muted: #f5f5f5; --color-muted-foreground: #666666;
-  --color-accent: #3772cf;
-  --color-destructive: #d45656; --color-destructive-foreground: #ffffff;
-  --color-warning: #c37d0d; --color-warning-foreground: #0d0d0d;
-  --color-info: #3772cf;
-  --color-border: #e5e5e5;
-}
-[data-palette="fresh"][data-theme="dark"] {
-  color-scheme: dark;
-  --color-background: #0d0d0d; --color-foreground: #ededed; --color-surface: #141414; --color-input-bg: #141414;
-  --color-primary: #18e299; --color-primary-foreground: #0d0d0d;
-  --color-secondary: #34d399; --color-secondary-foreground: #0d0d0d;
-  --color-muted: #1f1f1f; --color-muted-foreground: #a0a0a0;
-  --color-accent: #60a5fa;
-  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
-  --color-warning: #fbbf24; --color-warning-foreground: #0d0d0d;
-  --color-info: #60a5fa;
-  --color-border: #2a2a2a;
-}
-
 /* ── Display Styles: Shape/personality overrides ─────────────────────── */
 
 [data-display-style="soft"] {
@@ -317,8 +203,8 @@
 
 /* Base styles */
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--el-page-bg);
+  color: var(--el-page-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   min-height: 100vh;

@@ -3,28 +3,34 @@ import { STORAGE_KEYS } from '../config';
 import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/types/theme';
 
 /**
- * Three-tier theme provider + Display Style — ported from dooooHub/dooooApp.
+ * Theme provider — two independent axes: Color + Shape.
  *
- * Tier 1 — ThemePattern: system | auto | light | dark
- *   • applies via data-theme="light|dark" on <html>
+ * ── Color axis ──
  *
- * Tier 2 — ThemeColor: 9 primary colors
- *   • changes --color-primary, --color-secondary, --color-accent only
- *   • applies via data-color="ocean" on <html>
+ * ThemePattern (Tier 1): system | auto | light | dark
+ *   • data-theme="light|dark" on <html>
+ *   • Controls base --color-primary (emerald light / dark variants)
  *
- * Tier 3 — ColorPalette: full themed presets (ocean, crimson, etc.)
- *   • overrides ALL color tokens (surfaces, text, borders, brand, status)
- *   • applies via data-palette="ocean" on <html>
- *   • Fixed-scheme palettes: data-theme is removed (palette controls everything)
- *   • Schemeable palettes (airbnb, clay, notion, starbucks, mintlify):
- *     data-theme is KEPT so ThemePattern still controls light/dark
+ * ThemeColor (Tier 2): 9 accent colors (electric, emerald, ocean, etc.)
+ *   • data-color="ocean" on <html>
+ *   • Overrides --color-primary/secondary/accent
+ *   • Default element tokens (--el-*) reference var(--color-primary),
+ *     so Tier 2 changes flow through to every UI element automatically
+ *   • Active only when NO palette is selected (the "default" look)
  *
- * Display Style — independent axis controlling shape/personality
- *   • applies via data-display-style="notion" on <html>
- *   • overrides shape, spacing, shadow, border, interaction tokens
- *   • works with ANY color palette or tier 1/2 combination
+ * ColorPalette (Tier 3): full curated themes (ocean, yellow, pink, warm, earth, fresh)
+ *   • data-palette="ocean" on <html>
+ *   • Palette CSS files (palettes/*.css) override ALL --el-* tokens
+ *   • Fixed-scheme palettes (ocean, yellow, pink): data-theme removed
+ *   • Schemeable palettes (warm, earth, fresh): data-theme kept for light/dark
+ *   • When active, Tier 2 (ThemeColor) has no effect
  *
- * Priority: palette > (pattern + color) for colors; display style is orthogonal
+ * ── Shape axis ──
+ *
+ * DisplayStyle: default | soft | flat | pill
+ *   • data-display-style="soft" on <html>
+ *   • Overrides radius, shadow, spacing, border, interaction tokens
+ *   • Independent of color — works with any palette or Tier 2 color
  */
 
 export const THEME_COLORS: ThemeColor[] = ['electric', 'emerald', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink'];

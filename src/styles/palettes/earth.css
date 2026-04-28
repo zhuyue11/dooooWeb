@@ -28,7 +28,7 @@
  *   Text Black Soft    rgba(0,0,0,0.58)   — Secondary/metadata text.
  *   Text White         #ffffff             — Text on dark green surfaces.
  *   Text White Soft    rgba(255,255,255,0.70) — Secondary text on dark.
- *   Rewards Green      #33443d            — Muted slate-green reading text.
+ *   Rewards Green      #33433d            — Muted slate-green reading text.
  *
  * SEMANTIC
  *   Red                #c82014   — Error, destructive actions.
@@ -120,9 +120,9 @@
   --el-item-checkbox-bg: #00754a;       /* Green Accent */
   --el-item-checkbox-mark: #ffffff;     /* Text White */
   --el-item-priority-high: #c82014;     /* Red */
-  --el-item-priority-normal: #cba258;   /* Gold */
-  --el-item-group-border: #006241;      /* Starbucks Green */
-  --el-item-group-text: #006241;        /* Starbucks Green */
+  --el-item-priority-normal: #fbbc05;   /* Yellow */
+  --el-item-group-border: #2b5148;      /* Green Uplift */
+  --el-item-group-text: #2b5148;        /* Green Uplift */
   --el-item-plan-border: #00754a;       /* Green Accent */
   --el-item-plan-text: #00754a;         /* Green Accent */
   --el-item-invited-bg: #faf6ee;        /* Gold Lightest */
@@ -147,7 +147,7 @@
   --el-panel-detail-label: rgba(0,0,0,0.58); /* Text Black Soft */
   --el-panel-detail-value: rgba(0,0,0,0.87); /* Text Black */
   --el-panel-separator: #edebe9;        /* Ceramic */
-  --el-panel-description: #33443d;      /* Rewards Green */
+  --el-panel-description: #33433d;      /* Rewards Green */
   --el-panel-guest-bg: #f9f9f9;         /* Neutral Cool */
   --el-panel-guest-text: rgba(0,0,0,0.87); /* Text Black */
   --el-panel-priority-high-bg: hsl(4 82% 43% / 5%); /* Red Tint */
@@ -177,7 +177,7 @@
   --el-editor-tag-text: rgba(0,0,0,0.87); /* Text Black */
   --el-editor-error: #c82014;           /* Red */
   --el-view-title: rgba(0,0,0,0.87);    /* Text Black */
-  --el-view-description: #33443d;       /* Rewards Green */
+  --el-view-description: #33433d;       /* Rewards Green */
   --el-view-detail-label: rgba(0,0,0,0.58); /* Text Black Soft */
   --el-view-detail-value: rgba(0,0,0,0.87); /* Text Black */
   --el-view-edit-border: #edebe9;       /* Ceramic */
@@ -295,7 +295,7 @@
   --el-ai-msg-bg: #ffffff;              /* White */
   --el-ai-msg-text: rgba(0,0,0,0.87);   /* Text Black */
   --el-ai-user-bg: #1e3932;             /* House Green */
-  --el-ai-user-text: #ffffff;           /* Text White */
+  --el-ai-user-text: rgba(255,255,255,0.70); /* Text White Soft — secondary feel on dark surface */
   --el-ai-session-bg: #d4e9e2;          /* Green Light */
   --el-ai-session-text: #006241;        /* Starbucks Green */
 
@@ -313,7 +313,7 @@
   --el-notif-success-bg: #d4e9e2;       /* Green Light */
   --el-notif-success-color: #006241;    /* Starbucks Green */
   --el-notif-warning-bg: #faf6ee;       /* Gold Lightest */
-  --el-notif-warning-color: #cba258;    /* Gold */
+  --el-notif-warning-color: #fbbc05;    /* Yellow */
   --el-notif-danger-bg: hsl(4 82% 43% / 5%); /* Red Tint */
   --el-notif-danger-color: #c82014;     /* Red */
   --el-notif-neutral-bg: #f9f9f9;       /* Neutral Cool */
@@ -437,7 +437,7 @@
   --el-item-checkbox-bg: #34d399;
   --el-item-checkbox-mark: #1e3932;
   --el-item-priority-high: #c82014;
-  --el-item-priority-normal: #dfc49d;   /* Gold Light */
+  --el-item-priority-normal: #fbbc05;   /* Yellow */
   --el-item-group-border: #34d399;
   --el-item-group-text: #34d399;
   --el-item-plan-border: #34d399;
@@ -617,7 +617,7 @@
   --el-notif-success-bg: rgba(52,211,153,0.15);
   --el-notif-success-color: #34d399;
   --el-notif-warning-bg: rgba(223,196,157,0.2);
-  --el-notif-warning-color: #dfc49d;
+  --el-notif-warning-color: #fbbc05;    /* Yellow */
   --el-notif-danger-bg: rgba(200,32,20,0.15);
   --el-notif-danger-color: #c82014;
   --el-notif-neutral-bg: #33604e;

@@ -13,101 +13,33 @@ dooooWeb uses an element-specific color token system where every UI element has 
 ### Completed
 - [x] Default light mode tokens defined (`:root` in `element-tokens.css`)
 - [x] Default dark mode tokens defined (`[data-theme="dark"]` in `element-tokens.css`)
-- [x] Earth palette fully documented with design system color references (`palettes/earth.css`) — **reference implementation**
-- [x] Warm palette fully documented with Clay design system colors (`palettes/warm.css`) — light + dark
-- [x] Fresh palette complete (`palettes/fresh.css`) — light + dark
-- [x] Ocean palette complete (`palettes/ocean.css`) — light + dark
-- [x] Yellow palette complete (`palettes/yellow.css`) — light + dark
-- [x] Pink palette complete (`palettes/pink.css`) — light + dark
-- [x] All 6 palettes have both light and dark mode variants
-- [x] Button, Card, Input, Toast components migrated to `--el-*` tokens
+- [x] Default tokens reference `var(--color-primary)` so Tier 2 primary color switch works
+- [x] All 6 palettes complete with both light and dark mode variants
+- [x] Earth palette fully documented with design system color references — **reference implementation**
+- [x] Warm palette documented with Clay design system colors
 - [x] File structure: `element-tokens.css` (defaults) + `palettes/{name}.css` (per palette)
+- [x] **All ~85 components migrated** to `--el-*` tokens — zero generic color tokens remain
+- [x] Old `[data-palette]` `--color-*` blocks removed from `index.css` (palette CSS files handle everything)
+- [x] `body` styles updated to `var(--el-page-bg)` / `var(--el-page-text)`
+- [x] `theme-context.tsx` comments updated to reflect current system
+- [x] CLAUDE.md design system token rule updated to reference `--el-*`
 
-### Remaining Work
+### How to add a new palette
 
-#### 1. Rewrite palette files with proper documentation (5 files)
+1. Create `palettes/{name}.css` following `earth.css` as reference
+2. Document all named colors from the design system in a header comment
+3. For each `--el-*` token, assign a color with a `/* Color Name */` comment
+4. Think about design intent — task cards use the palette's primary tint, events use a secondary color, etc.
+5. For schemeable palettes, write both `[data-palette="X"]` and `[data-palette="X"][data-theme="dark"]` blocks
+6. Add the palette name to `COLOR_PALETTES` in `theme-context.tsx` and `PALETTE_COLORS`
 
-Each palette file needs the same treatment as `earth.css`:
-- Color palette documented in header comment (all named colors from the design system)
-- Every `--el-*` token assigned with a comment tracing it to a named palette color
-- Both light and dark mode variants for schemeable palettes (warm, fresh)
+### How to add a new component
 
-| File | Source Design System | Status |
-|------|---------------------|--------|
-| `palettes/earth.css` | Starbucks DESIGN.md | ✅ Complete — reference |
-| `palettes/warm.css` | Clay DESIGN.md | ✅ Complete — light + dark, documented |
-| `palettes/fresh.css` | Mintlify DESIGN.md | ✅ Complete — light + dark |
-| `palettes/ocean.css` | Original doooo theme | ✅ Complete — light + dark |
-| `palettes/yellow.css` | Original doooo theme | ✅ Complete — light + dark |
-| `palettes/pink.css` | Original doooo theme | ✅ Complete — light + dark |
-
-**How to write a palette file:**
-1. Read the DESIGN.md from `/tmp/design-md-explore/{name}/DESIGN.md`
-2. List ALL colors from the design system in the header comment
-3. For each of the 273 `--el-*` tokens, assign a color from the palette with a `/* Color Name */` comment
-4. Think about design intent — don't randomly assign colors. E.g., task cards should use the palette's primary tint, events should use a secondary color, etc.
-5. For schemeable palettes (warm, earth, fresh), also write the `[data-palette="X"][data-theme="dark"]` block
-
-#### 2. Migrate all components to `--el-*` tokens (~85 files, ~1062 replacements)
-
-Components currently use generic Tailwind theme tokens (`bg-primary`, `text-foreground`, `border-border`, etc.). Each needs to be replaced with the element-specific `--el-*` token.
-
-**Important:** The same `bg-primary` in different components maps to DIFFERENT element tokens:
-- `bg-primary` in a button → `bg-(--el-btn-primary-bg)`
-- `bg-primary` in the calendar add button → `bg-(--el-cal-add-btn-bg)`
-- `bg-primary` in a sidebar active item → `bg-(--el-sidebar-item-active-bg)`
-
-This must be done per-component, not as a blanket find-and-replace.
-
-**Already migrated:**
-- `Button.tsx` — uses `--el-btn-*` tokens
-- `Card.tsx` — uses `--el-card-*` tokens
-- `Input.tsx` — uses `--el-input-*` tokens
-- `Toast.tsx` — uses `--el-toast-*` tokens
-
-**Migration order (by area):**
-1. UI primitives: ConfirmDialog, PopoverWrapper, Switch, CategoryPopover, RepeatPopover, ReminderPicker, DurationPicker, TimePicker, TimeOfDayPicker, TimeZonePicker, CalendarPopover
-2. Layout: Sidebar, Header, Logo
-3. Calendar: CalendarHeader, WeekGrid, MonthGrid, DayTimeline, ItemCard, ItemRow, ItemPanel
-4. Items: ItemFormModal, ItemSidePanel, ItemEditorPage, ItemViewPage
-5. Targets: TargetCard, PlanCard, PlanCalendarView, PlanExecutionView, PlanTemplateItem, etc.
-6. Groups: GroupCard, GroupFormModal, InviteMemberModal, MemberListItem, etc.
-7. Chat: MessageBubble, ChatInputBar, ChatMessageList, AIChatMessage, etc.
-8. Notifications: NotificationItem, GroupInvitationCard
-9. Auth: LoginPage, RegisterPage, EmailLoginPage, ForgotPasswordPage
-10. Settings: ThemeSettingsPage, SettingsPage, LanguageSettingsPage, etc.
-11. Other pages: HomePage, TodoPage, SearchPage, StubPage
-
-**How to migrate a component:**
-1. Read the component file
-2. Find every color-related class (`bg-*`, `text-*`, `border-*`, `color:`, `backgroundColor:`)
-3. Replace each with the corresponding `--el-*` token based on the element's semantic role
+1. Use `--el-*` tokens for ALL colors — never generic classes like `bg-primary` or `text-foreground`
+2. The same semantic role (e.g., "primary button") maps to different tokens in different contexts
+3. Find the right token by area: `--el-{area}-{element}-{property}` in `element-tokens.css`
 4. Use `var(--el-*)` for inline styles
-5. Verify the component still renders correctly
-
-#### 3. Remove old `--color-*` tokens
-
-Once ALL components are migrated:
-1. Remove old `--color-*` definitions from `@theme` in `index.css`
-2. Remove old `[data-palette="*"]` blocks from `index.css`
-3. Remove old `[data-color="*"]` (Tier 2) blocks from `index.css`
-4. Remove old `[data-theme="dark"]` color overrides from `index.css` (keep the shape token dark overrides)
-5. Verify build: `npx vite build`
-6. Verify no component references `--color-*`: `grep -r 'color-primary\|color-foreground\|color-surface' src/`
-
-#### 4. Update theme-context.tsx
-
-Simplify the theme context:
-- Remove `ThemeColor` tier (Tier 2) — no longer needed since element tokens handle everything
-- Keep `ThemePattern` (light/dark/auto/system)
-- Keep `ColorPalette` (ocean, yellow, pink, warm, earth, fresh)
-- Keep `DisplayStyle` (default, soft, flat, pill)
-- Remove `THEME_COLORS`, `THEME_COLOR_HEX` arrays
-- Remove `ThemeColorSection` from ThemeSettingsPage
-
-#### 5. Update CLAUDE.md
-
-Update the design system token rule to reference `--el-*` instead of `--color-*`.
+5. If a new token is needed, add it to `element-tokens.css` (both `:root` and `[data-theme="dark"]`) and all 6 palette files
 
 ## File Structure
 

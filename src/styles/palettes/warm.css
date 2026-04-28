@@ -129,7 +129,7 @@
   --el-item-checkbox-bg: #0a0a0a;       /* Ink */
   --el-item-checkbox-mark: #ffffff;     /* On Primary */
   --el-item-priority-high: #ff6b5a;     /* Brand Coral */
-  --el-item-priority-normal: #e8b94a;   /* Brand Ochre */
+  --el-item-priority-normal: #f59e0b;   /* Warning */
   --el-item-group-border: #b8a4ed;      /* Brand Lavender */
   --el-item-group-text: #8b72d4;        /* Brand Lavender darkened */
   --el-item-plan-border: #ff4d8b;       /* Brand Pink */
@@ -143,7 +143,7 @@
   --el-item-activity-bg: rgba(255,77,139,0.08); /* Brand Pink tint */
   --el-item-activity-text: #ff4d8b;     /* Brand Pink */
   --el-item-meta-icon: #9a9a9a;         /* Muted Soft */
-  --el-item-organizer-icon: #e8b94a;    /* Brand Ochre */
+  --el-item-organizer-icon: #ffb084;    /* Brand Peach */
 
   /* Item Side Panel */
   --el-panel-bg: #faf5e8;               /* Surface Soft */
@@ -212,7 +212,7 @@
   --el-input-bg: #fffaf0;               /* Canvas */
   --el-input-text: #3a3a3a;             /* Body */
   --el-input-placeholder: #9a9a9a;      /* Muted Soft */
-  --el-input-border: #ebe6d6;           /* Surface Strong */
+  --el-input-border: #e5e5e5;           /* Hairline */
   --el-input-focus: #ff4d8b;            /* Brand Pink */
   --el-input-error-border: #ef4444;     /* Error */
   --el-input-error-text: #ef4444;       /* Error */
@@ -225,7 +225,7 @@
   /* Toast */
   --el-toast-success-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
   --el-toast-success-border: #a4d4c5;   /* Brand Mint */
-  --el-toast-success-icon: #3a9478;     /* Brand Mint darkened */
+  --el-toast-success-icon: #22c55e;     /* Success */
   --el-toast-error-bg: rgba(255,107,90,0.1); /* Brand Coral tint */
   --el-toast-error-border: #ff6b5a;     /* Brand Coral */
   --el-toast-error-icon: #ff6b5a;       /* Brand Coral */
@@ -257,7 +257,7 @@
 
   /* Switch */
   --el-switch-active: #ff4d8b;          /* Brand Pink */
-  --el-switch-inactive: #f5f0e0;        /* Surface Card */
+  --el-switch-inactive: #f0f0f0;        /* Hairline Soft */
   --el-switch-thumb: #ffffff;           /* On Primary */
 
   /* Targets & Plans */
@@ -293,7 +293,7 @@
   --el-group-owner-text: #6a6a6a;       /* Muted */
 
   /* Chat */
-  --el-chat-own-bg: #0a0a0a;            /* Ink */
+  --el-chat-own-bg: #1a3a3a;            /* Brand Teal */
   --el-chat-own-text: #ffffff;          /* On Primary */
   --el-chat-other-bg: #f5f0e0;          /* Surface Card */
   --el-chat-other-text: #3a3a3a;        /* Body */
@@ -320,9 +320,9 @@
   --el-notif-task-bg: rgba(255,77,139,0.1); /* Brand Pink tint */
   --el-notif-task-color: #ff4d8b;       /* Brand Pink */
   --el-notif-success-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
-  --el-notif-success-color: #3a9478;    /* Brand Mint darkened */
+  --el-notif-success-color: #22c55e;    /* Success */
   --el-notif-warning-bg: rgba(232,185,74,0.15); /* Brand Ochre tint */
-  --el-notif-warning-color: #c49a2e;    /* Brand Ochre darkened */
+  --el-notif-warning-color: #f59e0b;    /* Warning */
   --el-notif-danger-bg: rgba(255,107,90,0.12); /* Brand Coral tint */
   --el-notif-danger-color: #ff6b5a;     /* Brand Coral */
   --el-notif-neutral-bg: #f5f0e0;       /* Surface Card */
@@ -447,7 +447,7 @@
   --el-item-checkbox-bg: #ffffff;
   --el-item-checkbox-mark: #0a1a1a;
   --el-item-priority-high: #ff6b5a;
-  --el-item-priority-normal: #e8b94a;
+  --el-item-priority-normal: #f59e0b;   /* Warning */
   --el-item-group-border: #c4b5fd;
   --el-item-group-text: #c4b5fd;
   --el-item-plan-border: #ff6b9d;
@@ -537,7 +537,7 @@
 
   --el-toast-success-bg: rgba(164,212,197,0.15);
   --el-toast-success-border: #a4d4c5;
-  --el-toast-success-icon: #a4d4c5;
+  --el-toast-success-icon: #22c55e;     /* Success */
   --el-toast-error-bg: rgba(255,107,90,0.15);
   --el-toast-error-border: #ff6b5a;
   --el-toast-error-icon: #ff6b5a;
@@ -625,9 +625,9 @@
   --el-notif-task-bg: rgba(255,107,157,0.12);
   --el-notif-task-color: #ff6b9d;
   --el-notif-success-bg: rgba(164,212,197,0.15);
-  --el-notif-success-color: #a4d4c5;
+  --el-notif-success-color: #22c55e;    /* Success */
   --el-notif-warning-bg: rgba(232,185,74,0.2);
-  --el-notif-warning-color: #e8b94a;
+  --el-notif-warning-color: #f59e0b;    /* Warning */
   --el-notif-danger-bg: rgba(255,107,90,0.15);
   --el-notif-danger-color: #ff6b5a;
   --el-notif-neutral-bg: #2a3a3a;
