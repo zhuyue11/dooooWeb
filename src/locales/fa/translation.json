@@ -1320,7 +1320,13 @@
     "groups": "گروه‌ها",
     "plans": "برنامه‌ها",
     "targets": "اهداف",
-    "clearAll": "پاک کردن"
+    "clearAll": "پاک کردن",
+    "status": "وضعیت",
+    "overdue": "عقب‌افتاده",
+    "completed": "تکمیل‌شده",
+    "dateRange": "بازه تاریخ",
+    "from": "از",
+    "to": "تا"
   },
   "targetPlan": {
     "title": "هدف و برنامه",

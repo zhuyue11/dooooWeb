@@ -1321,7 +1321,13 @@
     "groups": "群组",
     "plans": "计划",
     "targets": "目标",
-    "clearAll": "清除"
+    "clearAll": "清除",
+    "status": "状态",
+    "overdue": "逾期",
+    "completed": "已完成",
+    "dateRange": "日期范围",
+    "from": "从",
+    "to": "到"
   },
   "targetPlan": {
     "title": "目标与计划",

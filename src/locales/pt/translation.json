@@ -1326,7 +1326,13 @@
     "groups": "Grupos",
     "plans": "Planos",
     "targets": "Objetivos",
-    "clearAll": "Limpar"
+    "clearAll": "Limpar",
+    "status": "Status",
+    "overdue": "Atrasada",
+    "completed": "Concluída",
+    "dateRange": "Intervalo de datas",
+    "from": "De",
+    "to": "Até"
   },
   "targetPlan": {
     "title": "Objetivo e Plano",

@@ -1326,7 +1326,13 @@
     "groups": "그룹",
     "plans": "플랜",
     "targets": "목표",
-    "clearAll": "지우기"
+    "clearAll": "지우기",
+    "status": "상태",
+    "overdue": "기한 초과",
+    "completed": "완료됨",
+    "dateRange": "날짜 범위",
+    "from": "시작",
+    "to": "종료"
   },
   "targetPlan": {
     "title": "목표 & 플랜",

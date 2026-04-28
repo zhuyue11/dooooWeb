@@ -1320,7 +1320,13 @@
     "groups": "مجموعات",
     "plans": "خطط",
     "targets": "أهداف",
-    "clearAll": "مسح"
+    "clearAll": "مسح",
+    "status": "الحالة",
+    "overdue": "متأخرة",
+    "completed": "مكتملة",
+    "dateRange": "نطاق التاريخ",
+    "from": "من",
+    "to": "إلى"
   },
   "targetPlan": {
     "title": "الهدف والخطة",

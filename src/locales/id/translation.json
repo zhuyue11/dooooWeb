@@ -1320,7 +1320,13 @@
     "groups": "Grup",
     "plans": "Rencana",
     "targets": "Target",
-    "clearAll": "Hapus"
+    "clearAll": "Hapus",
+    "status": "Status",
+    "overdue": "Terlambat",
+    "completed": "Selesai",
+    "dateRange": "Rentang tanggal",
+    "from": "Dari",
+    "to": "Sampai"
   },
   "targetPlan": {
     "title": "Target & Rencana",

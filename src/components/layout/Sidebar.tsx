@@ -125,9 +125,13 @@ function MainSidebarContent({
         />
         {!collapsed && (
           <div className="flex items-center gap-1">
-            <button className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground">
+            <NavLink
+              to="/search"
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
               <Icon name="search" size={20} />
-            </button>
+            </NavLink>
             <NavLink
               to="/notifications"
               onClick={onClose}

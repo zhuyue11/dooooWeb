@@ -1320,7 +1320,13 @@
     "groups": "Grupy",
     "plans": "Plany",
     "targets": "Cele",
-    "clearAll": "Wyczyść"
+    "clearAll": "Wyczyść",
+    "status": "Status",
+    "overdue": "Zaległe",
+    "completed": "Ukończone",
+    "dateRange": "Zakres dat",
+    "from": "Od",
+    "to": "Do"
   },
   "targetPlan": {
     "title": "Cel i Plan",

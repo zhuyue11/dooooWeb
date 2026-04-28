@@ -1320,7 +1320,13 @@
     "groups": "Gruppi",
     "plans": "Piani",
     "targets": "Obiettivi",
-    "clearAll": "Cancella"
+    "clearAll": "Cancella",
+    "status": "Stato",
+    "overdue": "Scaduta",
+    "completed": "Completata",
+    "dateRange": "Intervallo di date",
+    "from": "Da",
+    "to": "A"
   },
   "targetPlan": {
     "title": "Obiettivo e Piano",

@@ -1320,7 +1320,13 @@
     "groups": "Группы",
     "plans": "Планы",
     "targets": "Цели",
-    "clearAll": "Сбросить"
+    "clearAll": "Сбросить",
+    "status": "Статус",
+    "overdue": "Просроченные",
+    "completed": "Завершённые",
+    "dateRange": "Диапазон дат",
+    "from": "С",
+    "to": "По"
   },
   "targetPlan": {
     "title": "Цель и План",

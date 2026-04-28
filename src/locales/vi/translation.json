@@ -1320,7 +1320,13 @@
     "groups": "Nhóm",
     "plans": "Kế hoạch",
     "targets": "Mục tiêu",
-    "clearAll": "Xóa"
+    "clearAll": "Xóa",
+    "status": "Trạng thái",
+    "overdue": "Quá hạn",
+    "completed": "Hoàn thành",
+    "dateRange": "Khoảng ngày",
+    "from": "Từ",
+    "to": "Đến"
   },
   "targetPlan": {
     "title": "Mục tiêu & Kế hoạch",

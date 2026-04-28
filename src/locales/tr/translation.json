@@ -1320,7 +1320,13 @@
     "groups": "Gruplar",
     "plans": "Planlar",
     "targets": "Hedefler",
-    "clearAll": "Temizle"
+    "clearAll": "Temizle",
+    "status": "Durum",
+    "overdue": "Gecikmiş",
+    "completed": "Tamamlanmış",
+    "dateRange": "Tarih aralığı",
+    "from": "Başlangıç",
+    "to": "Bitiş"
   },
   "targetPlan": {
     "title": "Hedef ve Plan",

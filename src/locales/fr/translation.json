@@ -1320,7 +1320,13 @@
     "groups": "Groupes",
     "plans": "Plans",
     "targets": "Objectifs",
-    "clearAll": "Effacer"
+    "clearAll": "Effacer",
+    "status": "Statut",
+    "overdue": "En retard",
+    "completed": "Terminée",
+    "dateRange": "Plage de dates",
+    "from": "Du",
+    "to": "Au"
   },
   "targetPlan": {
     "title": "Objectif et Plan",

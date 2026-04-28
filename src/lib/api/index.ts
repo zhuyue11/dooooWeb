@@ -732,8 +732,52 @@ export async function deleteNotification(id: string): Promise<void> {
 
 // ===== Search =====
 
-export async function searchTasks(params: { query?: string; status?: string; priority?: string; categoryId?: string; fromDate?: string; toDate?: string; page?: number; limit?: number }): Promise<{ tasks: Task[]; total: number }> {
-  const res = await apiClient.get<{ success: boolean; data: { tasks: Task[]; total: number } }>('/api/tasks/search', { params });
+export async function searchTasks(params: {
+  search?: string;
+  priority?: string;
+  categoryId?: string;
+  planId?: string;
+  targetId?: string;
+  groupId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  overdueOnly?: boolean;
+  completedOnly?: boolean;
+  scope: 'personal' | 'group' | 'all';
+}): Promise<Task[]> {
+  const query: Record<string, string> = { scope: params.scope };
+  if (params.search) query.search = params.search;
+  if (params.priority) query.priority = params.priority;
+  if (params.categoryId) query.categoryId = params.categoryId;
+  if (params.planId) query.planId = params.planId;
+  if (params.targetId) query.targetId = params.targetId;
+  if (params.groupId) query.groupId = params.groupId;
+  if (params.dateFrom) query.dateFrom = params.dateFrom;
+  if (params.dateTo) query.dateTo = params.dateTo;
+  if (params.overdueOnly) query.overdueOnly = 'true';
+  if (params.completedOnly) query.completedOnly = 'true';
+
+  const res = await apiClient.get<{ success: boolean; count: number; data: Task[] }>(
+    '/api/tasks/search',
+    { params: query },
+  );
+  return res.data.data;
+}
+
+export async function searchEvents(params: {
+  search?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}): Promise<Event[]> {
+  const query: Record<string, string> = {};
+  if (params.search) query.search = params.search;
+  if (params.dateFrom) query.dateFrom = params.dateFrom;
+  if (params.dateTo) query.dateTo = params.dateTo;
+
+  const res = await apiClient.get<{ success: boolean; count: number; data: Event[] }>(
+    '/api/events/search',
+    { params: query },
+  );
   return res.data.data;
 }
 

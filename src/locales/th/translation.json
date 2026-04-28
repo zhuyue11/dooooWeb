@@ -1320,7 +1320,13 @@
     "groups": "กลุ่ม",
     "plans": "แผน",
     "targets": "เป้าหมาย",
-    "clearAll": "ล้าง"
+    "clearAll": "ล้าง",
+    "status": "สถานะ",
+    "overdue": "เลยกำหนด",
+    "completed": "เสร็จสิ้น",
+    "dateRange": "ช่วงวันที่",
+    "from": "จาก",
+    "to": "ถึง"
   },
   "targetPlan": {
     "title": "เป้าหมายและแผน",

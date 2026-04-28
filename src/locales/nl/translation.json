@@ -1323,7 +1323,13 @@
     "groups": "Groepen",
     "plans": "Plannen",
     "targets": "Doelen",
-    "clearAll": "Wissen"
+    "clearAll": "Wissen",
+    "status": "Status",
+    "overdue": "Achterstallig",
+    "completed": "Voltooid",
+    "dateRange": "Datumbereik",
+    "from": "Van",
+    "to": "Tot"
   },
   "targetPlan": {
     "title": "Doel & Plan",

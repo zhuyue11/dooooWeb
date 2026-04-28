@@ -1326,7 +1326,13 @@
     "groups": "グループ",
     "plans": "プラン",
     "targets": "目標",
-    "clearAll": "クリア"
+    "clearAll": "クリア",
+    "status": "ステータス",
+    "overdue": "期限切れ",
+    "completed": "完了",
+    "dateRange": "日付範囲",
+    "from": "開始",
+    "to": "終了"
   },
   "targetPlan": {
     "title": "目標とプラン",

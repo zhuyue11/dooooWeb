@@ -1446,7 +1446,13 @@
     "groups": "Groups",
     "plans": "Plans",
     "targets": "Targets",
-    "clearAll": "Clear"
+    "clearAll": "Clear",
+    "status": "Status",
+    "overdue": "Overdue",
+    "completed": "Completed",
+    "dateRange": "Date Range",
+    "from": "From",
+    "to": "To"
   },
   "dashboard": {
     "greeting": {
