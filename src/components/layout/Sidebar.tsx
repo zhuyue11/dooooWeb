@@ -128,6 +128,7 @@ function MainSidebarContent({
             <NavLink
               to="/search"
               onClick={onClose}
+              data-testid="sidebar-search-button"
               className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Icon name="search" size={20} />
