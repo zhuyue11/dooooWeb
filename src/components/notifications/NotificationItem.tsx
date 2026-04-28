@@ -1,12 +1,19 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useMarkNotificationAsRead, useDeleteNotification } from '@/hooks/useNotifications';
 import { formatNotificationMessage } from '@/lib/notificationFormatter';
+import { getNotificationRoute } from '@/lib/notificationRoutes';
 import { formatTimeAgo } from '@/lib/timeAgo';
 import { NotificationType } from '@/types/api';
 import type { Notification } from '@/types/api';
+
+const INVITATION_TYPES = new Set([
+  NotificationType.GROUP_INVITATION,
+  NotificationType.PROJECT_INVITATION,
+]);
 
 const ICON_MAP: Partial<Record<NotificationType, { name: string; bg: string; color: string }>> = {
   [NotificationType.TASK_ASSIGNED]: { name: 'assignment', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
@@ -39,6 +46,7 @@ interface NotificationItemProps {
 
 export function NotificationItem({ notification }: NotificationItemProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const markAsRead = useMarkNotificationAsRead();
   const deleteMutation = useDeleteNotification();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -46,10 +54,15 @@ export function NotificationItem({ notification }: NotificationItemProps) {
   const { title, message } = formatNotificationMessage(notification, t);
   const timeAgo = formatTimeAgo(notification.createdAt, t);
   const icon = ICON_MAP[notification.type] || DEFAULT_ICON;
+  const route = getNotificationRoute(notification);
+  const isPendingInvitation = INVITATION_TYPES.has(notification.type);
 
   function handleClick() {
     if (!notification.isRead) {
       markAsRead.mutate(notification.id);
+    }
+    if (route) {
+      navigate(route);
     }
   }
 
@@ -92,17 +105,24 @@ export function NotificationItem({ notification }: NotificationItemProps) {
             <span className="mt-1 block text-xs text-muted-foreground/70">{timeAgo}</span>
           </div>
 
-          {/* Delete button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDeleteConfirm(true);
-            }}
-            className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
-          >
-            <Icon name="close" size={16} />
-          </button>
+          {/* Navigable indicator */}
+          {route && (
+            <Icon name="chevron_right" size={16} className="shrink-0 text-muted-foreground/50" />
+          )}
+
+          {/* Delete button — hidden for pending invitations */}
+          {!isPendingInvitation && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDeleteConfirm(true);
+              }}
+              className="shrink-0 rounded p-1 text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+            >
+              <Icon name="close" size={16} />
+            </button>
+          )}
         </div>
       </div>
 

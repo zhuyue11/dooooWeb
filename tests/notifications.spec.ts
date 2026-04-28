@@ -1,10 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 /**
- * Phase 3.8 — Notification page & group invitation E2E tests.
+ * Phase 3.8 + 5.2 — Notification page, group invitation, & notification actions E2E tests.
  *
  * Tests the notification inbox page structure, tab switching, empty states,
  * navigation, and the notification badge in the sidebar/header.
+ * Phase 5.2 adds: click-to-navigate, delete button hiding for invitations,
+ * and chevron indicator for navigable notifications (using mocked data).
  *
  * The logged-in user (web@doooo.co) is the group OWNER, so they send
  * invitations but don't receive GROUP_INVITATION notifications themselves.
@@ -14,6 +16,87 @@ import { test, expect } from '@playwright/test';
  * Tests run in serial mode because later tests depend on state from earlier
  * ones (e.g., creating invitations that generate notifications).
  */
+
+// ── Mock notification data for Phase 5.2 tests ──
+
+const MOCK_TASK_ID = 'mock-task-id-001';
+const MOCK_EVENT_ID = 'mock-event-id-001';
+const MOCK_GROUP_ID = 'mock-group-id-001';
+
+const MOCK_NOTIFICATIONS = [
+  {
+    id: 'notif-task-assigned',
+    type: 'TASK_ASSIGNED',
+    isRead: false,
+    data: { taskId: MOCK_TASK_ID, taskTitle: 'Review docs', assignedByUserId: 'u1', assignedByName: 'Alice' },
+    createdAt: new Date().toISOString(),
+    readAt: null,
+  },
+  {
+    id: 'notif-event-updated',
+    type: 'EVENT_UPDATED',
+    isRead: true,
+    data: { eventId: MOCK_EVENT_ID, eventTitle: 'Team standup', updatedByUserId: 'u2' },
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    readAt: new Date().toISOString(),
+  },
+  {
+    id: 'notif-group-member-joined',
+    type: 'GROUP_MEMBER_JOINED',
+    isRead: true,
+    data: { groupId: MOCK_GROUP_ID, groupName: 'Project Alpha', newMemberId: 'u3', newMemberName: 'Bob' },
+    createdAt: new Date(Date.now() - 7200000).toISOString(),
+    readAt: new Date().toISOString(),
+  },
+  {
+    id: 'notif-group-invitation',
+    type: 'GROUP_INVITATION',
+    isRead: false,
+    data: { groupId: 'g2', groupName: 'Beta Team', invitedByUserId: 'u4', invitedByName: 'Carol', role: 'MEMBER', invitationId: 'inv-001' },
+    createdAt: new Date(Date.now() - 10800000).toISOString(),
+    readAt: null,
+  },
+  {
+    id: 'notif-daily-digest',
+    type: 'DAILY_DIGEST',
+    isRead: true,
+    data: { type: 'daily', summary: { total: 5, byType: {} } },
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+    readAt: new Date().toISOString(),
+  },
+];
+
+/** Set up route mocks for notification API endpoints with mock data. */
+async function setupNotificationMocks(page: Page) {
+  await page.route('**/api/notifications', (route) => {
+    if (route.request().method() === 'GET') {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: MOCK_NOTIFICATIONS }),
+      });
+    } else {
+      route.continue();
+    }
+  });
+
+  await page.route('**/api/notifications/unread-count', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { count: 2 } }),
+    });
+  });
+
+  // Mark as read — just succeed
+  await page.route('**/api/notifications/*/read', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true }),
+    });
+  });
+}
 
 test.describe('Notification page', () => {
   test.describe.configure({ mode: 'serial' });
@@ -196,5 +279,118 @@ test.describe('Invitation card via group members flow', () => {
       // Pending section should disappear
       await expect(page.getByTestId('pending-invitations-section')).not.toBeVisible({ timeout: 5000 });
     }
+  });
+});
+
+// ── Phase 5.2 — Notification actions (mocked data) ──
+
+test.describe('Notification actions — click-to-navigate', () => {
+  test('clicking a task notification navigates to /items/:taskId', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    // Switch to All tab to see all mocked notifications
+    await page.getByTestId('tab-all').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // Click the TASK_ASSIGNED notification
+    await page.getByTestId('notification-item-notif-task-assigned').click();
+
+    // Should navigate to the task item view
+    await expect(page).toHaveURL(`/items/${MOCK_TASK_ID}`);
+  });
+
+  test('clicking an event notification navigates to /items/:eventId?type=event', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    await page.getByTestId('tab-all').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // Click the EVENT_UPDATED notification
+    await page.getByTestId('notification-item-notif-event-updated').click();
+
+    // Should navigate to the event item view with type=event
+    await expect(page).toHaveURL(`/items/${MOCK_EVENT_ID}?type=event`);
+  });
+
+  test('clicking a group member notification navigates to /groups/:groupId', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    await page.getByTestId('tab-all').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // Click the GROUP_MEMBER_JOINED notification
+    await page.getByTestId('notification-item-notif-group-member-joined').click();
+
+    // Should navigate to the group detail (redirects to /groups/:groupId/tasks)
+    await expect(page).toHaveURL(new RegExp(`/groups/${MOCK_GROUP_ID}`));
+  });
+});
+
+test.describe('Notification actions — chevron indicator', () => {
+  test('navigable notifications show chevron, non-navigable do not', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    await page.getByTestId('tab-all').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // Task notification (navigable) — should have chevron
+    const taskItem = page.getByTestId('notification-item-notif-task-assigned');
+    await expect(taskItem.locator('span:has-text("chevron_right")')).toBeVisible();
+
+    // Event notification (navigable) — should have chevron
+    const eventItem = page.getByTestId('notification-item-notif-event-updated');
+    await expect(eventItem.locator('span:has-text("chevron_right")')).toBeVisible();
+
+    // Group member notification (navigable) — should have chevron
+    const groupItem = page.getByTestId('notification-item-notif-group-member-joined');
+    await expect(groupItem.locator('span:has-text("chevron_right")')).toBeVisible();
+
+    // Daily digest (non-navigable) — should NOT have chevron
+    const digestItem = page.getByTestId('notification-item-notif-daily-digest');
+    await expect(digestItem.locator('span:has-text("chevron_right")')).not.toBeVisible();
+  });
+});
+
+test.describe('Notification actions — delete button hiding', () => {
+  test('invitation cards do not show delete button', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    // Switch to Invitations tab where GROUP_INVITATION renders as GroupInvitationCard
+    await page.getByTestId('tab-invitations').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // GroupInvitationCard should have Accept/Decline but no close/delete button
+    const invitationCard = page.getByTestId('invitation-card-notif-group-invitation');
+    await expect(invitationCard).toBeVisible();
+    await expect(invitationCard.getByTestId('accept-invitation-button')).toBeVisible();
+    await expect(invitationCard.getByTestId('decline-invitation-button')).toBeVisible();
+
+    // No close/delete icon button (the icon text "close" should not appear)
+    await expect(invitationCard.locator('button:has(span:has-text("close"))')).not.toBeVisible();
+  });
+
+  test('regular notifications show delete button on hover', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/notifications');
+    await expect(page.getByTestId('notifications-heading')).toBeVisible({ timeout: 10000 });
+
+    await page.getByTestId('tab-all').click();
+    await expect(page.getByTestId('notifications-list')).toBeVisible({ timeout: 5000 });
+
+    // Task notification should have a delete button (visible on hover via CSS)
+    const taskItem = page.getByTestId('notification-item-notif-task-assigned');
+    const deleteButton = taskItem.locator('button:has(span:has-text("close"))');
+    // Button exists in DOM even if opacity-0 before hover
+    await expect(deleteButton).toBeAttached();
   });
 });
