@@ -14,6 +14,12 @@ dooooWeb uses an element-specific color token system where every UI element has 
 - [x] Default light mode tokens defined (`:root` in `element-tokens.css`)
 - [x] Default dark mode tokens defined (`[data-theme="dark"]` in `element-tokens.css`)
 - [x] Earth palette fully documented with design system color references (`palettes/earth.css`) — **reference implementation**
+- [x] Warm palette fully documented with Clay design system colors (`palettes/warm.css`) — light + dark
+- [x] Fresh palette complete (`palettes/fresh.css`) — light + dark
+- [x] Ocean palette complete (`palettes/ocean.css`) — light + dark
+- [x] Yellow palette complete (`palettes/yellow.css`) — light + dark
+- [x] Pink palette complete (`palettes/pink.css`) — light + dark
+- [x] All 6 palettes have both light and dark mode variants
 - [x] Button, Card, Input, Toast components migrated to `--el-*` tokens
 - [x] File structure: `element-tokens.css` (defaults) + `palettes/{name}.css` (per palette)
 
@@ -29,11 +35,11 @@ Each palette file needs the same treatment as `earth.css`:
 | File | Source Design System | Status |
 |------|---------------------|--------|
 | `palettes/earth.css` | Starbucks DESIGN.md | ✅ Complete — reference |
-| `palettes/warm.css` | Clay DESIGN.md | ❌ Header done, needs full rewrite |
-| `palettes/fresh.css` | Mintlify DESIGN.md | ❌ Needs full rewrite |
-| `palettes/ocean.css` | Original doooo theme | ❌ Needs full rewrite |
-| `palettes/yellow.css` | Original doooo theme | ❌ Needs full rewrite |
-| `palettes/pink.css` | Original doooo theme | ❌ Needs full rewrite |
+| `palettes/warm.css` | Clay DESIGN.md | ✅ Complete — light + dark, documented |
+| `palettes/fresh.css` | Mintlify DESIGN.md | ✅ Complete — light + dark |
+| `palettes/ocean.css` | Original doooo theme | ✅ Complete — light + dark |
+| `palettes/yellow.css` | Original doooo theme | ✅ Complete — light + dark |
+| `palettes/pink.css` | Original doooo theme | ✅ Complete — light + dark |
 
 **How to write a palette file:**
 1. Read the DESIGN.md from `/tmp/design-md-explore/{name}/DESIGN.md`

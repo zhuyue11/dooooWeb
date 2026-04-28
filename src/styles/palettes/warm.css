@@ -51,4 +51,624 @@
  * ───────────────────────────────────────────────────────────────────────
  */
 
-/* (token assignments truncated for context — see full file) */
+/* ── Light Mode ── */
+
+[data-palette="warm"] {
+  /* Layout */
+  --el-page-bg: #fffaf0;                /* Canvas */
+  --el-page-text: #3a3a3a;              /* Body */
+  --el-logo-fill: #ff4d8b;              /* Brand Pink */
+
+  /* Sidebar */
+  --el-sidebar-bg: #faf5e8;             /* Surface Soft */
+  --el-sidebar-border: #ebe6d6;         /* Surface Strong */
+  --el-sidebar-item-text: #6a6a6a;      /* Muted */
+  --el-sidebar-item-hover-bg: #f5f0e0;  /* Surface Card */
+  --el-sidebar-item-hover-text: #3a3a3a; /* Body */
+  --el-sidebar-item-active-bg: rgba(255,77,139,0.1); /* Brand Pink tint */
+  --el-sidebar-item-active-text: #ff4d8b; /* Brand Pink */
+  --el-sidebar-item-icon: #6a6a6a;      /* Muted */
+  --el-sidebar-item-active-icon: #ff4d8b; /* Brand Pink */
+  --el-sidebar-badge-bg: #ff6b5a;       /* Brand Coral */
+  --el-sidebar-badge-text: #ffffff;     /* On Primary */
+  --el-sidebar-avatar-bg: #ff4d8b;      /* Brand Pink */
+  --el-sidebar-avatar-text: #ffffff;    /* On Primary */
+  --el-sidebar-group-dot: #ff4d8b;      /* Brand Pink */
+  --el-sidebar-handle-bg: #faf5e8;      /* Surface Soft */
+  --el-sidebar-handle-border: #ebe6d6;  /* Surface Strong */
+  --el-sidebar-footer-border: #ebe6d6;  /* Surface Strong */
+
+  /* Header */
+  --el-header-bg: #faf5e8;              /* Surface Soft */
+  --el-header-border: #ebe6d6;          /* Surface Strong */
+  --el-header-text: #1a1a1a;            /* Body Strong */
+  --el-header-icon: #6a6a6a;            /* Muted */
+  --el-header-icon-hover-bg: #f5f0e0;   /* Surface Card */
+  --el-header-badge-bg: #ff6b5a;        /* Brand Coral */
+  --el-header-badge-text: #ffffff;      /* On Primary */
+
+  /* Calendar */
+  --el-cal-title: #1a1a1a;              /* Body Strong */
+  --el-cal-date-label: #6a6a6a;         /* Muted */
+  --el-cal-nav-border: #ebe6d6;         /* Surface Strong */
+  --el-cal-nav-text: #3a3a3a;           /* Body */
+  --el-cal-nav-hover-bg: #f5f0e0;       /* Surface Card */
+  --el-cal-switcher-bg: #f5f0e0;        /* Surface Card */
+  --el-cal-tab-active-bg: #faf5e8;      /* Surface Soft */
+  --el-cal-tab-active-text: #1a1a1a;    /* Body Strong */
+  --el-cal-tab-inactive-text: #6a6a6a;  /* Muted */
+  --el-cal-add-btn-bg: #0a0a0a;         /* Ink */
+  --el-cal-add-btn-text: #ffffff;       /* On Primary */
+  --el-cal-today-border: #ebe6d6;       /* Surface Strong */
+  --el-cal-today-text: #1a1a1a;         /* Body Strong */
+  --el-cal-grid-bg: #faf5e8;            /* Surface Soft */
+  --el-cal-grid-border: #ebe6d6;        /* Surface Strong */
+  --el-cal-day-header: #9a9a9a;         /* Muted Soft */
+  --el-cal-date-selected-bg: #0a0a0a;   /* Ink */
+  --el-cal-date-selected-text: #ffffff; /* On Primary */
+  --el-cal-date-today-border: #ff4d8b;  /* Brand Pink */
+  --el-cal-date-today-text: #ff4d8b;    /* Brand Pink */
+  --el-cal-date-normal: #3a3a3a;        /* Body */
+  --el-cal-date-other: #9a9a9a;         /* Muted Soft */
+  --el-cal-current-hour-bg: rgba(255,77,139,0.05); /* Brand Pink tint */
+  --el-cal-hour-label: #9a9a9a;         /* Muted Soft */
+  --el-cal-hour-label-current: #ff4d8b; /* Brand Pink */
+  --el-cal-more-items: #6a6a6a;         /* Muted */
+  --el-cal-task-bg: rgba(255,77,139,0.1); /* Brand Pink tint */
+  --el-cal-task-text: #ff4d8b;          /* Brand Pink */
+  --el-cal-event-bg: rgba(184,164,237,0.15); /* Brand Lavender tint */
+  --el-cal-event-text: #8b72d4;         /* Brand Lavender darkened */
+
+  /* Item Row */
+  --el-item-bg: transparent;
+  --el-item-completed-bg: #f5f0e0;      /* Surface Card */
+  --el-item-title: #3a3a3a;             /* Body */
+  --el-item-title-completed: #9a9a9a;   /* Muted Soft */
+  --el-item-details: #6a6a6a;           /* Muted */
+  --el-item-checkbox-border: #0a0a0a;   /* Ink */
+  --el-item-checkbox-bg: #0a0a0a;       /* Ink */
+  --el-item-checkbox-mark: #ffffff;     /* On Primary */
+  --el-item-priority-high: #ff6b5a;     /* Brand Coral */
+  --el-item-priority-normal: #e8b94a;   /* Brand Ochre */
+  --el-item-group-border: #b8a4ed;      /* Brand Lavender */
+  --el-item-group-text: #8b72d4;        /* Brand Lavender darkened */
+  --el-item-plan-border: #ff4d8b;       /* Brand Pink */
+  --el-item-plan-text: #ff4d8b;         /* Brand Pink */
+  --el-item-invited-bg: rgba(232,185,74,0.15); /* Brand Ochre tint */
+  --el-item-invited-text: #c49a2e;      /* Brand Ochre darkened */
+  --el-item-declined-bg: rgba(255,107,90,0.1); /* Brand Coral tint */
+  --el-item-declined-text: #ff6b5a;     /* Brand Coral */
+  --el-item-confirmed-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
+  --el-item-confirmed-text: #3a9478;    /* Brand Mint darkened */
+  --el-item-activity-bg: rgba(255,77,139,0.08); /* Brand Pink tint */
+  --el-item-activity-text: #ff4d8b;     /* Brand Pink */
+  --el-item-meta-icon: #9a9a9a;         /* Muted Soft */
+  --el-item-organizer-icon: #e8b94a;    /* Brand Ochre */
+
+  /* Item Side Panel */
+  --el-panel-bg: #faf5e8;               /* Surface Soft */
+  --el-panel-border: #ebe6d6;           /* Surface Strong */
+  --el-panel-header-border: #ebe6d6;    /* Surface Strong */
+  --el-panel-title: #1a1a1a;            /* Body Strong */
+  --el-panel-title-completed: #9a9a9a;  /* Muted Soft */
+  --el-panel-icon-btn: #6a6a6a;         /* Muted */
+  --el-panel-icon-hover-bg: #f5f0e0;    /* Surface Card */
+  --el-panel-detail-label: #6a6a6a;     /* Muted */
+  --el-panel-detail-value: #3a3a3a;     /* Body */
+  --el-panel-separator: #ebe6d6;        /* Surface Strong */
+  --el-panel-description: #3a3a3a;      /* Body */
+  --el-panel-guest-bg: #f5f0e0;         /* Surface Card */
+  --el-panel-guest-text: #3a3a3a;       /* Body */
+  --el-panel-priority-high-bg: rgba(255,107,90,0.1); /* Brand Coral tint */
+  --el-panel-priority-high-text: #ff6b5a; /* Brand Coral */
+  --el-panel-priority-normal-bg: rgba(232,185,74,0.12); /* Brand Ochre tint */
+  --el-panel-priority-normal-text: #e8b94a; /* Brand Ochre */
+
+  /* Modals & Forms */
+  --el-modal-overlay: rgba(0,0,0,0.50);
+  --el-modal-bg: #faf5e8;               /* Surface Soft */
+  --el-modal-title-text: #1a1a1a;       /* Body Strong */
+  --el-modal-title-placeholder: #9a9a9a; /* Muted Soft */
+  --el-modal-type-active-bg: #0a0a0a;   /* Ink */
+  --el-modal-type-active-text: #ffffff; /* On Primary */
+  --el-modal-type-inactive-text: #6a6a6a; /* Muted */
+  --el-modal-schedule-border: #ebe6d6;  /* Surface Strong */
+  --el-modal-icon-selected: #ff4d8b;    /* Brand Pink */
+  --el-modal-icon-unselected: #9a9a9a;  /* Muted Soft */
+  --el-modal-save-bg: #0a0a0a;          /* Ink */
+  --el-modal-save-text: #ffffff;        /* On Primary */
+  --el-modal-cancel-border: #ebe6d6;    /* Surface Strong */
+  --el-modal-cancel-text: #3a3a3a;      /* Body */
+  --el-editor-card-bg: #faf5e8;         /* Surface Soft */
+  --el-editor-field-label: #6a6a6a;     /* Muted */
+  --el-editor-field-value: #3a3a3a;     /* Body */
+  --el-editor-tag-bg: #f5f0e0;          /* Surface Card */
+  --el-editor-tag-text: #3a3a3a;        /* Body */
+  --el-editor-error: #ef4444;           /* Error */
+  --el-view-title: #1a1a1a;             /* Body Strong */
+  --el-view-description: #3a3a3a;       /* Body */
+  --el-view-detail-label: #6a6a6a;      /* Muted */
+  --el-view-detail-value: #3a3a3a;      /* Body */
+  --el-view-edit-border: #ebe6d6;       /* Surface Strong */
+  --el-view-edit-text: #3a3a3a;         /* Body */
+  --el-view-delete-border: #ebe6d6;     /* Surface Strong */
+  --el-view-delete-text: #ef4444;       /* Error */
+
+  /* Buttons */
+  --el-btn-primary-bg: #0a0a0a;         /* Ink */
+  --el-btn-primary-text: #ffffff;       /* On Primary */
+  --el-btn-primary-hover: #1f1f1f;      /* Ink Active */
+  --el-btn-secondary-bg: #ff4d8b;       /* Brand Pink */
+  --el-btn-secondary-text: #ffffff;     /* On Primary */
+  --el-btn-destructive-bg: #ef4444;     /* Error */
+  --el-btn-destructive-text: #ffffff;   /* On Primary */
+  --el-btn-ghost-text: #3a3a3a;         /* Body */
+  --el-btn-ghost-hover: #f5f0e0;        /* Surface Card */
+  --el-btn-outline-border: #ebe6d6;     /* Surface Strong */
+  --el-btn-outline-text: #3a3a3a;       /* Body */
+  --el-btn-outline-hover: #f5f0e0;      /* Surface Card */
+
+  /* Inputs */
+  --el-input-bg: #fffaf0;               /* Canvas */
+  --el-input-text: #3a3a3a;             /* Body */
+  --el-input-placeholder: #9a9a9a;      /* Muted Soft */
+  --el-input-border: #ebe6d6;           /* Surface Strong */
+  --el-input-focus: #ff4d8b;            /* Brand Pink */
+  --el-input-error-border: #ef4444;     /* Error */
+  --el-input-error-text: #ef4444;       /* Error */
+  --el-input-label: #3a3a3a;            /* Body */
+
+  /* Cards */
+  --el-card-bg: #faf5e8;                /* Surface Soft */
+  --el-card-border: #ebe6d6;            /* Surface Strong */
+
+  /* Toast */
+  --el-toast-success-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
+  --el-toast-success-border: #a4d4c5;   /* Brand Mint */
+  --el-toast-success-icon: #3a9478;     /* Brand Mint darkened */
+  --el-toast-error-bg: rgba(255,107,90,0.1); /* Brand Coral tint */
+  --el-toast-error-border: #ff6b5a;     /* Brand Coral */
+  --el-toast-error-icon: #ff6b5a;       /* Brand Coral */
+  --el-toast-info-bg: rgba(184,164,237,0.12); /* Brand Lavender tint */
+  --el-toast-info-border: #b8a4ed;      /* Brand Lavender */
+  --el-toast-info-icon: #8b72d4;        /* Brand Lavender darkened */
+  --el-toast-text: #3a3a3a;             /* Body */
+  --el-toast-close: #9a9a9a;            /* Muted Soft */
+
+  /* Confirm Dialog */
+  --el-dialog-overlay: rgba(0,0,0,0.30);
+  --el-dialog-bg: #faf5e8;              /* Surface Soft */
+  --el-dialog-title: #1a1a1a;           /* Body Strong */
+  --el-dialog-description: #6a6a6a;     /* Muted */
+  --el-dialog-confirm-bg: #ef4444;      /* Error */
+  --el-dialog-confirm-text: #ffffff;    /* On Primary */
+  --el-dialog-cancel-border: #ebe6d6;   /* Surface Strong */
+  --el-dialog-cancel-text: #3a3a3a;     /* Body */
+
+  /* Popovers */
+  --el-popover-bg: #faf5e8;             /* Surface Soft */
+  --el-popover-border: #ebe6d6;         /* Surface Strong */
+  --el-popover-item-text: #3a3a3a;      /* Body */
+  --el-popover-item-hover: #f5f0e0;     /* Surface Card */
+  --el-popover-item-selected-bg: #f5f0e0; /* Surface Card */
+  --el-popover-check: #ff4d8b;          /* Brand Pink */
+  --el-popover-apply-bg: #0a0a0a;       /* Ink */
+  --el-popover-apply-text: #ffffff;     /* On Primary */
+
+  /* Switch */
+  --el-switch-active: #ff4d8b;          /* Brand Pink */
+  --el-switch-inactive: #f5f0e0;        /* Surface Card */
+  --el-switch-thumb: #ffffff;           /* On Primary */
+
+  /* Targets & Plans */
+  --el-target-bg: #faf5e8;              /* Surface Soft */
+  --el-target-title: #1a1a1a;           /* Body Strong */
+  --el-target-description: #6a6a6a;     /* Muted */
+  --el-target-chevron: #ff4d8b;         /* Brand Pink */
+  --el-target-status-active-bg: rgba(255,77,139,0.1); /* Brand Pink tint */
+  --el-target-status-active-text: #ff4d8b; /* Brand Pink */
+  --el-target-status-complete-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
+  --el-target-status-complete-text: #3a9478; /* Brand Mint darkened */
+  --el-target-status-archived-bg: #f5f0e0; /* Surface Card */
+  --el-target-status-archived-text: #9a9a9a; /* Muted Soft */
+  --el-plan-bg: #faf5e8;                /* Surface Soft */
+  --el-plan-title: #1a1a1a;             /* Body Strong */
+  --el-plan-description: #6a6a6a;       /* Muted */
+  --el-plan-chevron: #ff4d8b;           /* Brand Pink */
+  --el-plan-progress-bar: #ff4d8b;      /* Brand Pink */
+  --el-plan-progress-track: #ebe6d6;    /* Surface Strong */
+  --el-plan-progress-text: #6a6a6a;     /* Muted */
+
+  /* Groups */
+  --el-group-bg: #faf5e8;               /* Surface Soft */
+  --el-group-title: #1a1a1a;            /* Body Strong */
+  --el-group-description: #6a6a6a;      /* Muted */
+  --el-group-star-filled: #e8b94a;      /* Brand Ochre */
+  --el-group-star-empty: #9a9a9a;       /* Muted Soft */
+  --el-group-member-icon: #6a6a6a;      /* Muted */
+  --el-group-member-text: #6a6a6a;      /* Muted */
+  --el-group-badge-bg: #0a0a0a;         /* Ink */
+  --el-group-badge-text: #ffffff;       /* On Primary */
+  --el-group-owner-border: #ebe6d6;     /* Surface Strong */
+  --el-group-owner-text: #6a6a6a;       /* Muted */
+
+  /* Chat */
+  --el-chat-own-bg: #0a0a0a;            /* Ink */
+  --el-chat-own-text: #ffffff;          /* On Primary */
+  --el-chat-other-bg: #f5f0e0;          /* Surface Card */
+  --el-chat-other-text: #3a3a3a;        /* Body */
+  --el-chat-avatar-bg: #ff4d8b;         /* Brand Pink */
+  --el-chat-avatar-text: #ffffff;       /* On Primary */
+  --el-chat-sender: #ff4d8b;            /* Brand Pink */
+  --el-chat-timestamp: #9a9a9a;         /* Muted Soft */
+  --el-ai-msg-bg: #faf5e8;              /* Surface Soft */
+  --el-ai-msg-text: #3a3a3a;            /* Body */
+  --el-ai-user-bg: #0a0a0a;             /* Ink */
+  --el-ai-user-text: #ffffff;           /* On Primary */
+  --el-ai-session-bg: rgba(255,77,139,0.08); /* Brand Pink tint */
+  --el-ai-session-text: #ff4d8b;        /* Brand Pink */
+
+  /* Notifications */
+  --el-notif-unread-bg: rgba(255,77,139,0.05); /* Brand Pink tint */
+  --el-notif-unread-border: rgba(255,77,139,0.15); /* Brand Pink tint */
+  --el-notif-read-bg: #faf5e8;          /* Surface Soft */
+  --el-notif-read-border: #ebe6d6;      /* Surface Strong */
+  --el-notif-title: #1a1a1a;            /* Body Strong */
+  --el-notif-message: #6a6a6a;          /* Muted */
+  --el-notif-time: rgba(154,154,154,0.7); /* Muted Soft faded */
+  --el-notif-dot: #ff4d8b;              /* Brand Pink */
+  --el-notif-task-bg: rgba(255,77,139,0.1); /* Brand Pink tint */
+  --el-notif-task-color: #ff4d8b;       /* Brand Pink */
+  --el-notif-success-bg: rgba(164,212,197,0.2); /* Brand Mint tint */
+  --el-notif-success-color: #3a9478;    /* Brand Mint darkened */
+  --el-notif-warning-bg: rgba(232,185,74,0.15); /* Brand Ochre tint */
+  --el-notif-warning-color: #c49a2e;    /* Brand Ochre darkened */
+  --el-notif-danger-bg: rgba(255,107,90,0.12); /* Brand Coral tint */
+  --el-notif-danger-color: #ff6b5a;     /* Brand Coral */
+  --el-notif-neutral-bg: #f5f0e0;       /* Surface Card */
+  --el-notif-neutral-color: #6a6a6a;    /* Muted */
+  --el-notif-event-bg: rgba(184,164,237,0.12); /* Brand Lavender tint */
+  --el-notif-event-color: #8b72d4;      /* Brand Lavender darkened */
+  --el-invite-accept-bg: #0a0a0a;       /* Ink */
+  --el-invite-accept-text: #ffffff;     /* On Primary */
+  --el-invite-decline-border: #ebe6d6;  /* Surface Strong */
+  --el-invite-decline-text: #3a3a3a;    /* Body */
+  --el-role-admin-bg: rgba(255,107,90,0.1); /* Brand Coral tint */
+  --el-role-admin-text: #ff6b5a;        /* Brand Coral */
+  --el-role-member-bg: rgba(184,164,237,0.12); /* Brand Lavender tint */
+  --el-role-member-text: #8b72d4;       /* Brand Lavender darkened */
+  --el-role-viewer-bg: #f5f0e0;         /* Surface Card */
+  --el-role-viewer-text: #9a9a9a;       /* Muted Soft */
+
+  /* Auth */
+  --el-auth-card-bg: #faf5e8;           /* Surface Soft */
+  --el-auth-title: #1a1a1a;             /* Body Strong */
+  --el-auth-subtitle: #6a6a6a;          /* Muted */
+  --el-auth-input-bg: #fffaf0;          /* Canvas */
+  --el-auth-input-border: #ebe6d6;      /* Surface Strong */
+  --el-auth-input-focus: #ff4d8b;       /* Brand Pink */
+  --el-auth-submit-bg: #0a0a0a;         /* Ink */
+  --el-auth-submit-text: #ffffff;       /* On Primary */
+  --el-auth-link: #ff4d8b;              /* Brand Pink */
+  --el-auth-google-bg: #faf5e8;         /* Surface Soft */
+  --el-auth-google-border: #ebe6d6;     /* Surface Strong */
+  --el-auth-google-text: #3a3a3a;       /* Body */
+  --el-auth-apple-bg: #0a0a0a;          /* Ink */
+  --el-auth-apple-text: #ffffff;        /* On Primary */
+  --el-auth-divider: #ebe6d6;           /* Surface Strong */
+  --el-auth-divider-text: #9a9a9a;      /* Muted Soft */
+  --el-auth-error: #ef4444;             /* Error */
+
+  /* Settings */
+  --el-settings-bg: #faf5e8;            /* Surface Soft */
+  --el-settings-border: #ebe6d6;        /* Surface Strong */
+  --el-settings-label: #6a6a6a;         /* Muted */
+  --el-settings-selected-border: #ff4d8b; /* Brand Pink */
+  --el-settings-selected-bg: rgba(255,77,139,0.05); /* Brand Pink tint */
+  --el-settings-unselected-border: #ebe6d6; /* Surface Strong */
+  --el-settings-hover: #f5f0e0;         /* Surface Card */
+  --el-settings-check: #ff4d8b;         /* Brand Pink */
+}
+
+/* ── Dark Mode ──
+ * Uses Surface Dark (#0a1a1a) as base, Surface Dark Elevated (#1a2a2a)
+ * as cards/panels, Brand Pink brightened to #ff6b9d for interactive,
+ * Brand Lavender stays vibrant, On Dark (#ffffff) for primary text.
+ */
+
+[data-palette="warm"][data-theme="dark"] {
+  --el-page-bg: #0a1a1a;               /* Surface Dark */
+  --el-page-text: #ffffff;              /* On Dark */
+  --el-logo-fill: #ff6b9d;             /* Brand Pink brightened */
+
+  --el-sidebar-bg: #1a2a2a;            /* Surface Dark Elev */
+  --el-sidebar-border: #2a3a3a;
+  --el-sidebar-item-text: #a0a0a0;      /* On Dark Soft */
+  --el-sidebar-item-hover-bg: #2a3a3a;
+  --el-sidebar-item-hover-text: #ffffff;
+  --el-sidebar-item-active-bg: rgba(255,107,157,0.12);
+  --el-sidebar-item-active-text: #ff6b9d;
+  --el-sidebar-item-icon: #a0a0a0;
+  --el-sidebar-item-active-icon: #ff6b9d;
+  --el-sidebar-badge-bg: #ff6b5a;       /* Brand Coral */
+  --el-sidebar-badge-text: #ffffff;
+  --el-sidebar-avatar-bg: #ff6b9d;
+  --el-sidebar-avatar-text: #0a1a1a;
+  --el-sidebar-group-dot: #ff6b9d;
+  --el-sidebar-handle-bg: #1a2a2a;
+  --el-sidebar-handle-border: #2a3a3a;
+  --el-sidebar-footer-border: #2a3a3a;
+
+  --el-header-bg: #1a2a2a;
+  --el-header-border: #2a3a3a;
+  --el-header-text: #ffffff;
+  --el-header-icon: #a0a0a0;
+  --el-header-icon-hover-bg: #2a3a3a;
+  --el-header-badge-bg: #ff6b5a;
+  --el-header-badge-text: #ffffff;
+
+  --el-cal-title: #ffffff;
+  --el-cal-date-label: #a0a0a0;
+  --el-cal-nav-border: #2a3a3a;
+  --el-cal-nav-text: #ffffff;
+  --el-cal-nav-hover-bg: #2a3a3a;
+  --el-cal-switcher-bg: #2a3a3a;
+  --el-cal-tab-active-bg: #1a2a2a;
+  --el-cal-tab-active-text: #ffffff;
+  --el-cal-tab-inactive-text: #a0a0a0;
+  --el-cal-add-btn-bg: #ffffff;
+  --el-cal-add-btn-text: #0a1a1a;
+  --el-cal-today-border: #2a3a3a;
+  --el-cal-today-text: #ffffff;
+  --el-cal-grid-bg: #1a2a2a;
+  --el-cal-grid-border: #2a3a3a;
+  --el-cal-day-header: #a0a0a0;
+  --el-cal-date-selected-bg: #ffffff;
+  --el-cal-date-selected-text: #0a1a1a;
+  --el-cal-date-today-border: #ff6b9d;
+  --el-cal-date-today-text: #ff6b9d;
+  --el-cal-date-normal: #ffffff;
+  --el-cal-date-other: #a0a0a0;
+  --el-cal-current-hour-bg: rgba(255,107,157,0.06);
+  --el-cal-hour-label: #a0a0a0;
+  --el-cal-hour-label-current: #ff6b9d;
+  --el-cal-more-items: #a0a0a0;
+  --el-cal-task-bg: rgba(255,107,157,0.15);
+  --el-cal-task-text: #ff6b9d;
+  --el-cal-event-bg: rgba(184,164,237,0.15);
+  --el-cal-event-text: #c4b5fd;         /* Brand Lavender brightened */
+
+  --el-item-bg: transparent;
+  --el-item-completed-bg: #2a3a3a;
+  --el-item-title: #ffffff;
+  --el-item-title-completed: #a0a0a0;
+  --el-item-details: #a0a0a0;
+  --el-item-checkbox-border: #ffffff;
+  --el-item-checkbox-bg: #ffffff;
+  --el-item-checkbox-mark: #0a1a1a;
+  --el-item-priority-high: #ff6b5a;
+  --el-item-priority-normal: #e8b94a;
+  --el-item-group-border: #c4b5fd;
+  --el-item-group-text: #c4b5fd;
+  --el-item-plan-border: #ff6b9d;
+  --el-item-plan-text: #ff6b9d;
+  --el-item-invited-bg: rgba(232,185,74,0.2);
+  --el-item-invited-text: #e8b94a;
+  --el-item-declined-bg: rgba(255,107,90,0.15);
+  --el-item-declined-text: #ff6b5a;
+  --el-item-confirmed-bg: rgba(164,212,197,0.15);
+  --el-item-confirmed-text: #a4d4c5;
+  --el-item-activity-bg: rgba(255,107,157,0.1);
+  --el-item-activity-text: #ff6b9d;
+  --el-item-meta-icon: #a0a0a0;
+  --el-item-organizer-icon: #e8b94a;
+
+  --el-panel-bg: #1a2a2a;
+  --el-panel-border: #2a3a3a;
+  --el-panel-header-border: #2a3a3a;
+  --el-panel-title: #ffffff;
+  --el-panel-title-completed: #a0a0a0;
+  --el-panel-icon-btn: #a0a0a0;
+  --el-panel-icon-hover-bg: #2a3a3a;
+  --el-panel-detail-label: #a0a0a0;
+  --el-panel-detail-value: #ffffff;
+  --el-panel-separator: #2a3a3a;
+  --el-panel-description: #ffffff;
+  --el-panel-guest-bg: #2a3a3a;
+  --el-panel-guest-text: #ffffff;
+  --el-panel-priority-high-bg: rgba(255,107,90,0.15);
+  --el-panel-priority-high-text: #ff6b5a;
+  --el-panel-priority-normal-bg: rgba(232,185,74,0.15);
+  --el-panel-priority-normal-text: #e8b94a;
+
+  --el-modal-overlay: rgba(0,0,0,0.60);
+  --el-modal-bg: #1a2a2a;
+  --el-modal-title-text: #ffffff;
+  --el-modal-title-placeholder: #a0a0a0;
+  --el-modal-type-active-bg: #ffffff;
+  --el-modal-type-active-text: #0a1a1a;
+  --el-modal-type-inactive-text: #a0a0a0;
+  --el-modal-schedule-border: #2a3a3a;
+  --el-modal-icon-selected: #ff6b9d;
+  --el-modal-icon-unselected: #a0a0a0;
+  --el-modal-save-bg: #ffffff;
+  --el-modal-save-text: #0a1a1a;
+  --el-modal-cancel-border: #2a3a3a;
+  --el-modal-cancel-text: #ffffff;
+  --el-editor-card-bg: #1a2a2a;
+  --el-editor-field-label: #a0a0a0;
+  --el-editor-field-value: #ffffff;
+  --el-editor-tag-bg: #2a3a3a;
+  --el-editor-tag-text: #ffffff;
+  --el-editor-error: #ef4444;
+  --el-view-title: #ffffff;
+  --el-view-description: #ffffff;
+  --el-view-detail-label: #a0a0a0;
+  --el-view-detail-value: #ffffff;
+  --el-view-edit-border: #2a3a3a;
+  --el-view-edit-text: #ffffff;
+  --el-view-delete-border: #2a3a3a;
+  --el-view-delete-text: #ef4444;
+
+  --el-btn-primary-bg: #ffffff;
+  --el-btn-primary-text: #0a1a1a;
+  --el-btn-primary-hover: #e5e5e5;
+  --el-btn-secondary-bg: #ff6b9d;
+  --el-btn-secondary-text: #0a1a1a;
+  --el-btn-destructive-bg: #ef4444;
+  --el-btn-destructive-text: #ffffff;
+  --el-btn-ghost-text: #ffffff;
+  --el-btn-ghost-hover: #2a3a3a;
+  --el-btn-outline-border: #2a3a3a;
+  --el-btn-outline-text: #ffffff;
+  --el-btn-outline-hover: #2a3a3a;
+
+  --el-input-bg: #1a2a2a;
+  --el-input-text: #ffffff;
+  --el-input-placeholder: #a0a0a0;
+  --el-input-border: #2a3a3a;
+  --el-input-focus: #ff6b9d;
+  --el-input-error-border: #ef4444;
+  --el-input-error-text: #ef4444;
+  --el-input-label: #ffffff;
+
+  --el-card-bg: #1a2a2a;
+  --el-card-border: #2a3a3a;
+
+  --el-toast-success-bg: rgba(164,212,197,0.15);
+  --el-toast-success-border: #a4d4c5;
+  --el-toast-success-icon: #a4d4c5;
+  --el-toast-error-bg: rgba(255,107,90,0.15);
+  --el-toast-error-border: #ff6b5a;
+  --el-toast-error-icon: #ff6b5a;
+  --el-toast-info-bg: rgba(184,164,237,0.15);
+  --el-toast-info-border: #c4b5fd;
+  --el-toast-info-icon: #c4b5fd;
+  --el-toast-text: #ffffff;
+  --el-toast-close: #a0a0a0;
+
+  --el-dialog-overlay: rgba(0,0,0,0.50);
+  --el-dialog-bg: #1a2a2a;
+  --el-dialog-title: #ffffff;
+  --el-dialog-description: #a0a0a0;
+  --el-dialog-confirm-bg: #ef4444;
+  --el-dialog-confirm-text: #ffffff;
+  --el-dialog-cancel-border: #2a3a3a;
+  --el-dialog-cancel-text: #ffffff;
+
+  --el-popover-bg: #1a2a2a;
+  --el-popover-border: #2a3a3a;
+  --el-popover-item-text: #ffffff;
+  --el-popover-item-hover: #2a3a3a;
+  --el-popover-item-selected-bg: #2a3a3a;
+  --el-popover-check: #ff6b9d;
+  --el-popover-apply-bg: #ffffff;
+  --el-popover-apply-text: #0a1a1a;
+
+  --el-switch-active: #ff6b9d;
+  --el-switch-inactive: #2a3a3a;
+  --el-switch-thumb: #ffffff;
+
+  --el-target-bg: #1a2a2a;
+  --el-target-title: #ffffff;
+  --el-target-description: #a0a0a0;
+  --el-target-chevron: #ff6b9d;
+  --el-target-status-active-bg: rgba(255,107,157,0.12);
+  --el-target-status-active-text: #ff6b9d;
+  --el-target-status-complete-bg: rgba(164,212,197,0.15);
+  --el-target-status-complete-text: #a4d4c5;
+  --el-target-status-archived-bg: rgba(255,255,255,0.1);
+  --el-target-status-archived-text: #a0a0a0;
+  --el-plan-bg: #1a2a2a;
+  --el-plan-title: #ffffff;
+  --el-plan-description: #a0a0a0;
+  --el-plan-chevron: #ff6b9d;
+  --el-plan-progress-bar: #ff6b9d;
+  --el-plan-progress-track: #2a3a3a;
+  --el-plan-progress-text: #a0a0a0;
+
+  --el-group-bg: #1a2a2a;
+  --el-group-title: #ffffff;
+  --el-group-description: #a0a0a0;
+  --el-group-star-filled: #e8b94a;
+  --el-group-star-empty: #a0a0a0;
+  --el-group-member-icon: #a0a0a0;
+  --el-group-member-text: #a0a0a0;
+  --el-group-badge-bg: #ffffff;
+  --el-group-badge-text: #0a1a1a;
+  --el-group-owner-border: #2a3a3a;
+  --el-group-owner-text: #a0a0a0;
+
+  --el-chat-own-bg: #ffffff;
+  --el-chat-own-text: #0a1a1a;
+  --el-chat-other-bg: #2a3a3a;
+  --el-chat-other-text: #ffffff;
+  --el-chat-avatar-bg: #ff6b9d;
+  --el-chat-avatar-text: #0a1a1a;
+  --el-chat-sender: #ff6b9d;
+  --el-chat-timestamp: #a0a0a0;
+  --el-ai-msg-bg: #1a2a2a;
+  --el-ai-msg-text: #ffffff;
+  --el-ai-user-bg: #ffffff;
+  --el-ai-user-text: #0a1a1a;
+  --el-ai-session-bg: rgba(255,107,157,0.12);
+  --el-ai-session-text: #ff6b9d;
+
+  --el-notif-unread-bg: rgba(255,107,157,0.06);
+  --el-notif-unread-border: rgba(255,107,157,0.15);
+  --el-notif-read-bg: #1a2a2a;
+  --el-notif-read-border: #2a3a3a;
+  --el-notif-title: #ffffff;
+  --el-notif-message: #a0a0a0;
+  --el-notif-time: rgba(160,160,160,0.7);
+  --el-notif-dot: #ff6b9d;
+  --el-notif-task-bg: rgba(255,107,157,0.12);
+  --el-notif-task-color: #ff6b9d;
+  --el-notif-success-bg: rgba(164,212,197,0.15);
+  --el-notif-success-color: #a4d4c5;
+  --el-notif-warning-bg: rgba(232,185,74,0.2);
+  --el-notif-warning-color: #e8b94a;
+  --el-notif-danger-bg: rgba(255,107,90,0.15);
+  --el-notif-danger-color: #ff6b5a;
+  --el-notif-neutral-bg: #2a3a3a;
+  --el-notif-neutral-color: #a0a0a0;
+  --el-notif-event-bg: rgba(184,164,237,0.15);
+  --el-notif-event-color: #c4b5fd;
+  --el-invite-accept-bg: #ffffff;
+  --el-invite-accept-text: #0a1a1a;
+  --el-invite-decline-border: #2a3a3a;
+  --el-invite-decline-text: #ffffff;
+  --el-role-admin-bg: rgba(255,107,90,0.15);
+  --el-role-admin-text: #ff6b5a;
+  --el-role-member-bg: rgba(184,164,237,0.15);
+  --el-role-member-text: #c4b5fd;
+  --el-role-viewer-bg: rgba(255,255,255,0.1);
+  --el-role-viewer-text: #a0a0a0;
+
+  --el-auth-card-bg: #1a2a2a;
+  --el-auth-title: #ffffff;
+  --el-auth-subtitle: #a0a0a0;
+  --el-auth-input-bg: #0a1a1a;
+  --el-auth-input-border: #2a3a3a;
+  --el-auth-input-focus: #ff6b9d;
+  --el-auth-submit-bg: #ffffff;
+  --el-auth-submit-text: #0a1a1a;
+  --el-auth-link: #ff6b9d;
+  --el-auth-google-bg: #1a2a2a;
+  --el-auth-google-border: #2a3a3a;
+  --el-auth-google-text: #ffffff;
+  --el-auth-apple-bg: #ffffff;
+  --el-auth-apple-text: #0a1a1a;
+  --el-auth-divider: #2a3a3a;
+  --el-auth-divider-text: #a0a0a0;
+  --el-auth-error: #ef4444;
+
+  --el-settings-bg: #1a2a2a;
+  --el-settings-border: #2a3a3a;
+  --el-settings-label: #a0a0a0;
+  --el-settings-selected-border: #ff6b9d;
+  --el-settings-selected-bg: rgba(255,107,157,0.06);
+  --el-settings-unselected-border: #2a3a3a;
+  --el-settings-hover: #2a3a3a;
+  --el-settings-check: #ff6b9d;
+}
