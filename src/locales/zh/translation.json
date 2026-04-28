@@ -725,7 +725,10 @@
     "palettePurple": "紫色",
     "palettePurpleDesc": "浅灰搭配大胆的紫色重点",
     "palettePink": "粉色",
-    "palettePinkDesc": "柔和温暖的粉色点缀"
+    "palettePinkDesc": "柔和温暖的粉色点缀",
+    "patternSystem": "系统",
+    "colorElectric": "Electric",
+    "autoDescription": "白天浅色，夜晚深色。"
   },
   "languageSettings": {
     "title": "语言设置",

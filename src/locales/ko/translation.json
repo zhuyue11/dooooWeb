@@ -725,7 +725,10 @@
     "palettePurple": "퍼플",
     "palettePurpleDesc": "깔끔한 라이트 그레이에 볼드한 퍼플 포인트",
     "palettePink": "핑크",
-    "palettePinkDesc": "핑크 포인트로 부드럽고 따뜻한 테마"
+    "palettePinkDesc": "핑크 포인트로 부드럽고 따뜻한 테마",
+    "patternSystem": "시스템",
+    "colorElectric": "Electric",
+    "autoDescription": "낮에는 라이트, 밤에는 다크."
   },
   "languageSettings": {
     "title": "언어 설정",

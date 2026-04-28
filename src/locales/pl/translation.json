@@ -725,7 +725,10 @@
     "palettePurple": "Fioletowy",
     "palettePurpleDesc": "Czysty jasny szary z odważnymi fioletowymi akcentami",
     "palettePink": "Różowy",
-    "palettePinkDesc": "Miękki i ciepły z różowymi akcentami"
+    "palettePinkDesc": "Miękki i ciepły z różowymi akcentami",
+    "patternSystem": "System",
+    "colorElectric": "Electric",
+    "autoDescription": "Jasny w dzień, ciemny w nocy."
   },
   "languageSettings": {
     "title": "Ustawienia języka",

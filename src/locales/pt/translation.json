@@ -725,7 +725,10 @@
     "palettePurple": "Roxo",
     "palettePurpleDesc": "Cinza claro limpo com detalhes roxos intensos",
     "palettePink": "Rosa",
-    "palettePinkDesc": "Suave e acolhedor com detalhes rosa"
+    "palettePinkDesc": "Suave e acolhedor com detalhes rosa",
+    "patternSystem": "Sistema",
+    "colorElectric": "Electric",
+    "autoDescription": "Claro durante o dia, escuro à noite."
   },
   "languageSettings": {
     "title": "Configurações de Idioma",

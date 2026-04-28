@@ -725,7 +725,10 @@
     "palettePurple": "Mor",
     "palettePurpleDesc": "Cesur mor vurgularla temiz açık gri",
     "palettePink": "Pembe",
-    "palettePinkDesc": "Pembe vurgularla yumuşak ve sıcak"
+    "palettePinkDesc": "Pembe vurgularla yumuşak ve sıcak",
+    "patternSystem": "Sistem",
+    "colorElectric": "Electric",
+    "autoDescription": "Gündüz açık, gece koyu."
   },
   "languageSettings": {
     "title": "Dil Ayarları",

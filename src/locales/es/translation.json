@@ -725,7 +725,10 @@
     "palettePurple": "Púrpura",
     "palettePurpleDesc": "Gris claro limpio con acentos púrpura intensos",
     "palettePink": "Rosa",
-    "palettePinkDesc": "Suave y cálido con acentos rosa"
+    "palettePinkDesc": "Suave y cálido con acentos rosa",
+    "patternSystem": "Sistema",
+    "colorElectric": "Electric",
+    "autoDescription": "Claro durante el día, oscuro por la noche."
   },
   "languageSettings": {
     "title": "Configuración de Idioma",

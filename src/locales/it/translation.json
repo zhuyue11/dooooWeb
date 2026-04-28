@@ -725,7 +725,10 @@
     "palettePurple": "Viola",
     "palettePurpleDesc": "Grigio chiaro pulito con accenti viola audaci",
     "palettePink": "Rosa",
-    "palettePinkDesc": "Morbido e caldo con accenti rosa"
+    "palettePinkDesc": "Morbido e caldo con accenti rosa",
+    "patternSystem": "Sistema",
+    "colorElectric": "Electric",
+    "autoDescription": "Chiaro di giorno, scuro di notte."
   },
   "languageSettings": {
     "title": "Impostazioni Lingua",

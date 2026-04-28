@@ -725,7 +725,10 @@
     "palettePurple": "بنفش",
     "palettePurpleDesc": "خاکستری روشن پاک با رنگ‌های بنفش پررنگ",
     "palettePink": "صورتی",
-    "palettePinkDesc": "نرم و گرم با رنگ‌های صورتی"
+    "palettePinkDesc": "نرم و گرم با رنگ‌های صورتی",
+    "patternSystem": "سیستم",
+    "colorElectric": "Electric",
+    "autoDescription": "روشن در طول روز، تاریک در شب."
   },
   "languageSettings": {
     "title": "تنظیمات زبان",

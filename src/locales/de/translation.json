@@ -725,7 +725,10 @@
     "palettePurple": "Violett",
     "palettePurpleDesc": "Klares Hellgrau mit kräftigen violetten Akzenten",
     "palettePink": "Rosa",
-    "palettePinkDesc": "Weich und warm mit rosa Akzenten"
+    "palettePinkDesc": "Weich und warm mit rosa Akzenten",
+    "patternSystem": "System",
+    "colorElectric": "Electric",
+    "autoDescription": "Tagsüber hell, nachts dunkel."
   },
   "languageSettings": {
     "title": "Spracheinstellungen",

@@ -725,7 +725,10 @@
     "palettePurple": "パープル",
     "palettePurpleDesc": "ライトグレーに鮮やかなパープルアクセント",
     "palettePink": "ピンク",
-    "palettePinkDesc": "ピンクアクセントの柔らかく温かみのあるテーマ"
+    "palettePinkDesc": "ピンクアクセントの柔らかく温かみのあるテーマ",
+    "patternSystem": "システム",
+    "colorElectric": "Electric",
+    "autoDescription": "昼はライト、夜はダーク。"
   },
   "languageSettings": {
     "title": "言語設定",

@@ -1,12 +1,22 @@
 @import "tailwindcss";
 
 /*
- * Theme tokens derived from dooooApp's lightTheme/darkTheme in utils/theme.ts.
- * Core tokens only — calendar/task-specific tokens will be added as features are built.
+ * Theme tokens — three-tier system ported from dooooHub/dooooApp.
+ *
+ * Tier 1 — ThemePattern: data-theme="light|dark" on <html>
+ * Tier 2 — ThemeColor:   data-color="ocean" etc. — overrides primary/secondary/accent only
+ * Tier 3 — ColorPalette: data-palette="ocean" etc. — overrides ALL tokens
+ *
+ * Priority: palette > (pattern + color)
+ * When a palette is active, data-theme is removed — palette controls everything.
+ *
+ * Default accent = emerald (base CSS). Electric is opt-in via data-color="electric".
  */
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
-  /* Light mode (default) */
+  /* Light mode (default — emerald accent) */
   --color-background: #f2f3f5;
   --color-foreground: #1f2937;
   --color-surface: #ffffff;
@@ -39,30 +49,177 @@
   --sidebar-collapsed-width: 64px;
 }
 
-/* Dark mode overrides via .dark class on <html> */
-.dark {
+/* ── Tier 1: Dark mode ─────────────────────────────────────────────── */
+
+[data-theme="dark"] {
   color-scheme: dark;
   --color-background: #0f0f0f;
   --color-foreground: #f3f4f6;
   --color-surface: #1a1a1a;
   --color-input-bg: #1a1a1a;
 
-  --color-primary: #10b981;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #14b8a6;
-  --color-secondary-foreground: #ffffff;
+  --color-primary: #34d399;
+  --color-primary-foreground: #0f172a;
+  --color-secondary: #2dd4bf;
+  --color-secondary-foreground: #0f172a;
 
   --color-muted: #262626;
   --color-muted-foreground: #9ca3af;
 
-  --color-accent: #f59e0b;
-  --color-destructive: #ef4444;
+  --color-accent: #fbbf24;
+  --color-destructive: #f87171;
   --color-destructive-foreground: #ffffff;
-  --color-warning: #fcd34d;
+  --color-warning: #fbbf24;
   --color-warning-foreground: #1f2937;
-  --color-info: #3b82f6;
+  --color-info: #60a5fa;
 
   --color-border: #333333;
+}
+
+/* ── Tier 2: Color overrides (primary/secondary/accent only) ───────── */
+/* Emerald is the base CSS default — no selector needed. */
+
+[data-color="electric"] { --color-primary: #360eff; --color-primary-foreground: #ffffff; --color-secondary: #7c3aed; --color-accent: #f59e0b; }
+[data-theme="dark"][data-color="electric"] { --color-primary: #818cf8; --color-primary-foreground: #0f172a; --color-secondary: #a78bfa; --color-accent: #fbbf24; }
+
+[data-color="ocean"] { --color-primary: #0ea5e9; --color-primary-foreground: #ffffff; --color-secondary: #6366f1; --color-accent: #f59e0b; }
+[data-theme="dark"][data-color="ocean"] { --color-primary: #38bdf8; --color-primary-foreground: #0f172a; --color-secondary: #818cf8; --color-accent: #fbbf24; }
+
+[data-color="crimson"] { --color-primary: #ef4444; --color-primary-foreground: #ffffff; --color-secondary: #e11d48; --color-accent: #f97316; }
+[data-theme="dark"][data-color="crimson"] { --color-primary: #f87171; --color-primary-foreground: #0f172a; --color-secondary: #fb7185; --color-accent: #fb923c; }
+
+[data-color="amber"] { --color-primary: #f59e0b; --color-primary-foreground: #ffffff; --color-secondary: #ea580c; --color-accent: #8b5cf6; }
+[data-theme="dark"][data-color="amber"] { --color-primary: #fbbf24; --color-primary-foreground: #0f172a; --color-secondary: #fb923c; --color-accent: #a78bfa; }
+
+[data-color="yellow"] { --color-primary: #eab308; --color-primary-foreground: #1f2937; --color-secondary: #ca8a04; --color-accent: #8b5cf6; }
+[data-theme="dark"][data-color="yellow"] { --color-primary: #facc15; --color-primary-foreground: #0f172a; --color-secondary: #eab308; --color-accent: #a78bfa; }
+
+[data-color="cyan"] { --color-primary: #06b6d4; --color-primary-foreground: #1f2937; --color-secondary: #0891b2; --color-accent: #f59e0b; }
+[data-theme="dark"][data-color="cyan"] { --color-primary: #22d3ee; --color-primary-foreground: #0f172a; --color-secondary: #06b6d4; --color-accent: #fbbf24; }
+
+[data-color="purple"] { --color-primary: #8b5cf6; --color-primary-foreground: #ffffff; --color-secondary: #7c3aed; --color-accent: #f59e0b; }
+[data-theme="dark"][data-color="purple"] { --color-primary: #a78bfa; --color-primary-foreground: #0f172a; --color-secondary: #8b5cf6; --color-accent: #fbbf24; }
+
+[data-color="pink"] { --color-primary: #ec4899; --color-primary-foreground: #ffffff; --color-secondary: #db2777; --color-accent: #f59e0b; }
+[data-theme="dark"][data-color="pink"] { --color-primary: #f472b6; --color-primary-foreground: #0f172a; --color-secondary: #ec4899; --color-accent: #fbbf24; }
+
+/* ── Tier 3: Full palette overrides (ALL tokens) ───────────────────── */
+
+[data-palette="light"] {
+  color-scheme: light;
+  --color-background: #f2f3f5; --color-foreground: #1f2937; --color-surface: #ffffff; --color-input-bg: #ffffff;
+  --color-primary: #360eff; --color-primary-foreground: #ffffff;
+  --color-secondary: #7c3aed; --color-secondary-foreground: #ffffff;
+  --color-muted: #f3f4f6; --color-muted-foreground: #6b7280;
+  --color-accent: #f59e0b;
+  --color-destructive: #ef4444; --color-destructive-foreground: #ffffff;
+  --color-warning: #fcd34d; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #e5e7eb;
+}
+
+[data-palette="dark"] {
+  color-scheme: dark;
+  --color-background: #0f0f0f; --color-foreground: #f3f4f6; --color-surface: #1a1a1a; --color-input-bg: #1a1a1a;
+  --color-primary: #818cf8; --color-primary-foreground: #0f172a;
+  --color-secondary: #a78bfa; --color-secondary-foreground: #0f172a;
+  --color-muted: #262626; --color-muted-foreground: #9ca3af;
+  --color-accent: #fbbf24;
+  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #60a5fa;
+  --color-border: #333333;
+}
+
+[data-palette="ocean"] {
+  color-scheme: light;
+  --color-background: #f0f7ff; --color-foreground: #1e3a5f; --color-surface: #ffffff; --color-input-bg: #ffffff;
+  --color-primary: #3b82f6; --color-primary-foreground: #ffffff;
+  --color-secondary: #14b8a6; --color-secondary-foreground: #ffffff;
+  --color-muted: #eff6ff; --color-muted-foreground: #64748b;
+  --color-accent: #f97316;
+  --color-destructive: #ef4444; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #bfdbfe;
+}
+
+[data-palette="crimson"] {
+  color-scheme: light;
+  --color-background: #e5e5e5; --color-foreground: #1f2937; --color-surface: #f5f5f5; --color-input-bg: #f5f5f5;
+  --color-primary: #dc2626; --color-primary-foreground: #ffffff;
+  --color-secondary: #b91c1c; --color-secondary-foreground: #ffffff;
+  --color-muted: #d1d5db; --color-muted-foreground: #6b7280;
+  --color-accent: #f97316;
+  --color-destructive: #dc2626; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #d1d5db;
+}
+
+[data-palette="amber"] {
+  color-scheme: light;
+  --color-background: #e5e5e5; --color-foreground: #1f2937; --color-surface: #f5f5f5; --color-input-bg: #f5f5f5;
+  --color-primary: #ea580c; --color-primary-foreground: #ffffff;
+  --color-secondary: #c2410c; --color-secondary-foreground: #ffffff;
+  --color-muted: #d1d5db; --color-muted-foreground: #6b7280;
+  --color-accent: #ea580c;
+  --color-destructive: #dc2626; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #d1d5db;
+}
+
+[data-palette="yellow"] {
+  color-scheme: dark;
+  --color-background: #1a1a1a; --color-foreground: #f0f0f0; --color-surface: #2a2a2a; --color-input-bg: #2a2a2a;
+  --color-primary: #edf060; --color-primary-foreground: #1f2937;
+  --color-secondary: #d4c94f; --color-secondary-foreground: #1f2937;
+  --color-muted: #4a4a4a; --color-muted-foreground: #9ca3af;
+  --color-accent: #edf060;
+  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #60a5fa;
+  --color-border: #404040;
+}
+
+[data-palette="cyan"] {
+  color-scheme: dark;
+  --color-background: #1a1a1a; --color-foreground: #f0f0f0; --color-surface: #2a2a2a; --color-input-bg: #2a2a2a;
+  --color-primary: #00ffff; --color-primary-foreground: #1f2937;
+  --color-secondary: #00d4d4; --color-secondary-foreground: #1f2937;
+  --color-muted: #3a3a3a; --color-muted-foreground: #9ca3af;
+  --color-accent: #00ffff;
+  --color-destructive: #f87171; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #60a5fa;
+  --color-border: #404040;
+}
+
+[data-palette="purple"] {
+  color-scheme: light;
+  --color-background: #e5e5e5; --color-foreground: #1f2937; --color-surface: #f5f5f5; --color-input-bg: #f5f5f5;
+  --color-primary: #8b5cf6; --color-primary-foreground: #ffffff;
+  --color-secondary: #7c3aed; --color-secondary-foreground: #ffffff;
+  --color-muted: #d1d5db; --color-muted-foreground: #6b7280;
+  --color-accent: #8b5cf6;
+  --color-destructive: #dc2626; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #d1d5db;
+}
+
+[data-palette="pink"] {
+  color-scheme: light;
+  --color-background: #fdf2f8; --color-foreground: #1f2937; --color-surface: #fce7f3; --color-input-bg: #fce7f3;
+  --color-primary: #ec4899; --color-primary-foreground: #ffffff;
+  --color-secondary: #db2777; --color-secondary-foreground: #ffffff;
+  --color-muted: #f3e8ff; --color-muted-foreground: #6b7280;
+  --color-accent: #ec4899;
+  --color-destructive: #dc2626; --color-destructive-foreground: #ffffff;
+  --color-warning: #fbbf24; --color-warning-foreground: #1f2937;
+  --color-info: #3b82f6;
+  --color-border: #f9a8d4;
 }
 
 /* Material Symbols Rounded base style */

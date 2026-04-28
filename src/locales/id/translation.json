@@ -725,7 +725,10 @@
     "palettePurple": "Ungu",
     "palettePurpleDesc": "Abu-abu terang bersih dengan aksen ungu tebal",
     "palettePink": "Merah Muda",
-    "palettePinkDesc": "Lembut dan hangat dengan aksen merah muda"
+    "palettePinkDesc": "Lembut dan hangat dengan aksen merah muda",
+    "patternSystem": "Sistem",
+    "colorElectric": "Electric",
+    "autoDescription": "Terang di siang hari, gelap di malam hari."
   },
   "languageSettings": {
     "title": "Pengaturan Bahasa",

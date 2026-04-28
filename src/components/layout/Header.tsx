@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
 import { useUnreadNotificationCount } from '@/hooks/useNotifications';
-import logo from '@/assets/logo-36.svg';
+import { Logo } from '@/components/ui/Logo';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -21,7 +21,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
       </button>
 
       <div className="flex flex-1 items-center gap-2">
-        <img src={logo} alt="doooo" className="h-6 w-6" />
+        <Logo size={24} />
         <span className="text-base font-bold text-foreground">DOOOO</span>
       </div>
 

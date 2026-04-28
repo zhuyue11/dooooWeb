@@ -18,6 +18,7 @@ export const STORAGE_KEYS = {
   AUTH_TOKEN: '@doooo_auth_token',
   THEME_PATTERN: '@doooo_theme_pattern',
   THEME_COLOR: '@doooo_theme_color',
+  COLOR_PALETTE: '@doooo_color_palette',
   LANGUAGE: '@doooo_language',
   DATE_FORMAT: '@doooo_date_format',
   TIME_FORMAT: '@doooo_time_format',

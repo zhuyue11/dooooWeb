@@ -725,7 +725,10 @@
     "palettePurple": "Tím",
     "palettePurpleDesc": "Xám sáng tinh tế với điểm nhấn tím nổi bật",
     "palettePink": "Hồng",
-    "palettePinkDesc": "Mềm mại và ấm áp với điểm nhấn hồng"
+    "palettePinkDesc": "Mềm mại và ấm áp với điểm nhấn hồng",
+    "patternSystem": "Hệ thống",
+    "colorElectric": "Electric",
+    "autoDescription": "Sáng ban ngày, tối ban đêm."
   },
   "languageSettings": {
     "title": "Cài đặt ngôn ngữ",

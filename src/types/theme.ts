@@ -1,8 +1,10 @@
-// Theme type definitions (adapted from dooooApp/utils/theme.ts)
+// Theme type definitions (adapted from dooooApp/utils/theme.ts + dooooHub)
 
-export type ThemePattern = 'auto' | 'light' | 'dark';
+export type ThemePattern = 'system' | 'auto' | 'light' | 'dark';
 
-export type ThemeColor = 'emerald' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink';
+export type ThemeColor = 'electric' | 'emerald' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink';
+
+export type ColorPalette = 'light' | 'dark' | 'ocean' | 'crimson' | 'amber' | 'yellow' | 'cyan' | 'purple' | 'pink';
 
 export interface ThemeColors {
   background: string;

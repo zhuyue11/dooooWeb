@@ -728,7 +728,10 @@
     "palettePurple": "Paars",
     "palettePurpleDesc": "Strak lichtgrijs met gedurfde paarse accenten",
     "palettePink": "Roze",
-    "palettePinkDesc": "Zacht en warm met roze accenten"
+    "palettePinkDesc": "Zacht en warm met roze accenten",
+    "patternSystem": "Systeem",
+    "colorElectric": "Electric",
+    "autoDescription": "Licht overdag, donker 's nachts."
   },
   "languageSettings": {
     "title": "Taalinstellingen",

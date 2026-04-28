@@ -725,7 +725,10 @@
     "palettePurple": "Фиолетовый",
     "palettePurpleDesc": "Чистый светло-серый с яркими фиолетовыми акцентами",
     "palettePink": "Розовый",
-    "palettePinkDesc": "Мягкая и тёплая с розовыми акцентами"
+    "palettePinkDesc": "Мягкая и тёплая с розовыми акцентами",
+    "patternSystem": "Система",
+    "colorElectric": "Electric",
+    "autoDescription": "Светлая днём, тёмная ночью."
   },
   "languageSettings": {
     "title": "Настройки языка",

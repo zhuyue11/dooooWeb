@@ -732,7 +732,10 @@
     "palettePurple": "Purple",
     "palettePurpleDesc": "Clean light grey with bold purple accents",
     "palettePink": "Pink",
-    "palettePinkDesc": "Soft and warm with pink accents"
+    "palettePinkDesc": "Soft and warm with pink accents",
+    "patternSystem": "System",
+    "colorElectric": "Electric Blue",
+    "autoDescription": "Light during the day, dark at night."
   },
   "fontSettings": {
     "title": "Font",

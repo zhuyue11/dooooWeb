@@ -725,7 +725,10 @@
     "palettePurple": "Violet",
     "palettePurpleDesc": "Gris clair épuré avec accents violets audacieux",
     "palettePink": "Rose",
-    "palettePinkDesc": "Doux et chaleureux avec accents roses"
+    "palettePinkDesc": "Doux et chaleureux avec accents roses",
+    "patternSystem": "Système",
+    "colorElectric": "Electric",
+    "autoDescription": "Clair le jour, sombre la nuit."
   },
   "languageSettings": {
     "title": "Paramètres de langue",

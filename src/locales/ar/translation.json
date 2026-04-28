@@ -725,7 +725,10 @@
     "palettePurple": "بنفسجي",
     "palettePurpleDesc": "رمادي فاتح نظيف مع لمسات بنفسجية جريئة",
     "palettePink": "وردي",
-    "palettePinkDesc": "ناعم ودافئ مع لمسات وردية"
+    "palettePinkDesc": "ناعم ودافئ مع لمسات وردية",
+    "patternSystem": "النظام",
+    "colorElectric": "Electric",
+    "autoDescription": "فاتح أثناء النهار، داكن في الليل."
   },
   "languageSettings": {
     "title": "إعدادات اللغة",

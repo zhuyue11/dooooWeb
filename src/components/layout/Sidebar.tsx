@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/contexts/auth-context';
 import { useUnreadMessages } from '@/lib/contexts/unread-messages-context';
 import { useUnreadNotificationCount } from '@/hooks/useNotifications';
 import { Icon } from '@/components/ui/Icon';
-import logo from '@/assets/logo-36.svg';
+import { Logo } from '@/components/ui/Logo';
 
 export interface GroupContext {
   groupId: string;
@@ -118,10 +118,9 @@ function MainSidebarContent({
     <>
       {/* Header */}
       <div className={`flex h-16 items-center ${collapsed ? 'justify-center px-0' : 'justify-between px-6'}`}>
-        <img
-          src={logo}
-          alt="doooo"
-          className={`flex-shrink-0 transition-transform duration-200 ${collapsed ? 'h-7 w-7 -scale-x-100' : 'h-9 w-9'}`}
+        <Logo
+          size={collapsed ? 28 : 36}
+          className={`flex-shrink-0 transition-transform duration-200 ${collapsed ? '-scale-x-100' : ''}`}
         />
         {!collapsed && (
           <div className="flex items-center gap-1">

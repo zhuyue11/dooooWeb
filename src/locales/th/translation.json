@@ -725,7 +725,10 @@
     "palettePurple": "ม่วง",
     "palettePurpleDesc": "เทาสว่างสะอาดพร้อมสีม่วงเด่น",
     "palettePink": "ชมพู",
-    "palettePinkDesc": "นุ่มนวลและอบอุ่นด้วยสีชมพู"
+    "palettePinkDesc": "นุ่มนวลและอบอุ่นด้วยสีชมพู",
+    "patternSystem": "ระบบ",
+    "colorElectric": "Electric",
+    "autoDescription": "สว่างตอนกลางวัน มืดตอนกลางคืน"
   },
   "languageSettings": {
     "title": "ตั้งค่าภาษา",

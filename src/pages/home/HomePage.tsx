@@ -361,7 +361,7 @@ export function HomePage() {
         <button
           data-testid="dashboard-add-button"
           onClick={handleAddClick}
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#360EFF] text-white transition-opacity hover:opacity-90"
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90"
         >
           <Icon name="add" size={20} />
         </button>
