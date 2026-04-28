@@ -132,11 +132,11 @@ export function TimeZonePicker({ selectedTimeZone, onSelect, onClose }: TimeZone
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full z-50 mt-1 w-[340px] rounded-xl border border-border bg-surface shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+      className="absolute left-0 top-full z-50 mt-1 w-[340px] rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated)"
     >
       {/* Search */}
       <div className="border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5">
+        <div className="flex items-center gap-2 rounded-(--radius-card) border border-border px-3 py-1.5">
           <Icon name="search" size={16} color="var(--color-muted-foreground)" />
           <input
             ref={searchRef}

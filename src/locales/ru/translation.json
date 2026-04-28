@@ -728,7 +728,22 @@
     "palettePinkDesc": "Мягкая и тёплая с розовыми акцентами",
     "patternSystem": "Система",
     "colorElectric": "Electric",
-    "autoDescription": "Светлая днём, тёмная ночью."
+    "autoDescription": "Светлая днём, тёмная ночью.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Стиль отображения",
+    "displayStyleSubtitle": "Управляет формой, тенями и отступами — совместим с любой палитрой",
+    "styleDefault": "По умолчанию",
+    "styleDefaultDesc": "Сбалансированные скругления и стандартные отступы",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Мягкие изгибы, тёплые тени, просторная компоновка",
+    "styleClay": "Clay",
+    "styleClayDesc": "Округлый и плоский, глубина через цветовой контраст",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Кнопки-таблетки, плоские поверхности"
   },
   "languageSettings": {
     "title": "Настройки языка",

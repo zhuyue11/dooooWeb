@@ -66,7 +66,7 @@ export function ChatHistoryPanel({
     }
     if (session.status === 'COMPLETED') {
       return (
-        <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[10px] font-semibold text-green-600">
+        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
           {t('targetPlan.completed')}
         </span>
       );
@@ -96,7 +96,7 @@ export function ChatHistoryPanel({
             <button
               type="button"
               onClick={() => { handleClose(); onStartNewChat(); }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
               title={t('aiChat.newChat')}
               data-testid="chat-history-new-chat"
             >
@@ -105,7 +105,7 @@ export function ChatHistoryPanel({
             <button
               type="button"
               onClick={handleClose}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
               data-testid="chat-history-close"
             >
               <Icon name="close" size={20} />

@@ -88,7 +88,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
       onClick={onClose}
     >
       <div
-        className="mx-6 w-full max-w-md rounded-xl bg-surface p-6 shadow-lg"
+        className="mx-6 w-full max-w-md rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -114,7 +114,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
                 if (e.target.value.length <= 100) setName(e.target.value);
               }}
               placeholder={t('groups.groupNamePlaceholder')}
-              className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              className="rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
             <span className="text-right text-xs text-muted-foreground">{name.length}/100</span>
           </div>
@@ -131,7 +131,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
               }}
               placeholder={t('groups.descriptionPlaceholder')}
               rows={3}
-              className="resize-none rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+              className="resize-none rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
             <span className="text-right text-xs text-muted-foreground">
               {description.length}/500
@@ -163,7 +163,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
 
         {/* Error */}
         {error && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2">
+          <div className="mt-4 flex items-center gap-2 rounded-(--radius-card) bg-destructive/10 px-3 py-2">
             <Icon name="error" size={16} color="var(--color-destructive)" />
             <span className="text-sm text-destructive">{error}</span>
           </div>
@@ -175,7 +175,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
           >
             {t('common.cancel')}
           </button>
@@ -183,7 +183,7 @@ export function GroupFormModal({ open, onClose, onSubmit, initialData, mode }: G
             type="button"
             onClick={handleSubmit}
             disabled={!name.trim() || submitting}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

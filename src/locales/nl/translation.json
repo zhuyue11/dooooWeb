@@ -731,7 +731,22 @@
     "palettePinkDesc": "Zacht en warm met roze accenten",
     "patternSystem": "Systeem",
     "colorElectric": "Electric",
-    "autoDescription": "Licht overdag, donker 's nachts."
+    "autoDescription": "Licht overdag, donker 's nachts.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Weergavestijl",
+    "displayStyleSubtitle": "Beheert vorm, schaduwen en afstanden — werkt met elk kleurenpalet",
+    "styleDefault": "Standaard",
+    "styleDefaultDesc": "Gebalanceerde afgeronde hoeken en standaard afstanden",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Zachte rondingen, warme schaduwen, ruime opmaak",
+    "styleClay": "Clay",
+    "styleClayDesc": "Rond en vlak, diepte door kleurcontrast",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Pilvormige knoppen, vlakke oppervlakken"
   },
   "languageSettings": {
     "title": "Taalinstellingen",

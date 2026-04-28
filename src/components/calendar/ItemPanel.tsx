@@ -52,7 +52,7 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
   return (
     <div
       data-testid="task-panel"
-      className="flex w-full flex-col overflow-hidden rounded-2xl border-t border-border bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:w-80 lg:border-l lg:border-t-0"
+      className="flex w-full flex-col overflow-hidden rounded-(--radius-card) border-t border-border bg-surface shadow-(--shadow-card) lg:w-80 lg:border-l lg:border-t-0"
     >
       {/* Panel header */}
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
@@ -61,7 +61,7 @@ export function ItemPanel({ selectedDate, today, visibleDates, viewMode, items, 
         </span>
         <button
           onClick={onAddClick}
-          className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex items-center gap-1 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
         >
           <Icon name="add" size={16} />
           <span>{t('calendarPage.panel.add')}</span>

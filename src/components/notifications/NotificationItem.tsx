@@ -16,29 +16,29 @@ const INVITATION_TYPES = new Set([
 ]);
 
 const ICON_MAP: Partial<Record<NotificationType, { name: string; bg: string; color: string }>> = {
-  [NotificationType.TASK_ASSIGNED]: { name: 'assignment', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
-  [NotificationType.TASK_OVERDUE]: { name: 'warning', bg: 'bg-amber-100 dark:bg-amber-900/40', color: 'text-amber-600 dark:text-amber-400' },
-  [NotificationType.TASK_COMPLETED]: { name: 'check_circle', bg: 'bg-emerald-100 dark:bg-emerald-900/40', color: 'text-emerald-600 dark:text-emerald-400' },
-  [NotificationType.TASK_COMMENT]: { name: 'chat', bg: 'bg-purple-100 dark:bg-purple-900/40', color: 'text-purple-600 dark:text-purple-400' },
-  [NotificationType.TASK_MENTION]: { name: 'alternate_email', bg: 'bg-indigo-100 dark:bg-indigo-900/40', color: 'text-indigo-600 dark:text-indigo-400' },
-  [NotificationType.GROUP_MEMBER_JOINED]: { name: 'person_add', bg: 'bg-emerald-100 dark:bg-emerald-900/40', color: 'text-emerald-600 dark:text-emerald-400' },
-  [NotificationType.GROUP_MEMBER_LEFT]: { name: 'person_remove', bg: 'bg-gray-100 dark:bg-gray-800/40', color: 'text-gray-600 dark:text-gray-400' },
-  [NotificationType.GROUP_MEMBER_REMOVED]: { name: 'person_remove', bg: 'bg-red-100 dark:bg-red-900/40', color: 'text-red-600 dark:text-red-400' },
-  [NotificationType.GROUP_MEMBER_ROLE_CHANGED]: { name: 'manage_accounts', bg: 'bg-violet-100 dark:bg-violet-900/40', color: 'text-violet-600 dark:text-violet-400' },
-  [NotificationType.SYSTEM_ALERT]: { name: 'info', bg: 'bg-gray-100 dark:bg-gray-800/40', color: 'text-gray-600 dark:text-gray-400' },
-  [NotificationType.EVENT_INVITATION]: { name: 'event', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
-  [NotificationType.EVENT_UPDATED]: { name: 'edit_calendar', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
-  [NotificationType.EVENT_CANCELLED]: { name: 'event_busy', bg: 'bg-red-100 dark:bg-red-900/40', color: 'text-red-600 dark:text-red-400' },
-  [NotificationType.EVENT_RSVP_CHANGED]: { name: 'rsvp', bg: 'bg-teal-100 dark:bg-teal-900/40', color: 'text-teal-600 dark:text-teal-400' },
-  [NotificationType.TASK_DUE_SOON]: { name: 'schedule', bg: 'bg-amber-100 dark:bg-amber-900/40', color: 'text-amber-600 dark:text-amber-400' },
-  [NotificationType.DEADLINE_REMINDER]: { name: 'alarm', bg: 'bg-amber-100 dark:bg-amber-900/40', color: 'text-amber-600 dark:text-amber-400' },
-  [NotificationType.PROJECT_INVITATION]: { name: 'folder_shared', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
-  [NotificationType.PROJECT_MEMBER_JOINED]: { name: 'person_add', bg: 'bg-emerald-100 dark:bg-emerald-900/40', color: 'text-emerald-600 dark:text-emerald-400' },
-  [NotificationType.DAILY_DIGEST]: { name: 'summarize', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
-  [NotificationType.WEEKLY_DIGEST]: { name: 'summarize', bg: 'bg-blue-100 dark:bg-blue-900/40', color: 'text-blue-600 dark:text-blue-400' },
+  [NotificationType.TASK_ASSIGNED]: { name: 'assignment', bg: 'bg-info/15', color: 'text-info' },
+  [NotificationType.TASK_OVERDUE]: { name: 'warning', bg: 'bg-warning/20', color: 'text-warning-foreground' },
+  [NotificationType.TASK_COMPLETED]: { name: 'check_circle', bg: 'bg-primary/15', color: 'text-primary' },
+  [NotificationType.TASK_COMMENT]: { name: 'chat', bg: 'bg-secondary/15', color: 'text-secondary' },
+  [NotificationType.TASK_MENTION]: { name: 'alternate_email', bg: 'bg-info/15', color: 'text-info' },
+  [NotificationType.GROUP_MEMBER_JOINED]: { name: 'person_add', bg: 'bg-primary/15', color: 'text-primary' },
+  [NotificationType.GROUP_MEMBER_LEFT]: { name: 'person_remove', bg: 'bg-muted', color: 'text-muted-foreground' },
+  [NotificationType.GROUP_MEMBER_REMOVED]: { name: 'person_remove', bg: 'bg-destructive/15', color: 'text-destructive' },
+  [NotificationType.GROUP_MEMBER_ROLE_CHANGED]: { name: 'manage_accounts', bg: 'bg-secondary/15', color: 'text-secondary' },
+  [NotificationType.SYSTEM_ALERT]: { name: 'info', bg: 'bg-muted', color: 'text-muted-foreground' },
+  [NotificationType.EVENT_INVITATION]: { name: 'event', bg: 'bg-accent/15', color: 'text-accent' },
+  [NotificationType.EVENT_UPDATED]: { name: 'edit_calendar', bg: 'bg-accent/15', color: 'text-accent' },
+  [NotificationType.EVENT_CANCELLED]: { name: 'event_busy', bg: 'bg-destructive/15', color: 'text-destructive' },
+  [NotificationType.EVENT_RSVP_CHANGED]: { name: 'rsvp', bg: 'bg-accent/15', color: 'text-accent' },
+  [NotificationType.TASK_DUE_SOON]: { name: 'schedule', bg: 'bg-warning/20', color: 'text-warning-foreground' },
+  [NotificationType.DEADLINE_REMINDER]: { name: 'alarm', bg: 'bg-warning/20', color: 'text-warning-foreground' },
+  [NotificationType.PROJECT_INVITATION]: { name: 'folder_shared', bg: 'bg-info/15', color: 'text-info' },
+  [NotificationType.PROJECT_MEMBER_JOINED]: { name: 'person_add', bg: 'bg-primary/15', color: 'text-primary' },
+  [NotificationType.DAILY_DIGEST]: { name: 'summarize', bg: 'bg-info/15', color: 'text-info' },
+  [NotificationType.WEEKLY_DIGEST]: { name: 'summarize', bg: 'bg-info/15', color: 'text-info' },
 };
 
-const DEFAULT_ICON = { name: 'notifications', bg: 'bg-gray-100 dark:bg-gray-800/40', color: 'text-gray-600 dark:text-gray-400' };
+const DEFAULT_ICON = { name: 'notifications', bg: 'bg-muted', color: 'text-muted-foreground' };
 
 interface NotificationItemProps {
   notification: Notification;
@@ -77,7 +77,7 @@ export function NotificationItem({ notification }: NotificationItemProps) {
       <div
         data-testid={`notification-item-${notification.id}`}
         onClick={handleClick}
-        className={`group cursor-pointer rounded-xl border p-4 transition-colors ${
+        className={`group cursor-pointer rounded-(--radius-card) border p-(--spacing-card) transition-colors ${
           notification.isRead
             ? 'border-border bg-surface hover:bg-muted/50'
             : 'border-primary/20 bg-primary/5 hover:bg-primary/10'

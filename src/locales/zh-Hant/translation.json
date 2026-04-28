@@ -728,7 +728,22 @@
     "palettePinkDesc": "柔和溫暖的粉色點綴",
     "patternSystem": "系統",
     "colorElectric": "Electric",
-    "autoDescription": "白天淺色，夜晚深色。"
+    "autoDescription": "白天淺色，夜晚深色。",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "星巴克",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "顯示風格",
+    "displayStyleSubtitle": "控制形狀、陰影和間距 — 與任何調色板相容",
+    "styleDefault": "預設",
+    "styleDefaultDesc": "均衡的圓角和標準間距",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "柔和曲線，溫暖陰影，寬敞佈局",
+    "styleClay": "Clay",
+    "styleClayDesc": "圓潤平面，透過色彩對比營造層次",
+    "styleStarbucks": "星巴克",
+    "styleStarbucksDesc": "膠囊按鈕，平面設計，咖啡館般的寬敞感"
   },
   "languageSettings": {
     "title": "語言設定",

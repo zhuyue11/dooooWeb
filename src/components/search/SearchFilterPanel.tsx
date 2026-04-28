@@ -70,7 +70,7 @@ export function SearchFilterPanel({
   const activeTargets = targets?.filter((t) => t.status === 'active') ?? [];
 
   return (
-    <div className="max-h-[320px] space-y-4 overflow-y-auto rounded-xl border border-border bg-surface p-4">
+    <div className="max-h-[320px] space-y-4 overflow-y-auto rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
       {/* Priority */}
       <div>
         <h4 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
@@ -214,7 +214,7 @@ export function SearchFilterPanel({
           <div className="relative" ref={dateFromRef}>
             <button
               onClick={() => setShowDateFromPicker(!showDateFromPicker)}
-              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] transition-colors ${
+              className={`flex items-center gap-1.5 rounded-(--radius-card) border px-3 py-1.5 text-[13px] transition-colors ${
                 dateFrom ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'
               }`}
             >
@@ -249,7 +249,7 @@ export function SearchFilterPanel({
           <div className="relative" ref={dateToRef}>
             <button
               onClick={() => setShowDateToPicker(!showDateToPicker)}
-              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] transition-colors ${
+              className={`flex items-center gap-1.5 rounded-(--radius-card) border px-3 py-1.5 text-[13px] transition-colors ${
                 dateTo ? 'border-primary text-primary' : 'border-border text-muted-foreground hover:bg-muted'
               }`}
             >

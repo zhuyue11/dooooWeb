@@ -112,7 +112,7 @@ export function MemberListItem({
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
               data-testid={`member-actions-${member.userId}`}
-              className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) hover:bg-muted"
             >
               <Icon name="more_vert" size={20} color="var(--color-muted-foreground)" />
             </button>

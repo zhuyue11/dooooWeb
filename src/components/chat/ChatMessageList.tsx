@@ -233,7 +233,7 @@ export function ChatMessageList({
       {unreadAboveCount > 0 && (
         <button
           onClick={scrollToFirstUnread}
-          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-lg transition-transform hover:scale-105"
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-(--shadow-elevated) transition-transform hover:scale-105"
           data-testid="unread-above-indicator"
         >
           {unreadAboveCount === 1
@@ -246,7 +246,7 @@ export function ChatMessageList({
       {newMessageCount > 0 && (
         <button
           onClick={scrollToBottom}
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-lg transition-transform hover:scale-105"
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-(--shadow-elevated) transition-transform hover:scale-105"
         >
           {newMessageCount === 1
             ? t('chat.newMessageSingular')

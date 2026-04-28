@@ -31,7 +31,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
   return (
     <div
       data-testid="calendar-month-grid"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Day headers */}
       <div className="grid grid-cols-7 border-b border-border px-2">
@@ -60,7 +60,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                   onClick={() => onSelectDate(date)}
                   className={`flex flex-col gap-1 p-2 text-left transition-colors hover:bg-muted ${
                     di < 6 ? 'border-r border-border' : ''
-                  } ${isToday ? 'bg-[#f0f0ff] dark:bg-[#1a1a2e]' : ''}`}
+                  } ${isToday ? 'bg-primary/5' : ''}`}
                 >
                   {/* Date number */}
                   <span
@@ -95,7 +95,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                               {item.title}
                             </div>
                             {item.groupName && !hideGroupTag && (
-                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
                                 <Icon name="group" size={7} color="#3b82f6" />
                                 {item.groupName}
                               </span>

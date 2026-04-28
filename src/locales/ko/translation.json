@@ -728,7 +728,22 @@
     "palettePinkDesc": "핑크 포인트로 부드럽고 따뜻한 테마",
     "patternSystem": "시스템",
     "colorElectric": "Electric",
-    "autoDescription": "낮에는 라이트, 밤에는 다크."
+    "autoDescription": "낮에는 라이트, 밤에는 다크.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "스타벅스",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "디스플레이 스타일",
+    "displayStyleSubtitle": "모양, 그림자, 간격 제어 — 모든 색상 팔레트와 호환",
+    "styleDefault": "기본",
+    "styleDefaultDesc": "균형 잡힌 둥근 모서리와 표준 간격",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "부드러운 곡선, 따뜻한 그림자",
+    "styleClay": "Clay",
+    "styleClayDesc": "둥글고 평면적, 색상 대비로 깊이감",
+    "styleStarbucks": "스타벅스",
+    "styleStarbucksDesc": "알약 버튼, 평면 디자인, 여유로운 간격"
   },
   "languageSettings": {
     "title": "언어 설정",

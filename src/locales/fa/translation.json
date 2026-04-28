@@ -728,7 +728,22 @@
     "palettePinkDesc": "نرم و گرم با رنگ‌های صورتی",
     "patternSystem": "سیستم",
     "colorElectric": "Electric",
-    "autoDescription": "روشن در طول روز، تاریک در شب."
+    "autoDescription": "روشن در طول روز، تاریک در شب.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "استارباکس",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "سبک نمایش",
+    "displayStyleSubtitle": "شکل، سایه‌ها و فاصله‌ها را کنترل می‌کند — با هر پالت رنگی سازگار",
+    "styleDefault": "پیش‌فرض",
+    "styleDefaultDesc": "گوشه‌های گرد متعادل و فاصله‌گذاری استاندارد",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "خمیدگی‌های نرم، سایه‌های گرم، فاصله‌گذاری سخاوتمندانه",
+    "styleClay": "Clay",
+    "styleClayDesc": "گرد و مسطح، عمق از طریق تضاد رنگ",
+    "styleStarbucks": "استارباکس",
+    "styleStarbucksDesc": "دکمه‌های کپسولی، سطوح مسطح"
   },
   "languageSettings": {
     "title": "تنظیمات زبان",

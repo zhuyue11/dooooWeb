@@ -63,7 +63,7 @@ export function GroupDetailPage() {
         <button
           type="button"
           onClick={() => navigate('/groups')}
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+          className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
         >
           {t('groups.goBack')}
         </button>
@@ -80,7 +80,7 @@ export function GroupDetailPage() {
         <button
           type="button"
           onClick={() => navigate('/groups')}
-          className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-muted"
+          className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) hover:bg-muted"
           data-testid="back-to-groups"
         >
           <Icon name="arrow_back" size={20} color="var(--color-foreground)" />
@@ -103,7 +103,7 @@ export function GroupDetailPage() {
           <button
             type="button"
             onClick={() => setShowEditModal(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
             data-testid="edit-group-button"
           >
             <Icon name="edit" size={16} color="var(--color-foreground)" />
@@ -114,13 +114,13 @@ export function GroupDetailPage() {
 
       {/* Description */}
       {group.description && (
-        <div className="rounded-xl border border-border bg-surface p-4">
+        <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
           <p className="text-sm leading-relaxed text-foreground">{group.description}</p>
         </div>
       )}
 
       {/* Info section */}
-      <div className="rounded-xl border border-border bg-surface p-4">
+      <div className="rounded-(--radius-card) border border-border bg-surface p-(--spacing-card)">
         <h3 className="mb-3 text-sm font-semibold text-foreground">{t('groups.groupInfo')}</h3>
         <div className="flex flex-col gap-2.5">
           {/* Members */}
@@ -156,7 +156,7 @@ export function GroupDetailPage() {
       </div>
 
       {/* Placeholder for future sections (calendar, chat, members list) */}
-      <div className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+      <div className="rounded-(--radius-card) border border-dashed border-border p-(--spacing-card) text-center text-sm text-muted-foreground">
         {t('groups.moreFeaturesComing')}
       </div>
 

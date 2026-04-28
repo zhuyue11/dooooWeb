@@ -150,7 +150,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
   // ═══════════════════════ LIST VIEW ═══════════════════════
   if (view === 'list') {
     return (
-      <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[240px] rounded-xl border border-border bg-surface p-1 shadow-[0_8px_24px_rgba(0,0,0,0.2)]">
+      <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[240px] rounded-(--radius-modal) border border-border bg-surface p-1 shadow-(--shadow-elevated)">
         {LIST_OPTIONS.map((option) => {
           const isSelected = currentOption === option;
           return (
@@ -158,7 +158,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
               key={option}
               type="button"
               onClick={() => handleListSelect(option)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${isSelected ? 'bg-muted font-medium' : ''}`}
+              className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${isSelected ? 'bg-muted font-medium' : ''}`}
             >
               <span className="flex-1">{getOptionLabel(option)}</span>
               {isSelected && <Icon name="check" size={16} color="var(--color-primary)" />}
@@ -171,7 +171,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
 
   // ═══════════════════════ CUSTOM VIEW ═══════════════════════
   return (
-    <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[300px] rounded-xl border border-border bg-surface p-3 shadow-[0_8px_24px_rgba(0,0,0,0.2)]">
+    <div ref={ref} className="absolute left-0 top-full mt-1 z-50 w-[300px] rounded-(--radius-modal) border border-border bg-surface p-(--spacing-card) shadow-(--shadow-elevated)">
       {/* Back button */}
       <button
         type="button"
@@ -192,7 +192,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
             max={30}
             value={customDay}
             onChange={(e) => setCustomDay(Math.max(0, Math.min(30, parseInt(e.target.value) || 0)))}
-            className="h-8 w-16 rounded-md border border-border bg-transparent px-2 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
         <div className="flex flex-col items-center gap-1">
@@ -203,7 +203,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
             max={23}
             value={customHour}
             onChange={(e) => setCustomHour(Math.max(0, Math.min(23, parseInt(e.target.value) || 0)))}
-            className="h-8 w-16 rounded-md border border-border bg-transparent px-2 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
         <div className="flex flex-col items-center gap-1">
@@ -214,7 +214,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
             max={59}
             value={customMin}
             onChange={(e) => setCustomMin(Math.max(0, Math.min(59, parseInt(e.target.value) || 0)))}
-            className="h-8 w-16 rounded-md border border-border bg-transparent px-2 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
       </div>
@@ -228,7 +228,7 @@ export function ReminderPopover({ value, onSelect, onClear, onClose }: ReminderP
       <button
         type="button"
         onClick={handleCustomApply}
-        className="mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        className="mt-3 w-full rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
       >
         {t('itemEditor.save')}
       </button>

@@ -159,7 +159,7 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
           <button
             data-testid="template-detail-close"
             onClick={handleClose}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
             title={t('common.close')}
           >
             <Icon name="close" size={18} />
@@ -175,7 +175,7 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
 
           {/* Details card */}
           {hasAnyDetail && (
-            <div className="rounded-lg border border-border" data-testid="template-detail-card">
+            <div className="rounded-(--radius-card) border border-border" data-testid="template-detail-card">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}

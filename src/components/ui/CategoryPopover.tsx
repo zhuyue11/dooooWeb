@@ -57,7 +57,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
       <PopoverWrapper onClose={onClose} className="w-[260px] p-3">
         {/* Header */}
         <div className="mb-3 flex items-center gap-2">
-          <button type="button" onClick={() => { setShowCreateForm(false); setError(null); }} className="rounded-md p-0.5 hover:bg-muted/50">
+          <button type="button" onClick={() => { setShowCreateForm(false); setError(null); }} className="rounded-(--radius-btn) p-0.5 hover:bg-muted/50">
             <Icon name="arrow_back" size={18} color="var(--color-muted-foreground)" />
           </button>
           <span className="text-sm font-medium text-foreground">{t('categories.newCategory')}</span>
@@ -71,7 +71,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
           placeholder={t('categories.namePlaceholder')}
           autoFocus
           maxLength={50}
-          className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+          className="mb-3 w-full rounded-(--radius-input) border border-border bg-background px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           onKeyDown={(e) => { if (e.key === 'Enter') handleCreate(); }}
         />
 
@@ -91,14 +91,14 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
         </div>
 
         {/* Error */}
-        {error && <p className="mb-2 text-xs text-red-500">{error}</p>}
+        {error && <p className="mb-2 text-xs text-destructive">{error}</p>}
 
         {/* Create button */}
         <button
           type="button"
           onClick={handleCreate}
           disabled={!newName.trim() || isCreating}
-          className="w-full rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isCreating ? t('categories.creating') : t('categories.newCategory')}
         </button>
@@ -115,7 +115,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
             key={cat.id}
             type="button"
             onClick={() => onSelect(cat.id)}
-            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === cat.id ? 'bg-muted font-medium' : ''}`}
+            className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === cat.id ? 'bg-muted font-medium' : ''}`}
           >
             <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: cat.color }} />
             <span className="truncate">{cat.name}</span>
@@ -129,7 +129,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
         <button
           type="button"
           onClick={() => setShowCreateForm(true)}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+          className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
         >
           <Icon name="add" size={16} />
           <span>{t('categories.createNew')}</span>
@@ -141,7 +141,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
             <button
               type="button"
               onClick={onClear}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
             >
               <Icon name="close" size={16} />
               <span>{t('itemEditor.clear')}</span>

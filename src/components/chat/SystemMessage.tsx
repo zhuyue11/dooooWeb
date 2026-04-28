@@ -45,7 +45,7 @@ export function SystemMessage({ message, groupColor }: SystemMessageProps) {
   return (
     <div className="flex justify-center py-1" data-testid="system-message">
       <div
-        className="flex max-w-[85%] items-center gap-2 rounded-xl border px-3 py-1.5"
+        className="flex max-w-[85%] items-center gap-2 rounded-(--radius-card) border px-3 py-1.5"
         style={{ borderColor: `color-mix(in srgb, ${accentColor} 30%, transparent)` }}
       >
         <Icon name={iconName} size={16} color={accentColor} />

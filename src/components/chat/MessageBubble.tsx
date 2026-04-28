@@ -21,7 +21,7 @@ export function MessageBubble({ message, isOwnMessage, groupColor }: MessageBubb
   if (isOwnMessage) {
     return (
       <div className="flex justify-end" data-testid="message-bubble">
-        <div className="max-w-[70%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">
+        <div className="max-w-[70%] rounded-(--radius-card) rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">
           <p className="whitespace-pre-wrap break-words text-sm">{message.content}</p>
           <div className="mt-1 flex items-center justify-end gap-1.5">
             {message.isEdited && (
@@ -42,7 +42,7 @@ export function MessageBubble({ message, isOwnMessage, groupColor }: MessageBubb
       >
         {initial}
       </div>
-      <div className="max-w-[70%] rounded-2xl rounded-bl-md bg-muted px-3.5 py-2">
+      <div className="max-w-[70%] rounded-(--radius-card) rounded-bl-md bg-muted px-3.5 py-2">
         <p
           className="text-xs font-semibold"
           style={{ color: groupColor || 'var(--color-primary)' }}

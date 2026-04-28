@@ -97,7 +97,7 @@ export function GroupTodoPage() {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-60 items-center gap-2 rounded-lg border border-border px-3">
+          <div className="flex h-9 w-60 items-center gap-2 rounded-(--radius-card) border border-border px-3">
             <Icon name="search" size={16} color="var(--color-muted-foreground)" />
             <input
               type="text"
@@ -109,7 +109,7 @@ export function GroupTodoPage() {
           </div>
           <button
             type="button"
-            className="flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3.5 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="flex h-(--btn-height-sm) items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <Icon name="add" size={16} />
             {t('todoPage.addTask')}
@@ -118,7 +118,7 @@ export function GroupTodoPage() {
       </div>
 
       {/* Task list card — matches TodoPage */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
         {isLoading ? (
           <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
             {t('common.loading')}

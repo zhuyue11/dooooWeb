@@ -95,7 +95,7 @@ export function AIChatPage() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
           data-testid="ai-chat-back"
         >
           <Icon name="arrow_back" size={20} />
@@ -107,7 +107,7 @@ export function AIChatPage() {
             <button
               type="button"
               onClick={chat.handleStartOver}
-              className="flex h-8 items-center gap-1 rounded-lg px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-8 items-center gap-1 rounded-(--radius-card) px-2 text-muted-foreground hover:bg-muted hover:text-foreground"
               data-testid="ai-chat-start-over"
             >
               <Icon name="refresh" size={18} />
@@ -117,7 +117,7 @@ export function AIChatPage() {
           <button
             type="button"
             onClick={() => chat.setShowChatHistory(true)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
             data-testid="ai-chat-history-button"
           >
             <Icon name="segment" size={20} />

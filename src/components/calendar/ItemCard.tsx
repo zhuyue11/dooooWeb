@@ -23,7 +23,7 @@ export function ItemCard({ item, categories, onClick }: ItemCardProps) {
   return (
     <div
       data-testid={`task-card-${item.id}`}
-      className={`rounded-md ${item.isCompleted ? 'opacity-60' : ''} ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+      className={`rounded-(--radius-btn) ${item.isCompleted ? 'opacity-60' : ''} ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
       style={{ backgroundColor: colors.bg, padding: '6px 8px' }}
       onClick={() => onClick?.(item)}
     >

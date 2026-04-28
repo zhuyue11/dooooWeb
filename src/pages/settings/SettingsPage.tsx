@@ -22,7 +22,7 @@ export function SettingsPage() {
       <h1 className="mb-6 text-2xl font-bold text-foreground">
         {t('settings.title', 'Settings')}
       </h1>
-      <div className="divide-y divide-border rounded-xl border border-border bg-surface">
+      <div className="divide-y divide-border rounded-(--radius-card) border border-border bg-surface">
         {SETTINGS_ITEMS.map(({ path, icon, labelKey }) => (
           <Link
             key={path}

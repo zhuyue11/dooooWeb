@@ -40,7 +40,7 @@ export function AssigneePicker({ groupId, selectedUserId, onSelect, currentUserI
     <div className="border-b border-border" data-testid="assignee-picker">
       {/* Search */}
       <div className="px-4 py-2">
-        <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-1.5">
+        <div className="flex items-center gap-2 rounded-(--radius-card) bg-muted/50 px-3 py-1.5">
           <Icon name="search" size={16} color="var(--color-muted-foreground)" />
           <input
             type="text"

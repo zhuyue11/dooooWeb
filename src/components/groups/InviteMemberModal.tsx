@@ -149,7 +149,7 @@ export function InviteMemberModal({
       onClick={onClose}
     >
       <div
-        className="mx-4 flex w-full max-w-lg flex-col rounded-xl bg-surface shadow-lg"
+        className="mx-4 flex w-full max-w-lg flex-col rounded-(--radius-modal) bg-surface shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -159,7 +159,7 @@ export function InviteMemberModal({
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-muted disabled:opacity-50"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) hover:bg-muted disabled:opacity-50"
             >
               <Icon name="close" size={20} color="var(--color-foreground)" />
             </button>
@@ -171,7 +171,7 @@ export function InviteMemberModal({
             type="button"
             onClick={handleSubmit}
             disabled={submitDisabled}
-            className="rounded-lg bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -185,7 +185,7 @@ export function InviteMemberModal({
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4">
           {/* Copied code success message */}
           {copiedCode && (
-            <div className="mb-4 flex items-center gap-2 rounded-lg px-3 py-2.5" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
+            <div className="mb-4 flex items-center gap-2 rounded-(--radius-card) px-3 py-2.5" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
               <Icon name="check_circle" size={18} color="var(--color-primary)" />
               <span className="text-sm text-foreground">
                 {t('groups.inviteModalCopiedMessage')} — <span className="font-mono font-semibold">{copiedCode}</span>
@@ -195,7 +195,7 @@ export function InviteMemberModal({
 
           {/* Info box */}
           {!copiedCode && (
-            <div className="mb-4 flex items-start gap-2 rounded-lg px-3 py-2.5" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
+            <div className="mb-4 flex items-start gap-2 rounded-(--radius-card) px-3 py-2.5" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
               <Icon name="info" size={18} color="var(--color-info)" className="mt-0.5 shrink-0" />
               <span className="text-sm text-muted-foreground">
                 {t('groups.inviteModalInfoText')}
@@ -205,7 +205,7 @@ export function InviteMemberModal({
 
           {/* Error */}
           {error && (
-            <div className="mb-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2">
+            <div className="mb-4 flex items-center gap-2 rounded-(--radius-card) bg-destructive/10 px-3 py-2">
               <Icon name="error" size={16} color="var(--color-destructive)" />
               <span className="text-sm text-destructive">{error}</span>
             </div>
@@ -227,7 +227,7 @@ export function InviteMemberModal({
                       setDeliveryMethod(opt.value);
                       setError('');
                     }}
-                    className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
+                    className={`flex items-center gap-3 rounded-(--radius-card) border px-3 py-2.5 text-left transition-colors ${
                       selected
                         ? 'border-primary bg-primary/5'
                         : 'border-border hover:bg-muted/50'
@@ -283,7 +283,7 @@ export function InviteMemberModal({
                 }}
                 placeholder={t('groups.inviteModalEmailPlaceholder')}
                 autoFocus
-                className="w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                className="w-full rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
               />
             </div>
           )}
@@ -301,7 +301,7 @@ export function InviteMemberModal({
                     key={opt.value}
                     type="button"
                     onClick={() => setRole(opt.value)}
-                    className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
+                    className={`flex items-center gap-3 rounded-(--radius-card) border px-3 py-2.5 text-left transition-colors ${
                       selected
                         ? 'border-primary bg-primary/5'
                         : 'border-border hover:bg-muted/50'

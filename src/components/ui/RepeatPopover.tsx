@@ -132,7 +132,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full mt-1 z-50 w-[320px] rounded-xl border border-border bg-surface shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+      className="absolute left-0 top-full mt-1 z-50 w-[320px] rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated)"
     >
       {/* Tabs */}
       <div className="flex border-b border-border">
@@ -159,7 +159,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
               key={i}
               type="button"
               onClick={() => handlePresetSelect(preset.value)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${isPresetSelected(preset.value) ? 'bg-muted font-medium' : ''}`}
+              className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${isPresetSelected(preset.value) ? 'bg-muted font-medium' : ''}`}
             >
               {isPresetSelected(preset.value) && <Icon name="check" size={16} className="text-primary" />}
               <span className={isPresetSelected(preset.value) ? '' : 'pl-[28px]'}>{preset.label}</span>
@@ -177,12 +177,12 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
               max={999}
               value={interval}
               onChange={(e) => setInterval(Math.max(1, parseInt(e.target.value) || 1))}
-              className="h-8 w-16 rounded-md border border-border bg-transparent px-2 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value as typeof PERIOD_OPTIONS[number])}
-              className="h-8 rounded-md border border-border bg-transparent px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="h-8 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               {PERIOD_OPTIONS.map((p) => (
                 <option key={p} value={p}>
@@ -271,21 +271,21 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
               <button
                 type="button"
                 onClick={() => setEndType('none')}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${endType === 'none' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
+                className={`rounded-(--radius-btn) px-(--spacing-btn-x-sm) py-1 text-xs font-medium transition-colors ${endType === 'none' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
               >
                 {t('tasks.input.infinite')}
               </button>
               <button
                 type="button"
                 onClick={() => setEndType('date')}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${endType === 'date' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
+                className={`rounded-(--radius-btn) px-(--spacing-btn-x-sm) py-1 text-xs font-medium transition-colors ${endType === 'date' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
               >
                 {t('tasks.input.addRepeatEndDate')}
               </button>
               <button
                 type="button"
                 onClick={() => setEndType('count')}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${endType === 'count' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
+                className={`rounded-(--radius-btn) px-(--spacing-btn-x-sm) py-1 text-xs font-medium transition-colors ${endType === 'count' ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:bg-muted'}`}
               >
                 {t('tasks.input.addRepeatTimes')}
               </button>
@@ -296,7 +296,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
                 <button
                   type="button"
                   onClick={() => setShowEndDateCalendar(!showEndDateCalendar)}
-                  className="flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted/50"
+                  className="flex items-center gap-2 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm text-foreground hover:bg-muted/50"
                 >
                   <Icon name="calendar_today" size={16} />
                   {endDate
@@ -323,7 +323,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
                   max={999}
                   value={endCount}
                   onChange={(e) => setEndCount(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="h-8 w-16 rounded-md border border-border bg-transparent px-2 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="h-8 w-16 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
             )}
@@ -333,7 +333,7 @@ export function RepeatPopover({ selectedRepeat, selectedDate, onSelect, onClose 
           <button
             type="button"
             onClick={handleCustomApply}
-            className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="w-full rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             {t('itemEditor.save')}
           </button>

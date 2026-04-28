@@ -120,7 +120,7 @@ export function InvitationListItem({
             type="button"
             onClick={() => setShowConfirm(true)}
             disabled={isCanceling}
-            className="shrink-0 rounded-lg border border-destructive/30 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
+            className="shrink-0 rounded-(--radius-btn) border border-destructive/30 px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
           >
             {isCanceling ? t('groups.canceling') : t('groups.cancelInvitation')}
           </button>

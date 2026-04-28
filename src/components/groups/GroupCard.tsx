@@ -22,7 +22,7 @@ export function GroupCard({ group, currentUserId, onClick, onStarToggle }: Group
 
   return (
     <div
-      className="cursor-pointer overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-md"
+      className="cursor-pointer overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
       onClick={onClick}
     >
       {/* Color strip */}

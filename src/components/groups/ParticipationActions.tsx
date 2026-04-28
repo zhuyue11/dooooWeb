@@ -31,9 +31,9 @@ export function ParticipationActions({ taskId, isRecurring, date, onActionComple
     onActionComplete?.();
   };
 
-  const btnPrimary = 'rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50';
-  const btnOutline = 'rounded-lg border border-border px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50';
-  const btnDestructive = 'rounded-lg border border-destructive/30 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50';
+  const btnPrimary = 'rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50';
+  const btnOutline = 'rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-foreground hover:bg-muted disabled:opacity-50';
+  const btnDestructive = 'rounded-(--radius-btn) border border-destructive/30 px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50';
 
   return (
     <div className="flex flex-wrap items-center gap-2 px-4 py-3" data-testid="participation-actions">

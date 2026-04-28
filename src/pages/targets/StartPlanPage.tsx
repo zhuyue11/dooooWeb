@@ -366,7 +366,7 @@ export function StartPlanPage() {
             <button
               type="button"
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="flex w-full items-center gap-2 rounded-xl border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
             >
               <Icon name="event" size={18} color="var(--color-primary)" />
               <span className="flex-1 text-[13px] text-foreground">
@@ -448,7 +448,7 @@ export function StartPlanPage() {
           <button
             type="button"
             onClick={() => navigate(`/plans/${planId}`)}
-            className="rounded-lg px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             data-testid="start-plan-cancel"
           >
             {t('common.cancel', 'Cancel')}
@@ -457,7 +457,7 @@ export function StartPlanPage() {
             type="button"
             onClick={handleConfirm}
             disabled={executing}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
             data-testid="confirm-create-tasks"
           >
             {executing ? (

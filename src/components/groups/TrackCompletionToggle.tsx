@@ -41,7 +41,7 @@ export function TrackCompletionToggle({ value, onChange }: TrackCompletionToggle
       </div>
 
       {showInfo && (
-        <div className="mx-4 mb-2 rounded-lg bg-muted/50 px-4 py-3">
+        <div className="mx-4 mb-2 rounded-(--radius-card) bg-muted/50 px-4 py-3">
           <p className="text-xs font-medium text-foreground">{t('tasks.input.trackCompletionInfoTitle')}</p>
           <p className="mt-1 whitespace-pre-line text-xs text-muted-foreground">{t('tasks.input.trackCompletionInfoContent')}</p>
         </div>

@@ -90,10 +90,10 @@ function FieldRow({ icon, text, onClick, active, suffix }: {
 // ── Priority popover ──
 
 const PRIORITY_OPTIONS = [
-  { value: 'URGENT', key: 'todoPage.priorityUrgent', color: 'text-red-500' },
-  { value: 'HIGH', key: 'todoPage.priorityHigh', color: 'text-orange-500' },
+  { value: 'URGENT', key: 'todoPage.priorityUrgent', color: 'text-destructive' },
+  { value: 'HIGH', key: 'todoPage.priorityHigh', color: 'text-accent' },
   { value: 'MEDIUM', key: 'todoPage.priorityMedium', color: 'text-yellow-500' },
-  { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-blue-500' },
+  { value: 'LOW', key: 'todoPage.priorityLow', color: 'text-info' },
 ] as const;
 
 type PriorityValue = typeof PRIORITY_OPTIONS[number]['value'];
@@ -112,7 +112,7 @@ function PriorityPopover({ selected, onSelect, onClear, onClose }: {
           key={opt.value}
           type="button"
           onClick={() => onSelect(opt.value)}
-          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === opt.value ? 'bg-muted font-medium' : ''}`}
+          className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm transition-colors hover:bg-muted/50 ${selected === opt.value ? 'bg-muted font-medium' : ''}`}
         >
           <Icon name="flag" size={16} className={opt.color} />
           <span>{t(opt.key)}</span>
@@ -124,7 +124,7 @@ function PriorityPopover({ selected, onSelect, onClear, onClose }: {
           <button
             type="button"
             onClick={onClear}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
+            className="flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/50"
           >
             <Icon name="close" size={16} />
             <span>{t('itemEditor.clear')}</span>
@@ -914,7 +914,7 @@ export function ItemEditorPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={handleClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface shadow-sm text-muted-foreground hover:bg-muted"
+            className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) bg-surface shadow-(--shadow-card) text-muted-foreground hover:bg-muted"
           >
             <Icon name="close" size={18} />
           </button>
@@ -922,12 +922,12 @@ export function ItemEditorPage() {
         </div>
         <div className="flex items-center gap-3">
           {/* Type toggle */}
-          <div className="flex rounded-lg bg-muted p-1">
+          <div className="flex rounded-(--radius-card) bg-muted p-1">
             <button
               type="button"
               onClick={() => handleItemTypeChange('TASK')}
-              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
-                isTask ? 'bg-surface shadow-sm text-foreground' : 'text-muted-foreground'
+              className={`flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
+                isTask ? 'bg-surface shadow-(--shadow-card) text-foreground' : 'text-muted-foreground'
               }`}
             >
               <Icon name="check_circle" size={14} />
@@ -936,8 +936,8 @@ export function ItemEditorPage() {
             <button
               type="button"
               onClick={() => handleItemTypeChange('EVENT')}
-              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-[13px] font-semibold transition-colors ${
-                !isTask ? 'bg-surface shadow-sm text-foreground' : 'text-muted-foreground'
+              className={`flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
+                !isTask ? 'bg-surface shadow-(--shadow-card) text-foreground' : 'text-muted-foreground'
               }`}
             >
               <Icon name="calendar_today" size={14} />
@@ -949,7 +949,7 @@ export function ItemEditorPage() {
             type="button"
             onClick={handleSubmit}
             disabled={saveDisabled}
-            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_2px_8px_rgba(54,14,255,0.25)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground shadow-(--shadow-card) transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -961,7 +961,7 @@ export function ItemEditorPage() {
       </div>
 
       {/* ── Title + Description card ── */}
-      <div className="mb-4 rounded-xl bg-surface p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="mb-4 rounded-(--radius-card) bg-surface p-(--spacing-card) shadow-(--shadow-card)">
         <input
           ref={titleRef}
           type="text"
@@ -985,7 +985,7 @@ export function ItemEditorPage() {
       {/* ── Two-column layout ── */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_446px]">
         {/* Left column: Schedule card */}
-        <div className="rounded-xl bg-surface p-1 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div className="rounded-(--radius-card) bg-surface p-1 shadow-(--shadow-card)">
           {/* Date */}
           <div className="relative">
             <div
@@ -1285,7 +1285,7 @@ export function ItemEditorPage() {
               )}
               {/* Validation: end can't be before start */}
               {effectiveDuration != null && effectiveDuration <= 0 && (
-                <div className="flex items-center gap-2 px-4 py-1.5 text-xs text-red-500">
+                <div className="flex items-center gap-2 px-4 py-1.5 text-xs text-destructive">
                   <Icon name="error" size={14} color="var(--color-destructive, #ef4444)" />
                   <span>{t('tasks.validation.endTimeBeforeStart', 'End time must be after start time')}</span>
                 </div>
@@ -1339,7 +1339,7 @@ export function ItemEditorPage() {
                 <Icon name="group" size={20} color={guests.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
                 <div className="flex flex-1 flex-wrap items-center gap-1.5">
                   {guests.map((guest, idx) => (
-                    <span key={guest.email} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                    <span key={guest.email} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
                       {guest.email}
                       <button type="button" onClick={() => setGuests((prev) => prev.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-foreground">
                         <Icon name="close" size={12} />
@@ -1720,7 +1720,7 @@ export function ItemEditorPage() {
         {/* Right column */}
         <div className="flex flex-col gap-4">
           {/* Classification card */}
-          <div className="rounded-xl bg-surface p-1 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div className="rounded-(--radius-card) bg-surface p-1 shadow-(--shadow-card)">
             {/* Priority */}
             <div className="relative">
               <FieldRow
@@ -1848,7 +1848,7 @@ export function ItemEditorPage() {
                 <Icon name="label" size={20} color={tags.length > 0 ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} />
                 <div className="flex flex-1 flex-wrap items-center gap-1.5">
                   {tags.map((tag) => (
-                    <span key={tag} className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                    <span key={tag} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
                       {tag}
                       <button type="button" onClick={() => handleRemoveTag(tag)} className="text-muted-foreground hover:text-foreground">
                         <Icon name="close" size={12} />
@@ -1876,7 +1876,7 @@ export function ItemEditorPage() {
 
           {/* Info card */}
           {!selectedDate && (
-            <div className="flex items-start gap-2.5 rounded-xl bg-muted p-4">
+            <div className="flex items-start gap-2.5 rounded-(--radius-card) bg-muted p-(--spacing-card)">
               <Icon name="info" size={18} color="var(--color-muted-foreground)" className="mt-0.5 shrink-0" />
               <p className="text-xs leading-relaxed text-muted-foreground">
                 {t('itemEditor.infoText')}

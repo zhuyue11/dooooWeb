@@ -14,7 +14,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
-          className={`h-10 rounded-lg border bg-input-bg px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 ${
+          className={`h-(--btn-height-md) rounded-(--radius-input) border bg-input-bg px-(--spacing-input-x) py-(--spacing-input-y) text-sm text-foreground placeholder:text-muted-foreground transition-all duration-(--transition-duration) focus:outline-none focus:ring-(length:--focus-ring-width) focus:ring-primary/50 ${
             error ? 'border-destructive' : 'border-border'
           } ${className}`}
           {...props}

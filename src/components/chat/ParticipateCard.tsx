@@ -71,7 +71,7 @@ export function ParticipateCard({
     return (
       <div className="flex justify-center py-2" data-testid="participate-card-loading">
         <div
-          className="w-[85%] max-w-md animate-pulse rounded-xl border p-4"
+          className="w-[85%] max-w-md animate-pulse rounded-(--radius-card) border p-(--spacing-card)"
           style={{ borderColor: `color-mix(in srgb, ${accentColor} 30%, transparent)` }}
         >
           <div className="mb-3 h-4 w-3/4 rounded bg-muted" />
@@ -86,7 +86,7 @@ export function ParticipateCard({
   if (isDeleted) {
     return (
       <div className="flex justify-center py-2" data-testid="participate-card-deleted">
-        <div className="flex w-[85%] max-w-md items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3">
+        <div className="flex w-[85%] max-w-md items-center gap-3 rounded-(--radius-card) border border-border bg-muted/30 px-4 py-3">
           <Icon name="delete" size={20} color="var(--color-muted-foreground)" />
           <span className="text-xs text-muted-foreground">
             {t('groups.participate.activityDeleted', 'This activity has been deleted')}
@@ -99,7 +99,7 @@ export function ParticipateCard({
   return (
     <div className="flex justify-center py-2" data-testid="participate-card">
       <div
-        className="w-[85%] max-w-md overflow-hidden rounded-xl border bg-surface"
+        className="w-[85%] max-w-md overflow-hidden rounded-(--radius-card) border bg-surface"
         style={{ borderColor: `color-mix(in srgb, ${accentColor} 30%, transparent)` }}
       >
         {/* Header */}

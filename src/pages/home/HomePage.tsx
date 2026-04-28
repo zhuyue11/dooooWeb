@@ -361,7 +361,7 @@ export function HomePage() {
         <button
           data-testid="dashboard-add-button"
           onClick={handleAddClick}
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90"
+          className="flex h-(--btn-height-sm) w-9 items-center justify-center rounded-(--radius-btn) bg-primary text-primary-foreground transition-opacity hover:opacity-90"
         >
           <Icon name="add" size={20} />
         </button>
@@ -372,7 +372,7 @@ export function HomePage() {
         {metrics.map((m) => (
           <div
             key={m.label}
-            className="flex flex-1 flex-col gap-2 rounded-2xl bg-surface p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+            className="flex flex-1 flex-col gap-2 rounded-(--radius-card) bg-surface p-(--spacing-card) shadow-(--shadow-card)"
           >
             <span className="text-[13px] font-medium text-muted-foreground">{m.label}</span>
             <div className="flex items-end gap-2">
@@ -394,10 +394,10 @@ export function HomePage() {
       {/* Body: Today | Overdue | To-do | Upcoming */}
       <div className="flex min-h-0 flex-1 gap-4">
         {/* 1. Today */}
-        <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div data-testid="today-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">{t('dashboard.panels.today')}</span>
-            <Link to="/calendar" className="text-[13px] font-medium text-[#360EFF] hover:underline">
+            <Link to="/calendar" className="text-[13px] font-medium text-primary hover:underline">
               {t('dashboard.panels.openCalendar')}
             </Link>
           </div>
@@ -416,7 +416,7 @@ export function HomePage() {
 
         {/* 2. Overdue */}
         {overdueItems.length > 0 && (
-          <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div data-testid="overdue-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <span className="text-base font-semibold text-destructive">{t('dashboard.panels.overdue')}</span>
             </div>
@@ -429,10 +429,10 @@ export function HomePage() {
         )}
 
         {/* 3. To-do */}
-        <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div data-testid="todo-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">{t('dashboard.panels.todo')}</span>
-            <Link to="/todo" className="text-[13px] font-medium text-[#360EFF] hover:underline">
+            <Link to="/todo" className="text-[13px] font-medium text-primary hover:underline">
               {t('dashboard.panels.viewAll')}
             </Link>
           </div>
@@ -450,7 +450,7 @@ export function HomePage() {
         </div>
 
         {/* 4. Upcoming */}
-        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div data-testid="upcoming-tasks-section" className="flex flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
           <div className="flex items-center justify-between border-b border-border px-5 py-4">
             <span className="text-base font-semibold text-foreground">{t('dashboard.panels.upcoming')}</span>
           </div>

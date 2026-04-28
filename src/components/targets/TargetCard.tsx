@@ -26,7 +26,7 @@ export function TargetCard({ target, onClick }: TargetCardProps) {
 
   return (
     <div
-      className="flex cursor-pointer items-center gap-3 rounded-2xl bg-surface px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-md"
+      className="flex cursor-pointer items-center gap-3 rounded-(--radius-card) bg-surface px-5 py-4 shadow-(--shadow-card) transition-shadow hover:shadow-(--shadow-card-hover)"
       onClick={onClick}
       data-testid={`target-card-${target.id}`}
     >

@@ -728,7 +728,22 @@
     "palettePinkDesc": "Pembe vurgularla yumuşak ve sıcak",
     "patternSystem": "Sistem",
     "colorElectric": "Electric",
-    "autoDescription": "Gündüz açık, gece koyu."
+    "autoDescription": "Gündüz açık, gece koyu.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Görüntüleme Stili",
+    "displayStyleSubtitle": "Şekil, gölge ve boşlukları kontrol eder — tüm paletlerle uyumlu",
+    "styleDefault": "Varsayılan",
+    "styleDefaultDesc": "Dengeli yuvarlak köşeler ve standart boşluk",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Yumuşak eğriler, sıcak gölgeler, geniş aralıklar",
+    "styleClay": "Clay",
+    "styleClayDesc": "Yuvarlak ve düz, renk kontrastıyla derinlik",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Hap düğmeler, düz yüzeyler"
   },
   "languageSettings": {
     "title": "Dil Ayarları",

@@ -64,7 +64,7 @@ export function NotificationPage() {
             data-testid="mark-all-read-button"
             onClick={() => markAllAsRead.mutate()}
             disabled={markAllAsRead.isPending}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/10 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary hover:bg-primary/10 disabled:opacity-50"
           >
             <Icon name="done_all" size={18} />
             {t('notifications.markAllRead')}

@@ -115,7 +115,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
       />
 
       {/* Modal card */}
-      <div className="relative z-10 mx-4 w-full max-w-md animate-modal-enter rounded-2xl bg-background p-6 shadow-xl">
+      <div className="relative z-10 mx-4 w-full max-w-md animate-modal-enter rounded-(--radius-card) bg-background p-(--spacing-card) shadow-(--shadow-elevated)">
         {/* Close button */}
         <button
           type="button"
@@ -137,7 +137,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
 
             <button
               type="button"
-              className="flex items-center gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex items-center gap-3 rounded-(--radius-card) border border-border p-(--spacing-card) text-left transition-colors hover:bg-muted/50"
               onClick={() => handleSpreadChoice('spread')}
               data-testid="option-spread"
             >
@@ -156,7 +156,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
 
             <button
               type="button"
-              className="flex items-center gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex items-center gap-3 rounded-(--radius-card) border border-border p-(--spacing-card) text-left transition-colors hover:bg-muted/50"
               onClick={() => handleSpreadChoice('same_period')}
               data-testid="option-same-period"
             >
@@ -185,7 +185,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
               <button
                 key={option.key}
                 type="button"
-                className="flex items-center gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:bg-muted/50"
+                className="flex items-center gap-3 rounded-(--radius-card) border border-border p-(--spacing-card) text-left transition-colors hover:bg-muted/50"
                 onClick={() => handlePeriodChoice(option.key)}
                 data-testid={`period-${option.key}`}
               >
@@ -222,7 +222,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
 
             <button
               type="button"
-              className="flex items-center gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex items-center gap-3 rounded-(--radius-card) border border-border p-(--spacing-card) text-left transition-colors hover:bg-muted/50"
               onClick={() => handleSchedulePrecision(false)}
               data-testid="option-specific-times"
             >
@@ -241,7 +241,7 @@ export function TimePreferenceModal({ open, onClose, onConfirm, showSpreadOption
 
             <button
               type="button"
-              className="flex items-center gap-3 rounded-xl border border-border p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex items-center gap-3 rounded-(--radius-card) border border-border p-(--spacing-card) text-left transition-colors hover:bg-muted/50"
               onClick={() => handleSchedulePrecision(true)}
               data-testid="option-time-of-day"
             >

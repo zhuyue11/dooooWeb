@@ -80,7 +80,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40" onClick={onClose}>
       <div
-        className="mx-6 w-full max-w-md rounded-xl bg-surface p-6 shadow-lg"
+        className="mx-6 w-full max-w-md rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -95,7 +95,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
 
         {/* Error */}
         {error && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2.5">
+          <div className="mb-4 flex items-center gap-2 rounded-(--radius-card) bg-destructive/10 px-3 py-2.5">
             <Icon name="error_outline" size={18} color="var(--color-destructive)" />
             <span className="text-sm text-destructive">{error}</span>
           </div>
@@ -112,7 +112,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
             onChange={(e) => setName(e.target.value)}
             placeholder={t('targetPlan.targetNamePlaceholder')}
             maxLength={100}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            className="w-full rounded-(--radius-input) border border-border bg-background px-(--spacing-input-x) py-(--spacing-input-y).5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           />
           <div className="mt-1 text-right text-xs text-muted-foreground">{name.length}/100</div>
         </div>
@@ -128,7 +128,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
             placeholder={t('targetPlan.descriptionPlaceholder')}
             maxLength={500}
             rows={3}
-            className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            className="w-full resize-none rounded-(--radius-input) border border-border bg-background px-(--spacing-input-x) py-(--spacing-input-y).5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
           />
           <div className="mt-1 text-right text-xs text-muted-foreground">{description.length}/500</div>
         </div>
@@ -169,7 +169,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
           >
             {t('common.cancel')}
           </button>
@@ -177,7 +177,7 @@ export function TargetFormModal({ open, onClose, onSubmit, initialData, mode }: 
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

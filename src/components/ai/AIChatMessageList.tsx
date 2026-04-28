@@ -128,7 +128,7 @@ export function AIChatMessageList({
             const isPending = proposal.status === 'pending';
             return (
               <div key={message.id} className="flex justify-start" data-testid="ai-proposal-card">
-                <div className="max-w-[75%] rounded-2xl rounded-bl-sm border border-border bg-surface px-3.5 py-2.5">
+                <div className="max-w-[75%] rounded-(--radius-card) rounded-bl-sm border border-border bg-surface px-3.5 py-2.5">
                   <div className="mb-1 flex items-center gap-1.5">
                     <Icon
                       name={proposal.kind === 'target' ? 'flag' : 'assignment'}
@@ -149,7 +149,7 @@ export function AIChatMessageList({
                         type="button"
                         onClick={() => onProposalResponse(message.id, 'decline')}
                         disabled={isStreamingDisabled}
-                        className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-50"
+                        className="rounded-(--radius-card) border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-50"
                       >
                         Decline
                       </button>
@@ -157,7 +157,7 @@ export function AIChatMessageList({
                         type="button"
                         onClick={() => onProposalResponse(message.id, 'confirm')}
                         disabled={isStreamingDisabled}
-                        className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                        className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-xs font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
                       >
                         Confirm
                       </button>
@@ -169,7 +169,7 @@ export function AIChatMessageList({
                         size={14}
                         color={proposal.status === 'confirmed' ? '#22c55e' : 'var(--color-muted-foreground)'}
                       />
-                      <span className={`text-xs font-medium ${proposal.status === 'confirmed' ? 'text-green-600' : 'text-muted-foreground'}`}>
+                      <span className={`text-xs font-medium ${proposal.status === 'confirmed' ? 'text-primary' : 'text-muted-foreground'}`}>
                         {proposal.status === 'confirmed' ? 'Confirmed' : 'Declined'}
                       </span>
                     </div>
@@ -187,7 +187,7 @@ export function AIChatMessageList({
                   <button
                     type="button"
                     onClick={() => onViewPlan?.(message.planAction!.planId, message.planAction!.type)}
-                    className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                    className="flex items-center gap-1.5 rounded-(--radius-card) border border-border bg-surface px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
                   >
                     <Icon name="visibility" size={16} color="var(--color-primary)" />
                     {t('aiChat.viewPlan')}
@@ -195,7 +195,7 @@ export function AIChatMessageList({
                   <button
                     type="button"
                     onClick={() => onStartPlan?.(message.planAction!.planId, message.planAction!.planName)}
-                    className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                    className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
                   >
                     <Icon name="play_arrow" size={16} />
                     {t('aiChat.startPlan')}

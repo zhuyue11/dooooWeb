@@ -728,7 +728,22 @@
     "palettePinkDesc": "นุ่มนวลและอบอุ่นด้วยสีชมพู",
     "patternSystem": "ระบบ",
     "colorElectric": "Electric",
-    "autoDescription": "สว่างตอนกลางวัน มืดตอนกลางคืน"
+    "autoDescription": "สว่างตอนกลางวัน มืดตอนกลางคืน",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "สตาร์บัคส์",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "รูปแบบการแสดงผล",
+    "displayStyleSubtitle": "ควบคุมรูปร่าง เงา และระยะห่าง — ใช้ได้กับทุกชุดสี",
+    "styleDefault": "ค่าเริ่มต้น",
+    "styleDefaultDesc": "มุมโค้งสมดุลและระยะห่างมาตรฐาน",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "เส้นโค้งนุ่มนวล เงาอบอุ่น ระยะห่างเหลือเฟือ",
+    "styleClay": "Clay",
+    "styleClayDesc": "โค้งมนและแบน ให้ความลึกด้วยคอนทราสต์สี",
+    "styleStarbucks": "สตาร์บัคส์",
+    "styleStarbucksDesc": "ปุ่มเม็ดยา พื้นผิวแบน"
   },
   "languageSettings": {
     "title": "ตั้งค่าภาษา",

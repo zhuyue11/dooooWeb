@@ -728,7 +728,22 @@
     "palettePinkDesc": "ناعم ودافئ مع لمسات وردية",
     "patternSystem": "النظام",
     "colorElectric": "Electric",
-    "autoDescription": "فاتح أثناء النهار، داكن في الليل."
+    "autoDescription": "فاتح أثناء النهار، داكن في الليل.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "ستاربكس",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "نمط العرض",
+    "displayStyleSubtitle": "يتحكم في الشكل والظلال والتباعد — يعمل مع أي لوحة ألوان",
+    "styleDefault": "افتراضي",
+    "styleDefaultDesc": "زوايا مستديرة متوازنة وتباعد قياسي",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "منحنيات ناعمة وظلال دافئة وتباعد واسع",
+    "styleClay": "Clay",
+    "styleClayDesc": "مستدير ومسطح، عمق من خلال تباين الألوان",
+    "styleStarbucks": "ستاربكس",
+    "styleStarbucksDesc": "أزرار كبسولة، أسطح مسطحة"
   },
   "languageSettings": {
     "title": "إعدادات اللغة",

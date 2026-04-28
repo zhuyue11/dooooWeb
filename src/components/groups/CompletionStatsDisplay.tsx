@@ -64,7 +64,7 @@ export function CompletionStatsDisplay({ taskId, currentUserId, organizerId, tra
   const displayParticipants = showAll ? participants : participants.slice(0, 5);
 
   return (
-    <div className="mx-4 my-2 rounded-xl border border-border" data-testid="completion-stats">
+    <div className="mx-4 my-2 rounded-(--radius-card) border border-border" data-testid="completion-stats">
       {/* Participants section */}
       {hasParticipants && (
         <div className="p-3">

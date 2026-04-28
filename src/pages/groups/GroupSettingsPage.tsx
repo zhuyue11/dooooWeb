@@ -76,7 +76,7 @@ export function GroupSettingsPage() {
     <div className="mx-auto w-full max-w-2xl p-6">
       <h1 className="mb-6 text-xl font-semibold text-foreground">{t('groups.navSettings')}</h1>
 
-      <div className="divide-y divide-border rounded-xl border border-border bg-surface">
+      <div className="divide-y divide-border rounded-(--radius-card) border border-border bg-surface">
         {/* Mute Messages */}
         <div className="flex items-center justify-between gap-4 px-5 py-4" data-testid="preference-mute-messages">
           <div className="flex items-center gap-4">
@@ -140,7 +140,7 @@ export function GroupSettingsPage() {
       </div>
 
       {/* Info callout */}
-      <div className="mt-4 flex items-start gap-3 rounded-lg bg-muted/50 px-4 py-3" data-testid="preferences-info">
+      <div className="mt-4 flex items-start gap-3 rounded-(--radius-card) bg-muted/50 px-4 py-3" data-testid="preferences-info">
         <Icon name="info" size={18} color="var(--color-muted-foreground)" />
         <span className="text-xs text-muted-foreground">{t('groups.preferencesInfo')}</span>
       </div>

@@ -126,7 +126,7 @@ export function GroupMembersPage() {
             type="button"
             onClick={() => setShowInviteModal(true)}
             data-testid="invite-member-button"
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             <Icon name="person_add" size={18} color="currentColor" />
             {t('groups.invite')}
@@ -136,7 +136,7 @@ export function GroupMembersPage() {
 
       {/* Pending invitations section */}
       {invitations.length > 0 && (
-        <div className="rounded-xl border border-border bg-surface" data-testid="pending-invitations-section">
+        <div className="rounded-(--radius-card) border border-border bg-surface" data-testid="pending-invitations-section">
           <div className="border-b border-border bg-muted/30 px-4 py-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {t('groups.pendingInvitations')} ({invitations.length})
@@ -156,7 +156,7 @@ export function GroupMembersPage() {
       )}
 
       {/* Members list */}
-      <div className="rounded-xl border border-border bg-surface divide-y divide-border" data-testid="members-list">
+      <div className="rounded-(--radius-card) border border-border bg-surface divide-y divide-border" data-testid="members-list">
         {members.map((member) => (
           <MemberListItem
             key={member.id}

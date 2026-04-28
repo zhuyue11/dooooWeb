@@ -13,7 +13,7 @@ export function FilterChip({ label, color, isActive, onClick, icon, dotColor }: 
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-1.5 rounded-2xl border-[1.5px] px-3 py-1.5 text-[13px] font-medium transition-colors"
+      className="flex items-center gap-1.5 rounded-(--radius-card) border-[1.5px] px-3 py-1.5 text-[13px] font-medium transition-colors"
       style={{
         borderColor: color,
         backgroundColor: isActive ? color : 'transparent',

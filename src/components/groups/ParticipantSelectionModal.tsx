@@ -98,7 +98,7 @@ export function ParticipantSelectionModal({
       data-testid="participant-selection-modal"
     >
       <div
-        className="mx-4 flex max-h-[80vh] w-full max-w-md flex-col rounded-xl bg-surface shadow-lg"
+        className="mx-4 flex max-h-[80vh] w-full max-w-md flex-col rounded-(--radius-modal) bg-surface shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -119,7 +119,7 @@ export function ParticipantSelectionModal({
 
         {/* Search */}
         <div className="px-4 py-2">
-          <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-1.5">
+          <div className="flex items-center gap-2 rounded-(--radius-card) bg-muted/50 px-3 py-1.5">
             <Icon name="search" size={16} color="var(--color-muted-foreground)" />
             <input
               type="text"

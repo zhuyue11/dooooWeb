@@ -87,7 +87,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full mt-2 z-50 w-[300px] rounded-xl border border-border bg-surface p-4 shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+      className="absolute left-0 top-full mt-2 z-50 w-[300px] rounded-(--radius-modal) border border-border bg-surface p-(--spacing-card) shadow-(--shadow-elevated)"
       data-testid="calendar-popover"
     >
       {/* Header */}
@@ -96,7 +96,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
           <button
             type="button"
             onClick={() => setViewMonth(new Date(year, month - 1, 1))}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
           >
             <Icon name="chevron_left" size={18} />
           </button>
@@ -113,7 +113,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
           <button
             type="button"
             onClick={() => setViewMonth(new Date(year, month + 1, 1))}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+            className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
           >
             <Icon name="chevron_right" size={18} />
           </button>
@@ -127,7 +127,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
             <button
               type="button"
               onClick={() => setPickerYear((y) => y - 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
             >
               <Icon name="chevron_left" size={18} />
             </button>
@@ -135,7 +135,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
             <button
               type="button"
               onClick={() => setPickerYear((y) => y + 1)}
-              className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"
+              className="flex h-7 w-7 items-center justify-center rounded-(--radius-btn) text-muted-foreground hover:bg-muted"
             >
               <Icon name="chevron_right" size={18} />
             </button>
@@ -150,7 +150,7 @@ export function CalendarPopover({ selectedDate, onSelect, onClose, minDate }: Ca
                   key={i}
                   type="button"
                   onClick={() => handleMonthSelect(i)}
-                  className={`rounded-lg py-2 text-[13px] font-medium transition-colors ${
+                  className={`rounded-(--radius-btn) py-2 text-[13px] font-medium transition-colors ${
                     isCurrent
                       ? 'bg-primary text-primary-foreground'
                       : 'text-foreground hover:bg-muted'

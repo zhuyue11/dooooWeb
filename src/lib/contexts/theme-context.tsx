@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { STORAGE_KEYS } from '../config';
-import type { ThemePattern, ThemeColor, ColorPalette } from '@/types/theme';
+import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/types/theme';
 
 /**
- * Three-tier theme provider — ported from dooooHub/dooooApp.
+ * Three-tier theme provider + Display Style — ported from dooooHub/dooooApp.
  *
  * Tier 1 — ThemePattern: system | auto | light | dark
  *   • applies via data-theme="light|dark" on <html>
@@ -13,15 +13,26 @@ import type { ThemePattern, ThemeColor, ColorPalette } from '@/types/theme';
  *   • applies via data-color="ocean" on <html>
  *
  * Tier 3 — ColorPalette: full themed presets (ocean, crimson, etc.)
- *   • overrides ALL tokens (surfaces, text, borders, brand, status)
+ *   • overrides ALL color tokens (surfaces, text, borders, brand, status)
  *   • applies via data-palette="ocean" on <html>
- *   • when active, data-theme is removed (palette controls everything)
+ *   • Fixed-scheme palettes: data-theme is removed (palette controls everything)
+ *   • Schemeable palettes (airbnb, clay, notion, starbucks, mintlify):
+ *     data-theme is KEPT so ThemePattern still controls light/dark
  *
- * Priority: palette > (pattern + color)
+ * Display Style — independent axis controlling shape/personality
+ *   • applies via data-display-style="notion" on <html>
+ *   • overrides shape, spacing, shadow, border, interaction tokens
+ *   • works with ANY color palette or tier 1/2 combination
+ *
+ * Priority: palette > (pattern + color) for colors; display style is orthogonal
  */
 
 export const THEME_COLORS: ThemeColor[] = ['electric', 'emerald', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink'];
-export const COLOR_PALETTES: ColorPalette[] = ['light', 'dark', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink'];
+export const COLOR_PALETTES: ColorPalette[] = ['light', 'dark', 'ocean', 'crimson', 'amber', 'yellow', 'cyan', 'purple', 'pink', 'airbnb', 'clay', 'notion', 'starbucks', 'mintlify'];
+export const DISPLAY_STYLES: DisplayStyle[] = ['default', 'airbnb', 'clay', 'starbucks'];
+
+/** Brand-inspired palettes that support both light and dark via ThemePattern. */
+export const SCHEMEABLE_PALETTES: ReadonlySet<ColorPalette> = new Set(['airbnb', 'clay', 'notion', 'starbucks', 'mintlify']);
 
 /** Hex values for each ThemeColor (light mode primary). Used for UI swatches. */
 export const THEME_COLOR_HEX: Record<ThemeColor, string> = {
@@ -47,6 +58,19 @@ export const PALETTE_COLORS: Record<ColorPalette, { primary: string; secondary: 
   cyan: { primary: '#00FFFF', secondary: '#00D4D4', accent: '#00FFFF', bg: '#1A1A1A' },
   purple: { primary: '#8B5CF6', secondary: '#7C3AED', accent: '#8B5CF6', bg: '#E5E5E5' },
   pink: { primary: '#EC4899', secondary: '#DB2777', accent: '#EC4899', bg: '#FDF2F8' },
+  airbnb: { primary: '#FF385C', secondary: '#460479', accent: '#FF385C', bg: '#FFFFFF' },
+  clay: { primary: '#FF4D8B', secondary: '#B8A4ED', accent: '#E8B94A', bg: '#FFFAF0' },
+  notion: { primary: '#0075DE', secondary: '#213183', accent: '#2A9D99', bg: '#FFFFFF' },
+  starbucks: { primary: '#006241', secondary: '#00754A', accent: '#CBA258', bg: '#F2F0EB' },
+  mintlify: { primary: '#18E299', secondary: '#0FA76E', accent: '#3772CF', bg: '#FFFFFF' },
+};
+
+/** Preview data for display style UI cards. */
+export const DISPLAY_STYLE_SHAPES: Record<DisplayStyle, { btnRadius: string; cardRadius: string; shadow: string }> = {
+  default: { btnRadius: '8px', cardRadius: '12px', shadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  airbnb: { btnRadius: '8px', cardRadius: '14px', shadow: '0 2px 8px rgba(0,0,0,0.06)' },
+  clay: { btnRadius: '12px', cardRadius: '16px', shadow: 'none' },
+  starbucks: { btnRadius: '50px', cardRadius: '8px', shadow: '0 1px 2px rgba(0,0,0,0.03)' },
 };
 
 type ResolvedTheme = 'light' | 'dark';
@@ -55,17 +79,20 @@ interface ThemeContextType {
   themePattern: ThemePattern;
   themeColor: ThemeColor;
   colorPalette: ColorPalette | null;
+  displayStyle: DisplayStyle;
   /** Computed light/dark from pattern (or palette's inherent scheme). */
   colorScheme: ResolvedTheme;
   setThemePattern: (pattern: ThemePattern) => void;
   setThemeColor: (color: ThemeColor) => void;
   setColorPalette: (palette: ColorPalette | null) => void;
+  setDisplayStyle: (style: DisplayStyle) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 const DEFAULT_PATTERN: ThemePattern = 'auto';
 const DEFAULT_COLOR: ThemeColor = 'emerald';
+const DEFAULT_DISPLAY_STYLE: DisplayStyle = 'default';
 
 function readPattern(): ThemePattern {
   const raw = localStorage.getItem(STORAGE_KEYS.THEME_PATTERN);
@@ -85,6 +112,12 @@ function readPalette(): ColorPalette | null {
   return null;
 }
 
+function readDisplayStyle(): DisplayStyle {
+  const raw = localStorage.getItem(STORAGE_KEYS.DISPLAY_STYLE);
+  if (raw && (DISPLAY_STYLES as string[]).includes(raw)) return raw as DisplayStyle;
+  return DEFAULT_DISPLAY_STYLE;
+}
+
 function resolvePattern(pattern: ThemePattern): ResolvedTheme {
   if (pattern === 'system') {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -96,12 +129,17 @@ function resolvePattern(pattern: ThemePattern): ResolvedTheme {
   return pattern;
 }
 
-function applyAttributes(resolved: ResolvedTheme, color: ThemeColor, palette: ColorPalette | null) {
+function applyAttributes(resolved: ResolvedTheme, color: ThemeColor, palette: ColorPalette | null, displayStyle: DisplayStyle) {
   const el = document.documentElement;
 
   if (palette) {
-    // Palette overrides everything — remove data-theme so palette CSS takes full control
-    delete el.dataset.theme;
+    if (SCHEMEABLE_PALETTES.has(palette)) {
+      // Schemeable palettes keep data-theme so CSS compound selectors work
+      el.dataset.theme = resolved;
+    } else {
+      // Fixed-scheme palettes remove data-theme — palette controls color-scheme
+      delete el.dataset.theme;
+    }
     delete el.dataset.color;
     el.dataset.palette = palette;
   } else {
@@ -115,6 +153,13 @@ function applyAttributes(resolved: ResolvedTheme, color: ThemeColor, palette: Co
     }
   }
 
+  // Display style — independent of color system
+  if (displayStyle === 'default') {
+    delete el.dataset.displayStyle;
+  } else {
+    el.dataset.displayStyle = displayStyle;
+  }
+
   // Remove legacy .dark class (migration from old system)
   el.classList.remove('dark');
 }
@@ -123,6 +168,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themePattern, setThemePatternState] = useState<ThemePattern>(DEFAULT_PATTERN);
   const [themeColor, setThemeColorState] = useState<ThemeColor>(DEFAULT_COLOR);
   const [colorPalette, setColorPaletteState] = useState<ColorPalette | null>(null);
+  const [displayStyle, setDisplayStyleState] = useState<DisplayStyle>(DEFAULT_DISPLAY_STYLE);
   const [colorScheme, setColorScheme] = useState<ResolvedTheme>('light');
 
   // Initial load from localStorage
@@ -130,46 +176,52 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const pattern = readPattern();
     const color = readColor();
     const palette = readPalette();
+    const style = readDisplayStyle();
     const resolved = resolvePattern(pattern);
     setThemePatternState(pattern);
     setThemeColorState(color);
     setColorPaletteState(palette);
+    setDisplayStyleState(style);
     setColorScheme(resolved);
-    applyAttributes(resolved, color, palette);
+    applyAttributes(resolved, color, palette, style);
   }, []);
 
-  // System preference listener (when pattern=system and no palette)
+  // System preference listener (when pattern=system)
   useEffect(() => {
-    if (themePattern !== 'system' || colorPalette) return;
+    if (themePattern !== 'system') return;
+    // For fixed-scheme palettes, pattern changes don't matter
+    if (colorPalette && !SCHEMEABLE_PALETTES.has(colorPalette)) return;
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = () => {
       const resolved: ResolvedTheme = mql.matches ? 'dark' : 'light';
       setColorScheme(resolved);
-      applyAttributes(resolved, themeColor, null);
+      applyAttributes(resolved, themeColor, colorPalette, displayStyle);
     };
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);
-  }, [themePattern, themeColor, colorPalette]);
+  }, [themePattern, themeColor, colorPalette, displayStyle]);
 
   // Auto mode — re-check every 60 seconds
   useEffect(() => {
-    if (themePattern !== 'auto' || colorPalette) return;
+    if (themePattern !== 'auto') return;
+    // For fixed-scheme palettes, pattern changes don't matter
+    if (colorPalette && !SCHEMEABLE_PALETTES.has(colorPalette)) return;
     const tick = () => {
       const resolved = resolvePattern('auto');
       setColorScheme(resolved);
-      applyAttributes(resolved, themeColor, null);
+      applyAttributes(resolved, themeColor, colorPalette, displayStyle);
     };
     const interval = setInterval(tick, 60_000);
     return () => clearInterval(interval);
-  }, [themePattern, themeColor, colorPalette]);
+  }, [themePattern, themeColor, colorPalette, displayStyle]);
 
   const setThemePattern = useCallback((pattern: ThemePattern) => {
     localStorage.setItem(STORAGE_KEYS.THEME_PATTERN, pattern);
     const resolved = resolvePattern(pattern);
     setThemePatternState(pattern);
     setColorScheme(resolved);
-    applyAttributes(resolved, themeColor, colorPalette);
-  }, [themeColor, colorPalette]);
+    applyAttributes(resolved, themeColor, colorPalette, displayStyle);
+  }, [themeColor, colorPalette, displayStyle]);
 
   const setThemeColor = useCallback((color: ThemeColor) => {
     // Changing color clears palette (tier 2 and 3 are mutually exclusive)
@@ -177,8 +229,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(STORAGE_KEYS.COLOR_PALETTE);
     setThemeColorState(color);
     setColorPaletteState(null);
-    applyAttributes(colorScheme, color, null);
-  }, [colorScheme]);
+    applyAttributes(colorScheme, color, null, displayStyle);
+  }, [colorScheme, displayStyle]);
 
   const setColorPalette = useCallback((palette: ColorPalette | null) => {
     if (palette) {
@@ -187,13 +239,23 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(STORAGE_KEYS.COLOR_PALETTE);
     }
     setColorPaletteState(palette);
-    applyAttributes(colorScheme, themeColor, palette);
-  }, [colorScheme, themeColor]);
+    applyAttributes(colorScheme, themeColor, palette, displayStyle);
+  }, [colorScheme, themeColor, displayStyle]);
+
+  const setDisplayStyle = useCallback((style: DisplayStyle) => {
+    if (style === 'default') {
+      localStorage.removeItem(STORAGE_KEYS.DISPLAY_STYLE);
+    } else {
+      localStorage.setItem(STORAGE_KEYS.DISPLAY_STYLE, style);
+    }
+    setDisplayStyleState(style);
+    applyAttributes(colorScheme, themeColor, colorPalette, style);
+  }, [colorScheme, themeColor, colorPalette]);
 
   return (
     <ThemeContext.Provider value={{
-      themePattern, themeColor, colorPalette, colorScheme,
-      setThemePattern, setThemeColor, setColorPalette,
+      themePattern, themeColor, colorPalette, displayStyle, colorScheme,
+      setThemePattern, setThemeColor, setColorPalette, setDisplayStyle,
     }}>
       {children}
     </ThemeContext.Provider>

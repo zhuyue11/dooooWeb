@@ -728,7 +728,22 @@
     "palettePinkDesc": "Weich und warm mit rosa Akzenten",
     "patternSystem": "System",
     "colorElectric": "Electric",
-    "autoDescription": "Tagsüber hell, nachts dunkel."
+    "autoDescription": "Tagsüber hell, nachts dunkel.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Anzeigestil",
+    "displayStyleSubtitle": "Steuert Form, Schatten und Abstände — mit jeder Farbpalette kombinierbar",
+    "styleDefault": "Standard",
+    "styleDefaultDesc": "Ausgewogene Rundungen und Standardabstände",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Weiche Kurven, warme Schatten, großzügige Abstände",
+    "styleClay": "Clay",
+    "styleClayDesc": "Abgerundet und flach, Tiefe durch Farbkontrast",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Pillen-Buttons, flache Oberflächen"
   },
   "languageSettings": {
     "title": "Spracheinstellungen",

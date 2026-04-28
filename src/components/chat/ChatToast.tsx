@@ -46,7 +46,7 @@ export function ChatToast() {
   return (
     <div className="pointer-events-none fixed inset-x-0 top-4 z-[100] flex justify-center">
     <div
-      className="pointer-events-auto w-96 max-w-[calc(100vw-2rem)] animate-[slide-in-down_0.3s_ease-out] cursor-pointer rounded-xl border border-border bg-surface shadow-lg transition-opacity hover:opacity-95"
+      className="pointer-events-auto w-96 max-w-[calc(100vw-2rem)] animate-[slide-in-down_0.3s_ease-out] cursor-pointer rounded-(--radius-card) border border-border bg-surface shadow-(--shadow-elevated) transition-opacity hover:opacity-95"
       onClick={handleClick}
       data-testid="chat-toast"
     >

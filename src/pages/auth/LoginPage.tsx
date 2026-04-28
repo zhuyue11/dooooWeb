@@ -9,7 +9,7 @@ export function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       {/* Login Card */}
-      <div className="flex w-[420px] flex-col gap-8 rounded-2xl bg-surface p-10 shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+      <div className="flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-surface p-(--spacing-card) shadow-(--shadow-elevated)">
         {/* Logo + Title */}
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />
@@ -24,7 +24,7 @@ export function LoginPage() {
         {/* OAuth Buttons */}
         <div className="flex flex-col gap-3">
           {/* Google */}
-          <button className="flex h-12 items-center justify-center gap-2.5 rounded-lg border border-[#747775] bg-surface text-[15px] font-medium text-foreground transition-opacity hover:opacity-80 dark:border-[#8E918F] dark:bg-[#131314] dark:text-[#E3E3E3]" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <button className="flex h-12 items-center justify-center gap-2.5 rounded-(--radius-card) border border-border bg-surface text-[15px] font-medium text-foreground transition-opacity hover:opacity-80 " style={{ fontFamily: 'Inter, sans-serif' }}>
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -35,7 +35,7 @@ export function LoginPage() {
           </button>
 
           {/* Apple — inverted colors between light/dark */}
-          <button className="flex h-12 items-center justify-center gap-2.5 rounded-lg bg-foreground text-[15px] font-medium text-background transition-opacity hover:opacity-90" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <button className="flex h-(--btn-height-lg) items-center justify-center gap-2.5 rounded-(--radius-btn) bg-foreground text-[15px] font-medium text-background transition-opacity hover:opacity-90" style={{ fontFamily: 'Inter, sans-serif' }}>
             <svg className="h-5 w-5 fill-background" viewBox="0 0 24 24">
               <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
             </svg>
@@ -52,7 +52,7 @@ export function LoginPage() {
           {/* Email */}
           <Link
             to="/login/email"
-            className="flex h-12 items-center justify-center gap-2.5 rounded-lg bg-[#360EFF] text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+            className="flex h-(--btn-height-lg) items-center justify-center gap-2.5 rounded-(--radius-btn) bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             <Icon name="mail" size={20} color="#ffffff" />

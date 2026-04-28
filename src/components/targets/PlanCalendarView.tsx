@@ -141,7 +141,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
         <button
           type="button"
           onClick={() => setShowDatePicker(!showDatePicker)}
-          className="flex w-full items-center gap-2 rounded-xl border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
+          className="flex w-full items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4 py-3 text-left transition-colors hover:bg-muted/50"
         >
           <Icon name="event" size={18} color="var(--color-primary)" />
           <span className="flex-1 text-[13px] text-foreground">
@@ -201,7 +201,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
       )}
 
       {/* Calendar grid — fills remaining height */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
         {/* Fixed: Day headers */}
         <div className="flex shrink-0 border-b border-border">
           <div style={{ width: HOUR_LABEL_WIDTH }} className="flex-shrink-0" />
@@ -261,7 +261,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                       <div
                         key={hour}
                         className={`border-b border-border/50 ${
-                          isToday && hour === currentHour ? 'bg-[#f0f0ff] dark:bg-[#1a1a2e]' : ''
+                          isToday && hour === currentHour ? 'bg-primary/5' : ''
                         }`}
                         style={{ height: HOUR_HEIGHT }}
                       />
@@ -278,7 +278,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                         <button
                           key={task.instanceId || task.templateId}
                           type="button"
-                          className="absolute cursor-pointer overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left transition-opacity hover:opacity-80"
+                          className="absolute cursor-pointer overflow-hidden rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) py-1 text-left transition-opacity hover:opacity-80"
                           style={{
                             top,
                             height,

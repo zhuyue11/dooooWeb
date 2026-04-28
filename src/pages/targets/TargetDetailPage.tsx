@@ -134,7 +134,7 @@ export function TargetDetailPage() {
           <button
             type="button"
             onClick={() => setShowEditModal(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted"
             data-testid="target-detail-edit"
           >
             <Icon name="edit" size={16} />
@@ -143,7 +143,7 @@ export function TargetDetailPage() {
           <button
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+            className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
             data-testid="target-detail-delete"
           >
             <Icon name="delete" size={16} />
@@ -159,14 +159,14 @@ export function TargetDetailPage() {
         <h2 className="mb-3 text-lg font-bold text-foreground">{t('targetPlan.linkedTasks')}</h2>
 
         {linkedTasks.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border py-10" data-testid="linked-tasks-empty">
+          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-border py-10" data-testid="linked-tasks-empty">
             <Icon name="task_alt" size={40} color="var(--color-muted-foreground)" />
             <span className="text-[15px] text-muted-foreground">{t('targetPlan.noLinkedTasks')}</span>
             <span className="text-[13px] text-muted-foreground">{t('targetPlan.linkTaskHint')}</span>
           </div>
         ) : (
           <div
-            className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5"
+            className="flex items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-4 py-3.5"
             data-testid="linked-tasks-count"
           >
             <Icon name="task_alt" size={24} color="var(--color-primary)" />
@@ -193,7 +193,7 @@ export function TargetDetailPage() {
         </div>
 
         {linkedPlans.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border py-10" data-testid="plans-empty">
+          <div className="flex flex-col items-center gap-2 rounded-(--radius-card) border border-dashed border-border py-10" data-testid="plans-empty">
             <Icon name="assignment" size={40} color="var(--color-muted-foreground)" />
             <span className="text-[15px] text-muted-foreground">{t('targetPlan.noLinkedPlans')}</span>
           </div>

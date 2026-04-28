@@ -10,7 +10,7 @@ export function StubPage({ title, description }: StubPageProps) {
       {description && (
         <p className="mt-2 text-sm text-muted-foreground">{description}</p>
       )}
-      <div className="mt-6 rounded-lg border border-dashed border-border px-8 py-4 text-sm text-muted-foreground">
+      <div className="mt-6 rounded-(--radius-card) border border-dashed border-border px-8 py-4 text-sm text-muted-foreground">
         Coming soon
       </div>
     </div>

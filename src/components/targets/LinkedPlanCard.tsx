@@ -17,7 +17,7 @@ export function LinkedPlanCard({ targetPlan, onNavigate, onUnlink }: LinkedPlanC
 
   return (
     <div
-      className="group flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5 transition-shadow hover:shadow-sm"
+      className="group flex cursor-pointer items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-(--spacing-card) py-3.5 transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)"
       onClick={() => onNavigate(targetPlan.planId)}
       data-testid={`plan-card-${targetPlan.planId}`}
     >
@@ -37,7 +37,7 @@ export function LinkedPlanCard({ targetPlan, onNavigate, onUnlink }: LinkedPlanC
           e.stopPropagation();
           onUnlink(targetPlan.planId, planName);
         }}
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+        className="flex h-(--btn-height-sm) w-8 shrink-0 items-center justify-center rounded-(--radius-btn) text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
         data-testid={`unlink-plan-${targetPlan.planId}`}
         title={t('targetPlan.unlinkPlan')}
       >

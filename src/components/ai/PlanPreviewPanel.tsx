@@ -204,7 +204,7 @@ export function PlanPreviewPanel({
               <button
                 type="button"
                 onClick={() => setSelectedTemplate(null)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
                 data-testid="plan-preview-back"
               >
                 <Icon name="arrow_back" size={20} />
@@ -222,7 +222,7 @@ export function PlanPreviewPanel({
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
                 data-testid="plan-preview-close"
               >
                 <Icon name="close" size={18} />
@@ -236,7 +236,7 @@ export function PlanPreviewPanel({
               )}
 
               {hasAnyDetail && (
-                <div className="rounded-lg border border-border">
+                <div className="rounded-(--radius-card) border border-border">
                   {dateDisplay && (
                     <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
                   )}
@@ -325,7 +325,7 @@ export function PlanPreviewPanel({
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
                 data-testid="plan-preview-close"
               >
                 <Icon name="close" size={18} />
@@ -371,7 +371,7 @@ export function PlanPreviewPanel({
                 <button
                   type="button"
                   onClick={onStartPlan}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                  className="flex w-full items-center justify-center gap-2 rounded-(--radius-card) bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
                   data-testid="plan-preview-start"
                 >
                   <Icon name="play_arrow" size={20} />

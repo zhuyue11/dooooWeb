@@ -3,21 +3,21 @@ import { useToast } from '@/lib/contexts/toast-context';
 
 const VARIANT_STYLES = {
   success: {
-    bg: 'bg-emerald-50 dark:bg-emerald-950/60',
-    border: 'border-emerald-200 dark:border-emerald-800',
-    icon: 'text-emerald-600 dark:text-emerald-400',
+    bg: 'bg-primary/10',
+    border: 'border-primary/30',
+    icon: 'text-primary',
     iconName: 'check_circle' as const,
   },
   error: {
-    bg: 'bg-red-50 dark:bg-red-950/60',
-    border: 'border-red-200 dark:border-red-800',
-    icon: 'text-red-600 dark:text-red-400',
+    bg: 'bg-destructive/10',
+    border: 'border-destructive/30',
+    icon: 'text-destructive',
     iconName: 'error' as const,
   },
   info: {
-    bg: 'bg-blue-50 dark:bg-blue-950/60',
-    border: 'border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-600 dark:text-blue-400',
+    bg: 'bg-info/10',
+    border: 'border-info/30',
+    icon: 'text-info',
     iconName: 'info' as const,
   },
 };
@@ -34,7 +34,7 @@ export function Toast() {
       <div
         key={toast.id}
         data-testid="toast"
-        className={`pointer-events-auto w-96 max-w-[calc(100vw-2rem)] animate-[slide-in-down_0.3s_ease-out] rounded-xl border shadow-lg ${style.bg} ${style.border}`}
+        className={`pointer-events-auto w-96 max-w-[calc(100vw-2rem)] animate-[slide-in-down_0.3s_ease-out] rounded-(--radius-card) border shadow-(--shadow-elevated) ${style.bg} ${style.border}`}
       >
         <div className="flex items-center gap-3 p-3">
           <span className={style.icon}>

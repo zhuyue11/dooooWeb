@@ -15,7 +15,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
     <header className="flex h-14 items-center gap-3 border-b border-border bg-surface px-4 lg:hidden">
       <button
         onClick={onMenuToggle}
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="flex h-9 w-9 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
       >
         <Icon name="menu" size={20} />
       </button>
@@ -27,7 +27,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <button
         onClick={() => navigate('/notifications')}
-        className="relative flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="relative flex h-9 w-9 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
       >
         <Icon name="notifications" size={20} />
         {notificationUnread > 0 && (

@@ -59,7 +59,7 @@ export function PlanReviewModal({
       data-testid="plan-review-modal"
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-xl bg-surface p-8 shadow-lg animate-review-pop-in"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal) animate-review-pop-in"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center">
@@ -108,7 +108,7 @@ export function PlanReviewModal({
 
           {/* Note textarea */}
           <textarea
-            className="mt-4 w-full resize-none rounded-lg border border-border bg-transparent px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            className="mt-4 w-full resize-none rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             placeholder={t('tasks.planReview.notePlaceholder', 'Share what worked (optional)') as string}
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -123,7 +123,7 @@ export function PlanReviewModal({
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="mt-4 flex w-full items-center justify-center rounded-lg bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="mt-4 flex w-full items-center justify-center rounded-(--radius-btn) bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
             data-testid="plan-review-submit"
           >
             {submitting ? (

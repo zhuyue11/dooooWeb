@@ -21,7 +21,7 @@ export function Switch({ checked, onChange, disabled, activeColor }: SwitchProps
       }}
     >
       <span
-        className="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform"
+        className="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-(--shadow-card) transition-transform"
         style={{
           transform: checked ? 'translateX(22px)' : 'translateX(2px)',
         }}

@@ -42,7 +42,7 @@ export function ForAllMembersToggle({ value, onChange, disabled = false }: ForAl
       </div>
 
       {showInfo && (
-        <div className="mx-4 mb-2 rounded-lg bg-muted/50 px-4 py-3">
+        <div className="mx-4 mb-2 rounded-(--radius-card) bg-muted/50 px-4 py-3">
           <p className="text-xs font-medium text-foreground">{t('fab.activity')}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t('fab.activityInfo')}</p>
         </div>

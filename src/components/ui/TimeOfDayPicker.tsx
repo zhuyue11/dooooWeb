@@ -51,7 +51,7 @@ export function TimeOfDayPicker({ selectedTimeOfDay, onSelect, onAtTimePress, on
   return (
     <div
       ref={ref}
-      className="absolute left-0 top-full z-50 mt-1 w-56 rounded-xl border border-border bg-surface shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+      className="absolute left-0 top-full z-50 mt-1 w-56 rounded-(--radius-modal) border border-border bg-surface shadow-(--shadow-elevated)"
     >
       <div className="py-1">
         {OPTIONS.map((option) => {

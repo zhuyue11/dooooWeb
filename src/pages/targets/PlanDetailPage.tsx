@@ -205,7 +205,7 @@ export function PlanDetailPage() {
                 <button
                   type="button"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
                   data-testid="plan-delete-btn"
                 >
                   <Icon name="delete" size={16} />
@@ -215,7 +215,7 @@ export function PlanDetailPage() {
                 <button
                   type="button"
                   onClick={() => setShowRemoveConfirm(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+                  className="flex items-center gap-1.5 rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
                   data-testid="plan-remove-btn"
                 >
                   <Icon name="bookmark_remove" size={16} />
@@ -275,7 +275,7 @@ export function PlanDetailPage() {
             <button
               type="button"
               onClick={() => setShowExecutionDeleteModal(true)}
-              className="flex items-center justify-center gap-1.5 self-start rounded-lg border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
+              className="flex items-center justify-center gap-1.5 self-start rounded-(--radius-card) border border-border px-3 py-1.5 text-[13px] font-medium text-destructive hover:bg-destructive/10"
               data-testid="execution-delete-btn"
             >
               <Icon name={activeExecution.status === 'COMPLETED' ? 'delete_outline' : 'stop_circle'} size={16} />
@@ -326,7 +326,7 @@ export function PlanDetailPage() {
               const tid = plan?.targetPlans?.[0]?.targetId;
               navigate(`/plans/${planId}/start${tid ? `?targetId=${tid}` : ''}`);
             }}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             data-testid="start-plan-btn"
           >
             <Icon

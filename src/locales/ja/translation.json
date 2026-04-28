@@ -728,7 +728,22 @@
     "palettePinkDesc": "ピンクアクセントの柔らかく温かみのあるテーマ",
     "patternSystem": "システム",
     "colorElectric": "Electric",
-    "autoDescription": "昼はライト、夜はダーク。"
+    "autoDescription": "昼はライト、夜はダーク。",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "スターバックス",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "表示スタイル",
+    "displayStyleSubtitle": "形状、影、余白を制御 — カラーパレットと組み合わせ自由",
+    "styleDefault": "デフォルト",
+    "styleDefaultDesc": "バランスの取れた角丸と標準的な余白",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "柔らかな曲線、温かみのある影",
+    "styleClay": "Clay",
+    "styleClayDesc": "丸みのあるフラット、色のコントラストで奥行き",
+    "styleStarbucks": "スターバックス",
+    "styleStarbucksDesc": "ピルボタン、フラットな表面"
   },
   "languageSettings": {
     "title": "言語設定",

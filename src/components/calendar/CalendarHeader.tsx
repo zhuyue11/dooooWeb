@@ -47,28 +47,28 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
         <button
           data-testid="nav-prev-week"
           onClick={onPrev}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
+          className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) border border-border text-foreground transition-colors hover:bg-muted"
         >
           <Icon name="chevron_left" size={18} />
         </button>
         <button
           data-testid="nav-next-week"
           onClick={onNext}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
+          className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) border border-border text-foreground transition-colors hover:bg-muted"
         >
           <Icon name="chevron_right" size={18} />
         </button>
 
         {/* View switcher — hidden on mobile */}
-        <div data-testid="view-switcher" className="flex items-center rounded-lg bg-muted p-1">
+        <div data-testid="view-switcher" className="flex items-center rounded-(--radius-card) bg-muted p-1">
           {VIEWS.map((v) => (
             <button
               key={v}
               data-testid={`view-tab-${v}`}
               onClick={() => onViewChange(v)}
-              className={`rounded-md px-3.5 py-1.5 text-[13px] transition-colors ${
+              className={`rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] transition-colors ${
                 v === viewMode
-                  ? 'bg-surface font-semibold text-foreground shadow-sm'
+                  ? 'bg-surface font-semibold text-foreground shadow-(--shadow-card)'
                   : 'font-medium text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -81,7 +81,7 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
         <button
           data-testid="nav-today"
           onClick={onToday}
-          className="flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
+          className="flex items-center gap-1.5 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
         >
           {t('calendarPage.today')}
         </button>
@@ -89,7 +89,7 @@ export function CalendarHeader({ viewMode, onViewChange, visibleDates, currentMo
         {/* Add button — hidden on mobile */}
         <button
           onClick={onAddClick}
-          className="hidden h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-opacity hover:opacity-90 lg:flex"
+          className="hidden h-(--btn-height-sm) w-9 items-center justify-center rounded-(--radius-btn) bg-primary text-primary-foreground transition-opacity hover:opacity-90 lg:flex"
         >
           <Icon name="add" size={20} />
         </button>

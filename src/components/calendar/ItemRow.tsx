@@ -52,7 +52,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
   return (
     <div
       data-testid={`task-row-${item.id}`}
-      className={`flex items-start gap-3 rounded-lg px-3 py-2.5 ${isChecked ? 'bg-muted' : ''} ${onClick ? 'cursor-pointer hover:bg-muted/50 transition-colors' : ''}`}
+      className={`flex items-start gap-3 rounded-(--radius-card) px-3 py-2.5 ${isChecked ? 'bg-muted' : ''} ${onClick ? 'cursor-pointer hover:bg-muted/50 transition-colors' : ''}`}
       onClick={() => onClick?.(item)}
     >
       {/* ── Toggle / Icon column ── */}
@@ -120,7 +120,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
           )}
           {/* Group name tag — hidden when already inside a group context */}
           {item.groupId && !hideGroupTag && (
-            <span className="flex items-center gap-0.5 rounded-full border border-[#3b82f6] px-1.5 text-[10px] font-medium text-[#3b82f6]">
+            <span className="flex items-center gap-0.5 rounded-full border border-info px-1.5 text-[10px] font-medium text-info">
               <Icon name="group" size={9} /> {item.groupName || t('calendarPage.itemRow.group')}
             </span>
           )}
@@ -146,7 +146,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
           {/* Priority tag */}
           {item.priority && (
             <span className="flex items-center gap-1 text-[10px] text-foreground">
-              <span className={`inline-block h-2 w-2 rounded-full ${isHighPriority ? 'bg-destructive' : 'bg-[#f59e0b]'}`} />
+              <span className={`inline-block h-2 w-2 rounded-full ${isHighPriority ? 'bg-destructive' : 'bg-accent'}`} />
               {item.priority.charAt(0).toUpperCase() + item.priority.slice(1).toLowerCase()}
             </span>
           )}
@@ -180,18 +180,18 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
             )}
             {/* Status tags */}
             {item.participantInstanceStatus === 'INVITED' && (
-              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">{t('calendarPage.itemRow.invited')}</span>
+              <span className="rounded-full bg-warning/20 px-1.5 text-[10px] font-medium text-warning-foreground">{t('calendarPage.itemRow.invited')}</span>
             )}
             {(item.participantInstanceStatus === 'DECLINED' || item.participantInstanceStatus === 'LEFT') && (
-              <span className="rounded-full bg-[#fee2e2] px-1.5 text-[10px] font-medium text-[#991b1b]">{t('calendarPage.itemRow.notGoing')}</span>
+              <span className="rounded-full bg-destructive/10 px-1.5 text-[10px] font-medium text-destructive">{t('calendarPage.itemRow.notGoing')}</span>
             )}
             {item.participantInstanceStatus === 'CONFIRMED' && (
-              <span className="rounded-full bg-[#d1fae5] px-1.5 text-[10px] font-medium text-[#065f46]">{t('calendarPage.itemRow.going')}</span>
+              <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-medium text-primary">{t('calendarPage.itemRow.going')}</span>
             )}
             {isOrganizer && (
-              <span className="rounded-full bg-[#fef3c7] px-1.5 text-[10px] font-medium text-[#92400e]">{t('calendarPage.itemRow.organizer')}</span>
+              <span className="rounded-full bg-warning/20 px-1.5 text-[10px] font-medium text-warning-foreground">{t('calendarPage.itemRow.organizer')}</span>
             )}
-            <span className="rounded-full bg-[#f0fdf4] px-1.5 text-[10px] font-medium text-[#15803d]">{t('calendarPage.itemRow.activity')}</span>
+            <span className="rounded-full bg-primary/10 px-1.5 text-[10px] font-medium text-primary">{t('calendarPage.itemRow.activity')}</span>
           </div>
         )}
       </div>

@@ -69,7 +69,7 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
     <>
       <div
         data-testid={`invitation-card-${notification.id}`}
-        className={`rounded-xl border p-4 transition-colors ${
+        className={`rounded-(--radius-card) border p-(--spacing-card) transition-colors ${
           notification.isRead
             ? 'border-border bg-surface'
             : 'border-primary/20 bg-primary/5'
@@ -102,7 +102,7 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
                 data-testid="accept-invitation-button"
                 onClick={handleAccept}
                 disabled={isActing}
-                className="rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
               >
                 {acceptMutation.isPending ? (
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -115,7 +115,7 @@ export function GroupInvitationCard({ notification }: GroupInvitationCardProps) 
                 data-testid="decline-invitation-button"
                 onClick={() => setShowDeclineConfirm(true)}
                 disabled={isActing}
-                className="rounded-lg border border-border px-4 py-1.5 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+                className="rounded-(--radius-card) border border-border px-4 py-1.5 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
               >
                 {t('groupInvitation.decline')}
               </button>

@@ -38,7 +38,7 @@ export function ConfirmDialog({
       onClick={onCancel}
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-xl bg-surface p-6 shadow-lg"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-base font-semibold text-foreground">{title}</h3>
@@ -48,7 +48,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted disabled:opacity-50 transition-all duration-(--transition-duration)"
           >
             {cancelLabel || t('common.cancel')}
           </button>
@@ -56,7 +56,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-50 ${confirmClass}`}
+            className={`rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold disabled:opacity-50 transition-all duration-(--transition-duration) active:scale-(--active-scale) ${confirmClass}`}
           >
             {isLoading ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

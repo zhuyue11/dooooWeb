@@ -112,7 +112,7 @@ function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLa
                       {item.title}
                     </div>
                     {item.groupName && !hideGroupTag && (
-                      <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                      <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
                         <Icon name="group" size={7} color="#3b82f6" />
                         {item.groupName}
                       </span>
@@ -188,7 +188,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
   return (
     <div
       data-testid="calendar-week-grid"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Day labels + date numbers header */}
       <div className="flex border-b border-border">
@@ -292,7 +292,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                         key={hour}
                         data-testid={i === 0 ? `hour-row-${hour}` : undefined}
                         className={`border-b border-border/50 ${
-                          isToday && hour === currentHour ? 'bg-[#f0f0ff] dark:bg-[#1a1a2e]' : ''
+                          isToday && hour === currentHour ? 'bg-primary/5' : ''
                         }`}
                         style={{ height: HOUR_HEIGHT }}
                       />
@@ -345,7 +345,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                               </span>
                             </div>
                             {item.groupName && !hideGroupTag && (
-                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-[#3b82f6] px-1 text-[7px] font-medium leading-tight text-[#3b82f6]">
+                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-info px-1 text-[7px] font-medium leading-tight text-info">
                                 <Icon name="group" size={7} color="#3b82f6" />
                                 {item.groupName}
                               </span>

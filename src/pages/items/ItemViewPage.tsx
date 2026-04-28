@@ -197,7 +197,7 @@ export function ItemViewPage() {
           {/* Meta row: pills + date summary */}
           <div className="flex flex-wrap items-center gap-2">
             {planId && (
-              <span className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: '#360EFF20', color: 'var(--color-primary)' }}>
+              <span className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 12%, transparent)', color: 'var(--color-primary)' }}>
                 <Icon name="stars" size={12} color="var(--color-primary)" />
                 AI Planned
               </span>
@@ -227,7 +227,7 @@ export function ItemViewPage() {
           {canEdit && (
             <button
               onClick={handleEdit}
-              className="flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-medium text-foreground hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-foreground hover:bg-muted"
             >
               <Icon name="edit" size={16} />
               {t('itemView.edit')}
@@ -236,7 +236,7 @@ export function ItemViewPage() {
           {canDelete && (
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-[13px] font-medium text-destructive hover:bg-muted"
+              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-destructive hover:bg-muted"
             >
               <Icon name="delete" size={16} color="var(--color-destructive)" />
               {t('itemView.delete')}
@@ -266,7 +266,7 @@ export function ItemViewPage() {
         <div className="flex w-[300px] shrink-0 flex-col gap-4">
           {/* Info card */}
           {hasAnyDetail && (
-            <div className="rounded-lg border border-border">
+            <div className="rounded-(--radius-card) border border-border">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}
@@ -312,8 +312,8 @@ export function ItemViewPage() {
           {/* Plan card */}
           {planId && planName && (
             <div
-              className="rounded-lg p-4"
-              style={{ backgroundColor: '#360EFF10', border: '1px solid #360EFF30' }}
+              className="rounded-(--radius-card) p-(--spacing-card)"
+              style={{ backgroundColor: 'color-mix(in srgb, var(--color-primary) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--color-primary) 19%, transparent)' }}
             >
               <div className="mb-2 flex items-center gap-2">
                 <Icon name="stars" size={16} color="var(--color-primary)" />
@@ -339,20 +339,20 @@ export function ItemViewPage() {
       {/* Delete confirmation dialog */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="w-full max-w-sm rounded-xl bg-surface p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-base font-semibold text-foreground">{t('itemView.confirmDelete')}</h3>
             <p className="mt-2 text-sm text-muted-foreground">{t('itemView.deleteDescription')}</p>
             <div className="mt-4 flex justify-end gap-3">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted"
               >
                 {t('common.cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleteTaskMutation.isPending || deleteEventMutation.isPending}
-                className="rounded-lg bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+                className="rounded-(--radius-btn) bg-destructive px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
               >
                 {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
               </button>

@@ -728,7 +728,22 @@
     "palettePinkDesc": "Mềm mại và ấm áp với điểm nhấn hồng",
     "patternSystem": "Hệ thống",
     "colorElectric": "Electric",
-    "autoDescription": "Sáng ban ngày, tối ban đêm."
+    "autoDescription": "Sáng ban ngày, tối ban đêm.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Kiểu hiển thị",
+    "displayStyleSubtitle": "Điều khiển hình dạng, bóng đổ và khoảng cách — tương thích với mọi bảng màu",
+    "styleDefault": "Mặc định",
+    "styleDefaultDesc": "Góc bo tròn cân đối và khoảng cách tiêu chuẩn",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Đường cong mềm mại, bóng ấm, khoảng cách rộng rãi",
+    "styleClay": "Clay",
+    "styleClayDesc": "Tròn và phẳng, chiều sâu qua tương phản màu",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Nút viên thuốc, bề mặt phẳng"
   },
   "languageSettings": {
     "title": "Cài đặt ngôn ngữ",

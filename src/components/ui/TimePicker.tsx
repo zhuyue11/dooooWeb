@@ -92,7 +92,7 @@ function TimePicker12hRow({ value, onChange }: {
             const v = Math.max(1, Math.min(12, parseInt(e.target.value) || 1));
             onChange(to24hFromAmPm(v, minute, period));
           }}
-          className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="h-8 w-12 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
         />
         <span className="text-sm font-medium text-muted-foreground">:</span>
         <input
@@ -104,11 +104,11 @@ function TimePicker12hRow({ value, onChange }: {
             const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
             onChange(to24hFromAmPm(hour, v, period));
           }}
-          className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="h-8 w-12 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
         />
       </div>
       {/* AM/PM toggle */}
-      <div className="flex rounded-md border border-border">
+      <div className="flex rounded-(--radius-btn) border border-border">
         <button
           type="button"
           onClick={() => period !== 'AM' && onChange(to24hFromAmPm(hour, minute, 'AM'))}
@@ -155,7 +155,7 @@ function TimePicker24hRow({ value, onChange }: {
           const v = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
           onChange(format24h(v, minute));
         }}
-        className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+        className="h-8 w-12 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
       />
       <span className="text-sm font-medium text-muted-foreground">:</span>
       <input
@@ -167,7 +167,7 @@ function TimePicker24hRow({ value, onChange }: {
           const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
           onChange(format24h(hour, v));
         }}
-        className="h-8 w-12 rounded-md border border-border bg-transparent px-1 text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+        className="h-8 w-12 rounded-(--radius-input) border border-border bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
       />
     </div>
   );

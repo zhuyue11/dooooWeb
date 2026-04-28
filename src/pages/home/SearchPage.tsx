@@ -358,7 +358,7 @@ export function SearchPage() {
 
       {/* Search bar + filter toggle */}
       <div className="flex items-center gap-2">
-        <div className="flex h-10 flex-1 items-center gap-2 rounded-xl border border-border bg-surface px-4">
+        <div className="flex h-10 flex-1 items-center gap-2 rounded-(--radius-card) border border-border bg-surface px-4">
           <Icon name="search" size={18} color="var(--color-muted-foreground)" />
           <input
             type="text"
@@ -377,7 +377,7 @@ export function SearchPage() {
 
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex h-10 items-center gap-1.5 rounded-xl border px-4 text-[13px] font-medium transition-colors ${
+          className={`flex h-10 items-center gap-1.5 rounded-(--radius-card) border px-4 text-[13px] font-medium transition-colors ${
             showFilters || activeFilterCount > 0
               ? 'border-primary bg-primary/10 text-primary'
               : 'border-border text-foreground hover:bg-muted'
@@ -423,7 +423,7 @@ export function SearchPage() {
       )}
 
       {/* Results list */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-(--radius-card) bg-surface shadow-(--shadow-card)">
         {isSearching ? (
           <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
             <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />

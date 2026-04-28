@@ -57,7 +57,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
   return (
     <div
       data-testid="calendar-day-timeline"
-      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] lg:min-h-0"
+      className="flex min-h-[400px] flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card) lg:min-h-0"
     >
       {/* Untimed items — no time-of-day */}
       {noTimeOfDayItems.length > 0 && (
@@ -72,7 +72,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                 <div
                   key={item.id}
                   data-testid={`day-task-${item.id}`}
-                  className={`rounded-md px-2.5 py-1 ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                  className={`rounded-(--radius-btn) px-(--spacing-btn-x-sm) py-1 ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                   style={{ backgroundColor: colors.bg }}
                   onClick={() => onItemClick?.(item)}
                 >
@@ -104,7 +104,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   <div
                     key={item.id}
                     data-testid={`day-task-${item.id}`}
-                    className={`rounded-md px-2.5 py-1 ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                    className={`rounded-(--radius-btn) px-(--spacing-btn-x-sm) py-1 ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                     style={{ backgroundColor: colors.bg }}
                     onClick={() => onItemClick?.(item)}
                   >
@@ -146,7 +146,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   <div
                     key={hour}
                     data-testid={`hour-row-${hour}`}
-                    className={`border-b border-border/50 ${isCurrentHour ? 'bg-[#f0f0ff] dark:bg-[#1a1a2e]' : ''}`}
+                    className={`border-b border-border/50 ${isCurrentHour ? 'bg-primary/5' : ''}`}
                     style={{ height: HOUR_HEIGHT }}
                   />
                 );
@@ -218,7 +218,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                       {/* Tags line */}
                       <div className="flex flex-wrap items-center gap-1" style={{ color: colors.text }}>
                         {item.groupId && !hideGroupTag && (
-                          <span className="inline-flex items-center gap-px rounded-full border border-[#3b82f6] px-1 text-[9px] font-medium text-[#3b82f6]">
+                          <span className="inline-flex items-center gap-px rounded-full border border-info px-1 text-[9px] font-medium text-info">
                             <Icon name="group" size={8} color="#3b82f6" />
                             {item.groupName || t('calendarPage.itemRow.group')}
                           </span>

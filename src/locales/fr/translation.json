@@ -728,7 +728,22 @@
     "palettePinkDesc": "Doux et chaleureux avec accents roses",
     "patternSystem": "Système",
     "colorElectric": "Electric",
-    "autoDescription": "Clair le jour, sombre la nuit."
+    "autoDescription": "Clair le jour, sombre la nuit.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Style d'affichage",
+    "displayStyleSubtitle": "Contrôle la forme, les ombres et l'espacement — compatible avec toute palette",
+    "styleDefault": "Par défaut",
+    "styleDefaultDesc": "Coins arrondis équilibrés et espacement standard",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Courbes douces, ombres chaudes, espacement généreux",
+    "styleClay": "Clay",
+    "styleClayDesc": "Arrondi et plat, profondeur par contraste de couleur",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Boutons pilule, surfaces plates"
   },
   "languageSettings": {
     "title": "Paramètres de langue",

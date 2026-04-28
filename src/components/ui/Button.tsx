@@ -18,9 +18,9 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'h-(--btn-height-sm) px-(--spacing-btn-x) text-sm',
+  md: 'h-(--btn-height-md) px-(--spacing-btn-x) text-sm',
+  lg: 'h-(--btn-height-lg) px-(--spacing-btn-x) text-base',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -29,7 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled || isLoading}
-        className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={`inline-flex items-center justify-center gap-2 rounded-(--radius-btn) font-medium transition-all duration-(--transition-duration) active:scale-(--active-scale) disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
         {...props}
       >
         {isLoading && (

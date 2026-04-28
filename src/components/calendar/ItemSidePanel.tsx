@@ -322,7 +322,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               <button
                 data-testid="side-panel-edit"
                 onClick={handleEdit}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
                 title={t('itemView.edit')}
               >
                 <Icon name="edit" size={18} />
@@ -331,7 +331,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             <button
               data-testid="side-panel-expand"
               onClick={handleExpand}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
               title={t('itemView.expand')}
             >
               <Icon name="open_in_full" size={18} />
@@ -340,7 +340,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               <button
                 data-testid="side-panel-delete"
                 onClick={handleDeleteClick}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
                 title={t('itemView.delete')}
               >
                 <Icon name="delete" size={18} />
@@ -349,7 +349,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             <button
               data-testid="side-panel-close"
               onClick={handleClose}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
               title={t('common.close')}
             >
               <Icon name="close" size={18} />
@@ -374,7 +374,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
           {/* Details card */}
           {hasAnyDetail && (
-            <div className="rounded-lg border border-border">
+            <div className="rounded-(--radius-card) border border-border">
               {dateDisplay && (
                 <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
               )}
@@ -427,7 +427,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
                       <span className="text-[13px] text-muted-foreground">{t('itemView.guests')}</span>
                       <div className="mt-1 flex flex-wrap gap-1">
                         {guestsDisplay.map((g) => (
-                          <span key={g.email} className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-muted px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-foreground">
                             {g.email}
                           </span>
                         ))}
@@ -504,20 +504,20 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
         {/* ── Delete confirmation overlay ── */}
         {showDeleteConfirm && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30">
-            <div className="mx-6 w-full max-w-sm rounded-xl bg-surface p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+            <div className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-base font-semibold text-foreground">{t('itemView.confirmDelete')}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{t('itemView.deleteDescription')}</p>
               <div className="mt-4 flex justify-end gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                  className="rounded-(--radius-btn) border border-border px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-foreground hover:bg-muted"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={deleteTaskMutation.isPending}
-                  className="rounded-lg bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+                  className="rounded-(--radius-btn) bg-destructive px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
                 >
                   {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
                 </button>

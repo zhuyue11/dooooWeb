@@ -201,7 +201,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
   return createPortal(
     <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 ${isClosing ? 'animate-backdrop-out' : ''}`} onClick={onClose}>
       <div
-        className={`relative w-full max-w-[560px] rounded-xl bg-surface shadow-[0_8px_32px_rgba(0,0,0,0.25)] ${isClosing ? 'animate-modal-exit' : 'animate-modal-enter'}`}
+        className={`relative w-full max-w-[560px] rounded-(--radius-modal) bg-surface shadow-(--shadow-modal) ${isClosing ? 'animate-modal-exit' : 'animate-modal-enter'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header: type toggle + close */}
@@ -210,7 +210,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             <button
               type="button"
               onClick={() => handleItemTypeChange('TASK')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-[13px] font-semibold transition-colors ${
+              className={`flex items-center gap-2 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
                 isTask
                   ? 'bg-primary text-primary-foreground'
                   : 'border border-border text-muted-foreground hover:bg-muted'
@@ -222,7 +222,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             <button
               type="button"
               onClick={() => handleItemTypeChange('EVENT')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-[13px] font-semibold transition-colors ${
+              className={`flex items-center gap-2 rounded-(--radius-btn) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold transition-colors ${
                 !isTask
                   ? 'bg-primary text-primary-foreground'
                   : 'border border-border text-muted-foreground hover:bg-muted'
@@ -235,7 +235,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
+            className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted"
           >
             <Icon name="close" size={20} />
           </button>
@@ -257,7 +257,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
           />
 
           {/* Schedule card */}
-          <div className="rounded-xl border border-border">
+          <div className="rounded-(--radius-card) border border-border">
             {/* Date row */}
             <div className="relative">
             <button
@@ -423,7 +423,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            className="rounded-(--radius-card) border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
             {t('calendarPage.form.cancel')}
           </button>
@@ -431,7 +431,7 @@ export function ItemFormModal({ defaultDate, groupId, onClose, onSaved }: ItemFo
             type="button"
             onClick={handleSubmit}
             disabled={saveDisabled}
-            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

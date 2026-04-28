@@ -103,7 +103,7 @@ export function GroupListPage() {
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="mt-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            className="mt-2 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             {t('groups.createGroup')}
           </button>
@@ -148,7 +148,7 @@ export function GroupListPage() {
           <button
             type="button"
             onClick={() => setShowCreateModal(true)}
-            className="ml-2 flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-[13px] font-semibold text-primary-foreground hover:opacity-90"
+            className="ml-2 flex items-center gap-1.5 rounded-(--radius-btn) bg-primary px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-semibold text-primary-foreground hover:opacity-90"
           >
             <Icon name="add" size={16} color="var(--color-primary-foreground)" />
             {t('groups.newGroup')}

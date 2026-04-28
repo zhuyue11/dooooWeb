@@ -85,7 +85,7 @@ export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse, groupCon
         {collapsed && !groupContext && (
           <button
             onClick={onToggleCollapse}
-            className="absolute right-0 top-1/2 z-50 hidden -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-border bg-surface shadow-sm transition-colors hover:bg-muted lg:flex"
+            className="absolute right-0 top-1/2 z-50 hidden -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-border bg-surface shadow-(--shadow-card) transition-colors hover:bg-muted lg:flex"
             style={{ width: 24, height: 24 }}
             title="Expand sidebar"
           >
@@ -128,14 +128,14 @@ function MainSidebarContent({
               to="/search"
               onClick={onClose}
               data-testid="sidebar-search-button"
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Icon name="search" size={20} />
             </NavLink>
             <NavLink
               to="/notifications"
               onClick={onClose}
-              className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="relative flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Icon name="notifications" size={20} />
               {notificationUnread > 0 && (
@@ -146,7 +146,7 @@ function MainSidebarContent({
             </NavLink>
             <button
               onClick={onToggleCollapse}
-              className="hidden h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground lg:flex"
+              className="hidden h-8 w-8 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground lg:flex"
               title="Collapse sidebar"
             >
               <Icon name="left_panel_close" size={20} />
@@ -167,7 +167,7 @@ function MainSidebarContent({
                 onClick={onClose}
                 title={collapsed ? t(labelKey, fallback) : undefined}
                 className={({ isActive }) =>
-                  `flex h-10 items-center gap-3 rounded-lg text-sm transition-colors ${
+                  `flex h-10 items-center gap-3 rounded-(--radius-card) text-sm transition-colors ${
                     collapsed ? 'justify-center px-0' : 'px-4'
                   } ${
                     isActive
@@ -237,7 +237,7 @@ function GroupSidebarContent({
         <button
           type="button"
           onClick={() => navigate('/groups')}
-          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-(--radius-card) text-muted-foreground hover:bg-muted hover:text-foreground"
           data-testid="group-sidebar-back"
         >
           <Icon name="arrow_back" size={20} />
@@ -246,7 +246,7 @@ function GroupSidebarContent({
           <>
             <div
               className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
-              style={{ backgroundColor: groupContext.groupColor || '#360EFF' }}
+              style={{ backgroundColor: groupContext.groupColor || 'var(--color-primary)' }}
             />
             <span className="min-w-0 flex-1 truncate text-[15px] font-semibold text-foreground">
               {groupContext.groupName}
@@ -269,7 +269,7 @@ function GroupSidebarContent({
                 to={fullPath}
                 onClick={onClose}
                 title={collapsed ? t(labelKey, fallback) : undefined}
-                className={`flex h-10 items-center gap-3 rounded-lg text-sm transition-colors ${
+                className={`flex h-10 items-center gap-3 rounded-(--radius-card) text-sm transition-colors ${
                   collapsed ? 'justify-center px-0' : 'px-4'
                 } ${
                   isActive

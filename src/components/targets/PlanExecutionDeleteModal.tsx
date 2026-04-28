@@ -47,7 +47,7 @@ export function PlanExecutionDeleteModal({
       data-testid="plan-execution-delete-modal"
     >
       <div
-        className="mx-6 w-full max-w-sm rounded-xl bg-surface p-6 shadow-lg animate-modal-enter"
+        className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-surface p-(--spacing-card) shadow-(--shadow-modal) animate-modal-enter"
         onClick={(e) => e.stopPropagation()}
       >
         {loading ? (
@@ -83,7 +83,7 @@ export function PlanExecutionDeleteModal({
             <button
               type="button"
               onClick={onConfirm}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-destructive py-3 text-[15px] font-semibold text-destructive-foreground transition-opacity hover:opacity-90"
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-(--radius-btn) bg-destructive py-3 text-[15px] font-semibold text-destructive-foreground transition-opacity hover:opacity-90"
               data-testid="execution-delete-confirm"
             >
               <Icon

@@ -735,7 +735,22 @@
     "palettePinkDesc": "Soft and warm with pink accents",
     "patternSystem": "System",
     "colorElectric": "Electric Blue",
-    "autoDescription": "Light during the day, dark at night."
+    "autoDescription": "Light during the day, dark at night.",
+    "paletteAirbnb": "Airbnb",
+    "paletteClay": "Clay",
+    "paletteNotion": "Notion",
+    "paletteStarbucks": "Starbucks",
+    "paletteMintlify": "Mintlify",
+    "displayStyleTitle": "Display Style",
+    "displayStyleSubtitle": "Controls shape, shadows, and spacing — works with any color palette",
+    "styleDefault": "Default",
+    "styleDefaultDesc": "Balanced rounded corners and standard spacing",
+    "styleAirbnb": "Airbnb",
+    "styleAirbnbDesc": "Soft curves, warm shadows, generous spacing",
+    "styleClay": "Clay",
+    "styleClayDesc": "Rounded and flat, depth through color contrast",
+    "styleStarbucks": "Starbucks",
+    "styleStarbucksDesc": "Pill buttons, flat surfaces, café spaciousness"
   },
   "fontSettings": {
     "title": "Font",

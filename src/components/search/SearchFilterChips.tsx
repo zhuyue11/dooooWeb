@@ -24,7 +24,7 @@ export function SearchFilterChips({ chips, onClearAll }: SearchFilterChipsProps)
         <button
           key={chip.key}
           onClick={chip.onRemove}
-          className="flex items-center gap-1 rounded-2xl px-3 py-1 text-[12px] font-medium text-white transition-opacity hover:opacity-80"
+          className="flex items-center gap-1 rounded-(--radius-card) px-3 py-1 text-[12px] font-medium text-white transition-opacity hover:opacity-80"
           style={{ backgroundColor: chip.color }}
         >
           <span className="max-w-[120px] truncate">{chip.label}</span>

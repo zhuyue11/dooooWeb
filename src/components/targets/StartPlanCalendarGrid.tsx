@@ -239,7 +239,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
 
   return (
     <div
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-(--radius-card) bg-surface shadow-(--shadow-card)"
       data-testid="start-plan-calendar-grid"
     >
       {/* Day headers */}
@@ -300,7 +300,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
                           <button
                             key={task.instanceId || task.templateId}
                             type="button"
-                            className="rounded-md bg-primary/15 px-1.5 py-1 text-left transition-opacity hover:opacity-80"
+                            className="rounded-(--radius-btn) bg-primary/15 px-(--spacing-btn-x-sm) py-1 text-left transition-opacity hover:opacity-80"
                             onClick={() => onTaskClick(task)}
                           >
                             <span className="truncate text-[10px] font-medium leading-tight text-primary">
@@ -345,7 +345,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
                     <div
                       key={hour}
                       className={`border-b border-border/50 ${
-                        isToday && hour === currentHour ? 'bg-[#f0f0ff] dark:bg-[#1a1a2e]' : ''
+                        isToday && hour === currentHour ? 'bg-primary/5' : ''
                       }`}
                       style={{ height: HOUR_HEIGHT }}
                     />
@@ -363,7 +363,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
                     return (
                       <div
                         key={task.instanceId || task.templateId}
-                        className={`absolute overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left select-none ${
+                        className={`absolute overflow-hidden rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) py-1 text-left select-none ${
                           isBeingDragged
                             ? 'opacity-35'
                             : onDragEnd
@@ -410,7 +410,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
         <div className="pointer-events-none fixed inset-0 z-[100]" data-testid="drag-overlay">
           {/* Time badge */}
           <div
-            className="absolute rounded bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground shadow-md"
+            className="absolute rounded bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground shadow-(--shadow-card-hover)"
             style={{
               top: dragState.startY + dragOffsetY - dragState.blockHeight - 8,
               left: dragState.colLeft,
@@ -424,7 +424,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
 
           {/* Floating block */}
           <div
-            className="absolute cursor-grabbing overflow-hidden rounded-md bg-primary px-1.5 py-1 text-left shadow-lg"
+            className="absolute cursor-grabbing overflow-hidden rounded-(--radius-btn) bg-primary px-(--spacing-btn-x-sm) py-1 text-left shadow-(--shadow-elevated)"
             style={{
               top: dragState.startY + dragOffsetY - (dragState.startY - (dragState.element.getBoundingClientRect().top)),
               left: dragState.colLeft + 2,

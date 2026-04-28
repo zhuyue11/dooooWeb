@@ -96,7 +96,7 @@ export function PlanTemplateItem({ template, index, scheduledDate, onClick }: Pl
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5${onClick ? ' cursor-pointer transition-shadow hover:shadow-md' : ''}`}
+      className={`flex items-center gap-3 rounded-(--radius-card) border border-border bg-surface px-(--spacing-card) py-3.5${onClick ? ' cursor-pointer transition-all duration-(--transition-duration) hover:shadow-(--shadow-card-hover)' : ''}`}
       data-testid={`plan-template-item-${index}`}
       onClick={onClick}
     >
