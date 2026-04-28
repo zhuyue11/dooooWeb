@@ -47,6 +47,7 @@ export function useUnreadNotificationCount() {
     queryKey: ['unread-count'],
     queryFn: getUnreadCount,
     staleTime: 30 * 1000,
+    refetchInterval: 30 * 1000,
   });
 }
 
@@ -54,7 +55,20 @@ export function useMarkNotificationAsRead() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: markNotificationAsRead,
-    onSuccess: () => {
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['unread-count'] });
+      const previous = queryClient.getQueryData<number>(['unread-count']);
+      queryClient.setQueryData<number>(['unread-count'], (old) =>
+        Math.max(0, (old ?? 1) - 1)
+      );
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(['unread-count'], context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
       queryClient.invalidateQueries({ queryKey: ['unread-count'] });
     },
@@ -92,15 +106,26 @@ export function useDeleteNotification() {
     mutationFn: deleteNotification,
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['notifications'] });
-      const previous = queryClient.getQueryData<Notification[]>(['notifications']);
+      await queryClient.cancelQueries({ queryKey: ['unread-count'] });
+      const previousNotifications = queryClient.getQueryData<Notification[]>(['notifications']);
+      const previousCount = queryClient.getQueryData<number>(['unread-count']);
       queryClient.setQueryData<Notification[]>(['notifications'], (old) =>
         old?.filter((n) => n.id !== id)
       );
-      return { previous };
+      const deletedNotification = previousNotifications?.find((n) => n.id === id);
+      if (deletedNotification && !deletedNotification.isRead) {
+        queryClient.setQueryData<number>(['unread-count'], (old) =>
+          Math.max(0, (old ?? 1) - 1)
+        );
+      }
+      return { previousNotifications, previousCount };
     },
     onError: (_err, _vars, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(['notifications'], context.previous);
+      if (context?.previousNotifications) {
+        queryClient.setQueryData(['notifications'], context.previousNotifications);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(['unread-count'], context.previousCount);
       }
     },
     onSettled: () => {

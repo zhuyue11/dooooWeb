@@ -394,3 +394,47 @@ test.describe('Notification actions — delete button hiding', () => {
     await expect(deleteButton).toBeAttached();
   });
 });
+
+// ── Phase 5.3 — Unread notification badge ──
+
+test.describe('Notification unread badge', () => {
+  test('badge shows unread count in sidebar', async ({ page }) => {
+    await setupNotificationMocks(page);
+    await page.goto('/home');
+    await expect(page.getByText(/Good (morning|afternoon|evening)/i)).toBeVisible({ timeout: 10000 });
+
+    const badge = page.getByTestId('notification-badge');
+    await expect(badge).toBeVisible();
+    await expect(badge).toHaveText('2');
+  });
+
+  test('badge is hidden when unread count is 0', async ({ page }) => {
+    await page.route('**/api/notifications/unread-count', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { count: 0 } }),
+      });
+    });
+    await page.goto('/home');
+    await expect(page.getByText(/Good (morning|afternoon|evening)/i)).toBeVisible({ timeout: 10000 });
+
+    await expect(page.getByTestId('notification-badge')).not.toBeVisible();
+  });
+
+  test('badge shows 99+ for large unread counts', async ({ page }) => {
+    await page.route('**/api/notifications/unread-count', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { count: 150 } }),
+      });
+    });
+    await page.goto('/home');
+    await expect(page.getByText(/Good (morning|afternoon|evening)/i)).toBeVisible({ timeout: 10000 });
+
+    const badge = page.getByTestId('notification-badge');
+    await expect(badge).toBeVisible();
+    await expect(badge).toHaveText('99+');
+  });
+});

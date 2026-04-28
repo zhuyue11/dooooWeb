@@ -135,7 +135,7 @@ function MainSidebarContent({
             >
               <Icon name="notifications" size={20} />
               {notificationUnread > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+                <span data-testid="notification-badge" className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
                   {notificationUnread > 99 ? '99+' : notificationUnread}
                 </span>
               )}
