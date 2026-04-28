@@ -2,7 +2,7 @@
 
 Tracks what has been completed, what's in progress, and what's remaining across all 7 phases to reach full dooooApp feature parity.
 
-Last updated: 2026-04-29
+Last updated: 2026-04-30
 
 ## Tech Stack
 
@@ -205,9 +205,9 @@ Last updated: 2026-04-29
 | Step | Status | Notes |
 |------|--------|-------|
 | 6.1 Settings index page + routing | ✅ Done | `SettingsPage.tsx` — 9-item menu list (Profile, Account, Theme, Language, Display, Notifications, Privacy, Help, About) with Material Symbols icons. All routes defined in `router.tsx` as nested children. Consistent card UI with navigation links. |
-| 6.2 Theme settings — light/dark/auto | ✅ Done | `ThemeSettingsPage.tsx` (40 lines). 3-button selector for theme pattern (Auto/Light/Dark). Uses `useTheme()` hook. Persisted to localStorage. **Gap vs dooooApp:** Missing color picker (9 accent colors) and palette picker (9 full themes). See step 6.4. |
+| 6.2 Theme settings — light/dark/auto | ✅ Done | `ThemeSettingsPage.tsx`. Theme pattern selector (Auto/Light/Dark/System). Uses `useTheme()` hook. Persisted to localStorage. Extended in step 6.4 with accent colors and color palettes. |
 | 6.3 Language settings | ✅ Done | `LanguageSettingsPage.tsx`. Lists all 19 languages with native name + English name. Click to switch instantly via `useLanguage()` context. Checkmark on active language. Persisted to localStorage. |
-| 6.4 Theme — accent colors + color palettes | ⬜ | **Build:** Extend `ThemeSettingsPage.tsx` to match dooooApp's full theme system. **Color picker section:** 9 accent color swatches (electric #360EFF, emerald, ocean, crimson, amber, yellow, cyan, purple, pink). Selecting a color updates CSS custom properties `--color-primary`, `--color-secondary`, `--color-accent`. Persisted to localStorage. **Palette picker section:** 9 full-theme presets (light, dark, ocean, crimson, amber, yellow, cyan, purple, pink) — each palette overrides ALL CSS tokens (background, surface, border, etc.), not just primary. Togglable (tap to apply, tap again to deselect). Palette active → disables pattern selector. Extend `theme-context.tsx` with `ThemeColor` and `ColorPalette` types + state + setters + `[data-color]` / `[data-palette]` CSS attribute management. dooooApp reference: `ThemeSettingsScreen.tsx` (709 lines) — pattern picker modal, color swatch grid, palette cards. |
+| 6.4 Theme — accent colors + color palettes | ✅ Done | **Three-tier theme system** ported from dooooHub/dooooApp. **Tier 1 — ThemePattern:** 4 options (light/dark/auto/system) with mini preview cards in 4-col grid; `system` follows OS `prefers-color-scheme` via `matchMedia` listener; `auto` time-based (6AM–6PM light, dark otherwise, 60s re-check). Applied via `data-theme="light|dark"` on `<html>`. **Tier 2 — ThemeColor:** 9 accent colors (electric #360EFF, emerald, ocean, crimson, amber, yellow, cyan, purple, pink) as circle swatches with ring selection indicator + color name labels. Applied via `data-color="ocean"` on `<html>` — overrides only `--color-primary`, `--color-primary-foreground`, `--color-secondary`, `--color-accent`. Each color has light + dark variants in CSS. Emerald is the default (no data-color attribute needed). **Tier 3 — ColorPalette:** 9 full-theme presets (light, dark, ocean, crimson, amber, yellow, cyan, purple, pink) in responsive grid (2→3→4→5 cols). Applied via `data-palette="ocean"` — overrides ALL 17 CSS tokens (background, foreground, surface, input-bg, primary, secondary, muted, accent, destructive, warning, info, border). Toggleable (click to activate, click again to deselect). When palette active, `data-theme` removed (palette controls everything including light/dark feel via `color-scheme`). Dark-background palettes (yellow, cyan, dark) set `color-scheme: dark`. **Priority:** palette > (pattern + color). Changing color clears palette; palette active disables pattern selector (opacity-50 + cursor-not-allowed). **CSS migration:** dark mode selector changed from `.dark` class to `[data-theme="dark"]` attribute; added `@custom-variant dark` declaration for Tailwind v4's `dark:` utilities. **Logo:** `Logo.tsx` component inlines the SVG with `fill="var(--color-primary)"` so logo color follows theme; replaced `<img>` in `Sidebar.tsx` and `Header.tsx`. **Dashboard FAB:** `+` button changed from hardcoded `bg-[#360EFF]` to `bg-primary text-primary-foreground`. **Context:** `theme-context.tsx` refactored — exports `THEME_COLORS`, `COLOR_PALETTES`, `THEME_COLOR_HEX`, `PALETTE_COLORS` constants; `applyAttributes()` manages `data-*` attributes on `document.documentElement`; `readPattern()`/`readColor()`/`readPalette()` initialize from localStorage with validation. **Types:** `ThemePattern` extended with `'system'`; `ThemeColor` extended with `'electric'`; new `ColorPalette` type. **Storage:** `@doooo_color_palette` key added to `STORAGE_KEYS`. **Responsive layout:** settings page uses two-column grid (`lg:grid-cols-2`) for pattern + color cards, full-width palette card below. **Translations:** 3 new keys (`patternSystem`, `colorElectric`, `autoDescription`) added to all 19 locale files. **E2E:** `theme-settings.spec.ts` — 10 tests covering 3-section render, pattern selection applies `data-theme`, color selection applies/removes `data-color`, check icon on selected swatch, palette applies `data-palette` and removes `data-theme`, palette toggle deselect, pattern disabled when palette active, color change clears palette, persistence across reload, sidebar navigation. All pass. |
 | 6.5 Display settings | ⬜ | **Stub exists** (`DisplaySettingsPage.tsx`). **Logic layer complete** in `display-context.tsx`. **Build UI only:** Date format selector (MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD) with radio buttons or dropdown. Time format selector (Auto / 12-hour / 24-hour) — auto uses per-language defaults. Week start day selector (Sunday / Monday). Each option shows a preview of the format. All selections call existing context setters — no new logic needed, only UI. **Lowest-effort settings page to complete.** |
 | 6.6 Profile page | ⬜ | **Stub exists** (`ProfilePage.tsx`). **API ready:** `updateProfile()` in auth context, `User` type has `name`, `email`, `avatarUrl`. **Build:** Avatar display (initials fallback if no image), avatar upload (file picker → `PATCH /api/users/profile` with multipart). Name edit (inline or modal input). Email display (read-only or with verification flow). User ID display (copyable). Account creation date. dooooApp reference: `AccountInfoScreen.tsx` (664 lines) — `ImagePicker` for avatar, `InputDialog` for inline editing. |
 | 6.7 Account info + change password | ⬜ | **Stub exists** (`AccountInfoPage.tsx`). **API ready:** `changePassword()` in auth context. **Build:** Combine account info + password change into one page (or two sub-sections). **Linked accounts section:** display linked OAuth providers (Google, Apple, WeChat) with icons + colors, link/unlink buttons. **Change password form:** current password (show/hide toggle), new password (show/hide toggle), confirm password (show/hide toggle). **Validation:** current required, new ≥ 8 chars, new ≠ current, new === confirm. Success → alert + clear fields. Error → show backend message. **Delete account option** with type-confirmation dialog. dooooApp references: `AccountInfoScreen.tsx` linked accounts + `ChangePasswordScreen.tsx` (383 lines) password form. |
@@ -220,7 +220,7 @@ Last updated: 2026-04-29
 | 6.12 Help + Feedback + Bug Report | ⬜ | **Stub exists** (`HelpPage.tsx`). dooooApp has 3 separate screens: `HelpScreen.tsx`, `FeedbackScreen.tsx`, `ReportBugScreen.tsx`. **Build:** Combined page with sections: FAQ accordion (common questions), contact support (email link or form), feedback form (text area + category selector + submit), bug report form (description + steps to reproduce + device info auto-fill + submit). Links to documentation. Social media links. |
 | 6.13 About page | ⬜ | **Stub exists** (`AboutPage.tsx` — currently shows "doooo v0.1.0"). **Build:** Version info (app version, build number). Changelog link. Terms of service link. Privacy policy link. Open source licenses/acknowledgments. Social links (GitHub, Twitter, etc.). Logo display. dooooApp reference: `AboutScreen.tsx`. |
 
-**Dependencies:** Step 6.8 (notification preferences) may need a new backend endpoint. Step 6.10 (privacy) depends on backend session management support. Step 6.4 (theme colors) requires CSS token engineering.
+**Dependencies:** Step 6.8 (notification preferences) may need a new backend endpoint. Step 6.10 (privacy) depends on backend session management support.
 
 ---
 
@@ -257,10 +257,10 @@ Last updated: 2026-04-29
 | 3 — Groups & Collaboration | 🔶 Partial | 7 | 9 | — |
 | 4 — Targets, Plans & AI | ✅ Complete | 11 | 11 | — |
 | 5 — Notifications, Search & Statistics | 🔶 Partial | 4 | 6 | Backend aggregate endpoints for statistics |
-| 6 — Settings & Account | 🔶 Partial | 3 | 15 | Backend preference endpoints for some settings |
+| 6 — Settings & Account | 🔶 Partial | 4 | 15 | Backend preference endpoints for some settings |
 | 7 — Polish & Parity | 🔶 Partial | 1 | 13 | OAuth wiring, Google Calendar API setup |
 
-**Overall: 53 of 81 steps complete (~65%)**
+**Overall: 54 of 81 steps complete (~67%)**
 
 ---
 
@@ -273,10 +273,6 @@ Login page renders Google and Apple OAuth buttons but they are purely visual —
 ### ⚠️ Display Settings page has no UI despite complete logic layer
 
 `display-context.tsx` contains working display preference logic (date format with 3 options, time format with auto/12h/24h and per-language defaults, week start day Sunday/Monday). These preferences are already used throughout the app's calendar and item display. But `DisplaySettingsPage.tsx` is a 2-line stub — users cannot change these preferences through the UI. This is the lowest-effort settings page to complete (UI only, no new logic).
-
-### ⚠️ Theme settings lack color picker and palette support
-
-Only light/dark/auto mode is available. dooooApp offers 9 accent colors and 9 full-theme palettes. The `theme-context.tsx` would need to be extended with `ThemeColor` and `ColorPalette` state, and CSS tokens need `[data-color]` / `[data-palette]` attribute selectors.
 
 ### ⚠️ No route for several dooooApp settings screens
 
