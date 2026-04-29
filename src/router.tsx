@@ -45,10 +45,18 @@ import { ProfilePage } from '@/pages/settings/ProfilePage';
 import { AccountInfoPage } from '@/pages/settings/AccountInfoPage';
 import { ThemeSettingsPage } from '@/pages/settings/ThemeSettingsPage';
 import { LanguageSettingsPage } from '@/pages/settings/LanguageSettingsPage';
+import { FontSettingsPage } from '@/pages/settings/FontSettingsPage';
 import { DisplaySettingsPage } from '@/pages/settings/DisplaySettingsPage';
 import { NotificationSettingsPage } from '@/pages/settings/NotificationSettingsPage';
 import { PrivacySecurityPage } from '@/pages/settings/PrivacySecurityPage';
+import { GoalsPage } from '@/pages/settings/GoalsPage';
+import { ActivityHistoryPage } from '@/pages/settings/ActivityHistoryPage';
+import { TaskDefaultsPage } from '@/pages/settings/TaskDefaultsPage';
+import { CalendarSettingsPage } from '@/pages/settings/CalendarSettingsPage';
+import { DataManagementPage } from '@/pages/settings/DataManagementPage';
 import { HelpPage } from '@/pages/settings/HelpPage';
+import { FeedbackPage } from '@/pages/settings/FeedbackPage';
+import { ReportBugPage } from '@/pages/settings/ReportBugPage';
 import { AboutPage } from '@/pages/settings/AboutPage';
 
 export const router = createBrowserRouter([
@@ -110,10 +118,18 @@ export const router = createBrowserRouter([
           { path: '/settings/account', element: <AccountInfoPage /> },
           { path: '/settings/theme', element: <ThemeSettingsPage /> },
           { path: '/settings/language', element: <LanguageSettingsPage /> },
+          { path: '/settings/font', element: <FontSettingsPage /> },
           { path: '/settings/display', element: <DisplaySettingsPage /> },
           { path: '/settings/notifications', element: <NotificationSettingsPage /> },
+          { path: '/settings/goals', element: <GoalsPage /> },
+          { path: '/settings/activity-history', element: <ActivityHistoryPage /> },
+          { path: '/settings/task-defaults', element: <TaskDefaultsPage /> },
+          { path: '/settings/calendar', element: <CalendarSettingsPage /> },
           { path: '/settings/privacy', element: <PrivacySecurityPage /> },
+          { path: '/settings/data-management', element: <DataManagementPage /> },
           { path: '/settings/help', element: <HelpPage /> },
+          { path: '/settings/feedback', element: <FeedbackPage /> },
+          { path: '/settings/report-bug', element: <ReportBugPage /> },
           { path: '/settings/about', element: <AboutPage /> },
         ],
       },
