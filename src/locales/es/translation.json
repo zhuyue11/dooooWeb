@@ -1624,10 +1624,9 @@
     "reminder": "Recordatorio",
     "location": "Ubicación",
     "repeat": "Repetir",
-    "createdAt": "Creado el {{date}}",
+    "createdAt": "Creado",
     "confirmDelete": "¿Eliminar este elemento?",
     "deleteDescription": "Esta acción no se puede deshacer. El elemento se eliminará permanentemente.",
-    "backToCalendar": "Volver al calendario",
     "timeZone": "Zona horaria",
     "guests": "Invitados",
     "meetingLink": "Enlace de reunión"

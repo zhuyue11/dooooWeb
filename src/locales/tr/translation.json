@@ -1624,10 +1624,9 @@
     "reminder": "Hatırlatıcı",
     "location": "Konum",
     "repeat": "Tekrarla",
-    "createdAt": "{{date}} tarihinde oluşturuldu",
+    "createdAt": "Oluşturuldu",
     "confirmDelete": "Bu öğe silinsin mi?",
     "deleteDescription": "Bu işlem geri alınamaz. Öğe kalıcı olarak silinecektir.",
-    "backToCalendar": "Takvime dön",
     "timeZone": "Saat dilimi",
     "guests": "Konuklar",
     "meetingLink": "Toplantı bağlantısı"

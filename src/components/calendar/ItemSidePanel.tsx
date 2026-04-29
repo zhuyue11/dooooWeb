@@ -281,7 +281,8 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
   const guestsDisplay = item.guests && item.guests.length > 0 ? item.guests : null;
   const meetingLinkDisplay = item.meetingLink || null;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay;
+  const createdAtRaw = item.sourceTask?.createdAt || item.sourceEvent?.createdAt;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay || createdAtRaw;
 
   return createPortal(
     <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
@@ -469,6 +470,16 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
                   <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
                 </>
               )}
+              {createdAtRaw && (
+                <>
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
+                  <DetailRow
+                    icon="event_available"
+                    label={t('itemView.createdAt')}
+                    value={new Date(createdAtRaw).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' })}
+                  />
+                </>
+              )}
             </div>
           )}
 
@@ -500,14 +511,6 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             </>
           )}
 
-          {/* Created/updated timestamp */}
-          {(item.sourceTask?.createdAt || item.sourceEvent?.createdAt) && (
-            <span className="text-xs text-(--el-panel-detail-label)">
-              {t('itemView.createdAt', {
-                date: new Date((item.sourceTask?.createdAt || item.sourceEvent?.createdAt)!).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
-              })}
-            </span>
-          )}
         </div>
 
         {/* ── Delete confirmation overlay ── */}

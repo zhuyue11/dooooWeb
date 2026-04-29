@@ -1625,10 +1625,9 @@
     "reminder": "提醒",
     "location": "地点",
     "repeat": "重复",
-    "createdAt": "创建于 {{date}}",
+    "createdAt": "创建于",
     "confirmDelete": "删除此项目？",
     "deleteDescription": "此操作无法撤销。该项目将被永久删除。",
-    "backToCalendar": "返回日历",
     "timeZone": "时区",
     "guests": "来宾",
     "meetingLink": "会议链接"

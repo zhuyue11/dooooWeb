@@ -1624,10 +1624,9 @@
     "reminder": "Pengingat",
     "location": "Lokasi",
     "repeat": "Ulangi",
-    "createdAt": "Dibuat {{date}}",
+    "createdAt": "Dibuat",
     "confirmDelete": "Hapus item ini?",
     "deleteDescription": "Tindakan ini tidak dapat dibatalkan. Item akan dihapus secara permanen.",
-    "backToCalendar": "Kembali ke Kalender",
     "timeZone": "Zona waktu",
     "guests": "Tamu",
     "meetingLink": "Tautan rapat"

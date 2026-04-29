@@ -1624,10 +1624,9 @@
     "reminder": "تذكير",
     "location": "الموقع",
     "repeat": "تكرار",
-    "createdAt": "تم الإنشاء {{date}}",
+    "createdAt": "تم الإنشاء",
     "confirmDelete": "حذف هذا العنصر؟",
     "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف العنصر نهائيًا.",
-    "backToCalendar": "العودة إلى التقويم",
     "timeZone": "المنطقة الزمنية",
     "guests": "الضيوف",
     "meetingLink": "رابط الاجتماع"

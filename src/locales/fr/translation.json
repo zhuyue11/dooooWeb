@@ -1624,10 +1624,9 @@
     "reminder": "Rappel",
     "location": "Lieu",
     "repeat": "Répéter",
-    "createdAt": "Créé le {{date}}",
+    "createdAt": "Créé",
     "confirmDelete": "Supprimer cet élément ?",
     "deleteDescription": "Cette action est irréversible. L'élément sera définitivement supprimé.",
-    "backToCalendar": "Retour au calendrier",
     "timeZone": "Fuseau horaire",
     "guests": "Invités",
     "meetingLink": "Lien de réunion"

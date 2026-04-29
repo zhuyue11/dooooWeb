@@ -108,7 +108,7 @@ export function ItemViewPage() {
       <div className="flex flex-col items-center justify-center gap-3 py-20">
         <span className="text-sm text-(--el-view-detail-label)">Item not found</span>
         <button onClick={handleBack} className="text-sm font-medium text-(--el-modal-icon-selected) hover:underline">
-          {t('itemView.backToCalendar')}
+          {t('common.back')}
         </button>
       </div>
     );
@@ -155,7 +155,7 @@ export function ItemViewPage() {
   const planName = isTask ? taskItem?.plan?.name : undefined;
   const createdAt = item.createdAt;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || item.repeat != null;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || item.repeat != null || createdAt;
 
   // Permissions (matching dooooApp's canUserEditTask / canUserDeleteTask)
   const itemUserId = isTask ? taskItem?.userId : (eventItem as ApiEvent & { userId?: string })?.userId;
@@ -170,7 +170,7 @@ export function ItemViewPage() {
       {/* Back row */}
       <button onClick={handleBack} className="mb-6 flex items-center gap-2 text-[13px] font-medium text-(--el-view-detail-label) hover:text-(--el-view-title)">
         <Icon name="arrow_back" size={20} />
-        {t('itemView.backToCalendar')}
+        {t('common.back')}
       </button>
 
       {/* Header */}
@@ -315,6 +315,16 @@ export function ItemViewPage() {
               )}
               <div className="mx-4 border-t border-(--el-view-edit-border)" />
               <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
+              {createdAt && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow
+                    icon="event_available"
+                    label={t('itemView.createdAt')}
+                    value={new Date(createdAt).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' })}
+                  />
+                </>
+              )}
             </div>
           )}
 
@@ -336,14 +346,6 @@ export function ItemViewPage() {
         </div>
       </div>
 
-      {/* Created timestamp */}
-      {createdAt && (
-        <div className="mt-8 text-xs text-(--el-view-detail-label)">
-          {t('itemView.createdAt', {
-            date: new Date(createdAt).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' }),
-          })}
-        </div>
-      )}
 
       {/* Delete confirmation dialog */}
       {showDeleteConfirm && (

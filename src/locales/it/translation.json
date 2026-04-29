@@ -1624,10 +1624,9 @@
     "reminder": "Promemoria",
     "location": "Posizione",
     "repeat": "Ripeti",
-    "createdAt": "Creato il {{date}}",
+    "createdAt": "Creato",
     "confirmDelete": "Eliminare questo elemento?",
     "deleteDescription": "Questa azione non può essere annullata. L'elemento verrà eliminato definitivamente.",
-    "backToCalendar": "Torna al calendario",
     "timeZone": "Fuso orario",
     "guests": "Ospiti",
     "meetingLink": "Link riunione"

@@ -1635,10 +1635,9 @@
     "timeZone": "Time zone",
     "guests": "Guests",
     "meetingLink": "Meeting link",
-    "createdAt": "Created {{date}}",
+    "createdAt": "Created",
     "confirmDelete": "Delete this item?",
-    "deleteDescription": "This action cannot be undone. The item will be permanently deleted.",
-    "backToCalendar": "Back to Calendar"
+    "deleteDescription": "This action cannot be undone. The item will be permanently deleted."
   },
   "itemEditor": {
     "newTask": "New Task",

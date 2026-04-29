@@ -1627,10 +1627,9 @@
     "reminder": "Herinnering",
     "location": "Locatie",
     "repeat": "Herhalen",
-    "createdAt": "Aangemaakt op {{date}}",
+    "createdAt": "Aangemaakt",
     "confirmDelete": "Dit item verwijderen?",
     "deleteDescription": "Deze actie kan niet ongedaan worden gemaakt. Het item wordt permanent verwijderd.",
-    "backToCalendar": "Terug naar agenda",
     "timeZone": "Tijdzone",
     "guests": "Gasten",
     "meetingLink": "Vergaderlink"

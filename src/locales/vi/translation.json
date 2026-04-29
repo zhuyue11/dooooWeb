@@ -1624,10 +1624,9 @@
     "reminder": "Nhắc nhở",
     "location": "Địa điểm",
     "repeat": "Lặp lại",
-    "createdAt": "Tạo ngày {{date}}",
+    "createdAt": "Đã tạo",
     "confirmDelete": "Xóa mục này?",
     "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
-    "backToCalendar": "Quay lại lịch",
     "timeZone": "Múi giờ",
     "guests": "Khách mời",
     "meetingLink": "Liên kết cuộc họp"

@@ -1624,10 +1624,9 @@
     "reminder": "Напоминание",
     "location": "Местоположение",
     "repeat": "Повторение",
-    "createdAt": "Создано {{date}}",
+    "createdAt": "Создано",
     "confirmDelete": "Удалить этот элемент?",
     "deleteDescription": "Это действие нельзя отменить. Элемент будет удалён навсегда.",
-    "backToCalendar": "Вернуться к календарю",
     "timeZone": "Часовой пояс",
     "guests": "Гости",
     "meetingLink": "Ссылка на встречу"
