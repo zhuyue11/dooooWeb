@@ -154,6 +154,15 @@ export async function getAssignedGroupTasks(): Promise<Task[]> {
   return res.data.data;
 }
 
+// ===== To-Do List =====
+
+export async function getTodoTasks(groupId?: string): Promise<Task[]> {
+  const res = await apiClient.get<{ success: boolean; data: Task[] }>('/api/tasks/todo', {
+    params: groupId ? { groupId } : undefined,
+  });
+  return res.data.data;
+}
+
 // ===== Task Instances =====
 
 export async function getTaskInstances(params?: { from?: string; to?: string }): Promise<TaskInstancesResponse> {

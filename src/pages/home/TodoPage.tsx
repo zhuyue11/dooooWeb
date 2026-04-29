@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
-import { getTasks, getAssignedGroupTasks, toggleTask } from '@/lib/api';
+import { toggleTask } from '@/lib/api';
 import { usePlanReview } from '@/lib/contexts/plan-review-context';
-import { useGroups } from '@/hooks/useGroups';
 import { useCategories } from '@/hooks/useCategories';
+import { useTodoListTasks } from '@/hooks/useTodoListTasks';
 import { Icon } from '@/components/ui/Icon';
 import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
@@ -14,36 +14,13 @@ import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Task } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 
-// ── Helpers (matching HomePage isTodo logic) ──
-
-function isTodo(t: { date?: string | null; dateType?: string }) {
-  return !t.date || t.dateType === 'DUE';
-}
-
 /** Convert Task to CalendarItem, handling null dates for to-do tasks */
-function todoTaskToCalendarItem(task: Task, groupNameMap: Record<string, string>): CalendarItem {
+function todoTaskToCalendarItem(task: Task): CalendarItem {
   const item = taskToCalendarItem(task);
-  // taskToCalendarItem uses task.date! which is unsafe for no-date tasks
   if (!task.date) {
-    (item as Record<string, unknown>).date = '';
-  }
-  if (task.groupId && groupNameMap[task.groupId]) {
-    item.groupName = groupNameMap[task.groupId];
+    (item as unknown as Record<string, unknown>).date = '';
   }
   return item;
-}
-
-// ── Priority sort order ──
-
-const PRIORITY_ORDER: Record<string, number> = {
-  URGENT: 0, urgent: 0,
-  HIGH: 1, high: 1,
-  MEDIUM: 2, medium: 2,
-  LOW: 3, low: 3,
-};
-
-function getPriorityOrder(p?: string): number {
-  return p ? (PRIORITY_ORDER[p] ?? 4) : 4;
 }
 
 // ── Component ──
@@ -53,7 +30,6 @@ export function TodoPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { data: categories } = useCategories();
-  const { groupNameMap } = useGroups();
 
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('');
@@ -75,57 +51,15 @@ export function TodoPage() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [showFilter]);
 
-  // ── Data queries ──
+  // ── Data ──
 
-  const { data: personalTasks = [], isLoading: loadingPersonal } = useQuery({
-    queryKey: ['todo-tasks'],
-    queryFn: () => getTasks({ status: 'PENDING' }),
-  });
+  const { todoTasks, isLoading } = useTodoListTasks();
 
-  const { data: groupTasks = [], isLoading: loadingGroup } = useQuery({
-    queryKey: ['todo-assigned-group-tasks'],
-    queryFn: getAssignedGroupTasks,
-    staleTime: 2 * 60 * 1000,
-  });
-
-  const isLoading = loadingPersonal || loadingGroup;
-
-  // ── Build to-do items ──
+  // ── Build CalendarItems (backend already sorts) ──
 
   const todoItems = useMemo(() => {
-    const items: CalendarItem[] = [];
-    const nameMap = groupNameMap || {};
-
-    // Personal to-do tasks
-    for (const task of personalTasks) {
-      if (!isTodo(task)) continue;
-      items.push(todoTaskToCalendarItem(task, nameMap));
-    }
-
-    // Group tasks that are to-do items
-    for (const task of groupTasks) {
-      if (task.isCompleted) continue;
-      if (!isTodo(task)) continue;
-      items.push(todoTaskToCalendarItem(task, nameMap));
-    }
-
-    // Sort: DUE tasks with dates first (by due date), then no-date tasks (by priority, then creation)
-    items.sort((a, b) => {
-      const aHasDate = !!a.date;
-      const bHasDate = !!b.date;
-      if (aHasDate && !bHasDate) return -1;
-      if (!aHasDate && bHasDate) return 1;
-      if (aHasDate && bHasDate) {
-        const dateDiff = new Date(a.date).getTime() - new Date(b.date).getTime();
-        if (dateDiff !== 0) return dateDiff;
-      }
-      const priDiff = getPriorityOrder(a.priority) - getPriorityOrder(b.priority);
-      if (priDiff !== 0) return priDiff;
-      return a.title.localeCompare(b.title);
-    });
-
-    return items;
-  }, [personalTasks, groupTasks, groupNameMap]);
+    return todoTasks.map((task) => todoTaskToCalendarItem(task));
+  }, [todoTasks]);
 
   // ── Filter & search ──
 
@@ -157,7 +91,6 @@ export function TodoPage() {
     if (item.itemType === 'EVENT') return;
     const { planExecutionCompleted } = await toggleTask(item.id);
     queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
-    queryClient.invalidateQueries({ queryKey: ['todo-assigned-group-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
@@ -310,6 +243,7 @@ export function TodoPage() {
               <ItemRow
                 item={item}
                 categories={categories}
+                showDate
                 currentUserId={user?.id}
                 onToggle={handleToggle}
                 onClick={handleItemClick}

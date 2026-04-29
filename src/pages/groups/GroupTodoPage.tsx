@@ -14,14 +14,6 @@ import { taskToCalendarItem } from '@/hooks/calendarHelpers';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import { getParentId } from '@/utils/calendarItemId';
 
-const PRIORITY_ORDER: Record<string, number> = {
-  URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3,
-};
-
-function getPriorityOrder(p?: string): number {
-  return p ? (PRIORITY_ORDER[p.toUpperCase()] ?? 4) : 4;
-}
-
 export function GroupTodoPage() {
   const { groupId } = useParams<{ groupId: string }>();
   const { t } = useTranslation();
@@ -32,41 +24,19 @@ export function GroupTodoPage() {
   const [search, setSearch] = useState('');
   const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
 
-  const { unplannedTasks, overdueTasks, isLoading } = useTodoListTasks(groupId);
+  const { todoTasks, isLoading } = useTodoListTasks(groupId);
 
-  // Convert to CalendarItems and sort (matching dooooApp ExpandableCalendar list viewMode)
+  // Convert to CalendarItems (backend already sorts)
   const todoItems: CalendarItem[] = useMemo(() => {
-    const items: CalendarItem[] = [];
-
-    for (const task of overdueTasks) {
-      items.push(taskToCalendarItem(task));
-    }
-
-    for (const task of unplannedTasks) {
+    return todoTasks.map((task) => {
       const item = taskToCalendarItem(task);
       if (!task.date) {
         item.date = '';
         item.isNoDate = true;
       }
-      items.push(item);
-    }
-
-    items.sort((a, b) => {
-      const aHasDate = !!a.date;
-      const bHasDate = !!b.date;
-      if (aHasDate && !bHasDate) return -1;
-      if (!aHasDate && bHasDate) return 1;
-      if (aHasDate && bHasDate) {
-        const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
-        if (diff !== 0) return diff;
-      }
-      const priDiff = getPriorityOrder(a.priority) - getPriorityOrder(b.priority);
-      if (priDiff !== 0) return priDiff;
-      return a.title.localeCompare(b.title);
+      return item;
     });
-
-    return items;
-  }, [unplannedTasks, overdueTasks]);
+  }, [todoTasks]);
 
   const filteredItems = useMemo(() => {
     if (!search.trim()) return todoItems;
@@ -78,7 +48,7 @@ export function GroupTodoPage() {
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
     const { planExecutionCompleted } = await toggleTask(getParentId(item));
-    queryClient.invalidateQueries({ queryKey: ['group-todo', groupId] });
+    queryClient.invalidateQueries({ queryKey: ['todo-tasks', groupId] });
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [queryClient, groupId, showPlanReview]);
 
