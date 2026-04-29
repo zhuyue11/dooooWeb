@@ -74,7 +74,7 @@ export function GroupDetailPage() {
   const memberCount = members.length;
 
   return (
-    <div className="flex h-full flex-col gap-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-5">
       {/* Header */}
       <div className="flex items-center gap-3">
         <button

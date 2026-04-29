@@ -69,7 +69,7 @@ export function CalendarPage() {
     : [];
 
   return (
-    <div className="flex h-full flex-col gap-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-5">
       <CalendarHeader
         viewMode={viewMode}
         onViewChange={setViewMode}

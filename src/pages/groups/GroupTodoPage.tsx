@@ -85,7 +85,7 @@ export function GroupTodoPage() {
   const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
 
   return (
-    <div className="flex h-full flex-col gap-5" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-5">
       {/* Header — matches TodoPage */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

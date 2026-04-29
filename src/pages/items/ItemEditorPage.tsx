@@ -908,7 +908,7 @@ export function ItemEditorPage() {
     : null;
 
   return (
-    <div className="animate-page-enter" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="animate-page-enter">
       {/* ── Header bar ── */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

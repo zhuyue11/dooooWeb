@@ -1,6 +1,7 @@
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LanguageProvider } from '@/lib/contexts/language-context';
+import { FontProvider } from '@/lib/contexts/font-context';
 import { ThemeProvider } from '@/lib/contexts/theme-context';
 import { DisplayProvider } from '@/lib/contexts/display-context';
 import { AuthProvider } from '@/lib/contexts/auth-context';
@@ -23,6 +24,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
+        <FontProvider>
         <ThemeProvider>
           <DisplayProvider>
             <AuthProvider>
@@ -38,6 +40,7 @@ export default function App() {
             </AuthProvider>
           </DisplayProvider>
         </ThemeProvider>
+        </FontProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

@@ -24,4 +24,6 @@ export const STORAGE_KEYS = {
   TIME_FORMAT: '@doooo_time_format',
   WEEK_START_DAY: '@doooo_week_start_day',
   DISPLAY_STYLE: '@doooo_display_style',
+  FONT_FAMILY: '@doooo_font_family_v2',
+  FONT_SIZE: '@doooo_font_size',
 } as const;

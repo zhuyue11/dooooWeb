@@ -349,7 +349,7 @@ export function HomePage() {
   // ── Render ──
 
   return (
-    <div className="flex h-full flex-col gap-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1">

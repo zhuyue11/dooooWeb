@@ -68,7 +68,7 @@ export function TargetDetailPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="flex h-full items-center justify-center">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
@@ -77,7 +77,7 @@ export function TargetDetailPage() {
   // Not found state
   if (!target) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="flex h-full flex-col items-center justify-center gap-4">
         <Icon name="flag" size={48} color="var(--el-target-description)" />
         <span className="text-base font-medium text-(--el-target-title)">{t('targetPlan.targetNotFound')}</span>
         <button
@@ -96,7 +96,7 @@ export function TargetDetailPage() {
   const linkedTasks = target.targetTasks || [];
 
   return (
-    <div className="flex h-full flex-col gap-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-6">
       {/* Back button */}
       <button
         type="button"

@@ -164,7 +164,7 @@ export function ItemViewPage() {
   const canDelete = !isTask || !isGroupItem || isItemOwner;
 
   return (
-    <div className="animate-page-enter" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="animate-page-enter">
       {/* Back row */}
       <button onClick={handleBack} className="mb-6 flex items-center gap-2 text-[13px] font-medium text-(--el-view-detail-label) hover:text-(--el-view-title)">
         <Icon name="arrow_back" size={20} />

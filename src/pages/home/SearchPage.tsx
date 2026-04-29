@@ -339,7 +339,7 @@ export function SearchPage() {
   // ── Render ──
 
   return (
-    <div className="flex h-full flex-col gap-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+    <div className="flex h-full flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-(--el-page-text)">{t('search.title')}</h1>

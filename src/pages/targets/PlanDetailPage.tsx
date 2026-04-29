@@ -120,7 +120,7 @@ export function PlanDetailPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="flex h-full items-center justify-center">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-(--el-btn-primary-bg) border-t-transparent" />
       </div>
     );
@@ -129,7 +129,7 @@ export function PlanDetailPage() {
   // Not found state
   if (!plan) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="plan-detail-page">
+      <div className="flex h-full flex-col items-center justify-center gap-4" data-testid="plan-detail-page">
         <Icon name="assignment" size={48} color="var(--el-plan-description)" />
         <span className="text-base font-medium text-(--el-plan-title)">{t('targetPlan.planNotFound')}</span>
         <button
@@ -149,7 +149,7 @@ export function PlanDetailPage() {
     : null;
 
   return (
-    <div className="flex h-full flex-col gap-4" style={{ fontFamily: 'Inter, sans-serif' }} data-testid="plan-detail-page">
+    <div className="flex h-full flex-col gap-4" data-testid="plan-detail-page">
       {/* Fixed header area — back, title, description, actions, view toggle */}
       <div className="flex shrink-0 flex-col gap-4">
         {/* Back button */}
