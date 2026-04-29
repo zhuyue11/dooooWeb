@@ -1625,6 +1625,7 @@
     "location": "Lokasi",
     "repeat": "Ulangi",
     "createdAt": "Dibuat",
+    "priority": "Prioritas",
     "confirmDelete": "Hapus item ini?",
     "deleteDescription": "Tindakan ini tidak dapat dibatalkan. Item akan dihapus secara permanen.",
     "timeZone": "Zona waktu",

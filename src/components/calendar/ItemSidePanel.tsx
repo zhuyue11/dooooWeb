@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { formatFullDate, formatTime } from '@/utils/date';
-import { getCategoryName, getCategoryColor } from '@/utils/category';
+import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { getParentId, getOccurrenceDateKey, isRecurringInstance } from '@/utils/calendarItemId';
 import { RecurringScopeModal } from './RecurringScopeModal';
@@ -42,11 +42,12 @@ function DetailRow({ icon, label, value }: { icon: string; label: string; value:
 // ── Priority pill ──
 
 function PriorityPill({ priority }: { priority: string }) {
+  const { t } = useTranslation();
   const p = priority.toLowerCase();
   const isHigh = p === 'high' || p === 'urgent';
   const bg = isHigh ? 'var(--el-panel-priority-high-bg)' : 'var(--el-panel-priority-normal-bg)';
   const text = isHigh ? 'var(--el-panel-priority-high-text)' : 'var(--el-panel-priority-normal-text)';
-  const label = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
+  const label = t(`tasks.priorities.${p}`);
   return (
     <span
       className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium"
@@ -61,7 +62,9 @@ function PriorityPill({ priority }: { priority: string }) {
 // ── Category pill ──
 
 function CategoryPill({ categoryId, categories }: { categoryId: string; categories?: Array<{ id: string; name: string; color?: string }> }) {
-  const name = getCategoryName(categoryId, categories);
+  const { t } = useTranslation();
+  const rawName = getCategoryName(categoryId, categories);
+  const name = rawName ? translateCategoryName(rawName, t) : undefined;
   const colors = getCategoryColor(categoryId, categories);
   if (!name) return null;
   return (

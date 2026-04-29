@@ -1625,6 +1625,7 @@
     "location": "Địa điểm",
     "repeat": "Lặp lại",
     "createdAt": "Đã tạo",
+    "priority": "Ưu tiên",
     "confirmDelete": "Xóa mục này?",
     "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
     "timeZone": "Múi giờ",

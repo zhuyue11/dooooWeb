@@ -1631,6 +1631,7 @@
     "location": "場所",
     "repeat": "繰り返し",
     "createdAt": "作成",
+    "priority": "優先度",
     "confirmDelete": "このアイテムを削除しますか？",
     "deleteDescription": "この操作は取り消せません。アイテムは完全に削除されます。",
     "timeZone": "タイムゾーン",

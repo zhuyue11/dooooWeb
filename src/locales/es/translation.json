@@ -1625,6 +1625,7 @@
     "location": "Ubicación",
     "repeat": "Repetir",
     "createdAt": "Creado",
+    "priority": "Prioridad",
     "confirmDelete": "¿Eliminar este elemento?",
     "deleteDescription": "Esta acción no se puede deshacer. El elemento se eliminará permanentemente.",
     "timeZone": "Zona horaria",

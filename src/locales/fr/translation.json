@@ -1625,6 +1625,7 @@
     "location": "Lieu",
     "repeat": "Répéter",
     "createdAt": "Créé",
+    "priority": "Priorité",
     "confirmDelete": "Supprimer cet élément ?",
     "deleteDescription": "Cette action est irréversible. L'élément sera définitivement supprimé.",
     "timeZone": "Fuseau horaire",

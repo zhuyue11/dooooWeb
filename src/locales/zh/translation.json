@@ -1626,6 +1626,7 @@
     "location": "地点",
     "repeat": "重复",
     "createdAt": "创建于",
+    "priority": "优先级",
     "confirmDelete": "删除此项目？",
     "deleteDescription": "此操作无法撤销。该项目将被永久删除。",
     "timeZone": "时区",

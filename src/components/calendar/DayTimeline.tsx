@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { getHoursArray, formatHourLabel, formatTime } from '@/utils/date';
-import { getCategoryColor, getCategoryName } from '@/utils/category';
+import { getCategoryColor, getCategoryName, translateCategoryName } from '@/utils/category';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { useDisplay } from '@/lib/contexts/display-context';
@@ -170,7 +170,8 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   const widthPct = `calc(${100 / info.totalColumns}% - 4px)`;
                   const leftPct = `calc(${(info.column / info.totalColumns) * 100}% + 2px)`;
 
-                  const categoryName = getCategoryName(item.categoryId, categories);
+                  const rawCategoryName = getCategoryName(item.categoryId, categories);
+                  const categoryName = rawCategoryName ? translateCategoryName(rawCategoryName, t) : undefined;
                   const startTime = formatTime(item.date, timeFormat as TimeFormat);
                   let endTime = '';
                   if (item.duration) {
@@ -179,7 +180,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                   }
                   const metaParts = [endTime ? `${startTime} – ${endTime}` : startTime];
                   if (categoryName) metaParts.push(categoryName);
-                  if (item.priority) metaParts.push(item.priority.charAt(0).toUpperCase() + item.priority.slice(1).toLowerCase());
+                  if (item.priority) metaParts.push(t(`tasks.priorities.${item.priority.toLowerCase()}`));
                   const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
 
                   return (

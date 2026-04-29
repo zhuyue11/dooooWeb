@@ -1625,6 +1625,7 @@
     "location": "Konum",
     "repeat": "Tekrarla",
     "createdAt": "Oluşturuldu",
+    "priority": "Öncelik",
     "confirmDelete": "Bu öğe silinsin mi?",
     "deleteDescription": "Bu işlem geri alınamaz. Öğe kalıcı olarak silinecektir.",
     "timeZone": "Saat dilimi",

@@ -1628,6 +1628,7 @@
     "location": "Locatie",
     "repeat": "Herhalen",
     "createdAt": "Aangemaakt",
+    "priority": "Prioriteit",
     "confirmDelete": "Dit item verwijderen?",
     "deleteDescription": "Deze actie kan niet ongedaan worden gemaakt. Het item wordt permanent verwijderd.",
     "timeZone": "Tijdzone",

@@ -1625,6 +1625,7 @@
     "location": "Ort",
     "repeat": "Wiederholen",
     "createdAt": "Erstellt",
+    "priority": "Priorität",
     "confirmDelete": "Dieses Element löschen?",
     "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Das Element wird dauerhaft gelöscht.",
     "timeZone": "Zeitzone",

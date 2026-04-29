@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { createCategory } from '@/lib/api';
 import { Icon } from '@/components/ui/Icon';
+import { translateCategoryName } from '@/utils/category';
 import { PopoverWrapper } from '@/components/ui/PopoverWrapper';
 
 const CATEGORY_COLOR_PRESETS = [
@@ -118,7 +119,7 @@ export function CategoryPopover({ categories, selected, onSelect, onClear, onClo
             className={`flex w-full items-center gap-3 rounded-(--radius-card) px-3 py-2 text-sm text-(--el-popover-item-text) transition-colors hover:bg-(--el-popover-item-hover) ${selected === cat.id ? 'bg-(--el-popover-item-selected-bg) font-medium' : ''}`}
           >
             <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: cat.color }} />
-            <span className="truncate">{cat.name}</span>
+            <span className="truncate">{translateCategoryName(cat.name, t)}</span>
           </button>
         ))}
       </div>

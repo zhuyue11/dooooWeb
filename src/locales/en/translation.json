@@ -1636,6 +1636,7 @@
     "guests": "Guests",
     "meetingLink": "Meeting link",
     "createdAt": "Created",
+    "priority": "Priority",
     "confirmDelete": "Delete this item?",
     "deleteDescription": "This action cannot be undone. The item will be permanently deleted."
   },

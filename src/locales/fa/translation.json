@@ -1625,6 +1625,7 @@
     "location": "مکان",
     "repeat": "تکرار",
     "createdAt": "ایجاد شده",
+    "priority": "اولویت",
     "confirmDelete": "این مورد حذف شود؟",
     "deleteDescription": "این عمل قابل بازگشت نیست. مورد به طور دائم حذف خواهد شد.",
     "timeZone": "منطقه زمانی",

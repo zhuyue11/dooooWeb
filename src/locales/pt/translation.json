@@ -1631,6 +1631,7 @@
     "location": "Local",
     "repeat": "Repetir",
     "createdAt": "Criado",
+    "priority": "Prioridade",
     "confirmDelete": "Excluir este item?",
     "deleteDescription": "Esta ação não pode ser desfeita. O item será excluído permanentemente.",
     "timeZone": "Fuso horário",

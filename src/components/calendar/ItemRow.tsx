@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
-import { getCategoryName, getCategoryColor } from '@/utils/category';
+import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import { formatTime } from '@/utils/date';
 import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
@@ -44,7 +44,8 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
   const isGroupActivity = !!item.isForAllMembers;
 
   // ── Derived display values ──
-  const categoryName = item.itemType === 'TASK' ? getCategoryName(item.categoryId, categories) : undefined;
+  const rawCategoryName = item.itemType === 'TASK' ? getCategoryName(item.categoryId, categories) : undefined;
+  const categoryName = rawCategoryName ? translateCategoryName(rawCategoryName, t) : undefined;
   const categoryColor = item.categoryId ? getCategoryColor(item.categoryId, categories) : undefined;
   const isHighPriority = item.priority === 'high' || item.priority === 'HIGH' || item.priority === 'urgent' || item.priority === 'URGENT';
   const hasTimeDisplay = item.hasTime && item.date;
@@ -148,7 +149,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
           {item.priority && (
             <span className="flex items-center gap-1 text-[10px] text-(--el-item-title)">
               <span className={`inline-block h-2 w-2 rounded-full ${isHighPriority ? 'bg-(--el-item-priority-high)' : 'bg-(--el-item-priority-normal)'}`} />
-              {item.priority.charAt(0).toUpperCase() + item.priority.slice(1).toLowerCase()}
+              {t(`tasks.priorities.${item.priority.toLowerCase()}`)}
             </span>
           )}
           {/* Meta icons: recurring, reminders */}

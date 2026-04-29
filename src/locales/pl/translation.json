@@ -1625,6 +1625,7 @@
     "location": "Lokalizacja",
     "repeat": "Powtórz",
     "createdAt": "Utworzono",
+    "priority": "Priorytet",
     "confirmDelete": "Usunąć ten element?",
     "deleteDescription": "Tej czynności nie można cofnąć. Element zostanie trwale usunięty.",
     "timeZone": "Strefa czasowa",

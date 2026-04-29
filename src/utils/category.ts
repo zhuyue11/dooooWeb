@@ -1,5 +1,6 @@
 // ── Category color and name utilities ────────────────────────────────
 import type { Category } from '@/types/api';
+import type { TFunction } from 'i18next';
 
 /** Hardcoded category colors for seed/default categories (bg + text pairs). */
 export const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
@@ -63,4 +64,18 @@ export function getCategoryName(
     if (cat) return cat.name;
   }
   return CATEGORY_NAMES[categoryId];
+}
+
+/**
+ * Translate a category name using i18n, matching dooooApp's pattern.
+ * Default categories (Work, Home, etc.) are translated via `calendarPage.categories.*`.
+ * Custom categories pass through unchanged.
+ */
+export function translateCategoryName(
+  name: string,
+  t: TFunction,
+): string {
+  const key = `tasks.categories.${name.toLowerCase()}`;
+  const translated = t(key);
+  return translated === key ? name : translated;
 }

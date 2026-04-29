@@ -1625,6 +1625,7 @@
     "location": "Posizione",
     "repeat": "Ripeti",
     "createdAt": "Creato",
+    "priority": "Priorità",
     "confirmDelete": "Eliminare questo elemento?",
     "deleteDescription": "Questa azione non può essere annullata. L'elemento verrà eliminato definitivamente.",
     "timeZone": "Fuso orario",

@@ -8,7 +8,7 @@ import { useCategories } from '@/hooks/useCategories';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { Icon } from '@/components/ui/Icon';
 import { formatFullDate, formatTime } from '@/utils/date';
-import { getCategoryName, getCategoryColor } from '@/utils/category';
+import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import type { TimeFormat } from '@/utils/date';
 import type { Task, Event as ApiEvent } from '@/types/api';
 import { useTranslation } from 'react-i18next';
@@ -145,17 +145,19 @@ export function ItemViewPage() {
 
   const durationDisplay = item.duration ? `${item.duration} min` : null;
   const reminderDisplay = formatReminder(item.firstReminderMinutes);
-  const repeatDisplay = item.repeat ? 'Yes' : 'None';
+  const repeatDisplay = item.repeat ? 'Yes' : null;
   const locationDisplay = item.location || null;
   const priority = isTask ? taskItem?.priority : eventItem?.priority;
   const categoryId = isTask ? taskItem?.categoryId : undefined;
-  const categoryName = categoryId ? getCategoryName(categoryId, categories) : undefined;
+  const rawCategoryName = categoryId ? getCategoryName(categoryId, categories) : undefined;
+  const categoryName = rawCategoryName ? translateCategoryName(rawCategoryName, t) : undefined;
   const categoryColor = categoryId ? getCategoryColor(categoryId, categories) : undefined;
   const planId = isTask ? taskItem?.planId : undefined;
   const planName = isTask ? taskItem?.plan?.name : undefined;
   const createdAt = item.createdAt;
 
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || item.repeat != null || createdAt;
+  const isHighPriority = priority === 'high' || priority === 'HIGH' || priority === 'urgent' || priority === 'URGENT';
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || repeatDisplay || priority || createdAt;
 
   // Permissions (matching dooooApp's canUserEditTask / canUserDeleteTask)
   const itemUserId = isTask ? taskItem?.userId : (eventItem as ApiEvent & { userId?: string })?.userId;
@@ -211,6 +213,18 @@ export function ItemViewPage() {
               >
                 <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: categoryColor?.text }} />
                 {categoryName}
+              </span>
+            )}
+            {priority && (
+              <span
+                className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+                style={{
+                  backgroundColor: isHighPriority ? 'var(--el-panel-priority-high-bg)' : 'var(--el-panel-priority-normal-bg)',
+                  color: isHighPriority ? 'var(--el-panel-priority-high-text)' : 'var(--el-panel-priority-normal-text)',
+                }}
+              >
+                <Icon name="flag" size={12} color={isHighPriority ? 'var(--el-panel-priority-high-text)' : 'var(--el-panel-priority-normal-text)'} />
+                {t(`tasks.priorities.${priority.toLowerCase()}`)}
               </span>
             )}
             {dateDisplay && (
@@ -313,8 +327,18 @@ export function ItemViewPage() {
                   <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
                 </>
               )}
-              <div className="mx-4 border-t border-(--el-view-edit-border)" />
-              <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
+              {priority && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow icon="flag" label={t('itemView.priority')} value={t(`tasks.priorities.${priority.toLowerCase()}`)} />
+                </>
+              )}
+              {repeatDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
+                </>
+              )}
               {createdAt && (
                 <>
                   <div className="mx-4 border-t border-(--el-view-edit-border)" />
