@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
+import { useDisplay } from '@/lib/contexts/display-context';
 import type { PlanTemplate } from '@/types/target';
 import type { Repeat } from '@/types/api';
 
@@ -28,8 +29,11 @@ function formatDuration(minutes: number): string {
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
-function formatTime(time: string): string {
+function formatTime(time: string, timeFormat: '12h' | '24h' = '12h'): string {
   const [h, m] = time.split(':').map(Number);
+  if (timeFormat === '24h') {
+    return `${h}:${m.toString().padStart(2, '0')}`;
+  }
   const period = h >= 12 ? 'PM' : 'AM';
   const hour12 = h % 12 || 12;
   return m === 0 ? `${hour12}:00 ${period}` : `${hour12}:${m.toString().padStart(2, '0')} ${period}`;
@@ -62,6 +66,7 @@ function formatScheduledDate(date: Date): string {
 
 export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: PlanTemplateDetailPanelProps) {
   const { t } = useTranslation();
+  const { timeFormat } = useDisplay();
   const [isClosing, setIsClosing] = useState(false);
   const isEvent = template.type === 'event';
 
@@ -121,7 +126,7 @@ export function PlanTemplateDetailPanel({ template, scheduledDate, onClose }: Pl
       })()
     : null;
 
-  const timeDisplay = template.time ? formatTime(template.time) : null;
+  const timeDisplay = template.time ? formatTime(template.time, timeFormat) : null;
   const durationDisplay = template.duration ? formatDuration(template.duration) : null;
   const dateDisplay = scheduledDate ? formatScheduledDate(scheduledDate) : null;
   const reminderDisplay = formatReminder(template.firstReminderMinutes);

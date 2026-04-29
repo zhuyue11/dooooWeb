@@ -52,12 +52,13 @@ export function formatDateDisplay(date: Date): string {
 }
 
 /**
- * Format hours and minutes to a display string like "11:30 AM".
+ * Format hours and minutes to a display string like "11:30 AM" (12h) or "14:30" (24h).
  */
-export function formatTimeDisplay(hours: number, minutes: number): string {
+export function formatTimeDisplay(hours: number, minutes: number, timeFormat: '12h' | '24h' = '12h'): string {
+  const displayMinutes = String(minutes).padStart(2, '0');
+  if (timeFormat === '24h') return `${hours}:${displayMinutes}`;
   const period = hours >= 12 ? 'PM' : 'AM';
   const displayHours = hours % 12 || 12;
-  const displayMinutes = String(minutes).padStart(2, '0');
   return `${displayHours}:${displayMinutes} ${period}`;
 }
 

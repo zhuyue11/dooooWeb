@@ -130,7 +130,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                 return (
                   <div key={hour} className="flex items-start justify-start px-4 pt-2" style={{ height: HOUR_HEIGHT }}>
                     <span className={`text-xs font-medium ${isCurrentHour ? 'text-(--el-cal-hour-label-current) font-semibold' : 'text-(--el-cal-hour-label)'}`}>
-                      {formatHourLabel(hour)}
+                      {formatHourLabel(hour, timeFormat)}
                     </span>
                   </div>
                 );

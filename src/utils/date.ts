@@ -93,8 +93,9 @@ export function getHoursArray(): number[] {
   return Array.from({ length: 24 }, (_, i) => i);
 }
 
-/** "8 AM", "12 PM", "1 PM" */
-export function formatHourLabel(hour: number): string {
+/** "8 AM" / "12 PM" (12h) or "8" / "14" (24h) */
+export function formatHourLabel(hour: number, timeFormat: TimeFormat = '12h'): string {
+  if (timeFormat === '24h') return String(hour);
   if (hour === 0) return '12 AM';
   if (hour < 12) return `${hour} AM`;
   if (hour === 12) return '12 PM';

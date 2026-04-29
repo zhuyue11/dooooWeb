@@ -3,7 +3,7 @@ import { isSameDay, toISODate, getHoursArray, formatHourLabel } from '@/utils/da
 import { getCategoryColor } from '@/utils/category';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
-
+import { useDisplay } from '@/lib/contexts/display-context';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 
@@ -146,6 +146,7 @@ const HOUR_LABEL_WIDTH = 48; // px for hour label column
 
 export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categories, onSelectDate, onItemClick, isLoading, hideGroupTag }: WeekGridProps) {
   const { t } = useTranslation();
+  const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentHour = new Date().getHours();
   const hours = getHoursArray();
@@ -267,7 +268,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                   style={{ height: HOUR_HEIGHT }}
                 >
                   <span className={`text-[10px] ${hour === currentHour ? 'font-semibold text-(--el-cal-hour-label-current)' : 'text-(--el-cal-hour-label)'}`}>
-                    {formatHourLabel(hour)}
+                    {formatHourLabel(hour, timeFormat)}
                   </span>
                 </div>
               ))}

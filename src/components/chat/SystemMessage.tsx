@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { ParticipateCard } from './ParticipateCard';
 import { useAuth } from '@/lib/contexts/auth-context';
+import { useDisplay } from '@/lib/contexts/display-context';
 import type { GroupMessage } from '@/types/api';
 
 interface SystemMessageProps {
@@ -12,6 +13,7 @@ interface SystemMessageProps {
 export function SystemMessage({ message, groupColor }: SystemMessageProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { timeFormat } = useDisplay();
 
   // Render ParticipateCard for "For All Members" group activities
   if (
@@ -40,6 +42,7 @@ export function SystemMessage({ message, groupColor }: SystemMessageProps) {
   const time = new Date(message.createdAt).toLocaleTimeString(undefined, {
     hour: 'numeric',
     minute: '2-digit',
+    hour12: timeFormat === '12h',
   });
 
   return (

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
+import { useDisplay } from '@/lib/contexts/display-context';
 import type { PlanTemplate } from '@/types/target';
 import type { Repeat } from '@/types/api';
 
@@ -63,8 +64,11 @@ function formatOccurrences(repeatJson: string): string | null {
   }
 }
 
-function formatTime(time: string): string {
+function formatTime(time: string, timeFormat: '12h' | '24h' = '12h'): string {
   const [h, m] = time.split(':').map(Number);
+  if (timeFormat === '24h') {
+    return m === 0 ? `${h}:00` : `${h}:${m.toString().padStart(2, '0')}`;
+  }
   const period = h >= 12 ? 'PM' : 'AM';
   const hour12 = h % 12 || 12;
   return m === 0 ? `${hour12} ${period}` : `${hour12}:${m.toString().padStart(2, '0')} ${period}`;
@@ -92,6 +96,7 @@ function formatScheduledDate(date: Date, t: (key: string) => string): string {
 
 export function PlanTemplateItem({ template, index, scheduledDate, onClick }: PlanTemplateItemProps) {
   const { t } = useTranslation();
+  const { timeFormat } = useDisplay();
   const isEvent = template.type === 'event';
 
   return (
@@ -116,7 +121,7 @@ export function PlanTemplateItem({ template, index, scheduledDate, onClick }: Pl
           {template.time && (
             <div className="flex items-center gap-1">
               <Icon name="schedule" size={12} color="var(--el-target-status-active-text)" />
-              <span className="text-xs font-medium text-(--el-target-status-active-text)">{formatTime(template.time)}</span>
+              <span className="text-xs font-medium text-(--el-target-status-active-text)">{formatTime(template.time, timeFormat)}</span>
             </div>
           )}
 

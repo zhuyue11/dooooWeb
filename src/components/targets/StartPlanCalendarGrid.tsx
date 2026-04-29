@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { getHoursArray, formatHourLabel, isSameDay } from '@/utils/date';
+import { useDisplay } from '@/lib/contexts/display-context';
 import type { ScheduledPlanItem } from '@/utils/planScheduler';
 
 interface StartPlanCalendarGridProps {
@@ -56,6 +57,7 @@ function clampTime(date: Date, originalDate: Date): Date {
 }
 
 export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDragEnd }: StartPlanCalendarGridProps) {
+  const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const hours = getHoursArray();
@@ -326,7 +328,7 @@ export function StartPlanCalendarGrid({ weekDates, planTasks, onTaskClick, onDra
                 className="flex items-start justify-end pr-2 pt-0"
                 style={{ height: HOUR_HEIGHT }}
               >
-                <span className="text-[10px] text-(--el-cal-hour-label)">{formatHourLabel(hour)}</span>
+                <span className="text-[10px] text-(--el-cal-hour-label)">{formatHourLabel(hour, timeFormat)}</span>
               </div>
             ))}
           </div>

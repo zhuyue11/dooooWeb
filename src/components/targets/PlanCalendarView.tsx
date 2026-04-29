@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { CalendarPopover } from '@/components/ui/CalendarPopover';
 import { getHoursArray, formatHourLabel, isSameDay, formatDateRange } from '@/utils/date';
+import { useDisplay } from '@/lib/contexts/display-context';
 import {
   schedulePlanTasks,
   getPlanWeekRange,
@@ -35,6 +36,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 
 export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: PlanCalendarViewProps) {
   const { t } = useTranslation();
+  const { timeFormat } = useDisplay();
   const scrollRef = useRef<HTMLDivElement>(null);
   const hours = getHoursArray();
   const today = useMemo(() => {
@@ -241,7 +243,7 @@ export function PlanCalendarView({ templates, planArchetype, onTemplateClick }: 
                   style={{ height: HOUR_HEIGHT }}
                 >
                   <span className="text-[10px] text-(--el-cal-hour-label)">
-                    {formatHourLabel(hour)}
+                    {formatHourLabel(hour, timeFormat)}
                   </span>
                 </div>
               ))}
