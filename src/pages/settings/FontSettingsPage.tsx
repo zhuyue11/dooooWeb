@@ -28,7 +28,7 @@ const SIZE_LABELS: Record<FontSize, string> = {
 
 function FontFamilySection() {
   const { t } = useTranslation();
-  const { currentFontId, fontOptions, selectFont, previewText } = useFont();
+  const { currentFontId, fontOptions, selectFont } = useFont();
 
   // Preload all Google Fonts for current language so cards render live previews
   useEffect(() => {
@@ -91,10 +91,6 @@ function FontFamilySection() {
         })}
       </div>
 
-      {/* Preview paragraph in selected font */}
-      <p className="mt-1 text-sm leading-relaxed text-(--el-settings-label)">
-        {previewText}
-      </p>
     </div>
   );
 }
@@ -103,7 +99,7 @@ function FontFamilySection() {
 
 function FontSizeSection() {
   const { t } = useTranslation();
-  const { fontSize, setFontSize, previewText } = useFont();
+  const { fontSize, setFontSize } = useFont();
 
   return (
     <div className="flex flex-col gap-3">
@@ -144,13 +140,6 @@ function FontSizeSection() {
         })}
       </div>
 
-      {/* Live preview at selected scale */}
-      <p
-        className="mt-1 leading-relaxed text-(--el-settings-label)"
-        style={{ fontSize: `${FONT_SIZE_SCALE[fontSize] * 0.875}rem` }}
-      >
-        {previewText}
-      </p>
     </div>
   );
 }

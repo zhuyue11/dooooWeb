@@ -4,7 +4,6 @@ import { useLanguage } from './language-context';
 import type { SupportedLanguage } from './language-context';
 import {
   getFontsForLanguage,
-  getPreviewText,
   type WebFontDefinition,
   type FontSize,
   FONT_SIZE_SCALE,
@@ -20,7 +19,6 @@ interface FontContextType {
   fontOptions: WebFontDefinition[];
   selectFont: (fontId: string) => void;
   setFontSize: (size: FontSize) => void;
-  previewText: string;
 }
 
 const FontContext = createContext<FontContextType | undefined>(undefined);
@@ -136,7 +134,6 @@ export function FontProvider({ children }: { children: ReactNode }) {
   const fontMapRef = useRef(readFontMap());
 
   const fontOptions = getFontsForLanguage(language);
-  const previewText = getPreviewText(language);
 
   // Initialize from stored per-language map
   const initial = resolveFont(language, fontMapRef.current);
@@ -192,7 +189,7 @@ export function FontProvider({ children }: { children: ReactNode }) {
 
   return (
     <FontContext.Provider
-      value={{ currentFontId, fontSize, fontOptions, selectFont, setFontSize, previewText }}
+      value={{ currentFontId, fontSize, fontOptions, selectFont, setFontSize }}
     >
       {children}
     </FontContext.Provider>

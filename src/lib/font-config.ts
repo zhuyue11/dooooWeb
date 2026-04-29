@@ -208,21 +208,6 @@ export const SCRIPT_FONTS: Record<ScriptGroup, WebFontDefinition[]> = {
 };
 
 // ---------------------------------------------------------------------------
-// Preview text — pangrams per script group for live font rendering
-// ---------------------------------------------------------------------------
-export const SCRIPT_PREVIEW_TEXT: Record<ScriptGroup, string> = {
-  latin: 'The quick brown fox jumps over the lazy dog.',
-  'chinese-simplified': '快速的棕色狐狸跳过了懒狗。',
-  'chinese-traditional': '快速的棕色狐狸跳過了懶狗。',
-  japanese: '素早い茶色の狐が怠惰な犬を飛び越えた。',
-  korean: '빠른 갈색 여우가 게으른 개를 뛰어넘었다.',
-  arabic: 'الثعلب البني السريع يقفز فوق الكلب الكسول.',
-  persian: 'روباه قهوه‌ای سریع از روی سگ تنبل می‌پرد.',
-  thai: 'สุนัขจิ้งจอกสีน้ำตาลกระโดดข้ามสุนัขขี้เกียจ',
-  cyrillic: 'Быстрая коричневая лиса перепрыгнула через ленивую собаку.',
-};
-
-// ---------------------------------------------------------------------------
 // Font size — web-only enhancement
 // ---------------------------------------------------------------------------
 export const FONT_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
@@ -246,10 +231,6 @@ export function getScriptGroup(lang: SupportedLanguage): ScriptGroup {
 
 export function getFontsForLanguage(lang: SupportedLanguage): WebFontDefinition[] {
   return SCRIPT_FONTS[getScriptGroup(lang)];
-}
-
-export function getPreviewText(lang: SupportedLanguage): string {
-  return SCRIPT_PREVIEW_TEXT[getScriptGroup(lang)];
 }
 
 /**
