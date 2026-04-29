@@ -16,6 +16,8 @@ import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
+import DOMPurify from 'dompurify';
+import { isHtml } from '@/utils/html';
 
 interface ItemSidePanelProps {
   item: CalendarItem;
@@ -369,7 +371,14 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
           {/* Description */}
           {item.description && (
-            <p className="text-sm leading-relaxed text-(--el-panel-description)">{item.description}</p>
+            isHtml(item.description) ? (
+              <div
+                className="rich-text text-sm text-(--el-panel-description)"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.description) }}
+              />
+            ) : (
+              <p className="text-sm leading-relaxed text-(--el-panel-description)">{item.description}</p>
+            )
           )}
 
           {/* Details card */}

@@ -14,8 +14,7 @@ import { PlanExecutionDeleteModal } from '@/components/targets/PlanExecutionDele
 import { PlanTemplateDetailPanel } from '@/components/targets/PlanTemplateDetailPanel';
 import { PlanCalendarView } from '@/components/targets/PlanCalendarView';
 import { hasUnscheduledTasks } from '@/utils/planScheduler';
-
-const isHtml = (text: string) => /<[^>]+>/.test(text);
+import { isHtml } from '@/utils/html';
 
 export function PlanDetailPage() {
   const { planId } = useParams<{ planId: string }>();

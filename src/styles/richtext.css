@@ -1,0 +1,40 @@
+/* Rich text content — un-reset Tailwind for rendered HTML descriptions */
+.rich-text {
+  line-height: 1.7;
+}
+.rich-text p {
+  margin-bottom: 0.5em;
+}
+.rich-text p:last-child {
+  margin-bottom: 0;
+}
+.rich-text strong,
+.rich-text b {
+  font-weight: 600;
+}
+.rich-text em,
+.rich-text i {
+  font-style: italic;
+}
+.rich-text ul,
+.rich-text ol {
+  padding-left: 1.5em;
+  margin-bottom: 0.5em;
+}
+.rich-text ul {
+  list-style-type: disc;
+}
+.rich-text ol {
+  list-style-type: decimal;
+}
+.rich-text li {
+  margin-bottom: 0.25em;
+}
+.rich-text a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rich-text a:hover {
+  opacity: 0.8;
+}

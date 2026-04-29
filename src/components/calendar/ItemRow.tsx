@@ -7,6 +7,7 @@ import { useDisplay } from '@/lib/contexts/display-context';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
+import { stripHtml } from '@/utils/html';
 
 interface ItemRowProps {
   item: CalendarItem;
@@ -106,7 +107,7 @@ export function ItemRow({ item, categories, showDate, currentUserId, hideGroupTa
         {/* Row 3: Description (2-line preview) */}
         {item.description && (
           <p className="line-clamp-2 text-xs text-(--el-item-details)">
-            {item.description}
+            {stripHtml(item.description)}
           </p>
         )}
 

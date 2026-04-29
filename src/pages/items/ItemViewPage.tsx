@@ -16,6 +16,8 @@ import i18n from '@/lib/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useState } from 'react';
+import DOMPurify from 'dompurify';
+import { isHtml } from '@/utils/html';
 
 // ── Detail row ──
 
@@ -253,9 +255,16 @@ export function ItemViewPage() {
         {/* Left: article */}
         <div className="flex min-w-0 flex-1 flex-col gap-6">
           {description && (
-            <p className="text-[15px] leading-relaxed text-(--el-view-title)" style={{ lineHeight: '1.7' }}>
-              {description}
-            </p>
+            isHtml(description) ? (
+              <div
+                className="rich-text text-[15px] text-(--el-view-title)"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }}
+              />
+            ) : (
+              <p className="text-[15px] leading-relaxed text-(--el-view-title)" style={{ lineHeight: '1.7' }}>
+                {description}
+              </p>
+            )
           )}
           {!description && (
             <p className="text-sm text-(--el-view-detail-label) italic">No description</p>

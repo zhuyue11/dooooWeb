@@ -7,6 +7,7 @@ import { PlanTemplateItem } from '@/components/targets/PlanTemplateItem';
 import { calculateTemplateScheduledDates } from '@/utils/planScheduler';
 import type { Plan, PlanTemplate } from '@/types/target';
 import type { Repeat } from '@/types/api';
+import { isHtml } from '@/utils/html';
 
 interface PlanPreviewPanelProps {
   open: boolean;
@@ -16,8 +17,6 @@ interface PlanPreviewPanelProps {
   loading: boolean;
   onStartPlan: () => void;
 }
-
-const isHtml = (text: string) => /<[^>]+>/.test(text);
 
 function formatDuration(minutes: number): string {
   if (minutes < 60) return `${minutes} min`;

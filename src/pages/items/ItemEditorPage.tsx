@@ -23,6 +23,7 @@ import { TrackCompletionToggle } from '@/components/groups/TrackCompletionToggle
 import { AssigneePicker } from '@/components/groups/AssigneePicker';
 import { ParticipantSelectionModal } from '@/components/groups/ParticipantSelectionModal';
 import { useTranslation } from 'react-i18next';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 
 // ── Helpers ──
 
@@ -973,12 +974,10 @@ export function ItemEditorPage() {
             if (e.key === 'Enter') e.preventDefault();
           }}
         />
-        <textarea
+        <RichTextEditor
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={setDescription}
           placeholder={t('itemEditor.addDescription')}
-          rows={3}
-          className="w-full resize-none bg-transparent text-sm leading-relaxed text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
         />
       </div>
 

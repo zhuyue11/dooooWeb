@@ -8,6 +8,7 @@ import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { layoutOverlaps } from './WeekGrid';
+import { stripHtml } from '@/utils/html';
 
 interface DayTimelineProps {
   date: Date;
@@ -212,7 +213,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                       <div className="flex items-center gap-1.5 text-[11px] leading-tight" style={{ color: colors.text, opacity: 0.8 }}>
                         <span className="truncate">{metaParts.join(' · ')}</span>
                         {item.description && (
-                          <span className="truncate opacity-70">— {item.description}</span>
+                          <span className="truncate opacity-70">— {stripHtml(item.description)}</span>
                         )}
                       </div>
                       {/* Tags line */}
