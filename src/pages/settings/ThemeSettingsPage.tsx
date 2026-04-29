@@ -10,6 +10,7 @@ import {
   SCHEMEABLE_PALETTES,
 } from '@/lib/contexts/theme-context';
 import { Icon } from '@/components/ui/Icon';
+import { SettingsPageLayout } from '@/components/layout/SettingsPageLayout';
 import type { ThemePattern, ThemeColor, ColorPalette, DisplayStyle } from '@/types/theme';
 
 /* ─── Section label ─────────────────────────────────────────────────── */
@@ -288,11 +289,7 @@ export function ThemeSettingsPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-bold text-(--el-page-text)">
-        {t('settings.theme', 'Theme')}
-      </h1>
-
+    <SettingsPageLayout title={t('settings.theme', 'Theme')}>
       {/* Pattern + Color — side by side at wider viewports */}
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
@@ -312,6 +309,6 @@ export function ThemeSettingsPage() {
       <div className="mt-4 rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
         <DisplayStyleSection />
       </div>
-    </div>
+    </SettingsPageLayout>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFont } from '@/lib/contexts/font-context';
 import { Icon } from '@/components/ui/Icon';
+import { SettingsPageLayout } from '@/components/layout/SettingsPageLayout';
 import { FONT_SIZES, FONT_SIZE_SCALE, buildGoogleFontsUrl, type FontSize } from '@/lib/font-config';
 
 /* ─── Section label (same pattern as ThemeSettingsPage) ─────────────── */
@@ -150,11 +151,7 @@ export function FontSettingsPage() {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-bold text-(--el-page-text)">
-        {t('fontSettings.title')}
-      </h1>
-
+    <SettingsPageLayout title={t('fontSettings.title')}>
       {/* Font Family */}
       <div className="rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
         <FontFamilySection />
@@ -164,6 +161,6 @@ export function FontSettingsPage() {
       <div className="mt-4 rounded-(--radius-card) border border-(--el-settings-border) bg-(--el-settings-bg) p-(--spacing-card)">
         <FontSizeSection />
       </div>
-    </div>
+    </SettingsPageLayout>
   );
 }
