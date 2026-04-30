@@ -1614,6 +1614,14 @@
     "priorityMedium": "Средний",
     "priorityLow": "Низкий"
   },
+  "notes": {
+    "title": "Заметки",
+    "addNote": "Добавить заметку",
+    "placeholder": "Напишите заметку...",
+    "titleGroup": "Заметки",
+    "addNoteGroup": "Добавить заметку",
+    "placeholderGroup": "Напишите заметку..."
+  },
   "itemView": {
     "edit": "Редактировать",
     "delete": "Удалить",
@@ -1626,6 +1634,15 @@
     "repeat": "Повторение",
     "createdAt": "Создано",
     "priority": "Приоритет",
+    "due": "Срок",
+    "completedAt": "Завершено",
+    "endedAt": "Окончено",
+    "organizer": "Организатор",
+    "assignee": "Назначено",
+    "activityEnded": "Активность завершена",
+    "endTime": "Конец",
+    "showMore": "Показать больше",
+    "showLess": "Свернуть",
     "confirmDelete": "Удалить этот элемент?",
     "deleteDescription": "Это действие нельзя отменить. Элемент будет удалён навсегда.",
     "timeZone": "Часовой пояс",

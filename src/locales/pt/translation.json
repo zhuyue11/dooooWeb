@@ -1620,6 +1620,14 @@
     "priorityMedium": "Média",
     "priorityLow": "Baixa"
   },
+  "notes": {
+    "title": "Notas",
+    "addNote": "Adicionar nota",
+    "placeholder": "Escreva uma nota...",
+    "titleGroup": "Notas",
+    "addNoteGroup": "Adicionar nota",
+    "placeholderGroup": "Escreva uma nota..."
+  },
   "itemView": {
     "edit": "Editar",
     "delete": "Excluir",
@@ -1632,6 +1640,15 @@
     "repeat": "Repetir",
     "createdAt": "Criado",
     "priority": "Prioridade",
+    "due": "Vencimento",
+    "completedAt": "Concluído",
+    "endedAt": "Finalizado",
+    "organizer": "Organizador",
+    "assignee": "Atribuído a",
+    "activityEnded": "Atividade finalizada",
+    "endTime": "Fim",
+    "showMore": "Ver mais",
+    "showLess": "Ver menos",
     "confirmDelete": "Excluir este item?",
     "deleteDescription": "Esta ação não pode ser desfeita. O item será excluído permanentemente.",
     "timeZone": "Fuso horário",

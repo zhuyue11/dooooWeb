@@ -1617,6 +1617,14 @@
     "priorityMedium": "Gemiddeld",
     "priorityLow": "Laag"
   },
+  "notes": {
+    "title": "Notities",
+    "addNote": "Notitie toevoegen",
+    "placeholder": "Schrijf een notitie...",
+    "titleGroup": "Notities",
+    "addNoteGroup": "Notitie toevoegen",
+    "placeholderGroup": "Schrijf een notitie..."
+  },
   "itemView": {
     "edit": "Bewerken",
     "delete": "Verwijderen",
@@ -1629,6 +1637,15 @@
     "repeat": "Herhalen",
     "createdAt": "Aangemaakt",
     "priority": "Prioriteit",
+    "due": "Deadline",
+    "completedAt": "Voltooid",
+    "endedAt": "Beëindigd",
+    "organizer": "Organisator",
+    "assignee": "Toegewezen aan",
+    "activityEnded": "Activiteit beëindigd",
+    "endTime": "Einde",
+    "showMore": "Meer tonen",
+    "showLess": "Minder tonen",
     "confirmDelete": "Dit item verwijderen?",
     "deleteDescription": "Deze actie kan niet ongedaan worden gemaakt. Het item wordt permanent verwijderd.",
     "timeZone": "Tijdzone",

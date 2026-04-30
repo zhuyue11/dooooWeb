@@ -102,6 +102,98 @@ export function formatHourLabel(hour: number, timeFormat: TimeFormat = '12h'): s
   return `${hour - 12} PM`;
 }
 
+// ── Reminder formatting ─────────────────────────────────────────────
+
+/** Format a reminder offset in minutes to a human-readable string. */
+export function formatReminder(minutes: number | null | undefined): string | null {
+  if (minutes == null) return null;
+  if (minutes === 0) return 'At time';
+  if (minutes < 60) return `${minutes} min before`;
+  if (minutes < 1440) {
+    const h = Math.floor(minutes / 60);
+    return `${h} hr${h > 1 ? 's' : ''} before`;
+  }
+  const d = Math.floor(minutes / 1440);
+  return `${d} day${d > 1 ? 's' : ''} before`;
+}
+
+// ── Duration formatting ─────────────────────────────────────────────
+
+/** Format duration in minutes to human-friendly string using i18n. */
+export function formatDuration(
+  minutes: number | null | undefined,
+  t: (key: string) => string,
+): string | null {
+  if (!minutes || minutes === 0) return null;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  const parts: string[] = [];
+  if (hours > 0) {
+    parts.push(`${hours}${hours === 1 ? t('tasks.panel.hour') : t('tasks.panel.hours')}`);
+  }
+  if (mins > 0) {
+    parts.push(`${mins}${mins === 1 ? t('tasks.panel.minute') : t('tasks.panel.minutes')}`);
+  }
+  return parts.join(' ') || null;
+}
+
+// ── Completion time formatting ──────────────────────────────────────
+
+/** Format a completion timestamp — time only if today, full date+time otherwise. */
+export function formatCompletionTime(
+  completedAt: string | null | undefined,
+  isForAllMembers: boolean | undefined,
+  t: (key: string) => string,
+): string | null {
+  if (!completedAt) return null;
+  const d = new Date(completedAt);
+  const now = new Date();
+  const isToday = d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate();
+
+  const label = isForAllMembers ? t('tasks.panel.endedAt') : t('tasks.panel.completedAt');
+  const timeStr = d.toLocaleTimeString(i18n.language, { hour: 'numeric', minute: '2-digit' });
+
+  if (isToday) {
+    return `${label} ${timeStr}`;
+  }
+  const dateStr = d.toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  return `${label} ${dateStr} ${timeStr}`;
+}
+
+// ── Repeat formatting ───────────────────────────────────────────────
+
+/** Format a repeat pattern to a translated human-readable string. */
+export function formatRepeatDisplay(
+  repeat: unknown,
+  t: (key: string) => string,
+): string | null {
+  if (!repeat) return null;
+  const r = repeat as { type?: string; interval?: number };
+  if (r.type === 'daily') return r.interval && r.interval > 1 ? `${t('tasks.panel.every')} ${r.interval} ${t('tasks.panel.days')}` : t('tasks.panel.daily');
+  if (r.type === 'weekly') return r.interval && r.interval > 1 ? `${t('tasks.panel.every')} ${r.interval} ${t('tasks.panel.weeks')}` : t('tasks.panel.weekly');
+  if (r.type === 'monthly') return r.interval && r.interval > 1 ? `${t('tasks.panel.every')} ${r.interval} ${t('tasks.panel.months')}` : t('tasks.panel.monthly');
+  if (r.type === 'yearly') return r.interval && r.interval > 1 ? `${t('tasks.panel.every')} ${r.interval} ${t('tasks.panel.years')}` : t('tasks.panel.yearly');
+  return t('itemView.repeat');
+}
+
+// ── Time past check ─────────────────────────────────────────────────
+
+/** Check if a task/event's time is in the past. */
+export function isTaskTimeInPast(date: string | null | undefined, hasTime: boolean): boolean {
+  if (!date) return false;
+  const now = new Date();
+  if (hasTime) {
+    return new Date(date).getTime() < now.getTime();
+  }
+  // All-day: past if the date is before today
+  const taskDate = new Date(date);
+  return taskDate.getFullYear() < now.getFullYear() ||
+    (taskDate.getFullYear() === now.getFullYear() && taskDate.getMonth() < now.getMonth()) ||
+    (taskDate.getFullYear() === now.getFullYear() && taskDate.getMonth() === now.getMonth() && taskDate.getDate() < now.getDate());
+}
+
 // ── Range label ──────────────────────────────────────────────────────
 
 /** "March 30 — April 5, 2026" style date range label. */

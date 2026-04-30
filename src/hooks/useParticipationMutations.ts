@@ -6,6 +6,7 @@ import {
   markNotGoing,
   inviteParticipants,
   completeParticipantTask,
+  manuallyCompleteGroupActivity,
 } from '@/lib/api';
 
 export function useParticipationMutations(taskId: string) {
@@ -59,6 +60,12 @@ export function useParticipationMutations(taskId: string) {
     onSuccess: invalidateAll,
   });
 
+  const manualCompleteMutation = useMutation({
+    mutationFn: (args: { isCompleted: boolean; date?: string }) =>
+      manuallyCompleteGroupActivity(taskId, args.isCompleted, args.date),
+    onSuccess: invalidateAll,
+  });
+
   return {
     participateMutation,
     declineMutation,
@@ -66,5 +73,6 @@ export function useParticipationMutations(taskId: string) {
     notGoingMutation,
     inviteMutation,
     completeMutation,
+    manualCompleteMutation,
   };
 }

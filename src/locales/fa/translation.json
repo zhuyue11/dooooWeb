@@ -1614,6 +1614,14 @@
     "priorityMedium": "متوسط",
     "priorityLow": "پایین"
   },
+  "notes": {
+    "title": "یادداشت‌ها",
+    "addNote": "افزودن یادداشت",
+    "placeholder": "یادداشت بنویسید...",
+    "titleGroup": "یادداشت‌ها",
+    "addNoteGroup": "افزودن یادداشت",
+    "placeholderGroup": "یادداشت بنویسید..."
+  },
   "itemView": {
     "edit": "ویرایش",
     "delete": "حذف",
@@ -1626,6 +1634,15 @@
     "repeat": "تکرار",
     "createdAt": "ایجاد شده",
     "priority": "اولویت",
+    "due": "مهلت",
+    "completedAt": "تکمیل شد",
+    "endedAt": "پایان یافت",
+    "organizer": "برگزارکننده",
+    "assignee": "محول به",
+    "activityEnded": "فعالیت پایان یافت",
+    "endTime": "پایان",
+    "showMore": "نمایش بیشتر",
+    "showLess": "نمایش کمتر",
     "confirmDelete": "این مورد حذف شود؟",
     "deleteDescription": "این عمل قابل بازگشت نیست. مورد به طور دائم حذف خواهد شد.",
     "timeZone": "منطقه زمانی",

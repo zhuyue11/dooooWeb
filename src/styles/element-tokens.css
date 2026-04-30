@@ -256,6 +256,15 @@
   --el-group-owner-text: #6b7280;
   --el-group-avatar-bg: color-mix(in srgb, var(--color-primary) 15%, transparent);
   --el-group-avatar-text: var(--color-primary);
+  /* Per-user avatar color palette — 8 slots derived from theme palette colors */
+  --el-avatar-0: var(--color-primary);
+  --el-avatar-1: var(--color-secondary);
+  --el-avatar-2: var(--color-accent);
+  --el-avatar-3: color-mix(in srgb, var(--color-primary) 50%, var(--color-secondary));
+  --el-avatar-4: color-mix(in srgb, var(--color-secondary) 50%, var(--color-accent));
+  --el-avatar-5: color-mix(in srgb, var(--color-accent) 50%, var(--color-primary));
+  --el-avatar-6: color-mix(in srgb, var(--color-primary) 70%, var(--color-accent));
+  --el-avatar-7: color-mix(in srgb, var(--color-secondary) 70%, var(--color-primary));
   --el-group-info-bg: rgba(59, 130, 246, 0.1);
   --el-group-info-icon: #3b82f6;
   --el-group-success-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
@@ -599,6 +608,14 @@
   --el-group-owner-text: #9ca3af;
   --el-group-avatar-bg: color-mix(in srgb, var(--color-primary) 15%, transparent);
   --el-group-avatar-text: var(--color-primary);
+  --el-avatar-0: var(--color-primary);
+  --el-avatar-1: var(--color-secondary);
+  --el-avatar-2: var(--color-accent);
+  --el-avatar-3: color-mix(in srgb, var(--color-primary) 50%, var(--color-secondary));
+  --el-avatar-4: color-mix(in srgb, var(--color-secondary) 50%, var(--color-accent));
+  --el-avatar-5: color-mix(in srgb, var(--color-accent) 50%, var(--color-primary));
+  --el-avatar-6: color-mix(in srgb, var(--color-primary) 70%, var(--color-accent));
+  --el-avatar-7: color-mix(in srgb, var(--color-secondary) 70%, var(--color-primary));
   --el-group-info-bg: rgba(96, 165, 250, 0.1);
   --el-group-info-icon: #60a5fa;
   --el-group-success-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);

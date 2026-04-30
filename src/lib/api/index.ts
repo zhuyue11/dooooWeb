@@ -586,6 +586,14 @@ export async function completeParticipantTask(
   await apiClient.put(`/api/collaboration/tasks/${taskId}/complete`, { isCompleted, date });
 }
 
+export async function manuallyCompleteGroupActivity(
+  taskId: string,
+  isCompleted: boolean,
+  date?: string,
+): Promise<void> {
+  await apiClient.put(`/api/collaboration/tasks/${taskId}/manual-complete`, { isCompleted, date });
+}
+
 export async function completeParticipantInstance(
   taskId: string,
   instanceId: string,
@@ -822,4 +830,46 @@ export async function deleteAISession(sessionId: string): Promise<void> {
 
 export async function completeAISession(sessionId: string): Promise<void> {
   await apiClient.post(`/api/ai/sessions/${sessionId}/complete`);
+}
+
+// ── Notes ──────────────────────────────────────────────────────────────
+
+export interface NoteUser {
+  id: string;
+  name: string;
+  avatar?: string;
+}
+
+export interface Note {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  user: NoteUser;
+}
+
+export interface NotesListResponse {
+  notes: Note[];
+  total: number;
+  page: number;
+  pages: number;
+}
+
+export async function getNotes(itemType: string, itemId: string, page = 1, limit = 50): Promise<NotesListResponse> {
+  const { data } = await apiClient.get(`/api/notes/${itemType}/${itemId}`, { params: { page, limit } });
+  return data.data;
+}
+
+export async function addNote(itemType: string, itemId: string, content: string): Promise<Note> {
+  const { data } = await apiClient.post(`/api/notes/${itemType}/${itemId}`, { content });
+  return data.data;
+}
+
+export async function updateNote(noteId: string, content: string): Promise<Note> {
+  const { data } = await apiClient.put(`/api/notes/${noteId}`, { content });
+  return data.data;
+}
+
+export async function deleteNote(noteId: string): Promise<void> {
+  await apiClient.delete(`/api/notes/${noteId}`);
 }

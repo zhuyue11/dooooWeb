@@ -1614,6 +1614,14 @@
     "priorityMedium": "Orta",
     "priorityLow": "Düşük"
   },
+  "notes": {
+    "title": "Notlar",
+    "addNote": "Not ekle",
+    "placeholder": "Bir not yazın...",
+    "titleGroup": "Notlar",
+    "addNoteGroup": "Not ekle",
+    "placeholderGroup": "Bir not yazın..."
+  },
   "itemView": {
     "edit": "Düzenle",
     "delete": "Sil",
@@ -1626,6 +1634,15 @@
     "repeat": "Tekrarla",
     "createdAt": "Oluşturuldu",
     "priority": "Öncelik",
+    "due": "Son tarih",
+    "completedAt": "Tamamlandı",
+    "endedAt": "Sona erdi",
+    "organizer": "Düzenleyen",
+    "assignee": "Atanan",
+    "activityEnded": "Etkinlik sona erdi",
+    "endTime": "Bitiş",
+    "showMore": "Daha fazla göster",
+    "showLess": "Daha az göster",
     "confirmDelete": "Bu öğe silinsin mi?",
     "deleteDescription": "Bu işlem geri alınamaz. Öğe kalıcı olarak silinecektir.",
     "timeZone": "Saat dilimi",

@@ -1614,6 +1614,14 @@
     "priorityMedium": "Trung bình",
     "priorityLow": "Thấp"
   },
+  "notes": {
+    "title": "Ghi chú",
+    "addNote": "Thêm ghi chú",
+    "placeholder": "Viết ghi chú...",
+    "titleGroup": "Bình luận",
+    "addNoteGroup": "Thêm bình luận",
+    "placeholderGroup": "Viết bình luận..."
+  },
   "itemView": {
     "edit": "Chỉnh sửa",
     "delete": "Xóa",
@@ -1626,6 +1634,15 @@
     "repeat": "Lặp lại",
     "createdAt": "Đã tạo",
     "priority": "Ưu tiên",
+    "due": "Hạn",
+    "completedAt": "Đã hoàn thành",
+    "endedAt": "Đã kết thúc",
+    "organizer": "Người tổ chức",
+    "assignee": "Giao cho",
+    "activityEnded": "Hoạt động đã kết thúc",
+    "endTime": "Kết thúc",
+    "showMore": "Xem thêm",
+    "showLess": "Thu gọn",
     "confirmDelete": "Xóa mục này?",
     "deleteDescription": "Hành động này không thể hoàn tác. Mục sẽ bị xóa vĩnh viễn.",
     "timeZone": "Múi giờ",

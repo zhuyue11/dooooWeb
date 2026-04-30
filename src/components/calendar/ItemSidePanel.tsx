@@ -4,20 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
-import { formatFullDate, formatTime } from '@/utils/date';
+import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast } from '@/utils/date';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { getParentId, getOccurrenceDateKey, isRecurringInstance } from '@/utils/calendarItemId';
 import { RecurringScopeModal } from './RecurringScopeModal';
+import { ItemActionsMenu } from './ItemActionsMenu';
+import { NotesSection } from './NotesSection';
+import { useNotes } from '@/hooks/useNotes';
+import { useAuth } from '@/lib/contexts/auth-context';
+import { useItemMenu } from '@/hooks/useItemMenu';
 import { AssigneeDisplay } from '@/components/groups/AssigneeDisplay';
-import { CompletionStatsDisplay } from '@/components/groups/CompletionStatsDisplay';
-import { ParticipationActions } from '@/components/groups/ParticipationActions';
+import { ParticipantsList } from '@/components/groups/ParticipantsList';
+import { computeParticipantStats } from '@/utils/participantStats';
+import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
+import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
-import DOMPurify from 'dompurify';
-import { isHtml } from '@/utils/html';
+import { CollapsibleDescription } from './CollapsibleDescription';
 
 interface ItemSidePanelProps {
   item: CalendarItem;
@@ -78,20 +84,6 @@ function CategoryPill({ categoryId, categories }: { categoryId: string; categori
   );
 }
 
-// ── Format reminder ──
-
-function formatReminder(minutes: number | null | undefined): string | null {
-  if (minutes == null) return null;
-  if (minutes === 0) return 'At time';
-  if (minutes < 60) return `${minutes} min before`;
-  if (minutes < 1440) {
-    const h = Math.floor(minutes / 60);
-    return `${h} hr${h > 1 ? 's' : ''} before`;
-  }
-  const d = Math.floor(minutes / 1440);
-  return `${d} day${d > 1 ? 's' : ''} before`;
-}
-
 // ── Main component ──
 
 export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId }: ItemSidePanelProps) {
@@ -107,9 +99,11 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
     updateTaskMutation,
     updateEventMutation,
   } = useItemMutations();
+  const { user } = useAuth();
   const [isClosing, setIsClosing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [scopeModalMode, setScopeModalMode] = useState<'edit' | 'delete' | null>(null);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Close on Escape
@@ -126,11 +120,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
     setTimeout(onClose, 200);
   }, [onClose]);
 
-  // ── Permissions (matching dooooApp's canUserEditTask / canUserDeleteTask) ──
-  const isTaskOwner = item.userId === currentUserId;
   const isGroupTask = !!item.groupId;
-  const canEdit = item.itemType === 'EVENT' || (!item.isCompleted && (!isGroupTask || isTaskOwner));
-  const canDelete = item.itemType === 'EVENT' || !isGroupTask || isTaskOwner;
 
   // Resolve the parent task/event id (never the virtual occurrence id) so all
   // routing and mutations target the actual backend record.
@@ -138,6 +128,13 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
   const occurrenceDateKey = getOccurrenceDateKey(item);
   const recurring = isRecurringInstance(item);
   const typeParam = item.itemType.toLowerCase();
+
+  // Notes — resolve the correct itemType for the unified Note model
+  const noteItemType = (() => {
+    if (item.itemType === 'EVENT') return item.isInstance ? 'EVENT_INSTANCE' as const : 'EVENT' as const;
+    return item.isInstance ? 'TASK_INSTANCE' as const : 'TASK' as const;
+  })();
+  const notesHook = useNotes(parentId, noteItemType);
 
   const handleExpand = useCallback(() => {
     onClose();
@@ -245,14 +242,47 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
     return currentUserId === item.userId;
   })();
 
-  const dateDisplay = item.date ? formatFullDate(new Date(item.date)) : null;
-  const timeDisplay = item.hasTime && item.date ? formatTime(item.date, timeFormat as TimeFormat) : null;
+  // (B6) Activity can complete — DUE type always, SCHEDULED only after start
+  const activityCanComplete = (() => {
+    if (!item.isForAllMembers) return true;
+    if (item.dateType === 'DUE') return true;
+    return isTaskTimeInPast(item.date, item.hasTime);
+  })();
+  // Show dashed circle when participant can't complete yet (future scheduled activity)
+  const showDashedCircle = shouldShowToggle && item.isForAllMembers && !activityCanComplete && !isChecked;
+
+  // (A1) Date display with dateType prefix
+  const datePrefix = item.dateType === 'DUE' ? `${t('itemView.due')} · ` : '';
+  // (A2) Multi-day event range
+  const dateDisplay = (() => {
+    if (!item.date) return null;
+    const startStr = formatFullDate(new Date(item.date));
+    if (item.endDate && item.endDate.slice(0, 10) !== item.date.slice(0, 10)) {
+      const endStr = formatFullDate(new Date(item.endDate));
+      return `${datePrefix}${startStr} — ${endStr}`;
+    }
+    return `${datePrefix}${startStr}`;
+  })();
+
+  // (A3) Time display with end time from duration
+  const timeDisplay = (() => {
+    if (!item.hasTime || !item.date) return null;
+    const startTime = formatTime(item.date, timeFormat as TimeFormat);
+    if (item.duration) {
+      const endMs = new Date(item.date).getTime() + item.duration * 60000;
+      const endTime = formatTime(new Date(endMs).toISOString(), timeFormat as TimeFormat);
+      return `${startTime} — ${endTime}`;
+    }
+    return startTime;
+  })();
+
   const timeOfDayDisplay = !item.hasTime && item.timeOfDay ? item.timeOfDay : null;
   const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
     MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
     AFTERNOON: { icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
     EVENING: { icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
   };
+
   // Timezone display — show abbreviation when task/event tz differs from device tz
   const deviceTz = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
   const itemTz = item.sourceTask?.timeZone || item.sourceEvent?.timeZone || null;
@@ -265,27 +295,64 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
       })()
     : null;
 
-  // Repeat display
-  const repeatDisplay = item.repeat
-    ? (() => {
-        const r = item.repeat as { type?: string; interval?: number };
-        if (r.type === 'daily') return r.interval && r.interval > 1 ? `Every ${r.interval} days` : 'Daily';
-        if (r.type === 'weekly') return r.interval && r.interval > 1 ? `Every ${r.interval} weeks` : 'Weekly';
-        if (r.type === 'monthly') return r.interval && r.interval > 1 ? `Every ${r.interval} months` : 'Monthly';
-        if (r.type === 'yearly') return r.interval && r.interval > 1 ? `Every ${r.interval} years` : 'Yearly';
-        return 'Repeats';
-      })()
-    : null;
+  // (A7) Repeat display — translated
+  const repeatDisplay = formatRepeatDisplay(item.repeat, t);
 
-  const durationDisplay = item.duration ? `${item.duration} min` : null;
-  const reminderDisplay = formatReminder(item.firstReminderMinutes);
-  const secondReminderDisplay = formatReminder(item.secondReminderMinutes);
+  // (A9) Duration display — human-friendly translated format
+  const durationDisplay = formatDuration(item.duration, t);
+
+  // (A8) Hide reminders for past/completed tasks
+  const taskTimePast = isTaskTimeInPast(item.date, item.hasTime);
+  const showReminders = !isChecked && !taskTimePast;
+  const reminderDisplay = showReminders ? formatReminder(item.firstReminderMinutes) : null;
+  const secondReminderDisplay = showReminders ? formatReminder(item.secondReminderMinutes) : null;
+
   const locationDisplay = item.location || null;
   const guestsDisplay = item.guests && item.guests.length > 0 ? item.guests : null;
   const meetingLinkDisplay = item.meetingLink || null;
 
+  // (A4) Completion timestamp
+  const completionDisplay = isChecked ? formatCompletionTime(item.completedAt, item.isForAllMembers, t) : null;
+
+  // (A5) Activity ended indicator
+  const activityEnded = isGroupTask && item.isForAllMembers && item.parentTaskIsCompleted && !isChecked;
+
+  // (A6) Organizer display
+  const organizerDisplay = item.isForAllMembers && item.creatorName ? item.creatorName : null;
+
+  // Compute participant stats locally from item data (matching dooooApp pattern)
+  const localParticipantStats = item.isForAllMembers
+    ? computeParticipantStats(item.participantInstances, item.participants)
+    : null;
+
   const createdAtRaw = item.sourceTask?.createdAt || item.sourceEvent?.createdAt;
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay || createdAtRaw;
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay || completionDisplay || activityEnded || organizerDisplay || createdAtRaw;
+
+  // Build 3-dots menu items via shared hook
+  const menuItems = useItemMenu({
+    itemType: item.itemType as 'TASK' | 'EVENT',
+    userId: item.userId,
+    isCompleted: isChecked,
+    groupId: item.groupId,
+    isForAllMembers: item.isForAllMembers,
+    trackCompletion: item.trackCompletion,
+    isRecurring: recurring,
+    parentTaskIsCompleted: item.parentTaskIsCompleted,
+    participantInstanceStatus: item.participantInstanceStatus,
+    date: item.date,
+    hasTime: item.hasTime,
+    dateType: item.dateType as 'SCHEDULED' | 'DUE' | undefined,
+    duration: item.duration,
+    assigneeId: item.assigneeId,
+    participants: item.participants,
+    taskId: parentId,
+    occurrenceDateKey,
+  }, {
+    onEdit: handleEdit,
+    onDelete: handleDeleteClick,
+    onToggleComplete: handleToggle,
+    onInvite: item.isForAllMembers && item.groupId ? () => setShowInviteModal(true) : undefined,
+  });
 
   return createPortal(
     <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
@@ -305,11 +372,17 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
           {/* Left: checkbox + title */}
           <div className="flex min-w-0 items-center gap-3">
             {shouldShowToggle ? (
-              <button onClick={handleToggle} className="shrink-0">
+              <button
+                onClick={showDashedCircle ? undefined : handleToggle}
+                className="shrink-0"
+                title={showDashedCircle ? t('groups.participate.activityNotStarted') : undefined}
+              >
                 {isChecked ? (
                   <div className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-(--el-item-checkbox-bg)">
                     <Icon name="check" size={14} color="var(--el-item-checkbox-mark)" weight={700} />
                   </div>
+                ) : showDashedCircle ? (
+                  <div className="h-[22px] w-[22px] rounded-full border-2 border-dashed border-(--el-item-checkbox-border) opacity-50" />
                 ) : (
                   <div className="h-[22px] w-[22px] rounded-full border-2 border-(--el-item-checkbox-border)" />
                 )}
@@ -324,16 +397,6 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
 
           {/* Right: action buttons */}
           <div className="flex shrink-0 items-center gap-1">
-            {canEdit && (
-              <button
-                data-testid="side-panel-edit"
-                onClick={handleEdit}
-                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
-                title={t('itemView.edit')}
-              >
-                <Icon name="edit" size={18} />
-              </button>
-            )}
             <button
               data-testid="side-panel-expand"
               onClick={handleExpand}
@@ -342,15 +405,8 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             >
               <Icon name="open_in_full" size={18} />
             </button>
-            {canDelete && (
-              <button
-                data-testid="side-panel-delete"
-                onClick={handleDeleteClick}
-                className="flex h-8 w-8 items-center justify-center rounded-(--radius-card) text-(--el-panel-icon-btn) hover:bg-(--el-panel-icon-hover-bg)"
-                title={t('itemView.delete')}
-              >
-                <Icon name="delete" size={18} />
-              </button>
+            {menuItems.length > 0 && (
+              <ItemActionsMenu items={menuItems} />
             )}
             <button
               data-testid="side-panel-close"
@@ -373,19 +429,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             </div>
           )}
 
-          {/* Description */}
-          {item.description && (
-            isHtml(item.description) ? (
-              <div
-                className="rich-text text-sm text-(--el-panel-description)"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.description) }}
-              />
-            ) : (
-              <p className="text-sm leading-relaxed text-(--el-panel-description)">{item.description}</p>
-            )
-          )}
-
-          {/* Details card */}
+          {/* Details card — shown first for date/time visibility */}
           {hasAnyDetail && (
             <div className="rounded-(--radius-card) border border-(--el-panel-border)">
               {dateDisplay && (
@@ -425,10 +469,41 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
                 </>
               )}
+              {/* (A4) Completion timestamp */}
+              {completionDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
+                  <DetailRow icon="check_circle" label={t('itemView.completedAt')} value={completionDisplay} />
+                </>
+              )}
+              {/* (A5) Activity ended indicator */}
+              {activityEnded && (
+                <>
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="event_busy" size={18} color="var(--el-dialog-confirm-bg)" />
+                    <span className="text-[13px] font-medium" style={{ color: 'var(--el-dialog-confirm-bg)' }}>
+                      {t('itemView.activityEnded')}
+                    </span>
+                  </div>
+                </>
+              )}
+              {/* (A11) Location — clickable, opens Google Maps */}
               {locationDisplay && (
                 <>
                   <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="location_on" label={t('itemView.location')} value={locationDisplay} />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="location_on" size={18} color="var(--el-panel-detail-label)" />
+                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.location')}</span>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationDisplay)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="truncate text-[13px] font-medium text-(--el-panel-detail-value) hover:underline"
+                    >
+                      {locationDisplay}
+                    </a>
+                  </div>
                 </>
               )}
               {guestsDisplay && (
@@ -473,6 +548,13 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
                   <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
                 </>
               )}
+              {/* (A6) Organizer display */}
+              {organizerDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-panel-separator)" />
+                  <DetailRow icon="person" label={t('itemView.organizer')} value={organizerDisplay} />
+                </>
+              )}
               {createdAtRaw && (
                 <>
                   <div className="mx-4 border-t border-(--el-panel-separator)" />
@@ -486,6 +568,51 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
             </div>
           )}
 
+          {/* Group activity participation banner — uses local status, not API */}
+          {isGroupTask && item.isForAllMembers && !isChecked && (
+            <ParticipationBanner
+              taskId={parentId}
+              status={item.participantInstanceStatus || 'NONE'}
+              isRecurring={recurring}
+              date={occurrenceDateKey}
+              isOrganizer={item.userId === currentUserId}
+            />
+          )}
+
+          {/* Description */}
+          {item.description && (
+            <CollapsibleDescription content={item.description} />
+          )}
+
+          {/* Notes */}
+          <NotesSection
+            notes={notesHook.notes}
+            total={notesHook.total}
+            loading={notesHook.loading}
+            currentUserId={currentUserId || user?.id}
+            onAddNote={notesHook.addNote}
+            onUpdateNote={notesHook.updateNote}
+            onDeleteNote={notesHook.deleteNote}
+            isAdding={notesHook.isAdding}
+            isGroupTask={isGroupTask}
+          />
+
+          {/* Group activity participants list */}
+          {isGroupTask && item.isForAllMembers && localParticipantStats && (
+            <div className="mx-4 my-2">
+              <ParticipantsList
+                participants={localParticipantStats.participants}
+                invitedParticipants={localParticipantStats.invitedParticipants}
+                notGoingParticipants={localParticipantStats.notGoingParticipants}
+                totalParticipants={localParticipantStats.totalParticipants}
+                completedCount={localParticipantStats.completedCount}
+                currentUserId={currentUserId}
+                organizerId={item.userId ?? ''}
+                trackCompletion={item.trackCompletion}
+              />
+            </div>
+          )}
+
           {/* Group task assignment info */}
           {isGroupTask && !item.isForAllMembers && item.assigneeName && (
             <AssigneeDisplay
@@ -493,25 +620,6 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               assigneeId={item.assigneeId}
               currentUserId={currentUserId}
             />
-          )}
-
-          {/* Group activity participation + completion stats */}
-          {isGroupTask && item.isForAllMembers && (
-            <>
-              {currentUserId !== item.userId && (
-                <ParticipationActions
-                  taskId={parentId}
-                  isRecurring={recurring}
-                  date={occurrenceDateKey}
-                />
-              )}
-              <CompletionStatsDisplay
-                taskId={parentId}
-                currentUserId={currentUserId}
-                organizerId={item.userId}
-                trackCompletion={item.trackCompletion}
-              />
-            </>
           )}
 
         </div>
@@ -579,6 +687,22 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
           }}
           onClose={() => setScopeModalMode(null)}
         />
+
+        {/* Invite participants modal */}
+        {item.isForAllMembers && item.groupId && (
+          <InviteParticipantsModal
+            open={showInviteModal}
+            onClose={() => setShowInviteModal(false)}
+            groupId={item.groupId}
+            taskId={parentId}
+            taskDate={occurrenceDateKey}
+            existingUserIds={[
+              ...(localParticipantStats?.participants.map(p => p.id) ?? []),
+              ...(localParticipantStats?.invitedParticipants?.map(p => p.id) ?? []),
+              ...(localParticipantStats?.notGoingParticipants?.map(p => p.id) ?? []),
+            ]}
+          />
+        )}
       </div>
     </div>,
     document.body,

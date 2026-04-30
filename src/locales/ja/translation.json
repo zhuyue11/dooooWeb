@@ -1620,6 +1620,14 @@
     "priorityMedium": "中",
     "priorityLow": "低"
   },
+  "notes": {
+    "title": "メモ",
+    "addNote": "メモを追加",
+    "placeholder": "メモを入力...",
+    "titleGroup": "コメント",
+    "addNoteGroup": "コメントを追加",
+    "placeholderGroup": "コメントを入力..."
+  },
   "itemView": {
     "edit": "編集",
     "delete": "削除",
@@ -1632,6 +1640,15 @@
     "repeat": "繰り返し",
     "createdAt": "作成",
     "priority": "優先度",
+    "due": "期限",
+    "completedAt": "完了",
+    "endedAt": "終了",
+    "organizer": "主催者",
+    "assignee": "担当者",
+    "activityEnded": "アクティビティは終了しました",
+    "endTime": "終了",
+    "showMore": "もっと見る",
+    "showLess": "閉じる",
     "confirmDelete": "このアイテムを削除しますか？",
     "deleteDescription": "この操作は取り消せません。アイテムは完全に削除されます。",
     "timeZone": "タイムゾーン",

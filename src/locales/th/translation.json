@@ -1614,6 +1614,14 @@
     "priorityMedium": "ปานกลาง",
     "priorityLow": "ต่ำ"
   },
+  "notes": {
+    "title": "บันทึก",
+    "addNote": "เพิ่มบันทึก",
+    "placeholder": "เขียนบันทึก...",
+    "titleGroup": "ความคิดเห็น",
+    "addNoteGroup": "เพิ่มความคิดเห็น",
+    "placeholderGroup": "เขียนความคิดเห็น..."
+  },
   "itemView": {
     "edit": "แก้ไข",
     "delete": "ลบ",
@@ -1626,6 +1634,15 @@
     "repeat": "ทำซ้ำ",
     "createdAt": "สร้างเมื่อ",
     "priority": "ลำดับความสำคัญ",
+    "due": "กำหนด",
+    "completedAt": "เสร็จสิ้น",
+    "endedAt": "สิ้นสุด",
+    "organizer": "ผู้จัด",
+    "assignee": "มอบหมายให้",
+    "activityEnded": "กิจกรรมสิ้นสุดแล้ว",
+    "endTime": "สิ้นสุด",
+    "showMore": "แสดงเพิ่มเติม",
+    "showLess": "แสดงน้อยลง",
     "confirmDelete": "ลบรายการนี้หรือไม่?",
     "deleteDescription": "การดำเนินการนี้ไม่สามารถยกเลิกได้ รายการจะถูกลบอย่างถาวร",
     "timeZone": "เขตเวลา",

@@ -7,7 +7,7 @@ import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { Icon } from '@/components/ui/Icon';
-import { formatFullDate, formatTime } from '@/utils/date';
+import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast } from '@/utils/date';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import type { TimeFormat } from '@/utils/date';
 import type { Task, Event as ApiEvent } from '@/types/api';
@@ -16,8 +16,16 @@ import i18n from '@/lib/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useState } from 'react';
-import DOMPurify from 'dompurify';
-import { isHtml } from '@/utils/html';
+import { CollapsibleDescription } from '@/components/calendar/CollapsibleDescription';
+import { AssigneeDisplay } from '@/components/groups/AssigneeDisplay';
+import { NotesSection } from '@/components/calendar/NotesSection';
+import { useNotes } from '@/hooks/useNotes';
+import { ItemActionsMenu } from '@/components/calendar/ItemActionsMenu';
+import { useItemMenu } from '@/hooks/useItemMenu';
+import { ParticipantsList } from '@/components/groups/ParticipantsList';
+import { computeParticipantStats } from '@/utils/participantStats';
+import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
+import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 
 // ── Detail row ──
 
@@ -29,20 +37,6 @@ function DetailRow({ icon, label, value }: { icon: string; label: string; value:
       <span className="text-xs font-medium text-(--el-view-title)">{value}</span>
     </div>
   );
-}
-
-// ── Format reminder ──
-
-function formatReminder(minutes: number | null | undefined): string | null {
-  if (minutes == null) return null;
-  if (minutes === 0) return 'At time';
-  if (minutes < 60) return `${minutes} min before`;
-  if (minutes < 1440) {
-    const h = Math.floor(minutes / 60);
-    return `${h} hr${h > 1 ? 's' : ''} before`;
-  }
-  const d = Math.floor(minutes / 1440);
-  return `${d} day${d > 1 ? 's' : ''} before`;
 }
 
 // ── Main component ──
@@ -59,6 +53,7 @@ export function ItemViewPage() {
   const { timeFormat } = useDisplay();
   const { deleteTaskMutation, deleteEventMutation } = useItemMutations();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   // Fetch item — cast to shared type to avoid union issues
   const { data: item, isLoading, isError } = useQuery<Task | ApiEvent>({
@@ -67,6 +62,11 @@ export function ItemViewPage() {
     enabled: !!id,
     retry: false,
   });
+
+  // Notes hook
+  const noteItemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
+  const notesHook = useNotes(id, noteItemType);
+
 
   const handleBack = useCallback(() => navigate(-1), [navigate]);
   const handleEdit = useCallback(() => {
@@ -94,6 +94,34 @@ export function ItemViewPage() {
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [id, type, queryClient, showPlanReview]);
+
+  // Build 3-dots menu items — must be called before early returns (hooks rules)
+  const taskItemForMenu = type === 'task' && item ? (item as Task) : null;
+  const eventItemForMenu = type !== 'task' && item ? (item as ApiEvent) : null;
+  const menuItems = useItemMenu({
+    itemType: type === 'task' ? 'TASK' : 'EVENT',
+    userId: type === 'task' ? taskItemForMenu?.userId : (eventItemForMenu as any)?.userId,
+    isCompleted: type === 'task' ? (taskItemForMenu?.isCompleted ?? false) : false,
+    groupId: taskItemForMenu?.groupId,
+    isForAllMembers: taskItemForMenu?.isForAllMembers,
+    trackCompletion: taskItemForMenu?.trackCompletion,
+    isRecurring: !!taskItemForMenu?.repeat,
+    parentTaskIsCompleted: (taskItemForMenu as any)?.parentTaskIsCompleted,
+    participantInstanceStatus: (taskItemForMenu as any)?.participantInstanceStatus,
+    date: item?.date,
+    hasTime: item?.hasTime ?? false,
+    dateType: taskItemForMenu?.dateType as 'SCHEDULED' | 'DUE' | undefined,
+    duration: item?.duration,
+    assigneeId: taskItemForMenu?.assigneeId,
+    participants: taskItemForMenu?.participants as any,
+    taskId: id ?? '',
+    occurrenceDateKey: item?.date?.slice(0, 10) ?? '',
+  }, {
+    onEdit: handleEdit,
+    onDelete: () => setShowDeleteConfirm(true),
+    onToggleComplete: handleToggle,
+    onInvite: taskItemForMenu?.isForAllMembers && taskItemForMenu?.groupId ? () => setShowInviteModal(true) : undefined,
+  });
 
   if (isLoading) {
     return (
@@ -123,8 +151,34 @@ export function ItemViewPage() {
   const description = item.description;
   const isCompleted = isTask ? (taskItem?.isCompleted ?? false) : false;
   const dateStr = item.date;
-  const dateDisplay = dateStr ? formatFullDate(new Date(dateStr)) : null;
-  const timeDisplay = item.hasTime && dateStr ? formatTime(dateStr, timeFormat as TimeFormat) : null;
+
+  // (A1) Date display with dateType prefix
+  const dateType = isTask ? taskItem?.dateType : undefined;
+  const datePrefix = dateType === 'DUE' ? `${t('itemView.due')} · ` : '';
+  // (A2) Multi-day event range
+  const endDate = !isTask ? eventItem?.endDate : undefined;
+  const dateDisplay = (() => {
+    if (!dateStr) return null;
+    const startStr = formatFullDate(new Date(dateStr));
+    if (endDate && endDate.slice(0, 10) !== dateStr.slice(0, 10)) {
+      const endStr = formatFullDate(new Date(endDate));
+      return `${datePrefix}${startStr} — ${endStr}`;
+    }
+    return `${datePrefix}${startStr}`;
+  })();
+
+  // (A3) Time display with end time from duration
+  const timeDisplay = (() => {
+    if (!item.hasTime || !dateStr) return null;
+    const startTime = formatTime(dateStr, timeFormat as TimeFormat);
+    if (item.duration) {
+      const endMs = new Date(dateStr).getTime() + item.duration * 60000;
+      const endTime = formatTime(new Date(endMs).toISOString(), timeFormat as TimeFormat);
+      return `${startTime} — ${endTime}`;
+    }
+    return startTime;
+  })();
+
   const timeOfDayValue = isTask && !item.hasTime && taskItem?.timeOfDay ? taskItem.timeOfDay : null;
   const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
     MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
@@ -143,10 +197,22 @@ export function ItemViewPage() {
       })()
     : null;
 
-  const durationDisplay = item.duration ? `${item.duration} min` : null;
-  const reminderDisplay = formatReminder(item.firstReminderMinutes);
-  const repeatDisplay = item.repeat ? 'Yes' : null;
+  // (A9) Duration display — human-friendly translated format
+  const durationDisplay = formatDuration(item.duration, t);
+
+  // (A8) Hide reminders for past/completed tasks
+  const taskTimePast = isTaskTimeInPast(dateStr, item.hasTime ?? false);
+  const showReminders = !isCompleted && !taskTimePast;
+  // (A10) Both first and second reminders
+  const reminderDisplay = showReminders ? formatReminder(item.firstReminderMinutes) : null;
+  const secondReminderDisplay = showReminders ? formatReminder(item.secondReminderMinutes) : null;
+
+  // (A7) Repeat display — translated
+  const repeatDisplay = formatRepeatDisplay(item.repeat, t);
+
+  // (A11) Location
   const locationDisplay = item.location || null;
+
   const priority = isTask ? taskItem?.priority : eventItem?.priority;
   const categoryId = isTask ? taskItem?.categoryId : undefined;
   const rawCategoryName = categoryId ? getCategoryName(categoryId, categories) : undefined;
@@ -156,16 +222,34 @@ export function ItemViewPage() {
   const planName = isTask ? taskItem?.plan?.name : undefined;
   const createdAt = item.createdAt;
 
-  const isHighPriority = priority === 'high' || priority === 'HIGH' || priority === 'urgent' || priority === 'URGENT';
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || repeatDisplay || priority || createdAt;
-
   // Permissions (matching dooooApp's canUserEditTask / canUserDeleteTask)
   const itemUserId = isTask ? taskItem?.userId : (eventItem as ApiEvent & { userId?: string })?.userId;
   const groupId = isTask ? taskItem?.groupId : undefined;
   const isItemOwner = itemUserId === user?.id;
   const isGroupItem = !!groupId;
-  const canEdit = !isTask || (!isCompleted && (!isGroupItem || isItemOwner));
-  const canDelete = !isTask || !isGroupItem || isItemOwner;
+
+  // (A4) Completion timestamp
+  const completedAt = isTask ? taskItem?.completedAt : undefined;
+  const isForAllMembers = isTask ? taskItem?.isForAllMembers : undefined;
+  const completionDisplay = isCompleted ? formatCompletionTime(completedAt, isForAllMembers, t) : null;
+
+  // (A5) Activity ended — check parentTaskIsCompleted
+  const parentTaskIsCompleted = isTask ? (taskItem as Task & { parentTaskIsCompleted?: boolean })?.parentTaskIsCompleted : undefined;
+  const activityEnded = isGroupItem && isForAllMembers && parentTaskIsCompleted && !isCompleted;
+
+  // (A6) Organizer display
+  const creatorName = isTask ? (taskItem as Task & { user?: { name?: string } })?.user?.name : undefined;
+  const organizerDisplay = isForAllMembers && creatorName ? creatorName : null;
+
+  // (A12) Guests
+  const guestsDisplay = !isTask && eventItem?.guests && eventItem.guests.length > 0 ? eventItem.guests : null;
+  // (A13) Meeting link
+  const meetingLinkDisplay = !isTask && eventItem?.meetingLink ? eventItem.meetingLink : null;
+
+  const isHighPriority = priority === 'high' || priority === 'HIGH' || priority === 'urgent' || priority === 'URGENT';
+  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || repeatDisplay || priority || completionDisplay || activityEnded || organizerDisplay || createdAt;
+
+
 
   return (
     <div className="animate-page-enter">
@@ -238,25 +322,10 @@ export function ItemViewPage() {
           </div>
         </div>
 
-        {/* Right: Edit + Delete (permission-gated) */}
+        {/* Right: Actions menu */}
         <div className="flex shrink-0 items-center gap-2">
-          {canEdit && (
-            <button
-              onClick={handleEdit}
-              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-(--el-view-title) hover:bg-(--el-popover-item-hover)"
-            >
-              <Icon name="edit" size={16} />
-              {t('itemView.edit')}
-            </button>
-          )}
-          {canDelete && (
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-1.5 rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-[13px] font-medium text-(--el-view-delete-text) hover:bg-(--el-popover-item-hover)"
-            >
-              <Icon name="delete" size={16} color="var(--el-view-delete-text)" />
-              {t('itemView.delete')}
-            </button>
+          {menuItems.length > 0 && (
+            <ItemActionsMenu items={menuItems} />
           )}
         </div>
       </div>
@@ -269,20 +338,24 @@ export function ItemViewPage() {
         {/* Left: article */}
         <div className="flex min-w-0 flex-1 flex-col gap-6">
           {description && (
-            isHtml(description) ? (
-              <div
-                className="rich-text text-[15px] text-(--el-view-title)"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }}
-              />
-            ) : (
-              <p className="text-[15px] leading-relaxed text-(--el-view-title)" style={{ lineHeight: '1.7' }}>
-                {description}
-              </p>
-            )
+            <CollapsibleDescription content={description} />
           )}
           {!description && (
             <p className="text-sm text-(--el-view-detail-label) italic">No description</p>
           )}
+
+          {/* Notes */}
+          <NotesSection
+            notes={notesHook.notes}
+            total={notesHook.total}
+            loading={notesHook.loading}
+            currentUserId={user?.id}
+            onAddNote={notesHook.addNote}
+            onUpdateNote={notesHook.updateNote}
+            onDeleteNote={notesHook.deleteNote}
+            isAdding={notesHook.isAdding}
+            isGroupTask={isGroupItem}
+          />
         </div>
 
         {/* Right: info sidebar */}
@@ -321,6 +394,82 @@ export function ItemViewPage() {
                   <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
                 </>
               )}
+              {/* (A10) Second reminder */}
+              {secondReminderDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
+                </>
+              )}
+              {/* (A4) Completion timestamp */}
+              {completionDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow icon="check_circle" label={t('itemView.completedAt')} value={completionDisplay} />
+                </>
+              )}
+              {/* (A5) Activity ended indicator */}
+              {activityEnded && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="event_busy" size={16} color="var(--el-dialog-confirm-bg)" />
+                    <span className="text-xs font-medium" style={{ color: 'var(--el-dialog-confirm-bg)' }}>
+                      {t('itemView.activityEnded')}
+                    </span>
+                  </div>
+                </>
+              )}
+              {/* (A11) Location — clickable */}
+              {locationDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="location_on" size={16} color="var(--el-view-detail-label)" />
+                    <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{t('itemView.location')}</span>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationDisplay)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="truncate text-xs font-medium text-(--el-view-title) hover:underline"
+                    >
+                      {locationDisplay}
+                    </a>
+                  </div>
+                </>
+              )}
+              {/* (A12) Guests */}
+              {guestsDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <div className="flex items-start gap-3 px-4 py-3">
+                    <Icon name="group" size={16} color="var(--el-view-detail-label)" className="mt-0.5" />
+                    <div className="flex-1">
+                      <span className="text-xs text-(--el-view-detail-label)">{t('itemView.guests')}</span>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {guestsDisplay.map((g) => (
+                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-(--el-panel-guest-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-panel-guest-text)">
+                            {g.email}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+              {/* (A13) Meeting link */}
+              {meetingLinkDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <Icon name="videocam" size={16} color="var(--el-view-detail-label)" />
+                    <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{t('itemView.meetingLink')}</span>
+                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-xs font-medium text-(--el-view-title) hover:underline">
+                      {meetingLinkDisplay}
+                    </a>
+                  </div>
+                </>
+              )}
               {tzDisplay && (
                 <>
                   <div className="mx-4 border-t border-(--el-view-edit-border)" />
@@ -337,6 +486,13 @@ export function ItemViewPage() {
                 <>
                   <div className="mx-4 border-t border-(--el-view-edit-border)" />
                   <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
+                </>
+              )}
+              {/* (A6) Organizer display */}
+              {organizerDisplay && (
+                <>
+                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
+                  <DetailRow icon="person" label={t('itemView.organizer')} value={organizerDisplay} />
                 </>
               )}
               {createdAt && (
@@ -367,6 +523,49 @@ export function ItemViewPage() {
               <p className="text-sm font-medium text-(--el-view-title)">{planName}</p>
             </div>
           )}
+
+          {/* (B7) Assignee display for group tasks */}
+          {isGroupItem && !isForAllMembers && taskItem?.assignee?.name && (
+            <AssigneeDisplay
+              assigneeName={taskItem.assignee.name}
+              assigneeId={taskItem.assigneeId}
+              currentUserId={user?.id}
+            />
+          )}
+
+          {/* (B1) Participation banner for group activities — uses local status */}
+          {isGroupItem && isForAllMembers && id && !isCompleted && (
+            <ParticipationBanner
+              taskId={id}
+              status={(taskItem as any)?.participantInstanceStatus || 'NONE'}
+              isRecurring={!!taskItem?.repeat}
+              date={taskItem?.date}
+              isOrganizer={isItemOwner}
+            />
+          )}
+
+          {/* (B2) Participants list for group activities — computed locally */}
+          {isGroupItem && isForAllMembers && (() => {
+            const stats = computeParticipantStats(
+              taskItem?.participantInstances as any,
+              taskItem?.participants as any,
+            );
+            if (!stats) return null;
+            return (
+              <div className="my-2">
+                <ParticipantsList
+                  participants={stats.participants}
+                  invitedParticipants={stats.invitedParticipants}
+                  notGoingParticipants={stats.notGoingParticipants}
+                  totalParticipants={stats.totalParticipants}
+                  completedCount={stats.completedCount}
+                  currentUserId={user?.id}
+                  organizerId={taskItem?.userId ?? ''}
+                  trackCompletion={taskItem?.trackCompletion}
+                />
+              </div>
+            );
+          })()}
         </div>
       </div>
 
@@ -394,6 +593,29 @@ export function ItemViewPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Invite participants modal */}
+      {isForAllMembers && groupId && (
+        <InviteParticipantsModal
+          open={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          groupId={groupId}
+          taskId={id!}
+          taskDate={dateStr ?? undefined}
+          existingUserIds={(() => {
+            const stats = computeParticipantStats(
+              taskItem?.participantInstances as any,
+              taskItem?.participants as any,
+            );
+            if (!stats) return [];
+            return [
+              ...stats.participants.map(p => p.id),
+              ...(stats.invitedParticipants?.map(p => p.id) ?? []),
+              ...(stats.notGoingParticipants?.map(p => p.id) ?? []),
+            ];
+          })()}
+        />
       )}
     </div>
   );

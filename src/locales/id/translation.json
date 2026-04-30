@@ -1614,6 +1614,14 @@
     "priorityMedium": "Sedang",
     "priorityLow": "Rendah"
   },
+  "notes": {
+    "title": "Catatan",
+    "addNote": "Tambah catatan",
+    "placeholder": "Tulis catatan...",
+    "titleGroup": "Catatan",
+    "addNoteGroup": "Tambah catatan",
+    "placeholderGroup": "Tulis catatan..."
+  },
   "itemView": {
     "edit": "Edit",
     "delete": "Hapus",
@@ -1626,6 +1634,15 @@
     "repeat": "Ulangi",
     "createdAt": "Dibuat",
     "priority": "Prioritas",
+    "due": "Tenggat",
+    "completedAt": "Selesai",
+    "endedAt": "Berakhir",
+    "organizer": "Penyelenggara",
+    "assignee": "Ditugaskan kepada",
+    "activityEnded": "Aktivitas berakhir",
+    "endTime": "Selesai",
+    "showMore": "Tampilkan lebih",
+    "showLess": "Tampilkan kurang",
     "confirmDelete": "Hapus item ini?",
     "deleteDescription": "Tindakan ini tidak dapat dibatalkan. Item akan dihapus secara permanen.",
     "timeZone": "Zona waktu",

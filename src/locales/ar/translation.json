@@ -1614,6 +1614,14 @@
     "priorityMedium": "متوسط",
     "priorityLow": "منخفض"
   },
+  "notes": {
+    "title": "ملاحظات",
+    "addNote": "إضافة ملاحظة",
+    "placeholder": "اكتب ملاحظة...",
+    "titleGroup": "ملاحظات",
+    "addNoteGroup": "إضافة ملاحظة",
+    "placeholderGroup": "اكتب ملاحظة..."
+  },
   "itemView": {
     "edit": "تعديل",
     "delete": "حذف",
@@ -1626,6 +1634,15 @@
     "repeat": "تكرار",
     "createdAt": "تم الإنشاء",
     "priority": "الأولوية",
+    "due": "الاستحقاق",
+    "completedAt": "مكتمل",
+    "endedAt": "انتهى",
+    "organizer": "المنظم",
+    "assignee": "مسند إلى",
+    "activityEnded": "انتهى النشاط",
+    "endTime": "النهاية",
+    "showMore": "عرض المزيد",
+    "showLess": "عرض أقل",
     "confirmDelete": "حذف هذا العنصر؟",
     "deleteDescription": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف العنصر نهائيًا.",
     "timeZone": "المنطقة الزمنية",

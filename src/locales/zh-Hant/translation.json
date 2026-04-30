@@ -1615,6 +1615,14 @@
     "priorityMedium": "中",
     "priorityLow": "低"
   },
+  "notes": {
+    "title": "備註",
+    "addNote": "新增備註",
+    "placeholder": "寫下備註...",
+    "titleGroup": "留言",
+    "addNoteGroup": "新增留言",
+    "placeholderGroup": "寫下留言..."
+  },
   "itemView": {
     "edit": "編輯",
     "delete": "刪除",
@@ -1627,6 +1635,15 @@
     "repeat": "重複",
     "createdAt": "建立於",
     "priority": "優先級",
+    "due": "截止",
+    "completedAt": "已完成",
+    "endedAt": "已結束",
+    "organizer": "組織者",
+    "assignee": "分配給",
+    "activityEnded": "活動已結束",
+    "endTime": "結束",
+    "showMore": "展開更多",
+    "showLess": "收起",
     "confirmDelete": "刪除此項目？",
     "deleteDescription": "此操作無法復原。該項目將被永久刪除。",
     "timeZone": "時區",

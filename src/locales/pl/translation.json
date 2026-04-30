@@ -1614,6 +1614,14 @@
     "priorityMedium": "Średni",
     "priorityLow": "Niski"
   },
+  "notes": {
+    "title": "Notatki",
+    "addNote": "Dodaj notatkę",
+    "placeholder": "Napisz notatkę...",
+    "titleGroup": "Notatki",
+    "addNoteGroup": "Dodaj notatkę",
+    "placeholderGroup": "Napisz notatkę..."
+  },
   "itemView": {
     "edit": "Edytuj",
     "delete": "Usuń",
@@ -1626,6 +1634,15 @@
     "repeat": "Powtórz",
     "createdAt": "Utworzono",
     "priority": "Priorytet",
+    "due": "Termin",
+    "completedAt": "Ukończono",
+    "endedAt": "Zakończono",
+    "organizer": "Organizator",
+    "assignee": "Przypisano do",
+    "activityEnded": "Aktywność zakończona",
+    "endTime": "Koniec",
+    "showMore": "Pokaż więcej",
+    "showLess": "Pokaż mniej",
     "confirmDelete": "Usunąć ten element?",
     "deleteDescription": "Tej czynności nie można cofnąć. Element zostanie trwale usunięty.",
     "timeZone": "Strefa czasowa",

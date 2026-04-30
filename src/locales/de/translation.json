@@ -1614,6 +1614,14 @@
     "priorityMedium": "Mittel",
     "priorityLow": "Niedrig"
   },
+  "notes": {
+    "title": "Notizen",
+    "addNote": "Notiz hinzufügen",
+    "placeholder": "Notiz schreiben...",
+    "titleGroup": "Notizen",
+    "addNoteGroup": "Notiz hinzufügen",
+    "placeholderGroup": "Notiz schreiben..."
+  },
   "itemView": {
     "edit": "Bearbeiten",
     "delete": "Löschen",
@@ -1626,6 +1634,15 @@
     "repeat": "Wiederholen",
     "createdAt": "Erstellt",
     "priority": "Priorität",
+    "due": "Fällig",
+    "completedAt": "Erledigt",
+    "endedAt": "Beendet",
+    "organizer": "Organisator",
+    "assignee": "Zugewiesen an",
+    "activityEnded": "Aktivität beendet",
+    "endTime": "Ende",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
     "confirmDelete": "Dieses Element löschen?",
     "deleteDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Das Element wird dauerhaft gelöscht.",
     "timeZone": "Zeitzone",

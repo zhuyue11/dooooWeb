@@ -1614,6 +1614,14 @@
     "priorityMedium": "Media",
     "priorityLow": "Bassa"
   },
+  "notes": {
+    "title": "Note",
+    "addNote": "Aggiungi nota",
+    "placeholder": "Scrivi una nota...",
+    "titleGroup": "Note",
+    "addNoteGroup": "Aggiungi nota",
+    "placeholderGroup": "Scrivi una nota..."
+  },
   "itemView": {
     "edit": "Modifica",
     "delete": "Elimina",
@@ -1626,6 +1634,15 @@
     "repeat": "Ripeti",
     "createdAt": "Creato",
     "priority": "Priorità",
+    "due": "Scadenza",
+    "completedAt": "Completato",
+    "endedAt": "Terminato",
+    "organizer": "Organizzatore",
+    "assignee": "Assegnato a",
+    "activityEnded": "Attività terminata",
+    "endTime": "Fine",
+    "showMore": "Mostra di più",
+    "showLess": "Mostra meno",
     "confirmDelete": "Eliminare questo elemento?",
     "deleteDescription": "Questa azione non può essere annullata. L'elemento verrà eliminato definitivamente.",
     "timeZone": "Fuso orario",

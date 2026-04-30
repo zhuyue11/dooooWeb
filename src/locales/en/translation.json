@@ -1622,6 +1622,14 @@
     "priorityMedium": "Medium",
     "priorityLow": "Low"
   },
+  "notes": {
+    "title": "Notes",
+    "addNote": "Add Note",
+    "placeholder": "Write a note...",
+    "titleGroup": "Notes",
+    "addNoteGroup": "Add Note",
+    "placeholderGroup": "Write a note..."
+  },
   "itemView": {
     "edit": "Edit",
     "delete": "Delete",
@@ -1637,6 +1645,15 @@
     "meetingLink": "Meeting link",
     "createdAt": "Created",
     "priority": "Priority",
+    "due": "Due",
+    "completedAt": "Completed",
+    "endedAt": "Ended",
+    "organizer": "Organizer",
+    "assignee": "Assigned to",
+    "activityEnded": "Activity ended",
+    "endTime": "End",
+    "showMore": "Show more",
+    "showLess": "Show less",
     "confirmDelete": "Delete this item?",
     "deleteDescription": "This action cannot be undone. The item will be permanently deleted."
   },
