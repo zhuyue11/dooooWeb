@@ -23,6 +23,7 @@ import { useItemMenu } from '@/hooks/useItemMenu';
 import { ParticipantsList } from '@/components/groups/ParticipantsList';
 import { computeParticipantStats } from '@/utils/participantStats';
 import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
+import { EndActivityConfirmDialog } from '@/components/groups/EndActivityConfirmDialog';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 
@@ -41,6 +42,7 @@ export function ItemViewPage() {
   const { manualCompleteMutation } = useParticipationMutations(id ?? '');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showEndActivityConfirm, setShowEndActivityConfirm] = useState(false);
 
   // Fetch item + derive participant-aware display state
   const itemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
@@ -55,6 +57,10 @@ export function ItemViewPage() {
   const noteItemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
   const notesHook = useNotes(id, noteItemType);
 
+
+  const localParticipantStats = isForAllMembers
+    ? computeParticipantStats(taskItem?.participantInstances as any, taskItem?.participants as any)
+    : null;
 
   const handleBack = useCallback(() => navigate(-1), [navigate]);
   const handleEdit = useCallback(() => {
@@ -324,7 +330,13 @@ export function ItemViewPage() {
               isRecurring={!!taskItem?.repeat}
               date={taskItem?.date}
               isOrganizer={isItemOwner}
-              onEndActivity={() => manualCompleteMutation.mutateAsync({ isCompleted: true, date: taskItem?.date })}
+              onEndActivity={() => {
+                if (localParticipantStats && localParticipantStats.totalParticipants > 0) {
+                  setShowEndActivityConfirm(true);
+                } else {
+                  manualCompleteMutation.mutateAsync({ isCompleted: true, date: taskItem?.date });
+                }
+              }}
               canManuallyComplete={
                 isItemOwner &&
                 taskItem?.trackCompletion !== false &&
@@ -386,6 +398,18 @@ export function ItemViewPage() {
         </div>
       )}
 
+      {/* End Activity confirmation dialog */}
+      <EndActivityConfirmDialog
+        open={showEndActivityConfirm}
+        completionStats={localParticipantStats}
+        isLoading={manualCompleteMutation.isPending}
+        onConfirm={() => {
+          manualCompleteMutation.mutateAsync({ isCompleted: true, date: taskItem?.date })
+            .then(() => setShowEndActivityConfirm(false));
+        }}
+        onCancel={() => setShowEndActivityConfirm(false)}
+      />
+
       {/* Invite participants modal */}
       {isForAllMembers && groupId && (
         <InviteParticipantsModal
@@ -394,18 +418,11 @@ export function ItemViewPage() {
           groupId={groupId}
           taskId={id!}
           taskDate={dateStr ?? undefined}
-          existingUserIds={(() => {
-            const stats = computeParticipantStats(
-              taskItem?.participantInstances as any,
-              taskItem?.participants as any,
-            );
-            if (!stats) return [];
-            return [
-              ...stats.participants.map(p => p.id),
-              ...(stats.invitedParticipants?.map(p => p.id) ?? []),
-              ...(stats.notGoingParticipants?.map(p => p.id) ?? []),
-            ];
-          })()}
+          existingUserIds={localParticipantStats ? [
+            ...localParticipantStats.participants.map(p => p.id),
+            ...(localParticipantStats.invitedParticipants?.map(p => p.id) ?? []),
+            ...(localParticipantStats.notGoingParticipants?.map(p => p.id) ?? []),
+          ] : []}
         />
       )}
     </div>

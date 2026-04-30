@@ -19,6 +19,7 @@ import { AssigneeDisplay } from '@/components/groups/AssigneeDisplay';
 import { ParticipantsList } from '@/components/groups/ParticipantsList';
 import { computeParticipantStats } from '@/utils/participantStats';
 import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
+import { EndActivityConfirmDialog } from '@/components/groups/EndActivityConfirmDialog';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 import { useItemData } from '@/hooks/useItemData';
@@ -106,6 +107,7 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   } = useItemData(parentId, itemType, currentUserId);
 
   const { manualCompleteMutation } = useParticipationMutations(parentId);
+  const [showEndActivityConfirm, setShowEndActivityConfirm] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [scopeModalMode, setScopeModalMode] = useState<'edit' | 'delete' | null>(null);
@@ -415,7 +417,13 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
               isRecurring={recurring}
               date={occurrenceDateKey}
               isOrganizer={task?.userId === currentUserId}
-              onEndActivity={() => manualCompleteMutation.mutateAsync({ isCompleted: true, date: occurrenceDateKey })}
+              onEndActivity={() => {
+                if (localParticipantStats && localParticipantStats.totalParticipants > 0) {
+                  setShowEndActivityConfirm(true);
+                } else {
+                  manualCompleteMutation.mutateAsync({ isCompleted: true, date: occurrenceDateKey });
+                }
+              }}
               canManuallyComplete={
                 task?.userId === currentUserId &&
                 trackCompletion !== false &&
@@ -550,6 +558,18 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
             ]}
           />
         )}
+
+        {/* End Activity confirmation dialog */}
+        <EndActivityConfirmDialog
+          open={showEndActivityConfirm}
+          completionStats={localParticipantStats}
+          isLoading={manualCompleteMutation.isPending}
+          onConfirm={() => {
+            manualCompleteMutation.mutateAsync({ isCompleted: true, date: occurrenceDateKey })
+              .then(() => setShowEndActivityConfirm(false));
+          }}
+          onCancel={() => setShowEndActivityConfirm(false)}
+        />
       </div>
     </div>,
     document.body,
