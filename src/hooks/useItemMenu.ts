@@ -132,13 +132,15 @@ export function useItemMenu(
   }, [isEvent, input.groupId, input.userId, currentUserId]);
 
   // canManuallyComplete — organizer can end activity after it has ended
+  // canManuallyComplete — only organizer/owner/admin can end an activity.
+  // parentTaskIsCompleted is the task's own isCompleted (whether organizer already ended it).
   const canManuallyComplete = useMemo(() => {
     if (!isGroupActivity) return false;
     if (input.trackCompletion === false) return false;
-    if (input.isCompleted) return false;
+    if (input.parentTaskIsCompleted) return false;
     if (!hasActivityEnded(input.date, input.hasTime, input.duration ?? undefined)) return false;
     return input.userId === currentUserId;
-  }, [isGroupActivity, input.trackCompletion, input.isCompleted, input.date, input.hasTime, input.duration, input.userId, currentUserId]);
+  }, [isGroupActivity, input.trackCompletion, input.parentTaskIsCompleted, input.date, input.hasTime, input.duration, input.userId, currentUserId]);
 
   // ── Participation state (matching dooooApp lines 390-408) ──
 

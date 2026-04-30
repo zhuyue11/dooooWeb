@@ -15,6 +15,7 @@ export function useParticipationMutations(taskId: string) {
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: ['completion-stats', taskId] });
     queryClient.invalidateQueries({ queryKey: ['participation-status', taskId] });
+    queryClient.invalidateQueries({ queryKey: ['task', taskId] });
     // Calendar and todo queries
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });

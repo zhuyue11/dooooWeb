@@ -194,6 +194,28 @@ export function isTaskTimeInPast(date: string | null | undefined, hasTime: boole
     (taskDate.getFullYear() === now.getFullYear() && taskDate.getMonth() === now.getMonth() && taskDate.getDate() < now.getDate());
 }
 
+/**
+ * Check if a group activity has ended (for manual completion by organizer/admin).
+ * Stricter than isTaskTimeInPast — accounts for duration.
+ * - Timed activity: now >= startTime + duration
+ * - All-day activity: now >= next day midnight
+ */
+export function hasActivityEnded(date: string | null | undefined, hasTime: boolean, duration: number | undefined): boolean {
+  if (!date) return false;
+  const now = new Date();
+  const taskDate = new Date(date);
+  if (hasTime) {
+    const durationMs = (duration || 0) * 60 * 1000;
+    const endTime = new Date(taskDate.getTime() + durationMs);
+    return now >= endTime;
+  }
+  // All-day: can complete starting the next day (midnight)
+  const nextDay = new Date(taskDate);
+  nextDay.setDate(nextDay.getDate() + 1);
+  nextDay.setHours(0, 0, 0, 0);
+  return now >= nextDay;
+}
+
 // ── Range label ──────────────────────────────────────────────────────
 
 /** "March 30 — April 5, 2026" style date range label. */

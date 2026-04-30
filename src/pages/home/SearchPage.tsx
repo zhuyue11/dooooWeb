@@ -49,7 +49,8 @@ export function SearchPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [searchResults, setSearchResults] = useState<CalendarItem[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -330,8 +331,16 @@ export function SearchPage() {
     setTimeout(rerunSearch, 300);
   }, [queryClient, showPlanReview, rerunSearch]);
 
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
-  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItemId(null), []);
+  const handleSidePanelToggle = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
+    setTimeout(rerunSearch, 300);
+  }, [queryClient, rerunSearch]);
 
   // Count active filters (for badge)
   const activeFilterCount = activeFilterChips.length;
@@ -459,12 +468,13 @@ export function SearchPage() {
       </div>
 
       {/* Item side panel */}
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
-          onToggle={handleToggle}
+          onToggle={handleSidePanelToggle}
         />
       )}
     </div>

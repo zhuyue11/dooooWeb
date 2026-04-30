@@ -25,7 +25,8 @@ export function GroupCalendarPage() {
   const queryClient = useQueryClient();
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
 
   // Fetch group name for enriching calendar items
   const { data: groupData } = useQuery({
@@ -57,8 +58,16 @@ export function GroupCalendarPage() {
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => setShowCreateModal(false), []);
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
-  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItemId(null), []);
+  const handleSidePanelToggle = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['group-calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['group-calendar-recurring-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['group-todo', groupId] });
+  }, [queryClient, groupId]);
 
   const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async (item: CalendarItem) => {
@@ -151,12 +160,13 @@ export function GroupCalendarPage() {
       )}
 
       {/* Item side panel */}
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
-          onToggle={handleToggle}
+          onToggle={handleSidePanelToggle}
           groupId={groupId}
         />
       )}

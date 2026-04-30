@@ -24,20 +24,23 @@ export function CalendarPage() {
   const { groupNameMap } = useGroups();
   const [viewMode, setViewMode] = useState<CalendarViewMode>('week');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
 
   const queryClient = useQueryClient();
   const { showPlanReview } = usePlanReview();
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => setShowCreateModal(false), []);
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
-  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItemId(null), []);
+
+  // Toggle from ItemPanel (receives CalendarItem)
   const handleToggle = useCallback(async (item: CalendarItem) => {
     if (item.itemType === 'EVENT') return;
-    // For recurring instances, item.id is a virtual id (`${taskId}_${YYYY-MM-DD}`).
-    // toggleTask must hit the parent task id; per-occurrence completion is a
-    // separate flow not handled here.
     const { planExecutionCompleted } = await toggleTask(getParentId(item));
     queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
@@ -47,6 +50,16 @@ export function CalendarPage() {
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [queryClient, showPlanReview]);
+
+  // Toggle from side panel (no args — side panel handles toggleTask internally)
+  const handleSidePanelToggle = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
+    queryClient.invalidateQueries({ queryKey: ['calendar-attending-events'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-todo'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+  }, [queryClient]);
 
   const {
     currentDate,
@@ -146,12 +159,13 @@ export function CalendarPage() {
       )}
 
       {/* Item side panel */}
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
-          onToggle={handleToggle}
+          onToggle={handleSidePanelToggle}
         />
       )}
     </div>

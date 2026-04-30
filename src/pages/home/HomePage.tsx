@@ -341,9 +341,14 @@ export function HomePage() {
   }, [invalidateDashboard]);
 
   // Side panel state
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
-  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItemId(null), []);
+  const handleSidePanelToggle = useCallback(() => invalidateDashboard(), [invalidateDashboard]);
   const { data: categories } = useCategories();
 
   // ── Render ──
@@ -475,12 +480,13 @@ export function HomePage() {
         />
       )}
 
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
-          onToggle={handleToggle}
+          onToggle={handleSidePanelToggle}
         />
       )}
     </div>

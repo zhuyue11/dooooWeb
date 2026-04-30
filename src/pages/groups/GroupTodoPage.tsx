@@ -22,7 +22,8 @@ export function GroupTodoPage() {
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState('');
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
 
   const { todoTasks, isLoading } = useTodoListTasks(groupId);
 
@@ -52,7 +53,13 @@ export function GroupTodoPage() {
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [queryClient, groupId, showPlanReview]);
 
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelToggle = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['todo-tasks', groupId] });
+  }, [queryClient, groupId]);
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -117,12 +124,13 @@ export function GroupTodoPage() {
       </div>
 
       {/* Item side panel */}
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
-          onClose={() => setSidePanelItem(null)}
-          onToggle={handleToggle}
+          onClose={() => setSidePanelItemId(null)}
+          onToggle={handleSidePanelToggle}
           groupId={groupId}
         />
       )}

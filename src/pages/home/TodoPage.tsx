@@ -37,7 +37,8 @@ export function TodoPage() {
   const [filterPriority, setFilterPriority] = useState<string>('');
   const [showFilter, setShowFilter] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [sidePanelItem, setSidePanelItem] = useState<CalendarItem | null>(null);
+  const [sidePanelItemId, setSidePanelItemId] = useState<string | null>(null);
+  const [sidePanelItemType, setSidePanelItemType] = useState<'TASK' | 'EVENT'>('TASK');
   const filterRef = useRef<HTMLDivElement>(null);
 
   // Close filter dropdown on outside click
@@ -101,8 +102,17 @@ export function TodoPage() {
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [queryClient, showPlanReview]);
 
-  const handleItemClick = useCallback((item: CalendarItem) => setSidePanelItem(item), []);
-  const handleSidePanelClose = useCallback(() => setSidePanelItem(null), []);
+  const handleItemClick = useCallback((item: CalendarItem) => {
+    setSidePanelItemId(item.id);
+    setSidePanelItemType(item.itemType as 'TASK' | 'EVENT');
+  }, []);
+  const handleSidePanelClose = useCallback(() => setSidePanelItemId(null), []);
+  const handleSidePanelToggle = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['todo-assigned-group-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-tasks'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-assigned-group-tasks'] });
+  }, [queryClient]);
   const handleAddClick = useCallback(() => setShowCreateModal(true), []);
   const handleModalClose = useCallback(() => setShowCreateModal(false), []);
   const handleSaved = useCallback(() => {
@@ -266,12 +276,13 @@ export function TodoPage() {
       )}
 
       {/* Item side panel */}
-      {sidePanelItem && (
+      {sidePanelItemId && (
         <ItemSidePanel
-          item={sidePanelItem}
+          itemId={sidePanelItemId}
+          itemType={sidePanelItemType}
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
-          onToggle={handleToggle}
+          onToggle={handleSidePanelToggle}
         />
       )}
     </div>

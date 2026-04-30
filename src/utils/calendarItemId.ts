@@ -55,3 +55,38 @@ export function getOccurrenceDateKey(item: CalendarItem): string {
 export function isRecurringInstance(item: CalendarItem): boolean {
   return !!item.repeat;
 }
+
+// ── String-based helpers (no CalendarItem required) ─────────────────
+
+/**
+ * Extract the parent task/event backend ID from a CalendarItem id string.
+ * Works without a CalendarItem object — uses only the id string and item type.
+ */
+export function getParentIdFromString(itemId: string, itemType: 'TASK' | 'EVENT'): string {
+  if (itemType === 'EVENT') {
+    return itemId.replace(/^event-(instance-)?/, '').split('_virtual_')[0];
+  }
+  const idx = itemId.lastIndexOf('_');
+  if (idx > 0) {
+    const tail = itemId.slice(idx + 1);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(tail)) return itemId.slice(0, idx);
+  }
+  return itemId;
+}
+
+/**
+ * Extract the occurrence date (YYYY-MM-DD) encoded in a CalendarItem id string.
+ * Returns null if the id has no date suffix (non-recurring or parent item).
+ */
+export function getOccurrenceDateFromId(itemId: string, itemType: 'TASK' | 'EVENT'): string | null {
+  if (itemType === 'EVENT') {
+    const match = itemId.match(/_virtual_(\d{4}-\d{2}-\d{2})$/);
+    return match ? match[1] : null;
+  }
+  const idx = itemId.lastIndexOf('_');
+  if (idx > 0) {
+    const tail = itemId.slice(idx + 1);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(tail)) return tail;
+  }
+  return null;
+}

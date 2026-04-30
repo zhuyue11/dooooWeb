@@ -7,7 +7,7 @@ import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { Icon } from '@/components/ui/Icon';
-import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast } from '@/utils/date';
+import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast, hasActivityEnded } from '@/utils/date';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import type { TimeFormat } from '@/utils/date';
 import type { Task, Event as ApiEvent } from '@/types/api';
@@ -548,7 +548,7 @@ export function ItemViewPage() {
                 isItemOwner &&
                 taskItem?.trackCompletion !== false &&
                 !parentTaskIsCompleted &&
-                isTaskTimeInPast(dateStr, item.hasTime ?? false)
+                hasActivityEnded(dateStr, item.hasTime ?? false, taskItem?.duration)
               }
               endActivityLoading={manualCompleteMutation.isPending}
             />
