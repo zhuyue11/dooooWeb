@@ -726,21 +726,21 @@ export async function deletePlanExecutionData(planId: string, executionId: strin
 // ===== Notifications =====
 
 export async function getNotifications(): Promise<Notification[]> {
-  const res = await apiClient.get<{ success: boolean; data: Notification[] }>('/api/notifications');
+  const res = await apiClient.get<{ success: boolean; data: Notification[] }>('/api/notifications/user');
   return res.data.data;
 }
 
 export async function getUnreadCount(): Promise<number> {
-  const res = await apiClient.get<{ success: boolean; data: { count: number } }>('/api/notifications/unread-count');
-  return res.data.data.count;
+  const res = await apiClient.get<{ success: boolean; data: { unreadCount: number } }>('/api/notifications/user/unread-count');
+  return res.data.data.unreadCount;
 }
 
 export async function markNotificationAsRead(id: string): Promise<void> {
-  await apiClient.patch(`/api/notifications/${id}/read`);
+  await apiClient.put(`/api/notifications/${id}/read`);
 }
 
 export async function markAllNotificationsAsRead(): Promise<void> {
-  await apiClient.patch('/api/notifications/read-all');
+  await apiClient.put('/api/notifications/mark-all-read');
 }
 
 export async function deleteNotification(id: string): Promise<void> {
