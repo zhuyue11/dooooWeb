@@ -19,6 +19,7 @@ import { ParticipantsList } from '@/components/groups/ParticipantsList';
 import { computeParticipantStats } from '@/utils/participantStats';
 import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
+import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
@@ -100,6 +101,7 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
     updateEventMutation,
   } = useItemMutations();
   const { user } = useAuth();
+  const { manualCompleteMutation } = useParticipationMutations(getParentId(item));
   const [isClosing, setIsClosing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [scopeModalMode, setScopeModalMode] = useState<'edit' | 'delete' | null>(null);
@@ -576,6 +578,14 @@ export function ItemSidePanel({ item, currentUserId, onClose, onToggle, groupId 
               isRecurring={recurring}
               date={occurrenceDateKey}
               isOrganizer={item.userId === currentUserId}
+              onEndActivity={() => manualCompleteMutation.mutateAsync({ isCompleted: true, date: occurrenceDateKey })}
+              canManuallyComplete={
+                item.userId === currentUserId &&
+                item.trackCompletion !== false &&
+                !item.parentTaskIsCompleted &&
+                taskTimePast
+              }
+              endActivityLoading={manualCompleteMutation.isPending}
             />
           )}
 

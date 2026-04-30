@@ -23,9 +23,12 @@ interface ParticipationBannerProps {
   isRecurring?: boolean;
   date?: string;
   isOrganizer?: boolean;
+  onEndActivity?: () => void;
+  canManuallyComplete?: boolean;
+  endActivityLoading?: boolean;
 }
 
-export function ParticipationBanner({ taskId, status, isRecurring, date, isOrganizer }: ParticipationBannerProps) {
+export function ParticipationBanner({ taskId, status, isRecurring, date, isOrganizer, onEndActivity, canManuallyComplete, endActivityLoading }: ParticipationBannerProps) {
   const { t } = useTranslation();
   const { participateMutation, declineMutation, notGoingMutation } = useParticipationMutations(taskId);
   const isPending = participateMutation.isPending || declineMutation.isPending || notGoingMutation.isPending;
@@ -36,6 +39,23 @@ export function ParticipationBanner({ taskId, status, isRecurring, date, isOrgan
   const btnOutline = 'rounded-full border border-(--el-btn-outline-border) px-4 py-2 text-[13px] font-semibold text-(--el-btn-outline-text) hover:bg-(--el-btn-outline-hover) disabled:opacity-50';
   const btnDanger = 'rounded-full border border-(--el-group-cancel-border) px-4 py-2 text-[13px] font-semibold text-(--el-group-cancel-text) hover:bg-(--el-group-cancel-hover) disabled:opacity-50';
   const btnMuted = 'rounded-full border border-(--el-card-border) px-4 py-2 text-[13px] font-medium text-(--el-group-description) hover:bg-(--el-popover-item-hover) disabled:opacity-50';
+
+  // Organizer: show "End Activity" when activity can be manually completed
+  if (isOrganizer && canManuallyComplete && onEndActivity) {
+    return (
+      <div className="px-4 py-3" data-testid="participation-banner">
+        <button
+          type="button"
+          disabled={endActivityLoading}
+          onClick={onEndActivity}
+          className={btnDanger}
+        >
+          <Icon name="stop_circle" size={16} color="var(--el-group-cancel-text)" className="mr-1.5 inline" />
+          {t('tasks.panel.endActivity')}
+        </button>
+      </div>
+    );
+  }
 
   // CONFIRMED / COMPLETED / organizer / no status — no banner
   if (!status || status === 'CONFIRMED' || status === 'COMPLETED' || isOrganizer) {
@@ -131,7 +151,7 @@ export function ParticipationBanner({ taskId, status, isRecurring, date, isOrgan
             {t('groups.participate.button')}
           </button>
         )}
-        {status === 'NONE' && (
+        {status === 'NONE' && !isOrganizer && (
           <button type="button" disabled={isPending} onClick={() => notGoingMutation.mutateAsync({ date: date! })} className={btnMuted}>
             {t('groups.participate.notGoing')}
           </button>

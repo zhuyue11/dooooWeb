@@ -66,10 +66,10 @@ function isTaskStarted(date: string | null | undefined, hasTime: boolean): boole
   const now = new Date();
   const taskDate = new Date(date);
   if (hasTime) return now >= taskDate;
-  // All-day: started if today >= task date
+  // All-day: "started" only after the day has passed (strictly greater, not equal)
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const taskDayStart = new Date(taskDate.getFullYear(), taskDate.getMonth(), taskDate.getDate());
-  return todayStart >= taskDayStart;
+  return todayStart > taskDayStart;
 }
 
 function canCompleteActivity(date: string | null | undefined, hasTime: boolean, dateType?: string): boolean {

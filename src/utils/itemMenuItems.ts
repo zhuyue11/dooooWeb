@@ -131,7 +131,7 @@ export function buildItemMenuItems(
       } else {
         items.push({ key: 'participate', icon: 'person_add', label: t('groups.participate.button'), onSelect: () => callbacks.onParticipate!('single') });
       }
-      if (status === 'NONE' && callbacks.onNotGoing) {
+      if (status === 'NONE' && callbacks.onNotGoing && !ctx.isOrganizer) {
         items.push({ key: 'notGoing', icon: 'event_busy', label: t('groups.participate.notGoing'), onSelect: callbacks.onNotGoing });
       }
     }

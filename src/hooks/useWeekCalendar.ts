@@ -359,9 +359,16 @@ export function useWeekCalendar(currentUserId?: string, groupNameMap?: Record<st
       if (enriched.groupId && groupNameMap) {
         enriched.groupName = groupNameMap[enriched.groupId];
       }
-      if (task?.participantInstances && currentUserId) {
-        const pi = task.participantInstances.find((p) => p.participantUserId === currentUserId);
-        enriched.participantInstanceStatus = pi?.status;
+      if (task?.isForAllMembers && currentUserId) {
+        // Check participantInstances first (instance-level record is source of truth)
+        const pi = task.participantInstances?.find((p) => p.participantUserId === currentUserId);
+        if (pi) {
+          enriched.participantInstanceStatus = pi.status;
+        } else {
+          // Fall back to participants (recurring "Join All")
+          const p = task.participants?.find((p) => p.userId === currentUserId);
+          enriched.participantInstanceStatus = p?.status;
+        }
       }
       if (task?.user?.name) {
         enriched.creatorName = task.user.name;

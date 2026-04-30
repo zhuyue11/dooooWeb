@@ -26,6 +26,7 @@ import { ParticipantsList } from '@/components/groups/ParticipantsList';
 import { computeParticipantStats } from '@/utils/participantStats';
 import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
+import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 
 // ── Detail row ──
 
@@ -52,6 +53,7 @@ export function ItemViewPage() {
   const { data: categories } = useCategories();
   const { timeFormat } = useDisplay();
   const { deleteTaskMutation, deleteEventMutation } = useItemMutations();
+  const { manualCompleteMutation } = useParticipationMutations(id ?? '');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
@@ -541,6 +543,14 @@ export function ItemViewPage() {
               isRecurring={!!taskItem?.repeat}
               date={taskItem?.date}
               isOrganizer={isItemOwner}
+              onEndActivity={() => manualCompleteMutation.mutateAsync({ isCompleted: true, date: taskItem?.date })}
+              canManuallyComplete={
+                isItemOwner &&
+                taskItem?.trackCompletion !== false &&
+                !parentTaskIsCompleted &&
+                isTaskTimeInPast(dateStr, item.hasTime ?? false)
+              }
+              endActivityLoading={manualCompleteMutation.isPending}
             />
           )}
 

@@ -13,6 +13,7 @@ import { taskToCalendarItem } from '@/hooks/calendarHelpers';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Task } from '@/types/api';
 import { useTranslation } from 'react-i18next';
+import { translateCategoryName } from '@/utils/category';
 
 /** Convert Task to CalendarItem, handling null dates for to-do tasks */
 function todoTaskToCalendarItem(task: Task): CalendarItem {
@@ -68,7 +69,10 @@ export function TodoPage() {
 
     if (search) {
       const q = search.toLowerCase();
-      items = items.filter((item) => item.title.toLowerCase().includes(q));
+      items = items.filter((item) =>
+        item.title.toLowerCase().includes(q) ||
+        (item.description && item.description.toLowerCase().includes(q))
+      );
     }
 
     if (filterCategory) {
@@ -178,7 +182,7 @@ export function TodoPage() {
                   >
                     <option value="">{t('todoPage.filterAll')}</option>
                     {categoryOptions.map((c) => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
+                      <option key={c.id} value={c.id}>{translateCategoryName(c.name, t)}</option>
                     ))}
                   </select>
                 </div>
