@@ -79,7 +79,7 @@
   --el-popover-item-text: #0d0d0d; --el-popover-item-hover: rgba(245,245,245,0.5);
   --el-popover-item-selected-bg: #f5f5f5; --el-popover-check: #0fa76e;
   --el-popover-apply-bg: #0d0d0d; --el-popover-apply-text: #ffffff;
-  --el-switch-active: #18e299; --el-switch-inactive: #f5f5f5; --el-switch-thumb: #ffffff;
+  --el-switch-active: #18e299; --el-switch-inactive: #e5e5e5; --el-switch-thumb: #ffffff;
   --el-target-bg: #ffffff; --el-target-title: #0d0d0d; --el-target-description: #666666; --el-target-chevron: #0fa76e;
   --el-target-status-active-bg: rgba(24,226,153,0.08); --el-target-status-active-text: #0fa76e;
   --el-target-status-complete-bg: rgba(24,226,153,0.1); --el-target-status-complete-text: #0fa76e;

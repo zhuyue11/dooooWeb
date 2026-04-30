@@ -220,7 +220,7 @@
 
   /* ── Switch ── */
   --el-switch-active: var(--color-primary);
-  --el-switch-inactive: #f3f4f6;
+  --el-switch-inactive: #d1d5db;
   --el-switch-thumb: #ffffff;
 
   /* ── Targets & Plans ── */
