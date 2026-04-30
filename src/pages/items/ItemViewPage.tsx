@@ -1,21 +1,20 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getTask, getEvent, toggleTask } from '@/lib/api';
+import { toggleTask } from '@/lib/api';
 import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useItemMutations } from '@/hooks/useItemMutations';
+import { useItemData } from '@/hooks/useItemData';
 import { useCategories } from '@/hooks/useCategories';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { Icon } from '@/components/ui/Icon';
 import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast, hasActivityEnded } from '@/utils/date';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import type { TimeFormat } from '@/utils/date';
-import type { Task, Event as ApiEvent } from '@/types/api';
+import type { Event as ApiEvent } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
-import { useState } from 'react';
 import { CollapsibleDescription } from '@/components/calendar/CollapsibleDescription';
 import { AssigneeDisplay } from '@/components/groups/AssigneeDisplay';
 import { NotesSection } from '@/components/calendar/NotesSection';
@@ -57,13 +56,14 @@ export function ItemViewPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
-  // Fetch item — cast to shared type to avoid union issues
-  const { data: item, isLoading, isError } = useQuery<Task | ApiEvent>({
-    queryKey: [type === 'event' ? 'event' : 'task', id],
-    queryFn: () => type === 'event' ? getEvent(id!) as Promise<Task | ApiEvent> : getTask(id!),
-    enabled: !!id,
-    retry: false,
-  });
+  // Fetch item + derive participant-aware display state
+  const itemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
+  const {
+    rawItem: item, task: taskItem, event: eventItem, isLoading, isError,
+    isForAllMembers, trackCompletion, participantInstanceStatus,
+    parentTaskIsCompleted, isChecked: isCompleted, creatorName, assigneeName, assigneeId: taskAssigneeId,
+    shouldShowToggle,
+  } = useItemData(id ?? '', itemType, user?.id);
 
   // Notes hook
   const noteItemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
@@ -98,31 +98,29 @@ export function ItemViewPage() {
   }, [id, type, queryClient, showPlanReview]);
 
   // Build 3-dots menu items — must be called before early returns (hooks rules)
-  const taskItemForMenu = type === 'task' && item ? (item as Task) : null;
-  const eventItemForMenu = type !== 'task' && item ? (item as ApiEvent) : null;
   const menuItems = useItemMenu({
-    itemType: type === 'task' ? 'TASK' : 'EVENT',
-    userId: type === 'task' ? taskItemForMenu?.userId : (eventItemForMenu as any)?.userId,
-    isCompleted: type === 'task' ? (taskItemForMenu?.isCompleted ?? false) : false,
-    groupId: taskItemForMenu?.groupId,
-    isForAllMembers: taskItemForMenu?.isForAllMembers,
-    trackCompletion: taskItemForMenu?.trackCompletion,
-    isRecurring: !!taskItemForMenu?.repeat,
-    parentTaskIsCompleted: (taskItemForMenu as any)?.parentTaskIsCompleted,
-    participantInstanceStatus: (taskItemForMenu as any)?.participantInstanceStatus,
+    itemType,
+    userId: taskItem?.userId,
+    isCompleted,
+    groupId: taskItem?.groupId,
+    isForAllMembers,
+    trackCompletion,
+    isRecurring: !!taskItem?.repeat,
+    parentTaskIsCompleted,
+    participantInstanceStatus,
     date: item?.date,
     hasTime: item?.hasTime ?? false,
-    dateType: taskItemForMenu?.dateType as 'SCHEDULED' | 'DUE' | undefined,
+    dateType: taskItem?.dateType as 'SCHEDULED' | 'DUE' | undefined,
     duration: item?.duration,
-    assigneeId: taskItemForMenu?.assigneeId,
-    participants: taskItemForMenu?.participants as any,
+    assigneeId: taskAssigneeId,
+    participants: taskItem?.participants as any,
     taskId: id ?? '',
     occurrenceDateKey: item?.date?.slice(0, 10) ?? '',
   }, {
     onEdit: handleEdit,
     onDelete: () => setShowDeleteConfirm(true),
     onToggleComplete: handleToggle,
-    onInvite: taskItemForMenu?.isForAllMembers && taskItemForMenu?.groupId ? () => setShowInviteModal(true) : undefined,
+    onInvite: isForAllMembers && taskItem?.groupId ? () => setShowInviteModal(true) : undefined,
   });
 
   if (isLoading) {
@@ -144,14 +142,9 @@ export function ItemViewPage() {
     );
   }
 
-  // Determine fields based on type
   const isTask = type === 'task';
-  const taskItem = isTask ? (item as Task) : null;
-  const eventItem = !isTask ? (item as ApiEvent) : null;
-
   const title = item.title;
   const description = item.description;
-  const isCompleted = isTask ? (taskItem?.isCompleted ?? false) : false;
   const dateStr = item.date;
 
   // (A1) Date display with dateType prefix
@@ -232,15 +225,12 @@ export function ItemViewPage() {
 
   // (A4) Completion timestamp
   const completedAt = isTask ? taskItem?.completedAt : undefined;
-  const isForAllMembers = isTask ? taskItem?.isForAllMembers : undefined;
   const completionDisplay = isCompleted ? formatCompletionTime(completedAt, isForAllMembers, t) : null;
 
-  // (A5) Activity ended — check parentTaskIsCompleted
-  const parentTaskIsCompleted = isTask ? (taskItem as Task & { parentTaskIsCompleted?: boolean })?.parentTaskIsCompleted : undefined;
-  const activityEnded = isGroupItem && isForAllMembers && parentTaskIsCompleted && !isCompleted;
+  // (A5) Activity ended indicator
+  const activityEnded = isGroupItem && !!isForAllMembers && !!parentTaskIsCompleted && !isCompleted;
 
   // (A6) Organizer display
-  const creatorName = isTask ? (taskItem as Task & { user?: { name?: string } })?.user?.name : undefined;
   const organizerDisplay = isForAllMembers && creatorName ? creatorName : null;
 
   // (A12) Guests
@@ -267,7 +257,7 @@ export function ItemViewPage() {
         <div className="flex min-w-0 flex-col gap-3">
           {/* Title row */}
           <div className="flex items-center gap-3">
-            {isTask && (
+            {shouldShowToggle && (
               <button onClick={handleToggle} className="shrink-0">
                 {isCompleted ? (
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-(--el-btn-primary-bg)">

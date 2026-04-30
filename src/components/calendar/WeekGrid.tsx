@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { isSameDay, toISODate, getHoursArray, formatHourLabel } from '@/utils/date';
 import { getCategoryColor } from '@/utils/category';
+import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { useDisplay } from '@/lib/contexts/display-context';
@@ -104,11 +105,11 @@ function UntimedRow({ icon, weekDates, getItems, categories, onItemClick, hourLa
                   <div
                     key={item.id}
                     data-testid={`task-card-${item.id}`}
-                    className={`cursor-pointer overflow-hidden rounded px-1 py-0.5 transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
+                    className={`cursor-pointer overflow-hidden rounded px-1 py-0.5 transition-opacity hover:opacity-80 ${isItemChecked(item) ? 'opacity-60' : ''}`}
                     style={{ backgroundColor: colors.bg, color: colors.text }}
                     onClick={() => onItemClick?.(item)}
                   >
-                    <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
+                    <div className={`truncate text-[10px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}>
                       {item.title}
                     </div>
                     {item.groupName && !hideGroupTag && (
@@ -322,7 +323,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                           <div
                             key={item.id}
                             data-testid={`task-card-${item.id}`}
-                            className={`absolute cursor-pointer overflow-hidden rounded transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
+                            className={`absolute cursor-pointer overflow-hidden rounded transition-opacity hover:opacity-80 ${isItemChecked(item) ? 'opacity-60' : ''}`}
                             style={{
                               top,
                               height,
@@ -339,7 +340,7 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
                                 <Icon name="calendar_today" size={9} color={colors.text} />
                               )}
                               <span
-                                className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                                className={`truncate text-[10px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}
                                 style={{ color: colors.text }}
                               >
                                 {item.title}

@@ -105,6 +105,18 @@ export interface CalendarItem {
   sourceEvent?: Event;
 }
 
+/**
+ * Whether a calendar item is "done" from the current user's perspective.
+ * - Personal task: task.isCompleted
+ * - Group activity: participant completed their part (not organizer's "end activity")
+ */
+export function isItemChecked(item: CalendarItem): boolean {
+  if (item.isForAllMembers) {
+    return item.participantInstanceStatus === 'COMPLETED';
+  }
+  return item.isCompleted;
+}
+
 // ── Participant summary computation (matches dooooApp's computeParticipantSummary) ──
 
 function computeParticipantSummary(task: Task): ParticipantSummary {

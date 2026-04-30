@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { getHoursArray, formatHourLabel, formatTime } from '@/utils/date';
 import { getCategoryColor, getCategoryName, translateCategoryName } from '@/utils/category';
+import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { useDisplay } from '@/lib/contexts/display-context';
@@ -187,7 +188,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                     <div
                       key={item.id}
                       data-testid={`day-task-${item.id}`}
-                      className={`absolute cursor-pointer overflow-hidden transition-opacity hover:opacity-80 ${item.isCompleted ? 'opacity-60' : ''}`}
+                      className={`absolute cursor-pointer overflow-hidden transition-opacity hover:opacity-80 ${isItemChecked(item) ? 'opacity-60' : ''}`}
                       style={{
                         top,
                         height,
@@ -203,7 +204,7 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
                       <div className="flex items-center gap-1">
                         {item.itemType === 'EVENT' && <Icon name="calendar_today" size={11} color={colors.text} />}
                         <span
-                          className={`truncate text-[12px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+                          className={`truncate text-[12px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}
                           style={{ color: colors.text }}
                         >
                           {item.title}

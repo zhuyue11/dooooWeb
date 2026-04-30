@@ -1,3 +1,4 @@
+import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
@@ -23,7 +24,7 @@ export function ItemCard({ item, categories, onClick }: ItemCardProps) {
   return (
     <div
       data-testid={`task-card-${item.id}`}
-      className={`rounded-(--radius-btn) ${item.isCompleted ? 'opacity-60' : ''} ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+      className={`rounded-(--radius-btn) ${isItemChecked(item) ? 'opacity-60' : ''} ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
       style={{ backgroundColor: colors.bg, padding: '6px 8px' }}
       onClick={() => onClick?.(item)}
     >
@@ -32,7 +33,7 @@ export function ItemCard({ item, categories, onClick }: ItemCardProps) {
           <Icon name="calendar_today" size={10} color={colors.text} />
         )}
         <span
-          className={`text-[11px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}
+          className={`text-[11px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}
           style={{ color: colors.text }}
         >
           {item.title}

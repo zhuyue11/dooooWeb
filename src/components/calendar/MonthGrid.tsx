@@ -1,4 +1,5 @@
 import { isSameDay, toISODate } from '@/utils/date';
+import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
@@ -87,11 +88,11 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                         return (
                           <div
                             key={item.id}
-                            className={`overflow-hidden rounded px-1 py-px ${item.isCompleted ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                            className={`overflow-hidden rounded px-1 py-px ${isItemChecked(item) ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
                             style={{ backgroundColor: colors.bg, color: colors.text }}
                             onClick={(e) => { if (onItemClick) { e.stopPropagation(); onItemClick(item); } }}
                           >
-                            <div className={`truncate text-[10px] font-medium leading-tight ${item.isCompleted ? 'line-through' : ''}`}>
+                            <div className={`truncate text-[10px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}>
                               {item.title}
                             </div>
                             {item.groupName && !hideGroupTag && (

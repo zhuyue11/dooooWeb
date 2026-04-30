@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
@@ -21,8 +21,8 @@ import { computeParticipantStats } from '@/utils/participantStats';
 import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
-import { getTask, getEvent, toggleTask } from '@/lib/api';
-import type { Task, Event as ApiEvent } from '@/types/api';
+import { useItemData } from '@/hooks/useItemData';
+import { toggleTask } from '@/lib/api';
 import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
@@ -111,11 +111,13 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   const idOccurrenceDate = getOccurrenceDateFromId(itemId, itemType);
   const typeParam = itemType.toLowerCase();
 
-  // Fetch live data from backend
-  const { data: rawItem, isLoading } = useQuery<Task | ApiEvent>({
-    queryKey: [itemType === 'EVENT' ? 'event' : 'task', parentId],
-    queryFn: () => itemType === 'EVENT' ? getEvent(parentId) as Promise<Task | ApiEvent> : getTask(parentId),
-  });
+  // Fetch live data from backend + derive participant-aware display state
+  const {
+    rawItem, task, event, isLoading,
+    isForAllMembers, trackCompletion, participantInstanceStatus,
+    parentTaskIsCompleted, isChecked, creatorName, assigneeName, assigneeId,
+    shouldShowToggle,
+  } = useItemData(parentId, itemType, currentUserId);
 
   const { manualCompleteMutation } = useParticipationMutations(parentId);
   const [isClosing, setIsClosing] = useState(false);
@@ -141,9 +143,6 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   // ── Derive fields from raw API response ──
 
   const isTask = itemType === 'TASK';
-  const task = isTask ? rawItem as Task | undefined : undefined;
-  const event = !isTask ? rawItem as ApiEvent | undefined : undefined;
-
   const date = task?.date ?? event?.date ?? '';
   const occurrenceDateKey = idOccurrenceDate ?? (date ? toISODate(new Date(date)) : '');
   const hasTime = !!(task?.hasTime ?? event?.hasTime);
@@ -151,31 +150,7 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   const repeat = task?.repeat ?? event?.repeat;
   const recurring = !!repeat;
   const isInstance = idOccurrenceDate !== null;
-
   const isGroupTask = !!(task?.groupId ?? event?.groupId);
-  const isForAllMembers = task?.isForAllMembers;
-  const trackCompletion = task?.trackCompletion;
-
-  // Participant status — find current user in participantInstances or participants
-  // The raw API has status: INVITED|CONFIRMED|DECLINED|LEFT + separate isCompleted boolean.
-  // CalendarItem normalizes this to a single string including 'COMPLETED'.
-  const participantInstanceStatus = useMemo((): string | undefined => {
-    if (!isForAllMembers || !currentUserId) return undefined;
-    const pi = task?.participantInstances?.find(p => p.participantUserId === currentUserId);
-    if (pi) return pi.isCompleted ? 'COMPLETED' : pi.status;
-    const p = task?.participants?.find(p => p.userId === currentUserId);
-    return p?.status;
-  }, [isForAllMembers, currentUserId, task?.participantInstances, task?.participants]);
-
-  // For the organizer, parentTaskIsCompleted is the task's own isCompleted
-  const parentTaskIsCompleted = isForAllMembers ? task?.isCompleted : undefined;
-  const creatorName = task?.user?.name;
-  const assigneeName = task?.assignee?.name;
-  const assigneeId = task?.assigneeId;
-
-  const isChecked = isForAllMembers
-    ? participantInstanceStatus === 'COMPLETED'
-    : (task?.isCompleted ?? false);
 
   // Notes — resolve the correct itemType for the unified Note model
   const noteItemType = (() => {
@@ -274,17 +249,6 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
     queryClient.invalidateQueries({ queryKey: ['task', parentId] });
     onToggle?.();
   }, [parentId, itemType, queryClient, onToggle]);
-
-  const shouldShowToggle = (() => {
-    if (!isTask) return false;
-    if (!isGroupTask) return true;
-    if (isForAllMembers) {
-      if (trackCompletion === false) return false;
-      return participantInstanceStatus === 'CONFIRMED' || participantInstanceStatus === 'COMPLETED';
-    }
-    if (assigneeId) return currentUserId === assigneeId;
-    return currentUserId === task?.userId;
-  })();
 
   // (B6) Activity can complete — DUE type always, SCHEDULED only after start
   const activityCanComplete = (() => {
