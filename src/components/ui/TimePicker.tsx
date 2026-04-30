@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { useDisplay } from '@/lib/contexts/display-context';
 import { useTranslation } from 'react-i18next';
@@ -79,31 +79,45 @@ function TimePicker12hRow({ value, onChange }: {
 }) {
   const { hour, minute, period } = useMemo(() => to12h(value), [value]);
   const { t } = useTranslation();
+  const [hourDraft, setHourDraft] = useState<string | null>(null);
+  const [minuteDraft, setMinuteDraft] = useState<string | null>(null);
+
+  const commitHour = () => {
+    if (hourDraft === null) return;
+    const parsed = parseInt(hourDraft);
+    const v = isNaN(parsed) ? hour : Math.max(1, Math.min(12, parsed));
+    setHourDraft(null);
+    onChange(to24hFromAmPm(v, minute, period));
+  };
+
+  const commitMinute = () => {
+    if (minuteDraft === null) return;
+    const parsed = parseInt(minuteDraft);
+    const v = isNaN(parsed) ? minute : Math.max(0, Math.min(59, parsed));
+    setMinuteDraft(null);
+    onChange(to24hFromAmPm(hour, v, period));
+  };
 
   return (
     <>
       <div className="flex items-center gap-0.5">
         <input
-          type="number"
-          min={1}
-          max={12}
-          value={hour}
-          onChange={(e) => {
-            const v = Math.max(1, Math.min(12, parseInt(e.target.value) || 1));
-            onChange(to24hFromAmPm(v, minute, period));
-          }}
+          type="text"
+          inputMode="numeric"
+          value={hourDraft ?? String(hour)}
+          onChange={(e) => setHourDraft(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+          onBlur={commitHour}
+          onKeyDown={(e) => e.key === 'Enter' && commitHour()}
           className="h-8 w-12 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-input-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
         />
         <span className="text-sm font-medium text-(--el-popover-item-text) opacity-50">:</span>
         <input
-          type="number"
-          min={0}
-          max={59}
-          value={String(minute).padStart(2, '0')}
-          onChange={(e) => {
-            const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
-            onChange(to24hFromAmPm(hour, v, period));
-          }}
+          type="text"
+          inputMode="numeric"
+          value={minuteDraft ?? String(minute).padStart(2, '0')}
+          onChange={(e) => setMinuteDraft(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+          onBlur={commitMinute}
+          onKeyDown={(e) => e.key === 'Enter' && commitMinute()}
           className="h-8 w-12 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-input-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
         />
       </div>
@@ -143,30 +157,44 @@ function TimePicker24hRow({ value, onChange }: {
   onChange: (v: string) => void;
 }) {
   const { hour, minute } = useMemo(() => parse24h(value), [value]);
+  const [hourDraft, setHourDraft] = useState<string | null>(null);
+  const [minuteDraft, setMinuteDraft] = useState<string | null>(null);
+
+  const commitHour = () => {
+    if (hourDraft === null) return;
+    const parsed = parseInt(hourDraft);
+    const v = isNaN(parsed) ? hour : Math.max(0, Math.min(23, parsed));
+    setHourDraft(null);
+    onChange(format24h(v, minute));
+  };
+
+  const commitMinute = () => {
+    if (minuteDraft === null) return;
+    const parsed = parseInt(minuteDraft);
+    const v = isNaN(parsed) ? minute : Math.max(0, Math.min(59, parsed));
+    setMinuteDraft(null);
+    onChange(format24h(hour, v));
+  };
 
   return (
     <div className="flex items-center gap-0.5">
       <input
-        type="number"
-        min={0}
-        max={23}
-        value={String(hour).padStart(2, '0')}
-        onChange={(e) => {
-          const v = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
-          onChange(format24h(v, minute));
-        }}
+        type="text"
+        inputMode="numeric"
+        value={hourDraft ?? String(hour).padStart(2, '0')}
+        onChange={(e) => setHourDraft(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+        onBlur={commitHour}
+        onKeyDown={(e) => e.key === 'Enter' && commitHour()}
         className="h-8 w-12 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-input-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
       />
       <span className="text-sm font-medium text-(--el-popover-item-text) opacity-50">:</span>
       <input
-        type="number"
-        min={0}
-        max={59}
-        value={String(minute).padStart(2, '0')}
-        onChange={(e) => {
-          const v = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
-          onChange(format24h(hour, v));
-        }}
+        type="text"
+        inputMode="numeric"
+        value={minuteDraft ?? String(minute).padStart(2, '0')}
+        onChange={(e) => setMinuteDraft(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+        onBlur={commitMinute}
+        onKeyDown={(e) => e.key === 'Enter' && commitMinute()}
         className="h-8 w-12 rounded-(--radius-input) border border-(--el-input-border) bg-transparent px-(--spacing-input-x) text-center text-sm font-medium text-(--el-input-text) focus:outline-none focus:ring-2 focus:ring-(--el-input-focus)/50"
       />
     </div>
