@@ -14,7 +14,7 @@ export function AssigneeDisplay({ assigneeName, assigneeId, currentUserId }: Ass
   return (
     <div className="flex items-center gap-3 px-4 py-3" data-testid="assignee-display">
       <Icon name="person" size={18} color="var(--el-group-description)" />
-      <span className="w-20 shrink-0 text-[13px] text-(--el-group-description)">{t('tasks.input.selectAssignee')}</span>
+      <span className="w-20 shrink-0 text-[13px] text-(--el-group-description)">{t('itemView.assignee')}</span>
       <span className="text-[13px] font-medium text-(--el-group-title)">
         {assigneeName}
         {isSelf && (
