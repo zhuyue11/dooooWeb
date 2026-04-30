@@ -32,6 +32,7 @@ interface ItemSidePanelProps {
   currentUserId?: string;
   onClose: () => void;
   onToggle?: () => void;
+  onMutate?: () => void;
   groupId?: string;
 }
 
@@ -76,7 +77,7 @@ function CategoryPill({ categoryId, categories }: { categoryId: string; categori
 
 // ── Main component ──
 
-export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onToggle, groupId }: ItemSidePanelProps) {
+export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onToggle, onMutate, groupId }: ItemSidePanelProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -183,8 +184,9 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
     } else {
       await deleteTaskMutation.mutateAsync(parentId);
     }
+    onMutate?.();
     onClose();
-  }, [deleteTaskMutation, deleteEventMutation, parentId, itemType, onClose]);
+  }, [deleteTaskMutation, deleteEventMutation, parentId, itemType, onClose, onMutate]);
 
   const handleScopeDeleteThis = useCallback(async () => {
     if (itemType === 'EVENT') {
@@ -193,8 +195,9 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
       await deleteTaskInstanceMutation.mutateAsync({ taskId: parentId, date: occurrenceDateKey });
     }
     setScopeModalMode(null);
+    onMutate?.();
     onClose();
-  }, [deleteEventInstanceMutation, deleteTaskInstanceMutation, parentId, occurrenceDateKey, itemType, onClose]);
+  }, [deleteEventInstanceMutation, deleteTaskInstanceMutation, parentId, occurrenceDateKey, itemType, onClose, onMutate]);
 
   const handleScopeDeleteFuture = useCallback(async () => {
     const truncated = {
@@ -207,8 +210,9 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
       await updateTaskMutation.mutateAsync({ id: parentId, data: { repeat: truncated as any } });
     }
     setScopeModalMode(null);
+    onMutate?.();
     onClose();
-  }, [updateEventMutation, updateTaskMutation, parentId, repeat, itemType, previousDayKey, onClose]);
+  }, [updateEventMutation, updateTaskMutation, parentId, repeat, itemType, previousDayKey, onClose, onMutate]);
 
   const handleScopeDeleteAll = useCallback(async () => {
     if (itemType === 'EVENT') {
@@ -217,8 +221,9 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
       await deleteTaskMutation.mutateAsync(parentId);
     }
     setScopeModalMode(null);
+    onMutate?.();
     onClose();
-  }, [deleteEventMutation, deleteTaskMutation, parentId, itemType, onClose]);
+  }, [deleteEventMutation, deleteTaskMutation, parentId, itemType, onClose, onMutate]);
 
   const handleDeleteClick = useCallback(() => {
     if (recurring) {

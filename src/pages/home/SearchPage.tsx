@@ -475,6 +475,7 @@ export function SearchPage() {
           currentUserId={user?.id}
           onClose={handleSidePanelClose}
           onToggle={handleSidePanelToggle}
+          onMutate={rerunSearch}
         />
       )}
     </div>
