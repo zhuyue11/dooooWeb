@@ -16,16 +16,23 @@ import { toISODate } from './date';
 
 /**
  * Return the parent task or event id for a calendar item, regardless of whether
- * the item is a parent, a stored MODIFIED instance, or a virtual occurrence.
+ * the item is a parent, a stored MODIFIED instance, a virtual occurrence, or
+ * a multi-day continuation entry.
  */
 export function getParentId(item: CalendarItem): string {
   if (item.itemType === 'EVENT') {
     if (item.eventId) return item.eventId;
-    // Strip "event-" / "event-instance-" prefix and "_virtual_<date>" suffix
-    return item.id.replace(/^event-(instance-)?/, '').split('_virtual_')[0];
+    // Strip "event-" / "event-instance-" prefix, "_virtual_<date>" and "_cont_<date>" suffixes
+    return item.id
+      .replace(/^event-(instance-)?/, '')
+      .split('_virtual_')[0]
+      .split('_cont_')[0];
   }
   // Tasks: parent id is item.taskId for instances, or item.id for parents
   if (item.taskId) return item.taskId;
+  // Strip "_cont_<date>" suffix for multi-day continuation entries
+  const contIdx = item.id.indexOf('_cont_');
+  if (contIdx > 0) return item.id.slice(0, contIdx);
   // Virtual recurring task instance: id is `${taskId}_${YYYY-MM-DD}`
   const idx = item.id.lastIndexOf('_');
   if (idx > 0) {
@@ -64,8 +71,15 @@ export function isRecurringInstance(item: CalendarItem): boolean {
  */
 export function getParentIdFromString(itemId: string, itemType: 'TASK' | 'EVENT'): string {
   if (itemType === 'EVENT') {
-    return itemId.replace(/^event-(instance-)?/, '').split('_virtual_')[0];
+    return itemId
+      .replace(/^event-(instance-)?/, '')
+      .split('_virtual_')[0]
+      .split('_cont_')[0];
   }
+  // Strip "_cont_<date>" suffix for multi-day continuation entries
+  const contIdx = itemId.indexOf('_cont_');
+  if (contIdx > 0) return itemId.slice(0, contIdx);
+  // Strip "_<YYYY-MM-DD>" suffix for virtual recurring instances
   const idx = itemId.lastIndexOf('_');
   if (idx > 0) {
     const tail = itemId.slice(idx + 1);
@@ -79,6 +93,8 @@ export function getParentIdFromString(itemId: string, itemType: 'TASK' | 'EVENT'
  * Returns null if the id has no date suffix (non-recurring or parent item).
  */
 export function getOccurrenceDateFromId(itemId: string, itemType: 'TASK' | 'EVENT'): string | null {
+  // Multi-day continuation entries are NOT recurring occurrences
+  if (itemId.includes('_cont_')) return null;
   if (itemType === 'EVENT') {
     const match = itemId.match(/_virtual_(\d{4}-\d{2}-\d{2})$/);
     return match ? match[1] : null;

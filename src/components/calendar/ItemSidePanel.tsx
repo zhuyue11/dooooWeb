@@ -5,9 +5,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Icon } from '@/components/ui/Icon';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
-import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast, hasActivityEnded, toISODate } from '@/utils/date';
+import { isTaskTimeInPast, hasActivityEnded, toISODate } from '@/utils/date';
+import { ItemDetailCard } from './ItemDetailCard';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
-import { useDisplay } from '@/lib/contexts/display-context';
 import { getParentIdFromString, getOccurrenceDateFromId } from '@/utils/calendarItemId';
 import { RecurringScopeModal } from './RecurringScopeModal';
 import { ItemActionsMenu } from './ItemActionsMenu';
@@ -23,9 +23,7 @@ import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsM
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 import { useItemData } from '@/hooks/useItemData';
 import { toggleTask } from '@/lib/api';
-import type { TimeFormat } from '@/utils/date';
 import { useTranslation } from 'react-i18next';
-import i18n from '@/lib/i18n';
 import { CollapsibleDescription } from './CollapsibleDescription';
 
 interface ItemSidePanelProps {
@@ -35,18 +33,6 @@ interface ItemSidePanelProps {
   onClose: () => void;
   onToggle?: () => void;
   groupId?: string;
-}
-
-// ── Detail row ──
-
-function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={18} color="var(--el-panel-detail-label)" />
-      <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{label}</span>
-      <span className="text-[13px] font-medium text-(--el-panel-detail-value)">{value}</span>
-    </div>
-  );
 }
 
 // ── Priority pill ──
@@ -95,7 +81,6 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: categories } = useCategories(groupId);
-  const { timeFormat } = useDisplay();
   const {
     deleteTaskMutation,
     deleteEventMutation,
@@ -258,89 +243,19 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   })();
   const showDashedCircle = shouldShowToggle && !!isForAllMembers && !activityCanComplete && !isChecked;
 
-  // (A1) Date display with dateType prefix
-  const datePrefix = task?.dateType === 'DUE' ? `${t('itemView.due')} · ` : '';
-  const dateDisplay = (() => {
-    if (!date) return null;
-    const startStr = formatFullDate(new Date(date));
-    const endDate = event?.endDate;
-    if (endDate && endDate.slice(0, 10) !== date.slice(0, 10)) {
-      const endStr = formatFullDate(new Date(endDate));
-      return `${datePrefix}${startStr} — ${endStr}`;
-    }
-    return `${datePrefix}${startStr}`;
-  })();
-
-  // (A3) Time display with end time from duration
-  const timeDisplay = (() => {
-    if (!hasTime || !date) return null;
-    const startTime = formatTime(date, timeFormat as TimeFormat);
-    if (duration) {
-      const endMs = new Date(date).getTime() + duration * 60000;
-      const endTime = formatTime(new Date(endMs).toISOString(), timeFormat as TimeFormat);
-      return `${startTime} — ${endTime}`;
-    }
-    return startTime;
-  })();
-
-  const timeOfDay = task?.timeOfDay;
-  const timeOfDayDisplay = !hasTime && timeOfDay ? timeOfDay : null;
-  const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
-    MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
-    AFTERNOON: { icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
-    EVENING: { icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
-  };
-
-  // Timezone display
-  const deviceTz = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
-  const itemTz = (task as any)?.timeZone || (event as any)?.timeZone || null;
-  const tzDisplay = hasTime && itemTz && itemTz !== deviceTz
-    ? (() => {
-        try {
-          const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
-          return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
-        } catch { return itemTz; }
-      })()
-    : null;
-
-  const repeatDisplay = formatRepeatDisplay(repeat, t);
-  const durationDisplay = formatDuration(duration ?? null, t);
-
-  // (A8) Hide reminders for past/completed tasks
-  const taskTimePast = isTaskTimeInPast(date, hasTime);
-  const showReminders = !isChecked && !taskTimePast;
-  const firstReminderMinutes = task?.firstReminderMinutes ?? event?.firstReminderMinutes;
-  const secondReminderMinutes = task?.secondReminderMinutes ?? event?.secondReminderMinutes;
-  const reminderDisplay = showReminders ? formatReminder(firstReminderMinutes) : null;
-  const secondReminderDisplay = showReminders ? formatReminder(secondReminderMinutes) : null;
-
-  const locationDisplay = task?.location ?? event?.location ?? null;
-  const guests = event?.guests;
-  const guestsDisplay = guests && guests.length > 0 ? guests : null;
-  const meetingLinkDisplay = event?.meetingLink ?? null;
-
-  // (A4) Completion timestamp
-  const completionDisplay = isChecked ? formatCompletionTime(task?.completedAt, isForAllMembers, t) : null;
-
   // (A5) Activity ended indicator
   const activityEnded = isGroupTask && !!isForAllMembers && !!parentTaskIsCompleted && !isChecked;
-
-  // (A6) Organizer display
-  const organizerDisplay = isForAllMembers && creatorName ? creatorName : null;
 
   // Compute participant stats
   const localParticipantStats = isForAllMembers
     ? computeParticipantStats(task?.participantInstances as any, task?.participants as any)
     : null;
 
-  const createdAtRaw = task?.createdAt ?? event?.createdAt;
   const title = task?.title ?? event?.title ?? '';
   const description = task?.description ?? event?.description;
   const priority = task?.priority;
   const categoryId = task?.categoryId ?? undefined;
   const itemGroupId = task?.groupId ?? event?.groupId ?? undefined;
-
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayDisplay || tzDisplay || repeatDisplay || durationDisplay || reminderDisplay || locationDisplay || guestsDisplay || meetingLinkDisplay || completionDisplay || activityEnded || organizerDisplay || createdAtRaw;
 
   // Build 3-dots menu items via shared hook
   const menuItems = useItemMenu({
@@ -460,144 +375,32 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
             </div>
           )}
 
-          {/* Details card — shown first for date/time visibility */}
-          {hasAnyDetail && (
-            <div className="rounded-(--radius-card) border border-(--el-panel-border)">
-              {dateDisplay && (
-                <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
-              )}
-              {timeDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
-                </>
-              )}
-              {timeOfDayDisplay && TIME_OF_DAY_META[timeOfDayDisplay] && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow
-                    icon={TIME_OF_DAY_META[timeOfDayDisplay].icon}
-                    label={t('itemView.time')}
-                    value={t(TIME_OF_DAY_META[timeOfDayDisplay].i18nKey)}
-                  />
-                </>
-              )}
-              {durationDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
-                </>
-              )}
-              {reminderDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
-                </>
-              )}
-              {secondReminderDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
-                </>
-              )}
-              {/* (A4) Completion timestamp */}
-              {completionDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="check_circle" label={t('itemView.completedAt')} value={completionDisplay} />
-                </>
-              )}
-              {/* (A5) Activity ended indicator */}
-              {activityEnded && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="event_busy" size={18} color="var(--el-dialog-confirm-bg)" />
-                    <span className="text-[13px] font-medium" style={{ color: 'var(--el-dialog-confirm-bg)' }}>
-                      {t('itemView.activityEnded')}
-                    </span>
-                  </div>
-                </>
-              )}
-              {/* (A11) Location — clickable, opens Google Maps */}
-              {locationDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="location_on" size={18} color="var(--el-panel-detail-label)" />
-                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.location')}</span>
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationDisplay)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="truncate text-[13px] font-medium text-(--el-panel-detail-value) hover:underline"
-                    >
-                      {locationDisplay}
-                    </a>
-                  </div>
-                </>
-              )}
-              {guestsDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <div className="flex items-start gap-3 px-4 py-3">
-                    <Icon name="group" size={18} color="var(--el-panel-detail-label)" className="mt-0.5" />
-                    <div className="flex-1">
-                      <span className="text-[13px] text-(--el-panel-detail-label)">{t('itemView.guests')}</span>
-                      <div className="mt-1 flex flex-wrap gap-1">
-                        {guestsDisplay.map((g) => (
-                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-(--el-panel-guest-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-panel-guest-text)">
-                            {g.email}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-              {meetingLinkDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="videocam" size={18} color="var(--el-panel-detail-label)" />
-                    <span className="w-20 shrink-0 text-[13px] text-(--el-panel-detail-label)">{t('itemView.meetingLink')}</span>
-                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-[13px] font-medium text-(--el-panel-detail-value) hover:underline">
-                      {meetingLinkDisplay}
-                    </a>
-                  </div>
-                </>
-              )}
-              {tzDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
-                </>
-              )}
-              {repeatDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
-                </>
-              )}
-              {/* (A6) Organizer display */}
-              {organizerDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow icon="person" label={t('itemView.organizer')} value={organizerDisplay} />
-                </>
-              )}
-              {createdAtRaw && (
-                <>
-                  <div className="mx-4 border-t border-(--el-panel-separator)" />
-                  <DetailRow
-                    icon="event_available"
-                    label={t('itemView.createdAt')}
-                    value={new Date(createdAtRaw).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' })}
-                  />
-                </>
-              )}
-            </div>
-          )}
+          {/* Details card */}
+          <ItemDetailCard
+            date={date || null}
+            hasTime={hasTime}
+            duration={duration}
+            endDate={event?.endDate}
+            dateType={task?.dateType as 'SCHEDULED' | 'DUE' | undefined}
+            timeOfDay={task?.timeOfDay}
+            timeZone={(task as any)?.timeZone || (event as any)?.timeZone}
+            repeat={repeat}
+            firstReminderMinutes={task?.firstReminderMinutes ?? event?.firstReminderMinutes}
+            secondReminderMinutes={task?.secondReminderMinutes ?? event?.secondReminderMinutes}
+            location={task?.location ?? event?.location}
+            guests={event?.guests}
+            meetingLink={event?.meetingLink}
+            createdAt={task?.createdAt ?? event?.createdAt}
+            isCompleted={isChecked}
+            completedAt={task?.completedAt}
+            activityEnded={activityEnded}
+            organizerName={isForAllMembers && creatorName ? creatorName : null}
+            isForAllMembers={isForAllMembers}
+            borderColor="--el-panel-border"
+            separatorColor="--el-panel-separator"
+            labelColor="--el-panel-detail-label"
+            valueColor="--el-panel-detail-value"
+          />
 
           {/* Group activity participation banner */}
           {isGroupTask && isForAllMembers && !isChecked && (

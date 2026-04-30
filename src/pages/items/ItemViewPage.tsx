@@ -5,11 +5,10 @@ import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useItemMutations } from '@/hooks/useItemMutations';
 import { useItemData } from '@/hooks/useItemData';
 import { useCategories } from '@/hooks/useCategories';
-import { useDisplay } from '@/lib/contexts/display-context';
 import { Icon } from '@/components/ui/Icon';
-import { formatFullDate, formatTime, formatReminder, formatDuration, formatCompletionTime, formatRepeatDisplay, isTaskTimeInPast, hasActivityEnded } from '@/utils/date';
+import { hasActivityEnded } from '@/utils/date';
+import { ItemDetailCard } from '@/components/calendar/ItemDetailCard';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
-import type { TimeFormat } from '@/utils/date';
 import type { Event as ApiEvent } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/lib/i18n';
@@ -27,18 +26,6 @@ import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
 
-// ── Detail row ──
-
-function DetailRow({ icon, label, value }: { icon: string; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3 px-4 py-3">
-      <Icon name={icon} size={16} color="var(--el-view-detail-label)" />
-      <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{label}</span>
-      <span className="text-xs font-medium text-(--el-view-title)">{value}</span>
-    </div>
-  );
-}
-
 // ── Main component ──
 
 export function ItemViewPage() {
@@ -50,7 +37,6 @@ export function ItemViewPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { data: categories } = useCategories();
-  const { timeFormat } = useDisplay();
   const { deleteTaskMutation, deleteEventMutation } = useItemMutations();
   const { manualCompleteMutation } = useParticipationMutations(id ?? '');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -61,7 +47,7 @@ export function ItemViewPage() {
   const {
     rawItem: item, task: taskItem, event: eventItem, isLoading, isError,
     isForAllMembers, trackCompletion, participantInstanceStatus,
-    parentTaskIsCompleted, isChecked: isCompleted, creatorName, assigneeName, assigneeId: taskAssigneeId,
+    parentTaskIsCompleted, isChecked: isCompleted, creatorName, assigneeId: taskAssigneeId,
     shouldShowToggle,
   } = useItemData(id ?? '', itemType, user?.id);
 
@@ -147,67 +133,6 @@ export function ItemViewPage() {
   const description = item.description;
   const dateStr = item.date;
 
-  // (A1) Date display with dateType prefix
-  const dateType = isTask ? taskItem?.dateType : undefined;
-  const datePrefix = dateType === 'DUE' ? `${t('itemView.due')} · ` : '';
-  // (A2) Multi-day event range
-  const endDate = !isTask ? eventItem?.endDate : undefined;
-  const dateDisplay = (() => {
-    if (!dateStr) return null;
-    const startStr = formatFullDate(new Date(dateStr));
-    if (endDate && endDate.slice(0, 10) !== dateStr.slice(0, 10)) {
-      const endStr = formatFullDate(new Date(endDate));
-      return `${datePrefix}${startStr} — ${endStr}`;
-    }
-    return `${datePrefix}${startStr}`;
-  })();
-
-  // (A3) Time display with end time from duration
-  const timeDisplay = (() => {
-    if (!item.hasTime || !dateStr) return null;
-    const startTime = formatTime(dateStr, timeFormat as TimeFormat);
-    if (item.duration) {
-      const endMs = new Date(dateStr).getTime() + item.duration * 60000;
-      const endTime = formatTime(new Date(endMs).toISOString(), timeFormat as TimeFormat);
-      return `${startTime} — ${endTime}`;
-    }
-    return startTime;
-  })();
-
-  const timeOfDayValue = isTask && !item.hasTime && taskItem?.timeOfDay ? taskItem.timeOfDay : null;
-  const TIME_OF_DAY_META: Record<string, { icon: string; i18nKey: string }> = {
-    MORNING: { icon: 'wb_sunny', i18nKey: 'tasks.timeOfDay.morning' },
-    AFTERNOON: { icon: 'wb_cloudy', i18nKey: 'tasks.timeOfDay.afternoon' },
-    EVENING: { icon: 'nightlight', i18nKey: 'tasks.timeOfDay.evening' },
-  };
-  // Timezone display
-  const deviceTz = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : null;
-  const itemTz = item.timeZone || null;
-  const tzDisplay = item.hasTime && itemTz && itemTz !== deviceTz
-    ? (() => {
-        try {
-          const parts = new Intl.DateTimeFormat(i18n.language, { timeZone: itemTz, timeZoneName: 'long' }).formatToParts(new Date());
-          return parts.find(p => p.type === 'timeZoneName')?.value || itemTz;
-        } catch { return itemTz; }
-      })()
-    : null;
-
-  // (A9) Duration display — human-friendly translated format
-  const durationDisplay = formatDuration(item.duration, t);
-
-  // (A8) Hide reminders for past/completed tasks
-  const taskTimePast = isTaskTimeInPast(dateStr, item.hasTime ?? false);
-  const showReminders = !isCompleted && !taskTimePast;
-  // (A10) Both first and second reminders
-  const reminderDisplay = showReminders ? formatReminder(item.firstReminderMinutes) : null;
-  const secondReminderDisplay = showReminders ? formatReminder(item.secondReminderMinutes) : null;
-
-  // (A7) Repeat display — translated
-  const repeatDisplay = formatRepeatDisplay(item.repeat, t);
-
-  // (A11) Location
-  const locationDisplay = item.location || null;
-
   const priority = isTask ? taskItem?.priority : eventItem?.priority;
   const categoryId = isTask ? taskItem?.categoryId : undefined;
   const rawCategoryName = categoryId ? getCategoryName(categoryId, categories) : undefined;
@@ -223,23 +148,10 @@ export function ItemViewPage() {
   const isItemOwner = itemUserId === user?.id;
   const isGroupItem = !!groupId;
 
-  // (A4) Completion timestamp
-  const completedAt = isTask ? taskItem?.completedAt : undefined;
-  const completionDisplay = isCompleted ? formatCompletionTime(completedAt, isForAllMembers, t) : null;
-
   // (A5) Activity ended indicator
   const activityEnded = isGroupItem && !!isForAllMembers && !!parentTaskIsCompleted && !isCompleted;
 
-  // (A6) Organizer display
-  const organizerDisplay = isForAllMembers && creatorName ? creatorName : null;
-
-  // (A12) Guests
-  const guestsDisplay = !isTask && eventItem?.guests && eventItem.guests.length > 0 ? eventItem.guests : null;
-  // (A13) Meeting link
-  const meetingLinkDisplay = !isTask && eventItem?.meetingLink ? eventItem.meetingLink : null;
-
   const isHighPriority = priority === 'high' || priority === 'HIGH' || priority === 'urgent' || priority === 'URGENT';
-  const hasAnyDetail = dateDisplay || timeDisplay || timeOfDayValue || tzDisplay || durationDisplay || reminderDisplay || locationDisplay || repeatDisplay || priority || completionDisplay || activityEnded || organizerDisplay || createdAt;
 
 
 
@@ -303,12 +215,9 @@ export function ItemViewPage() {
                 {t(`tasks.priorities.${priority.toLowerCase()}`)}
               </span>
             )}
-            {dateDisplay && (
+            {dateStr && (
               <span className="text-[13px] text-(--el-view-detail-label)">
-                {dateDisplay}
-                {timeDisplay && ` · ${timeDisplay}`}
-                {!timeDisplay && timeOfDayValue && ` · ${t(TIME_OF_DAY_META[timeOfDayValue].i18nKey)}`}
-                {durationDisplay && ` · ${durationDisplay}`}
+                {new Date(dateStr).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' })}
               </span>
             )}
           </div>
@@ -353,152 +262,34 @@ export function ItemViewPage() {
         {/* Right: info sidebar */}
         <div className="flex w-[300px] shrink-0 flex-col gap-4">
           {/* Info card */}
-          {hasAnyDetail && (
-            <div className="rounded-(--radius-card) border border-(--el-view-edit-border)">
-              {dateDisplay && (
-                <DetailRow icon="calendar_today" label={t('itemView.date')} value={dateDisplay} />
-              )}
-              {timeDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="schedule" label={t('itemView.time')} value={timeDisplay} />
-                </>
-              )}
-              {timeOfDayValue && TIME_OF_DAY_META[timeOfDayValue] && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow
-                    icon={TIME_OF_DAY_META[timeOfDayValue].icon}
-                    label={t('itemView.time')}
-                    value={t(TIME_OF_DAY_META[timeOfDayValue].i18nKey)}
-                  />
-                </>
-              )}
-              {durationDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="timer" label={t('itemView.duration')} value={durationDisplay} />
-                </>
-              )}
-              {reminderDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={reminderDisplay} />
-                </>
-              )}
-              {/* (A10) Second reminder */}
-              {secondReminderDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="notifications" label={t('itemView.reminder')} value={secondReminderDisplay} />
-                </>
-              )}
-              {/* (A4) Completion timestamp */}
-              {completionDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="check_circle" label={t('itemView.completedAt')} value={completionDisplay} />
-                </>
-              )}
-              {/* (A5) Activity ended indicator */}
-              {activityEnded && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="event_busy" size={16} color="var(--el-dialog-confirm-bg)" />
-                    <span className="text-xs font-medium" style={{ color: 'var(--el-dialog-confirm-bg)' }}>
-                      {t('itemView.activityEnded')}
-                    </span>
-                  </div>
-                </>
-              )}
-              {/* (A11) Location — clickable */}
-              {locationDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="location_on" size={16} color="var(--el-view-detail-label)" />
-                    <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{t('itemView.location')}</span>
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationDisplay)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="truncate text-xs font-medium text-(--el-view-title) hover:underline"
-                    >
-                      {locationDisplay}
-                    </a>
-                  </div>
-                </>
-              )}
-              {/* (A12) Guests */}
-              {guestsDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <div className="flex items-start gap-3 px-4 py-3">
-                    <Icon name="group" size={16} color="var(--el-view-detail-label)" className="mt-0.5" />
-                    <div className="flex-1">
-                      <span className="text-xs text-(--el-view-detail-label)">{t('itemView.guests')}</span>
-                      <div className="mt-1 flex flex-wrap gap-1">
-                        {guestsDisplay.map((g) => (
-                          <span key={g.email} className="inline-flex items-center rounded-(--radius-btn) bg-(--el-panel-guest-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-panel-guest-text)">
-                            {g.email}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-              {/* (A13) Meeting link */}
-              {meetingLinkDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Icon name="videocam" size={16} color="var(--el-view-detail-label)" />
-                    <span className="w-20 shrink-0 text-xs text-(--el-view-detail-label)">{t('itemView.meetingLink')}</span>
-                    <a href={meetingLinkDisplay} target="_blank" rel="noopener noreferrer" className="truncate text-xs font-medium text-(--el-view-title) hover:underline">
-                      {meetingLinkDisplay}
-                    </a>
-                  </div>
-                </>
-              )}
-              {tzDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="public" label={t('itemView.timeZone')} value={tzDisplay} />
-                </>
-              )}
-              {priority && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="flag" label={t('itemView.priority')} value={t(`tasks.priorities.${priority.toLowerCase()}`)} />
-                </>
-              )}
-              {repeatDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="repeat" label={t('itemView.repeat')} value={repeatDisplay} />
-                </>
-              )}
-              {/* (A6) Organizer display */}
-              {organizerDisplay && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow icon="person" label={t('itemView.organizer')} value={organizerDisplay} />
-                </>
-              )}
-              {createdAt && (
-                <>
-                  <div className="mx-4 border-t border-(--el-view-edit-border)" />
-                  <DetailRow
-                    icon="event_available"
-                    label={t('itemView.createdAt')}
-                    value={new Date(createdAt).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' })}
-                  />
-                </>
-              )}
-            </div>
-          )}
+          <ItemDetailCard
+            date={dateStr || null}
+            hasTime={item.hasTime ?? false}
+            duration={item.duration}
+            endDate={eventItem?.endDate}
+            dateType={taskItem?.dateType as 'SCHEDULED' | 'DUE' | undefined}
+            timeOfDay={taskItem?.timeOfDay}
+            timeZone={item.timeZone}
+            repeat={item.repeat}
+            firstReminderMinutes={item.firstReminderMinutes}
+            secondReminderMinutes={item.secondReminderMinutes}
+            location={item.location}
+            guests={eventItem?.guests}
+            meetingLink={eventItem?.meetingLink}
+            createdAt={createdAt}
+            isCompleted={isCompleted}
+            completedAt={taskItem?.completedAt}
+            activityEnded={activityEnded}
+            organizerName={isForAllMembers && creatorName ? creatorName : null}
+            isForAllMembers={isForAllMembers}
+            priority={priority}
+            borderColor="--el-view-edit-border"
+            separatorColor="--el-view-edit-border"
+            labelColor="--el-view-detail-label"
+            valueColor="--el-view-title"
+            iconSize={16}
+            textClass="text-xs"
+          />
 
           {/* Plan card */}
           {planId && planName && (

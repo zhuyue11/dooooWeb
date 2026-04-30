@@ -102,6 +102,39 @@ export function formatHourLabel(hour: number, timeFormat: TimeFormat = '12h'): s
   return `${hour - 12} PM`;
 }
 
+// ── Time range formatting ───────────────────────────────────────────
+
+/**
+ * Format a start time + duration into a time range string.
+ * When the end time falls on a different day, includes short dates:
+ *   same day:  "9:00 PM — 11:30 PM"
+ *   cross day: "May 1, 9:00 PM — May 2, 2:30 AM"
+ */
+export function formatTimeRange(
+  dateStr: string,
+  durationMinutes: number,
+  timeFormat: TimeFormat = '24h',
+): string {
+  const startTime = formatTime(dateStr, timeFormat);
+  const startDate = new Date(dateStr);
+  const endDate = new Date(startDate.getTime() + durationMinutes * 60_000);
+  const endTime = formatTime(endDate.toISOString(), timeFormat);
+
+  // Same calendar day — just times
+  if (
+    startDate.getFullYear() === endDate.getFullYear() &&
+    startDate.getMonth() === endDate.getMonth() &&
+    startDate.getDate() === endDate.getDate()
+  ) {
+    return `${startTime} — ${endTime}`;
+  }
+
+  // Different days — include short date with each time
+  const shortDate = (d: Date) =>
+    d.toLocaleDateString(i18n.language, { month: 'short', day: 'numeric' });
+  return `${shortDate(startDate)}, ${startTime} — ${shortDate(endDate)}, ${endTime}`;
+}
+
 // ── Reminder formatting ─────────────────────────────────────────────
 
 /** Format a reminder offset in minutes to a human-readable string. */
