@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { getHoursArray, formatHourLabel, formatTime } from '@/utils/date';
 import { getCategoryColor, getCategoryName, translateCategoryName } from '@/utils/category';
+import { getSegmentForDay } from '@/utils/multiDay';
 import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
@@ -156,14 +157,14 @@ export function DayTimeline({ date, items, categories, onItemClick, isLoading, h
 
               {/* Absolutely positioned timed items */}
               {(() => {
-                const layout = layoutOverlaps(timedItems, DAY_MAX_COLS);
+                const layout = layoutOverlaps(timedItems, DAY_MAX_COLS, date);
                 return timedItems.filter((item) => !layout.get(item.id)?.hidden).map((item) => {
-                  const itemDate = new Date(item.date);
-                  const startHour = itemDate.getHours();
-                  const startMinute = itemDate.getMinutes();
+                  // For multi-day items, clip start/duration to this day's visible segment
+                  const segment = getSegmentForDay(item.date, item.duration || 60, date);
+                  const startHour = segment.visibleStart.getHours();
+                  const startMinute = segment.visibleStart.getMinutes();
                   const top = (startHour + startMinute / 60) * HOUR_HEIGHT;
-                  const duration = item.duration || 60;
-                  const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
+                  const height = Math.max(24, (segment.visibleMinutes / 60) * HOUR_HEIGHT);
                   const colors = item.itemType === 'EVENT'
                     ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                     : getCategoryColor(item.categoryId, categories);

@@ -2,12 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDisplay } from '@/lib/contexts/display-context';
 import {
-  getTasks,
-  getAssignedGroupTasks,
-  getEvents,
-  getAttendingEvents,
-  getUserEventInstances,
-  getTaskInstances,
+  getCalendarItems,
   getRecurringTasks,
   getRecurringEvents,
 } from '@/lib/api';
@@ -60,46 +55,18 @@ export function useCalendar(
 
   const fromDate = useMemo(() => toISODate(visibleDates[0]), [visibleDates]);
   const toDate = useMemo(() => toISODate(visibleDates[visibleDates.length - 1]), [visibleDates]);
-  // Events use datetime comparison — extend end by 1 day to cover full last day
-  const toDateEnd = useMemo(() => {
-    const d = new Date(visibleDates[visibleDates.length - 1]);
-    d.setDate(d.getDate() + 1);
-    return toISODate(d);
-  }, [visibleDates]);
 
-  // ── 5 parallel queries (matching dooooApp's multi-source architecture) ──
+  // ── Unified date-range query (tasks + events + instances with multi-day overlap) ──
 
-  const { data: personalTasks = [], isLoading: loadingTasks } = useQuery({
-    queryKey: ['calendar-tasks', fromDate, toDate],
-    queryFn: () => getTasks({ fromDate, toDate }),
+  const { data: calendarData, isLoading: loadingItems } = useQuery({
+    queryKey: ['calendar-items', fromDate, toDate],
+    queryFn: () => getCalendarItems({ from: fromDate, to: toDate }),
   });
 
-  const { data: groupTasks = [], isLoading: loadingGroupTasks } = useQuery({
-    queryKey: ['calendar-assigned-group-tasks'],
-    queryFn: getAssignedGroupTasks,
-    staleTime: 2 * 60 * 1000,
-  });
-
-  const { data: ownedEvents = [], isLoading: loadingEvents } = useQuery({
-    queryKey: ['calendar-events', fromDate, toDateEnd],
-    queryFn: () => getEvents({ from: fromDate, to: toDateEnd }),
-  });
-
-  const { data: attendingEvents = [], isLoading: loadingAttending } = useQuery({
-    queryKey: ['calendar-attending-events', fromDate, toDateEnd],
-    queryFn: () => getAttendingEvents({ from: fromDate, to: toDateEnd }),
-  });
-
-  const { data: eventInstances = [], isLoading: loadingEventInstances } = useQuery({
-    queryKey: ['calendar-event-instances', fromDate, toDateEnd],
-    queryFn: () => getUserEventInstances({ from: fromDate, to: toDateEnd }),
-  });
-
-  const { data: taskInstancesResponse, isLoading: loadingTaskInstances } = useQuery({
-    queryKey: ['calendar-task-instances', fromDate, toDate],
-    queryFn: () => getTaskInstances({ from: fromDate, to: toDate }),
-  });
-  const taskInstances: TaskInstance[] = taskInstancesResponse?.data?.instances ?? [];
+  const personalTasks = calendarData?.tasks ?? [];
+  const taskInstances: TaskInstance[] = calendarData?.taskInstances ?? [];
+  const calendarEvents = calendarData?.events ?? [];
+  const eventInstances = calendarData?.eventInstances ?? [];
 
   // Recurring tasks/events fetched once per session (no date filter) so the
   // calendar can expand instances on weeks where the parent's start date is
@@ -117,12 +84,7 @@ export function useCalendar(
   });
 
   const isLoading =
-    loadingTasks ||
-    loadingGroupTasks ||
-    loadingEvents ||
-    loadingAttending ||
-    loadingEventInstances ||
-    loadingTaskInstances ||
+    loadingItems ||
     loadingRecurringTasks ||
     loadingRecurringEvents;
 
@@ -253,7 +215,7 @@ export function useCalendar(
       }
     };
 
-    // 1. Personal tasks: merge date-range query + recurring query (deduped via seenIds).
+    // 1. Tasks: date-range query (personal + group) + recurring (deduped via seenIds).
     // The recurring query is needed because the date-range query only returns
     // tasks whose start date overlaps the visible range, but a recurring task
     // whose start date falls outside may still have occurrences inside.
@@ -264,15 +226,8 @@ export function useCalendar(
       pushTaskWithRecurrence(task);
     }
 
-    // 2. Assigned group tasks
-    for (const task of groupTasks) {
-      pushTaskWithRecurrence(task);
-    }
-
-    // 3. Events (owned + attending + recurring, deduplicated)
-    // Same recurring-task rationale: a recurring event whose start date falls
-    // outside the visible range may still have occurrences inside it.
-    const allEventsRaw = [...ownedEvents, ...attendingEvents, ...recurringEvents];
+    // 2. Events (date-range + recurring, deduplicated)
+    const allEventsRaw = [...calendarEvents, ...recurringEvents];
     const dedupedEventsMap = new Map<string, Event>();
     for (const event of allEventsRaw) {
       if (!dedupedEventsMap.has(event.id)) dedupedEventsMap.set(event.id, event);
@@ -331,7 +286,7 @@ export function useCalendar(
     }
 
     return map;
-  }, [personalTasks, recurringTasks, groupTasks, ownedEvents, attendingEvents, recurringEvents, eventInstances, taskInstances, visibleDates, currentUserId, groupNameMap]);
+  }, [personalTasks, recurringTasks, calendarEvents, recurringEvents, eventInstances, taskInstances, visibleDates, currentUserId, groupNameMap]);
 
   // ── Panel items: selected date OR all visible days ──
 

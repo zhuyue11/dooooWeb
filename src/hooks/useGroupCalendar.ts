@@ -2,15 +2,15 @@ import { useState, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDisplay } from '@/lib/contexts/display-context';
 import {
+  getCalendarItems,
   getGroupTasks,
-  getGroupEvents,
   getRecurringGroupEvents,
 } from '@/lib/api';
 import {
   getWeekDates, startOfMonth, getMonthGridDates,
   toISODate, isSameDay, startOfDay,
 } from '@/utils/date';
-import type { Task, Event, Repeat } from '@/types/api';
+import type { Task, Event, TaskInstance, Repeat } from '@/types/api';
 import type { WeekStartDay } from '@/utils/date';
 import { shouldGenerateInstance, isSingleOccurrenceRecurring } from '@/utils/recurrence';
 import { buildOccurrenceDate } from '@/utils/recurrenceTime';
@@ -18,7 +18,7 @@ import { distributeAcrossDays } from '@/utils/multiDay';
 import type { CalendarItem } from './useWeekCalendar';
 import type { CalendarViewMode } from './useCalendar';
 import {
-  taskToCalendarItem, eventToCalendarItem,
+  taskToCalendarItem, eventToCalendarItem, eventInstanceToCalendarItem,
   computeParticipantSummaryForDate, sortByTime, sortByDateThenTime,
 } from './calendarHelpers';
 
@@ -56,33 +56,29 @@ export function useGroupCalendar(
   // ── Date range for API queries ──
 
   const fromDate = useMemo(() => toISODate(visibleDates[0]), [visibleDates]);
-  const toDateEnd = useMemo(() => {
-    const d = new Date(visibleDates[visibleDates.length - 1]);
-    d.setDate(d.getDate() + 1);
-    return toISODate(d);
-  }, [visibleDates]);
+  const toDate = useMemo(() => toISODate(visibleDates[visibleDates.length - 1]), [visibleDates]);
 
   // ── Queries ──
 
   const enabled = !!groupId;
 
-  const { data: groupTasks = [], isLoading: loadingTasks } = useQuery({
-    queryKey: ['group-calendar-tasks', groupId, fromDate, toDateEnd],
-    queryFn: () => getGroupTasks(groupId!, { from: fromDate, to: toDateEnd }),
+  // Unified date-range query (tasks + events with multi-day overlap)
+  const { data: calendarData, isLoading: loadingItems } = useQuery({
+    queryKey: ['group-calendar-items', groupId, fromDate, toDate],
+    queryFn: () => getCalendarItems({ from: fromDate, to: toDate, groupId: groupId! }),
     enabled,
   });
+
+  const groupTasks = calendarData?.tasks ?? [];
+  const groupEvents = calendarData?.events ?? [];
+  const taskInstances: TaskInstance[] = calendarData?.taskInstances ?? [];
+  const eventInstances = calendarData?.eventInstances ?? [];
 
   const { data: recurringGroupTasks = [], isLoading: loadingRecurringTasks } = useQuery({
     queryKey: ['group-calendar-recurring-tasks', groupId],
     queryFn: () => getGroupTasks(groupId!, { recurring: true }),
     enabled,
     staleTime: 2 * 60 * 1000,
-  });
-
-  const { data: groupEvents = [], isLoading: loadingEvents } = useQuery({
-    queryKey: ['group-calendar-events', groupId, fromDate, toDateEnd],
-    queryFn: () => getGroupEvents(groupId!, { from: fromDate, to: toDateEnd }),
-    enabled,
   });
 
   const { data: recurringGroupEvents = [], isLoading: loadingRecurringEvents } = useQuery({
@@ -92,7 +88,7 @@ export function useGroupCalendar(
     staleTime: 2 * 60 * 1000,
   });
 
-  const isLoading = loadingTasks || loadingRecurringTasks || loadingEvents || loadingRecurringEvents;
+  const isLoading = loadingItems || loadingRecurringTasks || loadingRecurringEvents;
 
   // ── Merge into CalendarItem[], grouped by date ──
 
@@ -114,6 +110,32 @@ export function useGroupCalendar(
     for (const d of visibleDates) {
       map.set(toISODate(d), []);
     }
+
+    // Index stored task instances for MODIFIED override / REMOVED skip
+    const taskInstanceByKey = new Map<string, TaskInstance>();
+    for (const inst of taskInstances) {
+      const dateKey = toISODate(new Date(inst.date));
+      taskInstanceByKey.set(`${inst.taskId}|${dateKey}`, inst);
+    }
+
+    const applyTaskInstance = (item: CalendarItem, inst: TaskInstance): CalendarItem => {
+      return {
+        ...item,
+        title: inst.title || item.title,
+        description: inst.description ?? item.description,
+        priority: inst.priority ?? item.priority,
+        categoryId: inst.categoryId ?? item.categoryId,
+        hasTime: inst.hasTime ?? item.hasTime,
+        duration: inst.duration ?? item.duration,
+        firstReminderMinutes: inst.firstReminderMinutes ?? item.firstReminderMinutes,
+        secondReminderMinutes: inst.secondReminderMinutes ?? item.secondReminderMinutes,
+        location: inst.location ?? item.location,
+        locationAddress: inst.locationAddress ?? item.locationAddress,
+        isCompleted: inst.status === 'COMPLETED',
+        instanceStatus: inst.status,
+        isInstance: true,
+      };
+    };
 
     const placeMultiDay = (origin: CalendarItem, startDate: Date, idPrefix: string) => {
       const parts = distributeAcrossDays(startDate, origin.duration, origin.isCompleted, visibleDates);
@@ -142,19 +164,23 @@ export function useGroupCalendar(
       const baseKey = toISODate(baseDate);
       const treatAsRegular = isSingleOccurrenceRecurring(true, task.originalTaskId, baseDate, repeat);
 
-      const baseItem = enrich(taskToCalendarItem(task, isNoDateTask ? baseDate.toISOString() : undefined), task);
-      if (isNoDateTask) {
-        baseItem.isNoDate = true;
-        baseItem.duration = null;
+      const baseStored = taskInstanceByKey.get(`${task.id}|${baseKey}`);
+      if (!baseStored || baseStored.status !== 'REMOVED') {
+        const baseItem = enrich(taskToCalendarItem(task, isNoDateTask ? baseDate.toISOString() : undefined), task);
+        if (isNoDateTask) {
+          baseItem.isNoDate = true;
+          baseItem.duration = null;
+        }
+        if (task.isForAllMembers) {
+          baseItem.participantSummary = computeParticipantSummaryForDate(task, baseDate);
+        }
+        if (treatAsRegular) {
+          baseItem.isInstance = false;
+          baseItem.repeat = undefined;
+        }
+        const finalBase = baseStored ? applyTaskInstance(baseItem, baseStored) : baseItem;
+        placeMultiDay(finalBase, baseDate, task.id);
       }
-      if (task.isForAllMembers) {
-        baseItem.participantSummary = computeParticipantSummaryForDate(task, baseDate);
-      }
-      if (treatAsRegular) {
-        baseItem.isInstance = false;
-        baseItem.repeat = undefined;
-      }
-      placeMultiDay(baseItem, baseDate, task.id);
 
       if (!repeat || !repeat.type || treatAsRegular) return;
 
@@ -162,6 +188,9 @@ export function useGroupCalendar(
         const dateKey = toISODate(day);
         if (dateKey === baseKey) continue;
         if (!shouldGenerateInstance(baseDate, day, repeat)) continue;
+
+        const stored = taskInstanceByKey.get(`${task.id}|${dateKey}`);
+        if (stored && stored.status === 'REMOVED') continue;
 
         const base = enrich(taskToCalendarItem(task), task);
         if (task.isForAllMembers) {
@@ -172,7 +201,8 @@ export function useGroupCalendar(
         base.isInstance = true;
         base.taskId = task.id;
         base.id = `${task.id}_${dateKey}`;
-        placeMultiDay(base, occDate, base.id);
+        const item = stored ? applyTaskInstance(base, stored) : base;
+        placeMultiDay(item, occDate, base.id);
       }
     };
 
@@ -186,24 +216,41 @@ export function useGroupCalendar(
     for (const event of allEventsRaw) {
       if (!dedupedEventsMap.has(event.id)) dedupedEventsMap.set(event.id, event);
     }
+    const eventsById = dedupedEventsMap;
+
+    // Process stored event instances first (REMOVED blocks virtual generation)
+    const storedInstanceKeys = new Set<string>();
+    for (const instance of eventInstances) {
+      const dateKey = toISODate(new Date(instance.date));
+      storedInstanceKeys.add(`${instance.eventId}|${dateKey}`);
+      if (instance.status === 'REMOVED') continue;
+      if (!map.has(dateKey)) continue;
+      const parent = eventsById.get(instance.eventId);
+      const item = eventInstanceToCalendarItem(instance, parent);
+      if (groupName) item.groupName = groupName;
+      map.get(dateKey)!.push(item);
+    }
 
     const seenEventIds = new Set<string>();
-    for (const event of dedupedEventsMap.values()) {
+    for (const event of allEventsRaw) {
       if (!event.date || seenEventIds.has(event.id)) continue;
       seenEventIds.add(event.id);
       const baseDate = new Date(event.date);
       const repeat = event.repeat as Repeat | undefined;
       const baseKey = toISODate(baseDate);
 
-      const item = eventToCalendarItem(event);
-      if (groupName) item.groupName = groupName;
-      placeMultiDay(item, baseDate, `event-${event.id}`);
+      if (!storedInstanceKeys.has(`${event.id}|${baseKey}`)) {
+        const item = eventToCalendarItem(event);
+        if (groupName) item.groupName = groupName;
+        placeMultiDay(item, baseDate, `event-${event.id}`);
+      }
 
       if (!repeat || !repeat.type) continue;
 
       for (const day of visibleDates) {
         const dateKey = toISODate(day);
         if (dateKey === baseKey) continue;
+        if (storedInstanceKeys.has(`${event.id}|${dateKey}`)) continue;
         if (!shouldGenerateInstance(baseDate, day, repeat)) continue;
 
         const occItem = eventToCalendarItem(event);
@@ -222,7 +269,7 @@ export function useGroupCalendar(
     }
 
     return map;
-  }, [groupTasks, recurringGroupTasks, groupEvents, recurringGroupEvents, visibleDates, currentUserId, groupName]);
+  }, [groupTasks, recurringGroupTasks, groupEvents, recurringGroupEvents, taskInstances, eventInstances, visibleDates, currentUserId, groupName]);
 
   // ── Panel items ──
 

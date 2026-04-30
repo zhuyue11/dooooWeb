@@ -301,6 +301,22 @@ export async function getRecurringEvents(): Promise<Event[]> {
   return res.data.data;
 }
 
+// ===== Calendar (unified date-range endpoint) =====
+
+export interface CalendarItemsResponse {
+  tasks: Task[];
+  taskInstances: TaskInstance[];
+  events: Event[];
+  eventInstances: EventInstance[];
+}
+
+export async function getCalendarItems(params: { from: string; to: string; groupId?: string }): Promise<CalendarItemsResponse> {
+  const res = await apiClient.get<{ success: boolean; data: CalendarItemsResponse }>('/api/calendar/items', { params });
+  return res.data.data;
+}
+
+// ===== Event Instances =====
+
 export async function createEventInstance(eventId: string, data: CreateEventInstanceRequest): Promise<EventInstance> {
   const res = await apiClient.post<{ success: boolean; data: EventInstance }>(`/api/events/${eventId}/instances`, data);
   return res.data.data;

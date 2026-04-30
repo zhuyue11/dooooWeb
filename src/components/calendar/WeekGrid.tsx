@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { isSameDay, toISODate, getHoursArray, formatHourLabel } from '@/utils/date';
 import { getCategoryColor } from '@/utils/category';
+import { getSegmentForDay } from '@/utils/multiDay';
 import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
@@ -12,15 +13,25 @@ export interface LayoutInfo { column: number; totalColumns: number; hidden: bool
 
 const MAX_VISIBLE_COLS = 2;
 
-/** Assign side-by-side columns to overlapping items (Google Calendar style). */
-export function layoutOverlaps(items: CalendarItem[], maxVisibleCols: number = MAX_VISIBLE_COLS): Map<string, LayoutInfo> {
+/** Assign side-by-side columns to overlapping items (Google Calendar style).
+ *  When `dayContext` is provided, multi-day items are clipped to that day's
+ *  visible segment so overlap detection uses the correct time range. */
+export function layoutOverlaps(items: CalendarItem[], maxVisibleCols: number = MAX_VISIBLE_COLS, dayContext?: Date): Map<string, LayoutInfo> {
   const result = new Map<string, LayoutInfo>();
   if (items.length === 0) return result;
 
   const spans = items.map((item) => {
-    const d = new Date(item.date);
-    const start = d.getHours() * 60 + d.getMinutes();
-    const end = start + (item.duration || 60);
+    let start: number;
+    let end: number;
+    if (dayContext) {
+      const seg = getSegmentForDay(item.date, item.duration || 60, dayContext);
+      start = seg.visibleStart.getHours() * 60 + seg.visibleStart.getMinutes();
+      end = start + seg.visibleMinutes;
+    } else {
+      const d = new Date(item.date);
+      start = d.getHours() * 60 + d.getMinutes();
+      end = start + (item.duration || 60);
+    }
     return { id: item.id, start, end };
   }).sort((a, b) => a.start - b.start || a.end - b.end);
 
@@ -302,14 +313,14 @@ export function WeekGrid({ weekDates, itemsByDate, selectedDate, today, categori
 
                     {/* Timed items — absolutely positioned, side-by-side for overlaps (max 2) */}
                     {(() => {
-                      const layout = layoutOverlaps(timedItems);
+                      const layout = layoutOverlaps(timedItems, MAX_VISIBLE_COLS, date);
                       return timedItems.filter((item) => !layout.get(item.id)?.hidden).map((item) => {
-                        const itemDate = new Date(item.date);
-                        const startHour = itemDate.getHours();
-                        const startMinute = itemDate.getMinutes();
+                        // For multi-day items, clip start/duration to this day's visible segment
+                        const segment = getSegmentForDay(item.date, item.duration || 60, date);
+                        const startHour = segment.visibleStart.getHours();
+                        const startMinute = segment.visibleStart.getMinutes();
                         const top = (startHour + startMinute / 60) * HOUR_HEIGHT;
-                        const duration = item.duration || 60;
-                        const height = Math.max(24, (duration / 60) * HOUR_HEIGHT);
+                        const height = Math.max(24, (segment.visibleMinutes / 60) * HOUR_HEIGHT);
                         const colors = item.itemType === 'EVENT'
                           ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                           : getCategoryColor(item.categoryId, categories);

@@ -1,10 +1,32 @@
-import { isSameDay, toISODate } from '@/utils/date';
+import { isSameDay, toISODate, startOfDay } from '@/utils/date';
 import { isItemChecked } from '@/hooks/useWeekCalendar';
 import type { CalendarItem } from '@/hooks/useWeekCalendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
+
+type ChipStyle = 'single' | 'start' | 'middle' | 'end';
+
+/**
+ * Determine multi-day chip style for an item on a given date cell.
+ * Mirrors dooooApp/components/calendar/MonthDayItem.tsx:determineChipStyle.
+ */
+function getChipStyle(item: CalendarItem, cellDate: Date): ChipStyle {
+  if (!item.duration || item.isCompleted) return 'single';
+
+  const taskStart = new Date(item.date);
+  const taskEnd = new Date(taskStart.getTime() + item.duration * 60_000);
+
+  const startDay = startOfDay(taskStart).getTime();
+  const endDay = startOfDay(taskEnd).getTime();
+  if (endDay <= startDay) return 'single';
+
+  const currentDay = startOfDay(cellDate).getTime();
+  if (currentDay === startDay) return 'start';
+  if (currentDay === endDay) return 'end';
+  return 'middle';
+}
 
 interface MonthGridProps {
   visibleDates: Date[]; // 35 or 42 dates from getMonthGridDates
@@ -59,7 +81,7 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                   key={di}
                   data-testid={`month-cell-${dateKey}`}
                   onClick={() => onSelectDate(date)}
-                  className={`flex flex-col gap-1 p-2 text-left transition-colors hover:bg-(--el-cal-nav-hover-bg) ${
+                  className={`flex flex-col gap-1 overflow-visible p-2 text-left transition-colors hover:bg-(--el-cal-nav-hover-bg) ${
                     di < 6 ? 'border-r border-(--el-cal-grid-border)' : ''
                   } ${isToday ? 'bg-(--el-cal-current-hour-bg)' : ''}`}
                 >
@@ -78,28 +100,60 @@ export function MonthGrid({ visibleDates, currentMonth, itemsByDate, selectedDat
                     {date.getDate()}
                   </span>
 
-                  {/* Item titles */}
+                  {/* Item chips */}
                   {!isLoading && items.length > 0 && (
-                    <div className="flex flex-col gap-0.5 overflow-hidden">
+                    <div className="flex flex-col gap-0.5 overflow-visible">
                       {items.slice(0, 3).map((item) => {
                         const colors = item.itemType === 'EVENT'
                           ? { bg: 'var(--el-cal-event-bg)', text: 'var(--el-cal-event-text)' }
                           : getCategoryColor(item.categoryId, categories);
+                        const chip = getChipStyle(item, date);
+                        const isMultiDay = chip !== 'single';
+                        const showTitle = chip === 'single' || chip === 'start';
+
+                        // Border-radius per segment
+                        const radiusLeft = chip === 'single' || chip === 'start' ? 4 : 0;
+                        const radiusRight = chip === 'single' || chip === 'end' ? 4 : 0;
+                        // Negative margins to bleed into adjacent cells for continuous stripe
+                        const marginLeft = chip === 'middle' || chip === 'end' ? -9 : 0;
+                        const marginRight = chip === 'start' || chip === 'middle' ? -9 : 0;
+
                         return (
                           <div
                             key={item.id}
-                            className={`overflow-hidden rounded px-1 py-px ${isItemChecked(item) ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
-                            style={{ backgroundColor: colors.bg, color: colors.text }}
+                            className={`${isItemChecked(item) ? 'opacity-60' : ''} ${onItemClick ? 'cursor-pointer transition-opacity hover:opacity-80' : ''} ${isMultiDay ? 'relative z-10' : ''}`}
+                            style={{
+                              backgroundColor: colors.bg,
+                              color: colors.text,
+                              borderTopLeftRadius: radiusLeft,
+                              borderBottomLeftRadius: radiusLeft,
+                              borderTopRightRadius: radiusRight,
+                              borderBottomRightRadius: radiusRight,
+                              marginLeft,
+                              marginRight,
+                              paddingLeft: chip === 'middle' || chip === 'end' ? marginLeft * -1 + 1 : 4,
+                              paddingRight: chip === 'start' || chip === 'middle' ? marginRight * -1 + 1 : 4,
+                              paddingTop: 1,
+                              paddingBottom: 1,
+                              minHeight: 18,
+                            }}
                             onClick={(e) => { if (onItemClick) { e.stopPropagation(); onItemClick(item); } }}
                           >
-                            <div className={`truncate text-[10px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}>
-                              {item.title}
-                            </div>
-                            {item.groupName && !hideGroupTag && (
-                              <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-(--el-item-group-border) px-1 text-[7px] font-medium leading-tight text-(--el-item-group-text)">
-                                <Icon name="group" size={7} color="var(--el-item-group-text)" />
-                                {item.groupName}
-                              </span>
+                            {showTitle ? (
+                              <>
+                                <div className={`truncate text-[10px] font-medium leading-tight ${isItemChecked(item) ? 'line-through' : ''}`}>
+                                  {item.title}
+                                </div>
+                                {item.groupName && !hideGroupTag && (
+                                  <span className="mt-0.5 inline-flex max-w-full items-center gap-px truncate rounded-full border border-(--el-item-group-border) px-1 text-[7px] font-medium leading-tight text-(--el-item-group-text)">
+                                    <Icon name="group" size={7} color="var(--el-item-group-text)" />
+                                    {item.groupName}
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              /* Continuation bar — no title, just colored bar */
+                              <div style={{ height: 14 }} />
                             )}
                           </div>
                         );

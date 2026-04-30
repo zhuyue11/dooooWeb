@@ -44,3 +44,34 @@ export function distributeAcrossDays(
   }
   return result;
 }
+
+/**
+ * For a timed item that may span multiple days, compute the visible segment
+ * on `currentDay`: the clipped start time, clipped end time, and the visible
+ * duration in minutes.
+ *
+ * Mirrors dooooApp/lib/utils.ts:getTaskSegmentInfo.
+ *
+ * @param itemDate - ISO date string of the item's start time
+ * @param durationMinutes - total duration in minutes
+ * @param currentDay - the calendar day to compute the segment for
+ */
+export function getSegmentForDay(
+  itemDate: string,
+  durationMinutes: number,
+  currentDay: Date,
+): { visibleStart: Date; visibleEnd: Date; visibleMinutes: number } {
+  const taskStart = new Date(itemDate);
+  const taskEnd = new Date(taskStart.getTime() + durationMinutes * 60_000);
+
+  const dayStart = new Date(currentDay);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(currentDay);
+  dayEnd.setHours(23, 59, 59, 999);
+
+  const visibleStart = new Date(Math.max(taskStart.getTime(), dayStart.getTime()));
+  const visibleEnd = new Date(Math.min(taskEnd.getTime(), dayEnd.getTime()));
+  const visibleMinutes = Math.max(0, (visibleEnd.getTime() - visibleStart.getTime()) / 60_000);
+
+  return { visibleStart, visibleEnd, visibleMinutes };
+}
