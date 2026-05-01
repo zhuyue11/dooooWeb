@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "รายการงานนี้จะถูกลบออกจาก {{originalDate}} และย้ายไปยัง {{newDate}} รายการอื่นจะไม่ได้รับผลกระทบ",
       "activityInstanceDateChangeMessage": "รายการกิจกรรมนี้จะถูกลบออกจาก {{originalDate}} และย้ายไปยัง {{newDate}} รายการอื่นจะไม่ได้รับผลกระทบ",
       "moveOccurrence": "ย้าย",
-      "keepOriginal": "คงเดิม"
+      "keepOriginal": "คงเดิม",
+      "viewAllOccurrences": "ดูรายการทั้งหมด",
+      "hideOccurrences": "ซ่อนรายการ",
+      "loadMore": "โหลดเพิ่มเติม"
     },
     "input": {
       "addTitle": "เพิ่มชื่อ",
@@ -1697,5 +1700,10 @@
     "newChat": "แชทใหม่",
     "planPreviewNoTemplates": "ไม่มีเทมเพลตในแผนนี้",
     "loadingPlan": "กำลังโหลดแผน..."
+  },
+  "reschedule": {
+    "title": "กำหนดเวลาใหม่",
+    "confirm": "ยืนยัน",
+    "allDay": "ทั้งวัน"
   }
 }

@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Lần xuất hiện nhiệm vụ này sẽ được xóa khỏi {{originalDate}} và chuyển sang {{newDate}}. Các lần xuất hiện khác sẽ không bị ảnh hưởng.",
       "activityInstanceDateChangeMessage": "Lần xuất hiện hoạt động này sẽ được xóa khỏi {{originalDate}} và chuyển sang {{newDate}}. Các lần xuất hiện khác sẽ không bị ảnh hưởng.",
       "moveOccurrence": "Di chuyển",
-      "keepOriginal": "Giữ nguyên"
+      "keepOriginal": "Giữ nguyên",
+      "viewAllOccurrences": "Xem tất cả lần xuất hiện",
+      "hideOccurrences": "Ẩn lần xuất hiện",
+      "loadMore": "Tải thêm"
     },
     "input": {
       "addTitle": "Thêm tiêu đề",
@@ -1697,5 +1700,10 @@
     "newChat": "Trò chuyện mới",
     "planPreviewNoTemplates": "Không có mẫu trong kế hoạch này",
     "loadingPlan": "Đang tải kế hoạch..."
+  },
+  "reschedule": {
+    "title": "Lên lịch lại",
+    "confirm": "Xác nhận",
+    "allDay": "Cả ngày"
   }
 }

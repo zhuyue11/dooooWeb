@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Esta ocorrência da tarefa será removida de {{originalDate}} e movida para {{newDate}}. As outras ocorrências não serão afetadas.",
       "activityInstanceDateChangeMessage": "Esta ocorrência da atividade será removida de {{originalDate}} e movida para {{newDate}}. As outras ocorrências não serão afetadas.",
       "moveOccurrence": "Mover",
-      "keepOriginal": "Manter original"
+      "keepOriginal": "Manter original",
+      "viewAllOccurrences": "Ver todas as ocorrências",
+      "hideOccurrences": "Ocultar ocorrências",
+      "loadMore": "Carregar mais"
     },
     "input": {
       "addTitle": "Adicionar título",
@@ -1703,5 +1706,10 @@
     "newChat": "Nova conversa",
     "planPreviewNoTemplates": "Nenhum modelo neste plano",
     "loadingPlan": "Carregando plano..."
+  },
+  "reschedule": {
+    "title": "Reagendar",
+    "confirm": "Confirmar",
+    "allDay": "O dia todo"
   }
 }

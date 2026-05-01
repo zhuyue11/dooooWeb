@@ -11,7 +11,7 @@
  * Use these helpers anywhere you would otherwise reach for `item.id` to build
  * a route or pass to an API mutation.
  */
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import { toISODate } from './date';
 
 /**

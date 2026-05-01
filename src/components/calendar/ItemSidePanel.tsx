@@ -3,13 +3,17 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Icon } from '@/components/ui/Icon';
-import { useItemMutations } from '@/hooks/useItemMutations';
 import { useCategories } from '@/hooks/useCategories';
 import { isTaskTimeInPast, hasActivityEnded, toISODate } from '@/utils/date';
 import { ItemDetailCard } from './ItemDetailCard';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
+import type { Category } from '@/types/api';
 import { getParentIdFromString, getOccurrenceDateFromId } from '@/utils/calendarItemId';
 import { RecurringScopeModal } from './RecurringScopeModal';
+import { RescheduleModal } from './RescheduleModal';
+import { OccurrencesList } from './OccurrencesList';
+import { useReschedule } from '@/hooks/useReschedule';
+import { useRecurringDelete } from '@/hooks/useRecurringDelete';
 import { ItemActionsMenu } from './ItemActionsMenu';
 import { NotesSection } from './NotesSection';
 import { useNotes } from '@/hooks/useNotes';
@@ -59,7 +63,7 @@ function PriorityPill({ priority }: { priority: string }) {
 
 // ── Category pill ──
 
-function CategoryPill({ categoryId, categories }: { categoryId: string; categories?: Array<{ id: string; name: string; color?: string }> }) {
+function CategoryPill({ categoryId, categories }: { categoryId: string; categories?: Category[] }) {
   const { t } = useTranslation();
   const rawName = getCategoryName(categoryId, categories);
   const name = rawName ? translateCategoryName(rawName, t) : undefined;
@@ -83,14 +87,8 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: categories } = useCategories(groupId);
-  const {
-    deleteTaskMutation,
-    deleteEventMutation,
-    deleteTaskInstanceMutation,
-    deleteEventInstanceMutation,
-    updateTaskMutation,
-    updateEventMutation,
-  } = useItemMutations();
+  // Mutations still needed for edit-scope "delete future" (truncates repeat)
+  // are now handled inside useRecurringDelete hook
   const { user } = useAuth();
 
   // Resolve IDs from the CalendarItem id string
@@ -103,14 +101,14 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
     rawItem, task, event, isLoading,
     isForAllMembers, trackCompletion, participantInstanceStatus,
     parentTaskIsCompleted, isChecked, creatorName, assigneeName, assigneeId,
-    shouldShowToggle,
-  } = useItemData(parentId, itemType, currentUserId);
+    shouldShowToggle, occurrenceInstance,
+  } = useItemData(parentId, itemType, currentUserId, idOccurrenceDate ? { date: idOccurrenceDate } : null);
 
   const { manualCompleteMutation } = useParticipationMutations(parentId);
   const [showEndActivityConfirm, setShowEndActivityConfirm] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [scopeModalMode, setScopeModalMode] = useState<'edit' | 'delete' | null>(null);
+  const [showEditScope, setShowEditScope] = useState(false);
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -131,10 +129,17 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
   // ── Derive fields from raw API response ──
 
   const isTask = itemType === 'TASK';
-  const date = task?.date ?? event?.date ?? '';
-  const occurrenceDateKey = idOccurrenceDate ?? (date ? toISODate(new Date(date)) : '');
-  const hasTime = !!(task?.hasTime ?? event?.hasTime);
-  const duration = task?.duration ?? event?.duration ?? undefined;
+  const occ = occurrenceInstance;
+  const parentDate = task?.date ?? event?.date ?? '';
+  // When viewing an occurrence: use instance data if real, else override date with occurrence date
+  const date = occ?.date
+    ? (typeof occ.date === 'string' ? occ.date : new Date(occ.date).toISOString())
+    : idOccurrenceDate
+      ? `${idOccurrenceDate}T12:00:00.000Z`
+      : parentDate;
+  const occurrenceDateKey = idOccurrenceDate ?? (parentDate ? toISODate(new Date(parentDate)) : '');
+  const hasTime = occ ? !!(occ.hasTime) : !!(task?.hasTime ?? event?.hasTime);
+  const duration = occ?.duration ?? task?.duration ?? event?.duration ?? undefined;
   const repeat = task?.repeat ?? event?.repeat;
   const recurring = !!repeat;
   const isInstance = idOccurrenceDate !== null;
@@ -167,73 +172,19 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
 
   const handleEdit = useCallback(() => {
     if (recurring) {
-      setScopeModalMode('edit');
+      setShowEditScope(true);
       return;
     }
     navigateToEditor();
   }, [recurring, navigateToEditor]);
 
-  // Compute the previous-day ISO date string used by "this and future" delete
-  const previousDayKey = useCallback(() => {
-    const d = new Date(occurrenceDateKey + 'T00:00:00Z');
-    d.setUTCDate(d.getUTCDate() - 1);
-    return d.toISOString().slice(0, 10);
-  }, [occurrenceDateKey]);
 
-  const handleDelete = useCallback(async () => {
-    if (itemType === 'EVENT') {
-      await deleteEventMutation.mutateAsync(parentId);
-    } else {
-      await deleteTaskMutation.mutateAsync(parentId);
-    }
-    onMutate?.();
-    onClose();
-  }, [deleteTaskMutation, deleteEventMutation, parentId, itemType, onClose, onMutate]);
+  // ── Reschedule handlers ──
 
-  const handleScopeDeleteThis = useCallback(async () => {
-    if (itemType === 'EVENT') {
-      await deleteEventInstanceMutation.mutateAsync({ eventId: parentId, date: occurrenceDateKey });
-    } else {
-      await deleteTaskInstanceMutation.mutateAsync({ taskId: parentId, date: occurrenceDateKey });
-    }
-    setScopeModalMode(null);
-    onMutate?.();
-    onClose();
-  }, [deleteEventInstanceMutation, deleteTaskInstanceMutation, parentId, occurrenceDateKey, itemType, onClose, onMutate]);
+  const handleRescheduleClick = useCallback(() => {
+    setShowRescheduleModal(true);
+  }, []);
 
-  const handleScopeDeleteFuture = useCallback(async () => {
-    const truncated = {
-      ...(typeof repeat === 'object' && repeat !== null ? repeat : {}),
-      endCondition: { type: 'date', endDate: previousDayKey() },
-    };
-    if (itemType === 'EVENT') {
-      await updateEventMutation.mutateAsync({ id: parentId, data: { repeat: truncated as any } });
-    } else {
-      await updateTaskMutation.mutateAsync({ id: parentId, data: { repeat: truncated as any } });
-    }
-    setScopeModalMode(null);
-    onMutate?.();
-    onClose();
-  }, [updateEventMutation, updateTaskMutation, parentId, repeat, itemType, previousDayKey, onClose, onMutate]);
-
-  const handleScopeDeleteAll = useCallback(async () => {
-    if (itemType === 'EVENT') {
-      await deleteEventMutation.mutateAsync(parentId);
-    } else {
-      await deleteTaskMutation.mutateAsync(parentId);
-    }
-    setScopeModalMode(null);
-    onMutate?.();
-    onClose();
-  }, [deleteEventMutation, deleteTaskMutation, parentId, itemType, onClose, onMutate]);
-
-  const handleDeleteClick = useCallback(() => {
-    if (recurring) {
-      setScopeModalMode('delete');
-      return;
-    }
-    setShowDeleteConfirm(true);
-  }, [recurring]);
 
   const handleToggle = useCallback(async () => {
     if (itemType === 'EVENT') return;
@@ -258,11 +209,34 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
     ? computeParticipantStats(task?.participantInstances as any, task?.participants as any)
     : null;
 
-  const title = task?.title ?? event?.title ?? '';
-  const description = task?.description ?? event?.description;
-  const priority = task?.priority;
-  const categoryId = task?.categoryId ?? undefined;
+  const title = occ?.title || (task?.title ?? event?.title ?? '');
+  const description = occ?.description ?? task?.description ?? event?.description;
+  const priority = occ?.priority ?? task?.priority;
+  const categoryId = occ?.categoryId ?? task?.categoryId ?? undefined;
   const itemGroupId = task?.groupId ?? event?.groupId ?? undefined;
+
+  // Reschedule hook
+  const { reschedule } = useReschedule({
+    itemId: parentId,
+    itemType,
+    isRecurring: recurring,
+    title,
+    occurrenceDateKey,
+    onSuccess: () => { onMutate?.(); onClose(); },
+  });
+
+  // Delete hook (handles scope for recurring: this/future/all)
+  const {
+    deleteMode, handleDeleteClick, closeDelete,
+    deleteAll, deleteThis, deleteFuture, isPending: deletePending,
+  } = useRecurringDelete({
+    itemId: parentId,
+    itemType,
+    isRecurring: recurring,
+    occurrenceDateKey,
+    repeat,
+    onSuccess: () => { onMutate?.(); onClose(); },
+  });
 
   // Build 3-dots menu items via shared hook
   const menuItems = useItemMenu({
@@ -285,6 +259,7 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
     occurrenceDateKey,
   }, {
     onEdit: handleEdit,
+    onReschedule: handleRescheduleClick,
     onDelete: handleDeleteClick,
     onToggleComplete: handleToggle,
     onInvite: isForAllMembers && itemGroupId ? () => setShowInviteModal(true) : undefined,
@@ -409,6 +384,21 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
             valueColor="--el-panel-detail-value"
           />
 
+          {/* View All Occurrences */}
+          {recurring && (
+            <OccurrencesList
+              itemId={parentId}
+              itemType={itemType}
+              date={task?.date ?? event?.date ?? ''}
+              repeat={repeat}
+              parentTitle={task?.title ?? event?.title ?? ''}
+              onInstancePress={() => {
+                // Close side panel — the calendar will show the occurrence
+                onClose();
+              }}
+            />
+          )}
+
           {/* Group activity participation banner */}
           {isGroupTask && isForAllMembers && !isChecked && (
             <ParticipationBanner
@@ -479,68 +469,51 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
 
         </div>
 
-        {/* ── Delete confirmation overlay ── */}
-        {showDeleteConfirm && (
+        {/* ── Delete confirmation (non-recurring) ── */}
+        {deleteMode === 'confirm' && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-(--el-dialog-overlay)">
             <div className="mx-6 w-full max-w-sm rounded-(--radius-modal) bg-(--el-dialog-bg) p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-base font-semibold text-(--el-dialog-title)">{t('itemView.confirmDelete')}</h3>
               <p className="mt-2 text-sm text-(--el-dialog-description)">{t('itemView.deleteDescription')}</p>
               <div className="mt-4 flex justify-end gap-3">
                 <button
-                  onClick={() => setShowDeleteConfirm(false)}
+                  onClick={closeDelete}
                   className="rounded-(--radius-btn) border border-(--el-dialog-cancel-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-dialog-cancel-text) hover:opacity-80"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
-                  onClick={handleDelete}
-                  disabled={deleteTaskMutation.isPending}
+                  onClick={deleteAll}
+                  disabled={deletePending}
                   className="rounded-(--radius-btn) bg-(--el-dialog-confirm-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-dialog-confirm-text) hover:opacity-90 disabled:opacity-50"
                 >
-                  {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
+                  {deletePending ? t('common.deleting') : t('itemView.delete')}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* ── Recurring scope picker (edit/delete this/future/all) ── */}
+        {/* ── Recurring delete scope picker (this/future/all) ── */}
         <RecurringScopeModal
-          open={scopeModalMode !== null}
-          mode={scopeModalMode ?? 'edit'}
-          pending={
-            deleteTaskInstanceMutation.isPending ||
-            deleteEventInstanceMutation.isPending ||
-            updateTaskMutation.isPending ||
-            updateEventMutation.isPending ||
-            deleteTaskMutation.isPending ||
-            deleteEventMutation.isPending
-          }
-          onThis={() => {
-            if (scopeModalMode === 'edit') {
-              setScopeModalMode(null);
-              navigateToEditor('this');
-            } else {
-              handleScopeDeleteThis();
-            }
-          }}
-          onAllFuture={() => {
-            if (scopeModalMode === 'edit') {
-              setScopeModalMode(null);
-              navigateToEditor('future');
-            } else {
-              handleScopeDeleteFuture();
-            }
-          }}
-          onAll={() => {
-            if (scopeModalMode === 'edit') {
-              setScopeModalMode(null);
-              navigateToEditor('all');
-            } else {
-              handleScopeDeleteAll();
-            }
-          }}
-          onClose={() => setScopeModalMode(null)}
+          open={deleteMode === 'scope'}
+          mode="delete"
+          pending={deletePending}
+          onThis={deleteThis}
+          onAllFuture={deleteFuture}
+          onAll={deleteAll}
+          onClose={closeDelete}
+        />
+
+        {/* ── Recurring edit scope picker (this/future/all) ── */}
+        <RecurringScopeModal
+          open={showEditScope}
+          mode="edit"
+          pending={false}
+          onThis={() => { setShowEditScope(false); navigateToEditor('this'); }}
+          onAllFuture={() => { setShowEditScope(false); navigateToEditor('future'); }}
+          onAll={() => { setShowEditScope(false); navigateToEditor('all'); }}
+          onClose={() => setShowEditScope(false)}
         />
 
         {/* Invite participants modal */}
@@ -570,6 +543,23 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
           }}
           onCancel={() => setShowEndActivityConfirm(false)}
         />
+
+        {/* Reschedule modal */}
+        <RescheduleModal
+          open={showRescheduleModal}
+          item={rawItem ? {
+            title,
+            date,
+            hasTime,
+            timeOfDay: task?.timeOfDay as 'MORNING' | 'AFTERNOON' | 'EVENING' | null | undefined,
+            itemType,
+            duration,
+            endDate: event?.endDate,
+          } : null}
+          onConfirm={(result) => { setShowRescheduleModal(false); reschedule(result); }}
+          onClose={() => setShowRescheduleModal(false)}
+        />
+
       </div>
     </div>,
     document.body,

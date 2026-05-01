@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Cette occurrence de tâche sera supprimée du {{originalDate}} et déplacée au {{newDate}}. Les autres occurrences ne seront pas affectées.",
       "activityInstanceDateChangeMessage": "Cette occurrence d'activité sera supprimée du {{originalDate}} et déplacée au {{newDate}}. Les autres occurrences ne seront pas affectées.",
       "moveOccurrence": "Déplacer",
-      "keepOriginal": "Conserver l'original"
+      "keepOriginal": "Conserver l'original",
+      "viewAllOccurrences": "Voir toutes les occurrences",
+      "hideOccurrences": "Masquer les occurrences",
+      "loadMore": "Charger plus"
     },
     "input": {
       "addTitle": "Ajouter un titre",
@@ -1697,5 +1700,10 @@
     "newChat": "Nouvelle conversation",
     "planPreviewNoTemplates": "Aucun modèle dans ce plan",
     "loadingPlan": "Chargement du plan..."
+  },
+  "reschedule": {
+    "title": "Replanifier",
+    "confirm": "Confirmer",
+    "allDay": "Toute la journée"
   }
 }

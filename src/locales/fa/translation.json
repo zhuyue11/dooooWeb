@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "این مورد وظیفه از {{originalDate}} حذف و به {{newDate}} منتقل می‌شود. سایر موارد تحت تأثیر قرار نمی‌گیرند.",
       "activityInstanceDateChangeMessage": "این مورد فعالیت از {{originalDate}} حذف و به {{newDate}} منتقل می‌شود. سایر موارد تحت تأثیر قرار نمی‌گیرند.",
       "moveOccurrence": "انتقال",
-      "keepOriginal": "حفظ اصلی"
+      "keepOriginal": "حفظ اصلی",
+      "viewAllOccurrences": "مشاهده همه تکرارها",
+      "hideOccurrences": "پنهان کردن تکرارها",
+      "loadMore": "بارگذاری بیشتر"
     },
     "input": {
       "addTitle": "افزودن عنوان",
@@ -1697,5 +1700,10 @@
     "newChat": "گفتگوی جدید",
     "planPreviewNoTemplates": "الگویی در این برنامه وجود ندارد",
     "loadingPlan": "در حال بارگذاری برنامه..."
+  },
+  "reschedule": {
+    "title": "زمان‌بندی مجدد",
+    "confirm": "تأیید",
+    "allDay": "تمام روز"
   }
 }

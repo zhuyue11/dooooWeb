@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "This task occurrence will be removed from {{originalDate}} and moved to {{newDate}}. Other occurrences will not be affected.",
       "activityInstanceDateChangeMessage": "This activity occurrence will be removed from {{originalDate}} and moved to {{newDate}}. Other occurrences will not be affected.",
       "moveOccurrence": "Move",
-      "keepOriginal": "Keep Original"
+      "keepOriginal": "Keep Original",
+      "viewAllOccurrences": "View All Occurrences",
+      "hideOccurrences": "Hide Occurrences",
+      "loadMore": "Load more"
     },
     "input": {
       "addTitle": "Add title",
@@ -1705,5 +1708,10 @@
     "newChat": "New Chat",
     "planPreviewNoTemplates": "No templates in this plan",
     "loadingPlan": "Loading plan..."
+  },
+  "reschedule": {
+    "title": "Reschedule",
+    "confirm": "Confirm",
+    "allDay": "All day"
   }
 }

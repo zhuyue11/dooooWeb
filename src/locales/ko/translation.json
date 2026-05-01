@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "이 작업 항목이 {{originalDate}}에서 제거되고 {{newDate}}로 이동됩니다. 다른 항목은 영향을 받지 않습니다.",
       "activityInstanceDateChangeMessage": "이 활동 항목이 {{originalDate}}에서 제거되고 {{newDate}}로 이동됩니다. 다른 항목은 영향을 받지 않습니다.",
       "moveOccurrence": "이동",
-      "keepOriginal": "원래대로 유지"
+      "keepOriginal": "원래대로 유지",
+      "viewAllOccurrences": "모든 발생 보기",
+      "hideOccurrences": "발생 숨기기",
+      "loadMore": "더 보기"
     },
     "input": {
       "addTitle": "제목 추가",
@@ -1703,5 +1706,10 @@
     "newChat": "새 채팅",
     "planPreviewNoTemplates": "이 플랜에 템플릿이 없습니다",
     "loadingPlan": "플랜 로딩 중..."
+  },
+  "reschedule": {
+    "title": "일정 변경",
+    "confirm": "확인",
+    "allDay": "하루 종일"
   }
 }

@@ -8,8 +8,8 @@ import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useGroups } from '@/hooks/useGroups';
 import { useCategories } from '@/hooks/useCategories';
 import type { Event } from '@/types/api';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
-import { taskToCalendarItem, eventToCalendarItem } from '@/hooks/calendarHelpers';
+import type { CalendarItem } from '@/types/calendar';
+import { taskToCalendarItem, eventToCalendarItem, enrichCalendarItem } from '@/hooks/calendarHelpers';
 import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { startOfDay, toISODate, startOfWeek, endOfWeek } from '@/utils/date';
@@ -239,26 +239,21 @@ export function HomePage() {
 
   // ── PANEL DATA ──
 
-  // Enrich CalendarItem with group name + participant status (mirrors useWeekCalendar's enrich)
-  const enrichCalendarItem = useCallback((ci: CalendarItem, task: { groupId?: string | null; participantInstances?: Array<{ participantUserId: string; status: string }> }): CalendarItem => {
-    if (task.groupId && groupNameMap[task.groupId]) ci.groupName = groupNameMap[task.groupId];
-    if (task.participantInstances && user) {
-      const pi = task.participantInstances.find((p) => p.participantUserId === user.id);
-      if (pi) ci.participantInstanceStatus = pi.status;
-    }
-    return ci;
-  }, [groupNameMap, user]);
+  const enrich = useCallback(
+    (item: CalendarItem, task: any): CalendarItem => enrichCalendarItem(item, task, user?.id, groupNameMap),
+    [groupNameMap, user],
+  );
 
   const todayItems = useMemo((): CalendarItem[] => {
     const items: CalendarItem[] = [];
     for (const t of todayTasks) {
-      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
+      items.push(enrich(taskToCalendarItem(t), t));
     }
     for (const t of groupTasksToday) {
-      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
+      items.push(enrich(taskToCalendarItem(t), t));
     }
     for (const e of eventsToday) {
-      items.push(enrichCalendarItem(eventToCalendarItem(e), e));
+      items.push(enrich(eventToCalendarItem(e), e));
     }
     return items.sort((a, b) => {
       if (a.hasTime && !b.hasTime) return -1;
@@ -271,7 +266,7 @@ export function HomePage() {
   // Overdue panel: past incomplete tasks (personal + group)
   const overdueItems = useMemo((): CalendarItem[] => {
     return allOverdue
-      .map((t) => enrichCalendarItem(taskToCalendarItem(t), t))
+      .map((t) => enrich(taskToCalendarItem(t), t))
       .sort((a, b) => {
         const da = a.date ? new Date(a.date).getTime() : 0;
         const db = b.date ? new Date(b.date).getTime() : 0;
@@ -291,16 +286,16 @@ export function HomePage() {
     for (const t of upcomingPersonal) {
       if (!isScheduleItem(t)) continue;
       if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
-      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
+      items.push(enrich(taskToCalendarItem(t), t));
     }
     for (const t of groupTasksUpcoming) {
       if (!isScheduleItem(t)) continue;
       if (!t.date || toISODate(new Date(t.date)) < tomorrowStr) continue;
-      items.push(enrichCalendarItem(taskToCalendarItem(t), t));
+      items.push(enrich(taskToCalendarItem(t), t));
     }
     for (const e of allEvents) {
       if (!e.date || toISODate(new Date(e.date)) < tomorrowStr) continue;
-      items.push(enrichCalendarItem(eventToCalendarItem(e), e));
+      items.push(enrich(eventToCalendarItem(e), e));
     }
     return items
       .sort((a, b) => {
@@ -313,8 +308,8 @@ export function HomePage() {
 
   // To-do panel: no-date + DUE tasks (converted to CalendarItem[])
   const todoListItems = useMemo((): CalendarItem[] => {
-    return todoItems.map((t) => enrichCalendarItem(taskToCalendarItem(t), t));
-  }, [todoItems, enrichCalendarItem]);
+    return todoItems.map((t) => enrich(taskToCalendarItem(t), t));
+  }, [todoItems, enrich]);
 
   // Toggle handler
   const queryClient = useQueryClient();

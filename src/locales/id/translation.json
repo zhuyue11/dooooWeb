@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Kejadian tugas ini akan dihapus dari {{originalDate}} dan dipindahkan ke {{newDate}}. Kejadian lain tidak akan terpengaruh.",
       "activityInstanceDateChangeMessage": "Kejadian aktivitas ini akan dihapus dari {{originalDate}} dan dipindahkan ke {{newDate}}. Kejadian lain tidak akan terpengaruh.",
       "moveOccurrence": "Pindahkan",
-      "keepOriginal": "Pertahankan asli"
+      "keepOriginal": "Pertahankan asli",
+      "viewAllOccurrences": "Lihat semua kejadian",
+      "hideOccurrences": "Sembunyikan kejadian",
+      "loadMore": "Muat lebih banyak"
     },
     "input": {
       "addTitle": "Tambah judul",
@@ -1697,5 +1700,10 @@
     "newChat": "Percakapan baru",
     "planPreviewNoTemplates": "Tidak ada template dalam rencana ini",
     "loadingPlan": "Memuat rencana..."
+  },
+  "reschedule": {
+    "title": "Jadwalkan ulang",
+    "confirm": "Konfirmasi",
+    "allDay": "Sepanjang hari"
   }
 }

@@ -16,7 +16,7 @@ import { toggleTask } from '@/lib/api';
 import { getParentId } from '@/utils/calendarItemId';
 import { usePlanReview } from '@/lib/contexts/plan-review-context';
 import { useQueryClient } from '@tanstack/react-query';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 
 export function CalendarPage() {
   const { user } = useAuth();

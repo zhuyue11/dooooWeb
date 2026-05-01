@@ -1,5 +1,5 @@
 import { Icon } from '@/components/ui/Icon';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import type { Category } from '@/types/api';
 import { getCategoryName, getCategoryColor, translateCategoryName } from '@/utils/category';
 import { formatTime } from '@/utils/date';

@@ -7,7 +7,7 @@ import {
   getRecurringEvents,
 } from '@/lib/api';
 import {
-  startOfWeek, getWeekDates, startOfMonth, getMonthGridDates,
+  getWeekDates, startOfMonth, getMonthGridDates,
   toISODate, isSameDay, startOfDay,
 } from '@/utils/date';
 import type { Task, Event, EventInstance, TaskInstance, Repeat } from '@/types/api';
@@ -15,9 +15,9 @@ import type { WeekStartDay } from '@/utils/date';
 import { shouldGenerateInstance, isSingleOccurrenceRecurring } from '@/utils/recurrence';
 import { buildOccurrenceDate } from '@/utils/recurrenceTime';
 import { distributeAcrossDays } from '@/utils/multiDay';
-export type { CalendarItem, ParticipantSummary } from './useWeekCalendar';
-import type { CalendarItem } from './useWeekCalendar';
-import { taskToCalendarItem, eventToCalendarItem, eventInstanceToCalendarItem, computeParticipantSummaryForDate, sortByTime, sortByDateThenTime } from './calendarHelpers';
+export type { CalendarItem, ParticipantSummary } from '@/types/calendar';
+import type { CalendarItem } from '@/types/calendar';
+import { taskToCalendarItem, eventToCalendarItem, eventInstanceToCalendarItem, computeParticipantSummaryForDate, sortByTime, sortByDateThenTime, enrichCalendarItem } from './calendarHelpers';
 
 export type CalendarViewMode = 'week' | 'month' | 'day';
 
@@ -27,6 +27,7 @@ export function useCalendar(
   currentUserId?: string,
   groupNameMap?: Record<string, string>,
   viewMode: CalendarViewMode = 'week',
+  groupId?: string,
 ) {
   const { weekStartDay } = useDisplay();
   const wsd = weekStartDay as WeekStartDay;
@@ -59,27 +60,27 @@ export function useCalendar(
   // ── Unified date-range query (tasks + events + instances with multi-day overlap) ──
 
   const { data: calendarData, isLoading: loadingItems } = useQuery({
-    queryKey: ['calendar-items', fromDate, toDate],
-    queryFn: () => getCalendarItems({ from: fromDate, to: toDate }),
+    queryKey: ['calendar-items', fromDate, toDate, groupId],
+    queryFn: () => getCalendarItems({ from: fromDate, to: toDate, groupId }),
   });
 
-  const personalTasks = calendarData?.tasks ?? [];
+  const calendarTasks: Task[] = calendarData?.tasks ?? [];
   const taskInstances: TaskInstance[] = calendarData?.taskInstances ?? [];
-  const calendarEvents = calendarData?.events ?? [];
-  const eventInstances = calendarData?.eventInstances ?? [];
+  const calendarEvents: Event[] = calendarData?.events ?? [];
+  const eventInstances: EventInstance[] = calendarData?.eventInstances ?? [];
 
   // Recurring tasks/events fetched once per session (no date filter) so the
   // calendar can expand instances on weeks where the parent's start date is
-  // outside the visible range. Mirrors dooooApp's local SQLite-backed pattern.
+  // outside the visible range.
   const { data: recurringTasks = [], isLoading: loadingRecurringTasks } = useQuery({
-    queryKey: ['calendar-recurring-tasks'],
-    queryFn: getRecurringTasks,
+    queryKey: ['calendar-recurring-tasks', groupId],
+    queryFn: () => getRecurringTasks(groupId),
     staleTime: 2 * 60 * 1000,
   });
 
   const { data: recurringEvents = [], isLoading: loadingRecurringEvents } = useQuery({
-    queryKey: ['calendar-recurring-events'],
-    queryFn: getRecurringEvents,
+    queryKey: ['calendar-recurring-events', groupId],
+    queryFn: () => getRecurringEvents(groupId),
     staleTime: 2 * 60 * 1000,
   });
 
@@ -92,53 +93,33 @@ export function useCalendar(
 
   const itemsByDate = useMemo(() => {
     const map = new Map<string, CalendarItem[]>();
-    const seenIds = new Set<string>();
 
-    const enrich = (item: CalendarItem, task?: Task) => {
-      const enriched = { ...item };
-      if (enriched.groupId && groupNameMap) {
-        enriched.groupName = groupNameMap[enriched.groupId];
-      }
-      if (task?.participantInstances && currentUserId) {
-        const pi = task.participantInstances.find((p) => p.participantUserId === currentUserId);
-        enriched.participantInstanceStatus = pi?.status;
-      }
-      if (task?.user?.name) {
-        enriched.creatorName = task.user.name;
-      }
-      return enriched;
-    };
+    const enrich = (item: CalendarItem, task?: Task): CalendarItem =>
+      enrichCalendarItem(item, task, currentUserId, groupNameMap);
 
     // Initialize all visible dates
     for (const d of visibleDates) {
       map.set(toISODate(d), []);
     }
 
-    // Index stored task instances for MODIFIED override / REMOVED skip
-    const taskInstanceByKey = new Map<string, TaskInstance>();
-    for (const inst of taskInstances) {
-      const dateKey = toISODate(new Date(inst.date));
-      taskInstanceByKey.set(`${inst.taskId}|${dateKey}`, inst);
-    }
+    // ── Helpers ──
 
-    const applyTaskInstance = (item: CalendarItem, inst: TaskInstance): CalendarItem => {
-      return {
-        ...item,
-        title: inst.title || item.title,
-        description: inst.description ?? item.description,
-        priority: inst.priority ?? item.priority,
-        categoryId: inst.categoryId ?? item.categoryId,
-        hasTime: inst.hasTime ?? item.hasTime,
-        duration: inst.duration ?? item.duration,
-        firstReminderMinutes: inst.firstReminderMinutes ?? item.firstReminderMinutes,
-        secondReminderMinutes: inst.secondReminderMinutes ?? item.secondReminderMinutes,
-        location: inst.location ?? item.location,
-        locationAddress: inst.locationAddress ?? item.locationAddress,
-        isCompleted: inst.status === 'COMPLETED',
-        instanceStatus: inst.status,
-        isInstance: true,
-      };
-    };
+    const applyTaskInstance = (item: CalendarItem, inst: TaskInstance): CalendarItem => ({
+      ...item,
+      title: inst.title || item.title,
+      description: inst.description ?? item.description,
+      priority: inst.priority ?? item.priority,
+      categoryId: inst.categoryId ?? item.categoryId,
+      hasTime: inst.hasTime ?? item.hasTime,
+      duration: inst.duration ?? item.duration,
+      firstReminderMinutes: inst.firstReminderMinutes ?? item.firstReminderMinutes,
+      secondReminderMinutes: inst.secondReminderMinutes ?? item.secondReminderMinutes,
+      location: inst.location ?? item.location,
+      locationAddress: inst.locationAddress ?? item.locationAddress,
+      isCompleted: inst.status === 'COMPLETED',
+      instanceStatus: inst.status,
+      isInstance: true,
+    });
 
     const placeMultiDay = (origin: CalendarItem, startDate: Date, idPrefix: string) => {
       const parts = distributeAcrossDays(startDate, origin.duration, origin.isCompleted, visibleDates);
@@ -152,121 +133,112 @@ export function useCalendar(
       }
     };
 
-    const pushTaskWithRecurrence = (task: Task) => {
-      if (seenIds.has(task.id)) return;
+    // ── Step 1: Regular (non-recurring) tasks ──
 
+    for (const task of calendarTasks) {
       const isNoDateTask = !task.date;
-      const displayDateSource = isNoDateTask
-        ? task.isCompleted && task.completedAt
-          ? task.completedAt
-          : null
+      const displayDate = isNoDateTask
+        ? task.isCompleted && task.completedAt ? task.completedAt : null
         : task.date;
-      if (!displayDateSource) return;
-
-      seenIds.add(task.id);
-      const baseDate = new Date(displayDateSource);
-      const repeat = task.repeat as Repeat | undefined;
-      const baseKey = toISODate(baseDate);
-
-      const treatAsRegular = isSingleOccurrenceRecurring(true, task.originalTaskId, baseDate, repeat);
-
-      const baseStored = taskInstanceByKey.get(`${task.id}|${baseKey}`);
-      if (!baseStored || baseStored.status !== 'REMOVED') {
-        const baseItem = enrich(
-          taskToCalendarItem(task, isNoDateTask ? baseDate.toISOString() : undefined),
-          task,
-        );
-        if (isNoDateTask) {
-          baseItem.isNoDate = true;
-          baseItem.duration = null;
-        }
-        if (task.isForAllMembers) {
-          baseItem.participantSummary = computeParticipantSummaryForDate(task, baseDate);
-        }
-        if (treatAsRegular) {
-          baseItem.isInstance = false;
-          baseItem.repeat = undefined;
-        }
-        const finalBase = baseStored ? applyTaskInstance(baseItem, baseStored) : baseItem;
-        placeMultiDay(finalBase, baseDate, task.id);
+      if (!displayDate) continue;
+      const baseDate = new Date(displayDate);
+      const item = enrich(
+        taskToCalendarItem(task, isNoDateTask ? baseDate.toISOString() : undefined),
+        task,
+      );
+      if (isNoDateTask) { item.isNoDate = true; item.duration = null; }
+      if (task.isForAllMembers) {
+        item.participantSummary = computeParticipantSummaryForDate(task, baseDate);
       }
+      placeMultiDay(item, baseDate, item.id);
+    }
 
-      if (!repeat || !repeat.type || treatAsRegular) return;
+    // ── Step 2: Regular (non-recurring) events ──
 
-      for (const day of visibleDates) {
-        const dateKey = toISODate(day);
-        if (dateKey === baseKey) continue;
-        if (!shouldGenerateInstance(baseDate, day, repeat)) continue;
+    for (const event of calendarEvents) {
+      if (!event.date) continue;
+      const item = eventToCalendarItem(event);
+      if (item.groupId && groupNameMap) item.groupName = groupNameMap[item.groupId];
+      placeMultiDay(item, new Date(event.date), item.id);
+    }
 
-        const stored = taskInstanceByKey.get(`${task.id}|${dateKey}`);
-        if (stored && stored.status === 'REMOVED') continue;
+    // ── Step 3: Stored task instances ──
+    // Index by taskId|date for step 5. Render non-REMOVED instances directly.
 
-        const base = enrich(taskToCalendarItem(task), task);
-        if (task.isForAllMembers) {
-          base.participantSummary = computeParticipantSummaryForDate(task, day);
-        }
-        const occDate = buildOccurrenceDate(baseDate, day, task.hasTime, task.timeZone);
-        base.date = occDate.toISOString();
-        base.isInstance = true;
-        base.taskId = task.id;
-        base.id = `${task.id}_${dateKey}`;
-        const item = stored ? applyTaskInstance(base, stored) : base;
-        placeMultiDay(item, occDate, base.id);
+    const taskInstanceByKey = new Map<string, TaskInstance>();
+    for (const inst of taskInstances) {
+      const dateKey = toISODate(new Date(inst.date));
+      taskInstanceByKey.set(`${inst.taskId}|${dateKey}`, inst);
+      if (inst.status === 'REMOVED') continue;
+      const parent = recurringTasks.find(t => t.id === inst.taskId);
+      if (!parent) continue;
+      const item = enrich(taskToCalendarItem(parent), parent);
+      if (parent.isForAllMembers) {
+        item.participantSummary = computeParticipantSummaryForDate(parent, new Date(inst.date));
       }
-    };
-
-    // 1. Tasks: date-range query (personal + group) + recurring (deduped via seenIds).
-    // The recurring query is needed because the date-range query only returns
-    // tasks whose start date overlaps the visible range, but a recurring task
-    // whose start date falls outside may still have occurrences inside.
-    for (const task of personalTasks) {
-      pushTaskWithRecurrence(task);
-    }
-    for (const task of recurringTasks) {
-      pushTaskWithRecurrence(task);
+      item.isInstance = true;
+      item.taskId = parent.id;
+      item.id = `${parent.id}_${dateKey}`;
+      const final = applyTaskInstance(item, inst);
+      placeMultiDay(final, new Date(inst.date), item.id);
     }
 
-    // 2. Events (date-range + recurring, deduplicated)
-    const allEventsRaw = [...calendarEvents, ...recurringEvents];
-    const dedupedEventsMap = new Map<string, Event>();
-    for (const event of allEventsRaw) {
-      if (!dedupedEventsMap.has(event.id)) dedupedEventsMap.set(event.id, event);
-    }
-    const allEvents = Array.from(dedupedEventsMap.values());
-    const eventsById = dedupedEventsMap;
+    // ── Step 4: Stored event instances ──
+    // Index by eventId|date for step 6. Render non-REMOVED instances directly.
 
-    const storedInstanceKeys = new Set<string>();
+    const eventsById = new Map<string, Event>();
+    for (const event of recurringEvents) eventsById.set(event.id, event);
+
+    const storedEventInstanceKeys = new Set<string>();
     for (const instance of eventInstances) {
       const dateKey = toISODate(new Date(instance.date));
-      storedInstanceKeys.add(`${instance.eventId}|${dateKey}`);
+      storedEventInstanceKeys.add(`${instance.eventId}|${dateKey}`);
       if (instance.status === 'REMOVED') continue;
-      if (!map.has(dateKey)) continue;
       const parent = eventsById.get(instance.eventId);
       const item = eventInstanceToCalendarItem(instance, parent);
       if (item.groupId && groupNameMap) item.groupName = groupNameMap[item.groupId];
-      map.get(dateKey)!.push(item);
+      placeMultiDay(item, new Date(instance.date), item.id);
     }
 
-    const seenEventIds = new Set<string>();
-    for (const event of allEvents) {
-      if (!event.date || seenEventIds.has(event.id)) continue;
-      seenEventIds.add(event.id);
-      const baseDate = new Date(event.date);
-      const repeat = event.repeat as Repeat | undefined;
+    // ── Step 5: Recurring tasks — generate virtual instances for visible days ──
 
-      const baseKey = toISODate(baseDate);
-      if (!storedInstanceKeys.has(`${event.id}|${baseKey}`)) {
-        const item = eventToCalendarItem(event);
-        if (item.groupId && groupNameMap) item.groupName = groupNameMap[item.groupId];
-        placeMultiDay(item, baseDate, `event-${event.id}`);
-      }
-
+    for (const task of recurringTasks) {
+      if (!task.date) continue;
+      const baseDate = new Date(task.date);
+      const repeat = task.repeat as Repeat | undefined;
       if (!repeat || !repeat.type) continue;
+      if (isSingleOccurrenceRecurring(true, task.originalTaskId, baseDate, repeat)) continue;
 
       for (const day of visibleDates) {
         const dateKey = toISODate(day);
-        if (dateKey === baseKey) continue;
-        if (storedInstanceKeys.has(`${event.id}|${dateKey}`)) continue;
+        if (taskInstanceByKey.has(`${task.id}|${dateKey}`)) continue; // handled in step 3
+        if (!shouldGenerateInstance(baseDate, day, repeat)) continue;
+
+        const item = enrich(taskToCalendarItem(task), task);
+        if (task.isForAllMembers) {
+          item.participantSummary = computeParticipantSummaryForDate(task, day);
+        }
+        const occDate = buildOccurrenceDate(baseDate, day, task.hasTime, task.timeZone);
+        item.date = occDate.toISOString();
+        item.isInstance = true;
+        item.taskId = task.id;
+        item.id = `${task.id}_${dateKey}`;
+        placeMultiDay(item, occDate, item.id);
+      }
+    }
+
+    // ── Step 6: Recurring events — generate virtual instances for visible days ──
+
+    for (const event of recurringEvents) {
+      if (!event.date) continue;
+      const baseDate = new Date(event.date);
+      const repeat = event.repeat as Repeat | undefined;
+      if (!repeat || !repeat.type) continue;
+      // TODO: add isSingleOccurrenceRecurring check for events (needs originalRecurringEventId on Event model)
+
+      for (const day of visibleDates) {
+        const dateKey = toISODate(day);
+        if (storedEventInstanceKeys.has(`${event.id}|${dateKey}`)) continue; // handled in step 4
         if (!shouldGenerateInstance(baseDate, day, repeat)) continue;
 
         const item = eventToCalendarItem(event);
@@ -286,7 +258,7 @@ export function useCalendar(
     }
 
     return map;
-  }, [personalTasks, recurringTasks, calendarEvents, recurringEvents, eventInstances, taskInstances, visibleDates, currentUserId, groupNameMap]);
+  }, [calendarTasks, recurringTasks, calendarEvents, recurringEvents, eventInstances, taskInstances, visibleDates, currentUserId, groupNameMap]);
 
   // ── Panel items: selected date OR all visible days ──
 

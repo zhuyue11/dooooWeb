@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "سيتم حذف هذا الحدوث من المهمة من {{originalDate}} ونقله إلى {{newDate}}. لن تتأثر الحدوثات الأخرى.",
       "activityInstanceDateChangeMessage": "سيتم حذف هذا الحدوث من النشاط من {{originalDate}} ونقله إلى {{newDate}}. لن تتأثر الحدوثات الأخرى.",
       "moveOccurrence": "نقل",
-      "keepOriginal": "الاحتفاظ بالأصل"
+      "keepOriginal": "الاحتفاظ بالأصل",
+      "viewAllOccurrences": "عرض جميع التكرارات",
+      "hideOccurrences": "إخفاء التكرارات",
+      "loadMore": "تحميل المزيد"
     },
     "input": {
       "addTitle": "إضافة عنوان",
@@ -1697,5 +1700,10 @@
     "newChat": "محادثة جديدة",
     "planPreviewNoTemplates": "لا توجد قوالب في هذه الخطة",
     "loadingPlan": "جارٍ تحميل الخطة..."
+  },
+  "reschedule": {
+    "title": "إعادة جدولة",
+    "confirm": "تأكيد",
+    "allDay": "طوال اليوم"
   }
 }

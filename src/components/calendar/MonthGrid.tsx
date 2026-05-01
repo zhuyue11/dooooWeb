@@ -1,6 +1,6 @@
 import { isSameDay, toISODate, startOfDay } from '@/utils/date';
-import { isItemChecked } from '@/hooks/useWeekCalendar';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import { isItemChecked } from '@/hooks/calendarHelpers';
+import type { CalendarItem } from '@/types/calendar';
 import type { Category } from '@/types/api';
 import { getCategoryColor } from '@/utils/category';
 import { useTranslation } from 'react-i18next';

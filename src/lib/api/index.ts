@@ -170,6 +170,37 @@ export async function getTaskInstances(params?: { from?: string; to?: string }):
   return res.data;
 }
 
+export async function getTaskInstancesForTask(
+  taskId: string,
+  from: string,
+  to: string,
+): Promise<TaskInstance[]> {
+  const res = await apiClient.get<TaskInstancesResponse>('/api/tasks/instances', {
+    params: { taskIds: taskId, from, to },
+  });
+  return res.data.data.instances;
+}
+
+export async function getTaskInstanceByIdOrDate(
+  taskId: string,
+  instanceIdOrDate: string,
+): Promise<TaskInstance> {
+  const res = await apiClient.get<{ success: boolean; data: TaskInstance }>(
+    `/api/tasks/${taskId}/instances/${instanceIdOrDate}`,
+  );
+  return res.data.data;
+}
+
+export async function getEventInstanceByIdOrDate(
+  eventId: string,
+  instanceIdOrDate: string,
+): Promise<any> {
+  const res = await apiClient.get<{ success: boolean; data: any }>(
+    `/api/events/${eventId}/instances/${instanceIdOrDate}`,
+  );
+  return res.data.data;
+}
+
 /**
  * Fetch every recurring (repeat IS NOT NULL) personal task for the user.
  *
@@ -177,8 +208,10 @@ export async function getTaskInstances(params?: { from?: string; to?: string }):
  * date-range `getTasks` query only returns tasks whose start date falls in
  * the visible week. Mirrors `getRecurringEvents` (already exposed in backend).
  */
-export async function getRecurringTasks(): Promise<Task[]> {
-  const res = await apiClient.get<{ success: boolean; data: Task[] }>('/api/tasks/recurring');
+export async function getRecurringTasks(groupId?: string): Promise<Task[]> {
+  const res = await apiClient.get<{ success: boolean; data: Task[] }>('/api/tasks/recurring', {
+    params: groupId ? { groupId } : undefined,
+  });
   return res.data.data;
 }
 
@@ -296,8 +329,10 @@ export async function getUserEventInstances(params: { from: string; to: string }
  * exists in the backend at `GET /api/events/recurring` and is unused by
  * dooooWeb today.
  */
-export async function getRecurringEvents(): Promise<Event[]> {
-  const res = await apiClient.get<{ success: boolean; data: Event[] }>('/api/events/recurring');
+export async function getRecurringEvents(groupId?: string): Promise<Event[]> {
+  const res = await apiClient.get<{ success: boolean; data: Event[] }>('/api/events/recurring', {
+    params: groupId ? { groupId } : undefined,
+  });
   return res.data.data;
 }
 

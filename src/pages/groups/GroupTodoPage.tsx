@@ -11,7 +11,7 @@ import { Icon } from '@/components/ui/Icon';
 import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { taskToCalendarItem } from '@/hooks/calendarHelpers';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import { getParentId } from '@/utils/calendarItemId';
 
 export function GroupTodoPage() {

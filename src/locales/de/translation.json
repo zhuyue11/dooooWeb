@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Dieses Aufgaben-Vorkommen wird von {{originalDate}} entfernt und nach {{newDate}} verschoben. Andere Vorkommen sind nicht betroffen.",
       "activityInstanceDateChangeMessage": "Dieses Aktivitäts-Vorkommen wird von {{originalDate}} entfernt und nach {{newDate}} verschoben. Andere Vorkommen sind nicht betroffen.",
       "moveOccurrence": "Verschieben",
-      "keepOriginal": "Original behalten"
+      "keepOriginal": "Original behalten",
+      "viewAllOccurrences": "Alle Vorkommnisse anzeigen",
+      "hideOccurrences": "Vorkommnisse ausblenden",
+      "loadMore": "Mehr laden"
     },
     "input": {
       "addTitle": "Titel hinzufügen",
@@ -1697,5 +1700,10 @@
     "newChat": "Neuer Chat",
     "planPreviewNoTemplates": "Keine Vorlagen in diesem Plan",
     "loadingPlan": "Plan wird geladen..."
+  },
+  "reschedule": {
+    "title": "Verschieben",
+    "confirm": "Bestätigen",
+    "allDay": "Ganztägig"
   }
 }

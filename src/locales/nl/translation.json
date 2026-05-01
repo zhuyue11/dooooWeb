@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Dit taakvoorval wordt verwijderd van {{originalDate}} en verplaatst naar {{newDate}}. Andere voorvallen worden niet beïnvloed.",
       "activityInstanceDateChangeMessage": "Dit activiteitvoorval wordt verwijderd van {{originalDate}} en verplaatst naar {{newDate}}. Andere voorvallen worden niet beïnvloed.",
       "moveOccurrence": "Verplaatsen",
-      "keepOriginal": "Origineel behouden"
+      "keepOriginal": "Origineel behouden",
+      "viewAllOccurrences": "Alle voorkomens bekijken",
+      "hideOccurrences": "Voorkomens verbergen",
+      "loadMore": "Meer laden"
     },
     "input": {
       "addTitle": "Titel toevoegen",
@@ -1700,5 +1703,10 @@
     "newChat": "Nieuw gesprek",
     "planPreviewNoTemplates": "Geen sjablonen in dit plan",
     "loadingPlan": "Plan laden..."
+  },
+  "reschedule": {
+    "title": "Opnieuw plannen",
+    "confirm": "Bevestigen",
+    "allDay": "Hele dag"
   }
 }

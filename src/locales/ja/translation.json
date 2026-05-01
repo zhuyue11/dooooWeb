@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "このタスクの回は{{originalDate}}から削除され、{{newDate}}に移動されます。他の回には影響しません。",
       "activityInstanceDateChangeMessage": "このアクティビティの回は{{originalDate}}から削除され、{{newDate}}に移動されます。他の回には影響しません。",
       "moveOccurrence": "移動",
-      "keepOriginal": "元のまま"
+      "keepOriginal": "元のまま",
+      "viewAllOccurrences": "すべての出現を表示",
+      "hideOccurrences": "出現を非表示",
+      "loadMore": "もっと読み込む"
     },
     "input": {
       "addTitle": "タイトルを追加",
@@ -1703,5 +1706,10 @@
     "newChat": "新しいチャット",
     "planPreviewNoTemplates": "このプランにはテンプレートがありません",
     "loadingPlan": "プランを読み込み中..."
+  },
+  "reschedule": {
+    "title": "スケジュール変更",
+    "confirm": "確認",
+    "allDay": "終日"
   }
 }

@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { toggleTask } from '@/lib/api';
 import { usePlanReview } from '@/lib/contexts/plan-review-context';
-import { useItemMutations } from '@/hooks/useItemMutations';
 import { useItemData } from '@/hooks/useItemData';
 import { useCategories } from '@/hooks/useCategories';
 import { Icon } from '@/components/ui/Icon';
@@ -26,6 +25,12 @@ import { ParticipationBanner } from '@/components/groups/ParticipationBanner';
 import { EndActivityConfirmDialog } from '@/components/groups/EndActivityConfirmDialog';
 import { InviteParticipantsModal } from '@/components/groups/InviteParticipantsModal';
 import { useParticipationMutations } from '@/hooks/useParticipationMutations';
+import { RescheduleModal } from '@/components/calendar/RescheduleModal';
+import { RecurringScopeModal } from '@/components/calendar/RecurringScopeModal';
+import { useReschedule } from '@/hooks/useReschedule';
+import { useRecurringDelete } from '@/hooks/useRecurringDelete';
+import { OccurrencesList } from '@/components/calendar/OccurrencesList';
+import type { MergedInstance } from '@/utils/instanceGenerator';
 
 // ── Main component ──
 
@@ -38,20 +43,24 @@ export function ItemViewPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { data: categories } = useCategories();
-  const { deleteTaskMutation, deleteEventMutation } = useItemMutations();
   const { manualCompleteMutation } = useParticipationMutations(id ?? '');
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showEndActivityConfirm, setShowEndActivityConfirm] = useState(false);
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [selectedOccurrence, setSelectedOccurrence] = useState<MergedInstance | null>(null);
 
   // Fetch item + derive participant-aware display state
   const itemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
+  // Build occurrence ref from selectedOccurrence state
+  const occurrenceRef = selectedOccurrence
+    ? { instanceId: selectedOccurrence.instanceId, date: selectedOccurrence.dateStr }
+    : null;
   const {
     rawItem: item, task: taskItem, event: eventItem, isLoading, isError,
     isForAllMembers, trackCompletion, participantInstanceStatus,
     parentTaskIsCompleted, isChecked: isCompleted, creatorName, assigneeId: taskAssigneeId,
-    shouldShowToggle,
-  } = useItemData(id ?? '', itemType, user?.id);
+    shouldShowToggle, occurrenceInstance,
+  } = useItemData(id ?? '', itemType, user?.id, occurrenceRef);
 
   // Notes hook
   const noteItemType = type === 'event' ? 'EVENT' as const : 'TASK' as const;
@@ -67,15 +76,18 @@ export function ItemViewPage() {
     navigate(`/items/${id}/edit?type=${type}`);
   }, [navigate, id, type]);
 
-  const handleDelete = useCallback(async () => {
-    if (!id) return;
-    if (type === 'event') {
-      await deleteEventMutation.mutateAsync(id);
-    } else {
-      await deleteTaskMutation.mutateAsync(id);
-    }
-    navigate(-1);
-  }, [id, type, deleteTaskMutation, deleteEventMutation, navigate]);
+  // Delete hook (handles scope for recurring: this/future/all)
+  const {
+    deleteMode, handleDeleteClick, closeDelete,
+    deleteAll, deleteThis, deleteFuture, isPending: deletePending,
+  } = useRecurringDelete({
+    itemId: id ?? '',
+    itemType,
+    isRecurring: !!taskItem?.repeat,
+    occurrenceDateKey: selectedOccurrence?.dateStr || item?.date?.slice(0, 10) || '',
+    repeat: taskItem?.repeat ?? eventItem?.repeat,
+    onSuccess: () => navigate(-1),
+  });
 
   const { showPlanReview } = usePlanReview();
   const handleToggle = useCallback(async () => {
@@ -88,6 +100,17 @@ export function ItemViewPage() {
     queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
     if (planExecutionCompleted) showPlanReview(planExecutionCompleted);
   }, [id, type, queryClient, showPlanReview]);
+
+  // Reschedule hook — must be called before early returns (hooks rules)
+  const occDateKey = selectedOccurrence?.dateStr || item?.date?.slice(0, 10) || '';
+  const { reschedule } = useReschedule({
+    itemId: id ?? '',
+    itemType,
+    isRecurring: !!taskItem?.repeat,
+    title: occurrenceInstance?.title || selectedOccurrence?.title || item?.title || '',
+    occurrenceDateKey: occDateKey,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['calendar-items'] }),
+  });
 
   // Build 3-dots menu items — must be called before early returns (hooks rules)
   const menuItems = useItemMenu({
@@ -110,7 +133,8 @@ export function ItemViewPage() {
     occurrenceDateKey: item?.date?.slice(0, 10) ?? '',
   }, {
     onEdit: handleEdit,
-    onDelete: () => setShowDeleteConfirm(true),
+    onReschedule: () => setShowRescheduleModal(true),
+    onDelete: handleDeleteClick,
     onToggleComplete: handleToggle,
     onInvite: isForAllMembers && taskItem?.groupId ? () => setShowInviteModal(true) : undefined,
   });
@@ -135,12 +159,19 @@ export function ItemViewPage() {
   }
 
   const isTask = type === 'task';
-  const title = item.title;
-  const description = item.description;
-  const dateStr = item.date;
+  // occurrenceInstance = real instance from backend, selectedOccurrence = local MergedInstance
+  const inst = occurrenceInstance;
+  const occ = selectedOccurrence;
+  const title = inst?.title || occ?.title || item.title;
+  const description = inst?.description ?? occ?.description ?? item.description;
+  // Date: real instance > virtual occurrence date > parent date
+  const dateStr = inst?.date
+    ? (typeof inst.date === 'string' ? inst.date : new Date(inst.date).toISOString())
+    : occ ? `${occ.dateStr}T12:00:00.000Z`
+    : item.date;
 
-  const priority = isTask ? taskItem?.priority : eventItem?.priority;
-  const categoryId = isTask ? taskItem?.categoryId : undefined;
+  const priority = inst?.priority ?? occ?.priority ?? (isTask ? taskItem?.priority : eventItem?.priority);
+  const categoryId = inst?.categoryId ?? occ?.categoryId ?? (isTask ? taskItem?.categoryId : undefined);
   const rawCategoryName = categoryId ? getCategoryName(categoryId, categories) : undefined;
   const categoryName = rawCategoryName ? translateCategoryName(rawCategoryName, t) : undefined;
   const categoryColor = categoryId ? getCategoryColor(categoryId, categories) : undefined;
@@ -164,9 +195,12 @@ export function ItemViewPage() {
   return (
     <div className="animate-page-enter">
       {/* Back row */}
-      <button onClick={handleBack} className="mb-6 flex items-center gap-2 text-[13px] font-medium text-(--el-view-detail-label) hover:text-(--el-view-title)">
+      <button
+        onClick={occ ? () => setSelectedOccurrence(null) : handleBack}
+        className="mb-6 flex items-center gap-2 text-[13px] font-medium text-(--el-view-detail-label) hover:text-(--el-view-title)"
+      >
         <Icon name="arrow_back" size={20} />
-        {t('common.back')}
+        {occ ? t('tasks.panel.viewAllOccurrences') : t('common.back')}
       </button>
 
       {/* Header */}
@@ -270,13 +304,13 @@ export function ItemViewPage() {
           {/* Info card */}
           <ItemDetailCard
             date={dateStr || null}
-            hasTime={item.hasTime ?? false}
-            duration={item.duration}
+            hasTime={inst?.hasTime ?? occ?.hasTime ?? item.hasTime ?? false}
+            duration={inst?.duration ?? occ?.duration ?? item.duration}
             endDate={eventItem?.endDate}
             dateType={taskItem?.dateType as 'SCHEDULED' | 'DUE' | undefined}
             timeOfDay={taskItem?.timeOfDay}
             timeZone={item.timeZone}
-            repeat={item.repeat}
+            repeat={occ ? undefined : item.repeat}
             firstReminderMinutes={item.firstReminderMinutes}
             secondReminderMinutes={item.secondReminderMinutes}
             location={item.location}
@@ -341,7 +375,7 @@ export function ItemViewPage() {
                 isItemOwner &&
                 taskItem?.trackCompletion !== false &&
                 !parentTaskIsCompleted &&
-                hasActivityEnded(dateStr, item.hasTime ?? false, taskItem?.duration)
+                hasActivityEnded(dateStr, item.hasTime ?? false, taskItem?.duration ?? undefined)
               }
               endActivityLoading={manualCompleteMutation.isPending}
             />
@@ -369,34 +403,57 @@ export function ItemViewPage() {
               </div>
             );
           })()}
+
+          {/* (D3) View All Occurrences */}
+          {!!taskItem?.repeat && !occ && (
+            <OccurrencesList
+              itemId={id!}
+              itemType={itemType}
+              date={taskItem?.date ?? ''}
+              repeat={taskItem?.repeat}
+              parentTitle={taskItem?.title ?? ''}
+              onInstancePress={(instance) => setSelectedOccurrence(instance)}
+            />
+          )}
         </div>
       </div>
 
 
-      {/* Delete confirmation dialog */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-(--el-dialog-overlay)" onClick={() => setShowDeleteConfirm(false)}>
+      {/* Delete confirmation (non-recurring) */}
+      {deleteMode === 'confirm' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-(--el-dialog-overlay)" onClick={closeDelete}>
           <div className="w-full max-w-sm rounded-(--radius-modal) bg-(--el-editor-card-bg) p-(--spacing-card) shadow-(--shadow-modal)" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-base font-semibold text-(--el-view-title)">{t('itemView.confirmDelete')}</h3>
             <p className="mt-2 text-sm text-(--el-view-detail-label)">{t('itemView.deleteDescription')}</p>
             <div className="mt-4 flex justify-end gap-3">
               <button
-                onClick={() => setShowDeleteConfirm(false)}
+                onClick={closeDelete}
                 className="rounded-(--radius-btn) border border-(--el-view-edit-border) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-medium text-(--el-view-title) hover:bg-(--el-popover-item-hover)"
               >
                 {t('common.cancel')}
               </button>
               <button
-                onClick={handleDelete}
-                disabled={deleteTaskMutation.isPending || deleteEventMutation.isPending}
+                onClick={deleteAll}
+                disabled={deletePending}
                 className="rounded-(--radius-btn) bg-(--el-dialog-confirm-bg) px-(--spacing-btn-x) py-(--spacing-btn-y) text-sm font-semibold text-(--el-dialog-confirm-text) hover:opacity-90 disabled:opacity-50"
               >
-                {(deleteTaskMutation.isPending || deleteEventMutation.isPending) ? t('common.deleting') : t('itemView.delete')}
+                {deletePending ? t('common.deleting') : t('itemView.delete')}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Recurring delete scope picker */}
+      <RecurringScopeModal
+        open={deleteMode === 'scope'}
+        mode="delete"
+        pending={deletePending}
+        onThis={deleteThis}
+        onAllFuture={deleteFuture}
+        onAll={deleteAll}
+        onClose={closeDelete}
+      />
 
       {/* End Activity confirmation dialog */}
       <EndActivityConfirmDialog
@@ -425,6 +482,22 @@ export function ItemViewPage() {
           ] : []}
         />
       )}
+
+      {/* Reschedule modal */}
+      <RescheduleModal
+        open={showRescheduleModal}
+        item={item ? {
+          title: item.title,
+          date: dateStr,
+          hasTime: item.hasTime ?? false,
+          timeOfDay: taskItem?.timeOfDay as 'MORNING' | 'AFTERNOON' | 'EVENING' | null | undefined,
+          itemType,
+          duration: item.duration,
+          endDate: eventItem?.endDate,
+        } : null}
+        onConfirm={(result) => { setShowRescheduleModal(false); reschedule(result); }}
+        onClose={() => setShowRescheduleModal(false)}
+      />
     </div>
   );
 }

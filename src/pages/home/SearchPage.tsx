@@ -9,7 +9,7 @@ import { usePlans } from '@/hooks/usePlans';
 import { useTargets } from '@/hooks/useTargets';
 import { searchTasks, searchEvents, toggleTask } from '@/lib/api';
 import { taskToCalendarItem, eventToCalendarItem } from '@/hooks/calendarHelpers';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import { Icon } from '@/components/ui/Icon';
 import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';

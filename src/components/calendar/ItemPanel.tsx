@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/Icon';
 import { isSameDay, formatMonthYear } from '@/utils/date';
 import { ItemRow } from './ItemRow';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
 import type { Category } from '@/types/api';
 import { useTranslation } from 'react-i18next';

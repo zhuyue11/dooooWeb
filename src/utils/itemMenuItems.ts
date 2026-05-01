@@ -37,6 +37,7 @@ export interface ItemMenuContext {
 
 export interface ItemMenuCallbacks {
   onEdit?: () => void;
+  onReschedule?: () => void;
   onComplete?: () => void;
   onParticipantComplete?: (complete: boolean) => void;
   onDelete?: () => void;
@@ -59,6 +60,11 @@ export function buildItemMenuItems(
   // ── Edit ──
   if (ctx.canEdit && callbacks.onEdit) {
     items.push({ key: 'edit', icon: 'edit', label: t('common.edit'), onSelect: callbacks.onEdit });
+  }
+
+  // ── Reschedule ──
+  if (ctx.canEdit && callbacks.onReschedule) {
+    items.push({ key: 'reschedule', icon: 'schedule', label: t('reschedule.title'), onSelect: callbacks.onReschedule });
   }
 
   // ── Complete / Uncomplete (non-group tasks) ──

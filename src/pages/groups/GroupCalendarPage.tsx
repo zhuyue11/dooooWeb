@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useCategories } from '@/hooks/useCategories';
-import { useGroupCalendar } from '@/hooks/useGroupCalendar';
+import { useCalendar } from '@/hooks/useCalendar';
 import type { CalendarViewMode } from '@/hooks/useCalendar';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { WeekGrid } from '@/components/calendar/WeekGrid';
 import { MonthGrid } from '@/components/calendar/MonthGrid';
@@ -49,7 +49,12 @@ export function GroupCalendarPage() {
     goToNext,
     goToToday,
     today,
-  } = useGroupCalendar(groupId, user?.id, groupData?.group?.name, viewMode);
+  } = useCalendar(
+    user?.id,
+    groupData?.group?.name && groupId ? { [groupId]: groupData.group.name } : undefined,
+    viewMode,
+    groupId,
+  );
 
   const dayItems = viewMode === 'day'
     ? (itemsByDate.get(toISODate(visibleDates[0])) || [])

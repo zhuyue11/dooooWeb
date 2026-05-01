@@ -54,6 +54,7 @@ interface ItemMenuInput {
 
 interface ItemMenuCallbackOverrides {
   onEdit?: () => void;
+  onReschedule?: () => void;
   onDelete?: () => void;
   onToggleComplete?: () => void;
   onInvite?: () => void;
@@ -188,6 +189,7 @@ export function useItemMenu(
     const date = input.occurrenceDateKey;
     return buildItemMenuItems(menuContext, {
       onEdit: callbacks.onEdit,
+      onReschedule: callbacks.onReschedule,
       onComplete: callbacks.onToggleComplete,
       onParticipantComplete: (complete) =>
         completeMutation.mutateAsync({ isCompleted: complete, date }),
@@ -205,7 +207,7 @@ export function useItemMenu(
         leaveMutation.mutateAsync({ leaveType: scope as 'single' | 'all', date }),
     }, t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuContext, callbacks.onEdit, callbacks.onToggleComplete, callbacks.onDelete, callbacks.onInvite, input.occurrenceDateKey, t]);
+  }, [menuContext, callbacks.onEdit, callbacks.onReschedule, callbacks.onToggleComplete, callbacks.onDelete, callbacks.onInvite, input.occurrenceDateKey, t]);
 
   return menuItems;
 }

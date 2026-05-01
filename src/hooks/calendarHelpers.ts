@@ -1,6 +1,47 @@
 import type { Task, Event, EventInstance } from '@/types/api';
-import type { CalendarItem, ParticipantSummary } from './useWeekCalendar';
+import type { CalendarItem, ParticipantSummary } from '@/types/calendar';
 import { toISODate } from '@/utils/date';
+
+/**
+ * Whether a calendar item should render as "completed" (dimmed + strikethrough).
+ * Events are never completed. Group activities check participant completion.
+ */
+export function isItemChecked(item: CalendarItem): boolean {
+  if (item.itemType === 'EVENT') return false;
+  if (item.isForAllMembers) {
+    return item.participantInstanceStatus === 'COMPLETED';
+  }
+  return item.isCompleted;
+}
+
+/**
+ * Enrich a CalendarItem with group name + participant status for the current user.
+ * Shared by useCalendar and HomePage.
+ */
+export function enrichCalendarItem(
+  item: CalendarItem,
+  task: Task | undefined,
+  currentUserId: string | undefined,
+  groupNameMap?: Record<string, string>,
+): CalendarItem {
+  const enriched = { ...item };
+  if (enriched.groupId && groupNameMap) {
+    enriched.groupName = groupNameMap[enriched.groupId];
+  }
+  if (task?.isForAllMembers && currentUserId) {
+    const pi = task.participantInstances?.find((p) => p.participantUserId === currentUserId);
+    if (pi) {
+      enriched.participantInstanceStatus = pi.status;
+    } else {
+      const p = task.participants?.find((p) => p.userId === currentUserId);
+      enriched.participantInstanceStatus = p?.status;
+    }
+  }
+  if (task?.user?.name) {
+    enriched.creatorName = task.user.name;
+  }
+  return enriched;
+}
 
 // ── Participant summary (per-date, for recurring "for all members" group tasks) ──
 

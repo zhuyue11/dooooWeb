@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Esta ocurrencia de tarea se eliminará de {{originalDate}} y se moverá a {{newDate}}. Las demás ocurrencias no se verán afectadas.",
       "activityInstanceDateChangeMessage": "Esta ocurrencia de actividad se eliminará de {{originalDate}} y se moverá a {{newDate}}. Las demás ocurrencias no se verán afectadas.",
       "moveOccurrence": "Mover",
-      "keepOriginal": "Mantener original"
+      "keepOriginal": "Mantener original",
+      "viewAllOccurrences": "Ver todas las ocurrencias",
+      "hideOccurrences": "Ocultar ocurrencias",
+      "loadMore": "Cargar más"
     },
     "input": {
       "addTitle": "Añadir título",
@@ -1697,5 +1700,10 @@
     "newChat": "Nuevo chat",
     "planPreviewNoTemplates": "No hay plantillas en este plan",
     "loadingPlan": "Cargando plan..."
+  },
+  "reschedule": {
+    "title": "Reprogramar",
+    "confirm": "Confirmar",
+    "allDay": "Todo el día"
   }
 }

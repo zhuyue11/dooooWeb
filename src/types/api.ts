@@ -453,6 +453,7 @@ export interface ConvertInstanceToTaskRequest {
   date: string; // ISO date string for the new task
   hasTime?: boolean;
   timeOfDay?: 'MORNING' | 'AFTERNOON' | 'EVENING' | null;
+  timeZone?: string | null;
   priority?: 'low' | 'medium' | 'high' | 'urgent' | 'none';
   categoryId?: string | null;
   firstReminderMinutes?: number | null;

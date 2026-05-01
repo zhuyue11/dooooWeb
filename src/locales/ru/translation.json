@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Это повторение задачи будет удалено из {{originalDate}} и перемещено на {{newDate}}. Другие повторения не будут затронуты.",
       "activityInstanceDateChangeMessage": "Это повторение мероприятия будет удалено из {{originalDate}} и перемещено на {{newDate}}. Другие повторения не будут затронуты.",
       "moveOccurrence": "Переместить",
-      "keepOriginal": "Оставить как есть"
+      "keepOriginal": "Оставить как есть",
+      "viewAllOccurrences": "Показать все повторения",
+      "hideOccurrences": "Скрыть повторения",
+      "loadMore": "Загрузить ещё"
     },
     "input": {
       "addTitle": "Добавить название",
@@ -1697,5 +1700,10 @@
     "newChat": "Новый чат",
     "planPreviewNoTemplates": "В этом плане нет шаблонов",
     "loadingPlan": "Загрузка плана..."
+  },
+  "reschedule": {
+    "title": "Перенести",
+    "confirm": "Подтвердить",
+    "allDay": "Весь день"
   }
 }

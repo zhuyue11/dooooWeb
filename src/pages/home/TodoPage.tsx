@@ -10,7 +10,7 @@ import { ItemRow } from '@/components/calendar/ItemRow';
 import { ItemFormModal } from '@/components/calendar/ItemFormModal';
 import { ItemSidePanel } from '@/components/calendar/ItemSidePanel';
 import { taskToCalendarItem } from '@/hooks/calendarHelpers';
-import type { CalendarItem } from '@/hooks/useWeekCalendar';
+import type { CalendarItem } from '@/types/calendar';
 import type { Task } from '@/types/api';
 import { useTranslation } from 'react-i18next';
 import { translateCategoryName } from '@/utils/category';

@@ -32,14 +32,9 @@ import type {
 function useInvalidateAll() {
   const queryClient = useQueryClient();
   return () => {
-    // Calendar queries
-    queryClient.invalidateQueries({ queryKey: ['calendar-tasks'] });
-    queryClient.invalidateQueries({ queryKey: ['calendar-task-instances'] });
+    // Calendar queries (unified endpoint + recurring)
+    queryClient.invalidateQueries({ queryKey: ['calendar-items'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-recurring-tasks'] });
-    queryClient.invalidateQueries({ queryKey: ['calendar-assigned-group-tasks'] });
-    queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
-    queryClient.invalidateQueries({ queryKey: ['calendar-attending-events'] });
-    queryClient.invalidateQueries({ queryKey: ['calendar-event-instances'] });
     queryClient.invalidateQueries({ queryKey: ['calendar-recurring-events'] });
     // To-do and dashboard queries
     queryClient.invalidateQueries({ queryKey: ['todo-tasks'] });

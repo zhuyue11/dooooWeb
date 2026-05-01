@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Bu görev örneği {{originalDate}} tarihinden kaldırılıp {{newDate}} tarihine taşınacak. Diğer örnekler etkilenmeyecek.",
       "activityInstanceDateChangeMessage": "Bu etkinlik örneği {{originalDate}} tarihinden kaldırılıp {{newDate}} tarihine taşınacak. Diğer örnekler etkilenmeyecek.",
       "moveOccurrence": "Taşı",
-      "keepOriginal": "Orijinali koru"
+      "keepOriginal": "Orijinali koru",
+      "viewAllOccurrences": "Tüm tekrarları göster",
+      "hideOccurrences": "Tekrarları gizle",
+      "loadMore": "Daha fazla yükle"
     },
     "input": {
       "addTitle": "Başlık ekle",
@@ -1697,5 +1700,10 @@
     "newChat": "Yeni sohbet",
     "planPreviewNoTemplates": "Bu planda şablon yok",
     "loadingPlan": "Plan yükleniyor..."
+  },
+  "reschedule": {
+    "title": "Yeniden planla",
+    "confirm": "Onayla",
+    "allDay": "Tüm gün"
   }
 }

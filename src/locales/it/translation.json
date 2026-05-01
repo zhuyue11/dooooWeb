@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "Questa occorrenza dell'attività verrà rimossa da {{originalDate}} e spostata a {{newDate}}. Le altre occorrenze non saranno interessate.",
       "activityInstanceDateChangeMessage": "Questa occorrenza dell'attività verrà rimossa da {{originalDate}} e spostata a {{newDate}}. Le altre occorrenze non saranno interessate.",
       "moveOccurrence": "Sposta",
-      "keepOriginal": "Mantieni originale"
+      "keepOriginal": "Mantieni originale",
+      "viewAllOccurrences": "Visualizza tutte le occorrenze",
+      "hideOccurrences": "Nascondi occorrenze",
+      "loadMore": "Carica altro"
     },
     "input": {
       "addTitle": "Aggiungi titolo",
@@ -1697,5 +1700,10 @@
     "newChat": "Nuova chat",
     "planPreviewNoTemplates": "Nessun modello in questo piano",
     "loadingPlan": "Caricamento piano..."
+  },
+  "reschedule": {
+    "title": "Riprogramma",
+    "confirm": "Conferma",
+    "allDay": "Tutto il giorno"
   }
 }

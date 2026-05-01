@@ -274,7 +274,10 @@
       "taskInstanceDateChangeMessage": "To wystąpienie zadania zostanie usunięte z {{originalDate}} i przeniesione na {{newDate}}. Inne wystąpienia nie będą naruszone.",
       "activityInstanceDateChangeMessage": "To wystąpienie aktywności zostanie usunięte z {{originalDate}} i przeniesione na {{newDate}}. Inne wystąpienia nie będą naruszone.",
       "moveOccurrence": "Przenieś",
-      "keepOriginal": "Zachowaj oryginał"
+      "keepOriginal": "Zachowaj oryginał",
+      "viewAllOccurrences": "Pokaż wszystkie wystąpienia",
+      "hideOccurrences": "Ukryj wystąpienia",
+      "loadMore": "Załaduj więcej"
     },
     "input": {
       "addTitle": "Dodaj tytuł",
@@ -1697,5 +1700,10 @@
     "newChat": "Nowy czat",
     "planPreviewNoTemplates": "Brak szablonów w tym planie",
     "loadingPlan": "Ładowanie planu..."
+  },
+  "reschedule": {
+    "title": "Przełóż",
+    "confirm": "Potwierdź",
+    "allDay": "Cały dzień"
   }
 }
