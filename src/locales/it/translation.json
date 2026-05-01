@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Questa occorrenza dell'attività verrà rimossa da {{originalDate}} e spostata a {{newDate}}. Le altre occorrenze non saranno interessate.",
       "moveOccurrence": "Sposta",
       "keepOriginal": "Mantieni originale",
-      "viewAllOccurrences": "Visualizza tutte le occorrenze",
-      "hideOccurrences": "Nascondi occorrenze",
+      "viewAllOccurrences": "Visualizza tutti gli eventi ricorrenti",
+      "hideOccurrences": "Nascondi eventi ricorrenti",
       "loadMore": "Carica altro"
     },
     "input": {

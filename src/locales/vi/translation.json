@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Lần xuất hiện hoạt động này sẽ được xóa khỏi {{originalDate}} và chuyển sang {{newDate}}. Các lần xuất hiện khác sẽ không bị ảnh hưởng.",
       "moveOccurrence": "Di chuyển",
       "keepOriginal": "Giữ nguyên",
-      "viewAllOccurrences": "Xem tất cả lần xuất hiện",
-      "hideOccurrences": "Ẩn lần xuất hiện",
+      "viewAllOccurrences": "Xem tất cả lịch trình lặp lại",
+      "hideOccurrences": "Ẩn lịch trình lặp lại",
       "loadMore": "Tải thêm"
     },
     "input": {

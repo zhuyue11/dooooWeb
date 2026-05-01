@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "このアクティビティの回は{{originalDate}}から削除され、{{newDate}}に移動されます。他の回には影響しません。",
       "moveOccurrence": "移動",
       "keepOriginal": "元のまま",
-      "viewAllOccurrences": "すべての出現を表示",
-      "hideOccurrences": "出現を非表示",
+      "viewAllOccurrences": "すべての繰り返し予定を表示",
+      "hideOccurrences": "繰り返し予定を非表示",
       "loadMore": "もっと読み込む"
     },
     "input": {

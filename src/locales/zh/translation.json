@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "此活动执行将从 {{originalDate}} 移动到 {{newDate}}。其他执行不受影响。",
       "moveOccurrence": "移动",
       "keepOriginal": "保持原样",
-      "viewAllOccurrences": "查看所有重复",
-      "hideOccurrences": "隐藏重复",
+      "viewAllOccurrences": "查看全部重复日程",
+      "hideOccurrences": "隐藏重复日程",
       "loadMore": "加载更多"
     },
     "input": {

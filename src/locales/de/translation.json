@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Dieses Aktivitäts-Vorkommen wird von {{originalDate}} entfernt und nach {{newDate}} verschoben. Andere Vorkommen sind nicht betroffen.",
       "moveOccurrence": "Verschieben",
       "keepOriginal": "Original behalten",
-      "viewAllOccurrences": "Alle Vorkommnisse anzeigen",
-      "hideOccurrences": "Vorkommnisse ausblenden",
+      "viewAllOccurrences": "Alle wiederkehrenden Termine anzeigen",
+      "hideOccurrences": "Wiederkehrende Termine ausblenden",
       "loadMore": "Mehr laden"
     },
     "input": {

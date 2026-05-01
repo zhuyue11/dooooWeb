@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "รายการกิจกรรมนี้จะถูกลบออกจาก {{originalDate}} และย้ายไปยัง {{newDate}} รายการอื่นจะไม่ได้รับผลกระทบ",
       "moveOccurrence": "ย้าย",
       "keepOriginal": "คงเดิม",
-      "viewAllOccurrences": "ดูรายการทั้งหมด",
-      "hideOccurrences": "ซ่อนรายการ",
+      "viewAllOccurrences": "ดูกำหนดการที่เกิดซ้ำทั้งหมด",
+      "hideOccurrences": "ซ่อนกำหนดการที่เกิดซ้ำ",
       "loadMore": "โหลดเพิ่มเติม"
     },
     "input": {

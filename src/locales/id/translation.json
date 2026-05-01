@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Kejadian aktivitas ini akan dihapus dari {{originalDate}} dan dipindahkan ke {{newDate}}. Kejadian lain tidak akan terpengaruh.",
       "moveOccurrence": "Pindahkan",
       "keepOriginal": "Pertahankan asli",
-      "viewAllOccurrences": "Lihat semua kejadian",
-      "hideOccurrences": "Sembunyikan kejadian",
+      "viewAllOccurrences": "Lihat semua jadwal berulang",
+      "hideOccurrences": "Sembunyikan jadwal berulang",
       "loadMore": "Muat lebih banyak"
     },
     "input": {

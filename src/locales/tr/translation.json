@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Bu etkinlik örneği {{originalDate}} tarihinden kaldırılıp {{newDate}} tarihine taşınacak. Diğer örnekler etkilenmeyecek.",
       "moveOccurrence": "Taşı",
       "keepOriginal": "Orijinali koru",
-      "viewAllOccurrences": "Tüm tekrarları göster",
-      "hideOccurrences": "Tekrarları gizle",
+      "viewAllOccurrences": "Tüm tekrarlanan etkinlikleri göster",
+      "hideOccurrences": "Tekrarlanan etkinlikleri gizle",
       "loadMore": "Daha fazla yükle"
     },
     "input": {

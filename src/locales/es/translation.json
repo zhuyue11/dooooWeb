@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Esta ocurrencia de actividad se eliminará de {{originalDate}} y se moverá a {{newDate}}. Las demás ocurrencias no se verán afectadas.",
       "moveOccurrence": "Mover",
       "keepOriginal": "Mantener original",
-      "viewAllOccurrences": "Ver todas las ocurrencias",
-      "hideOccurrences": "Ocultar ocurrencias",
+      "viewAllOccurrences": "Ver todos los eventos recurrentes",
+      "hideOccurrences": "Ocultar eventos recurrentes",
       "loadMore": "Cargar más"
     },
     "input": {

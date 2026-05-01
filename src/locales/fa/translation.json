@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "این مورد فعالیت از {{originalDate}} حذف و به {{newDate}} منتقل می‌شود. سایر موارد تحت تأثیر قرار نمی‌گیرند.",
       "moveOccurrence": "انتقال",
       "keepOriginal": "حفظ اصلی",
-      "viewAllOccurrences": "مشاهده همه تکرارها",
-      "hideOccurrences": "پنهان کردن تکرارها",
+      "viewAllOccurrences": "مشاهده همه رویدادهای تکراری",
+      "hideOccurrences": "پنهان کردن رویدادهای تکراری",
       "loadMore": "بارگذاری بیشتر"
     },
     "input": {

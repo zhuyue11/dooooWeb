@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "سيتم حذف هذا الحدوث من النشاط من {{originalDate}} ونقله إلى {{newDate}}. لن تتأثر الحدوثات الأخرى.",
       "moveOccurrence": "نقل",
       "keepOriginal": "الاحتفاظ بالأصل",
-      "viewAllOccurrences": "عرض جميع التكرارات",
-      "hideOccurrences": "إخفاء التكرارات",
+      "viewAllOccurrences": "عرض جميع الأحداث المتكررة",
+      "hideOccurrences": "إخفاء الأحداث المتكررة",
       "loadMore": "تحميل المزيد"
     },
     "input": {

@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Это повторение мероприятия будет удалено из {{originalDate}} и перемещено на {{newDate}}. Другие повторения не будут затронуты.",
       "moveOccurrence": "Переместить",
       "keepOriginal": "Оставить как есть",
-      "viewAllOccurrences": "Показать все повторения",
-      "hideOccurrences": "Скрыть повторения",
+      "viewAllOccurrences": "Показать все повторяющиеся события",
+      "hideOccurrences": "Скрыть повторяющиеся события",
       "loadMore": "Загрузить ещё"
     },
     "input": {

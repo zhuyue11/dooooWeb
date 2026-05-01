@@ -271,7 +271,7 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
       <div className="fixed inset-0 z-40 flex justify-end" onClick={handleClose}>
         <div className={`absolute inset-0 bg-black/20 ${isClosing ? 'animate-backdrop-out' : 'animate-backdrop-in'}`} />
         <div
-          className={`relative flex h-full w-[420px] max-w-full flex-col items-center justify-center bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
+          className={`relative flex h-full w-[560px] max-w-full flex-col items-center justify-center bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
           style={{ borderLeft: '1px solid var(--el-panel-border)' }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -291,7 +291,7 @@ export function ItemSidePanel({ itemId, itemType, currentUserId, onClose, onTogg
       <div
         ref={panelRef}
         data-testid="item-side-panel"
-        className={`relative flex h-full w-[420px] max-w-full flex-col bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
+        className={`relative flex h-full w-[560px] max-w-full flex-col bg-(--el-panel-bg) shadow-[-4px_0_16px_rgba(0,0,0,0.12)] ${isClosing ? 'animate-panel-out' : 'animate-panel-in'}`}
         style={{ borderLeft: '1px solid var(--el-panel-border)' }}
         onClick={(e) => e.stopPropagation()}
       >

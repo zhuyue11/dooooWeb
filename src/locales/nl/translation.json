@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Dit activiteitvoorval wordt verwijderd van {{originalDate}} en verplaatst naar {{newDate}}. Andere voorvallen worden niet beïnvloed.",
       "moveOccurrence": "Verplaatsen",
       "keepOriginal": "Origineel behouden",
-      "viewAllOccurrences": "Alle voorkomens bekijken",
-      "hideOccurrences": "Voorkomens verbergen",
+      "viewAllOccurrences": "Alle herhalende afspraken bekijken",
+      "hideOccurrences": "Herhalende afspraken verbergen",
       "loadMore": "Meer laden"
     },
     "input": {

@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "Cette occurrence d'activité sera supprimée du {{originalDate}} et déplacée au {{newDate}}. Les autres occurrences ne seront pas affectées.",
       "moveOccurrence": "Déplacer",
       "keepOriginal": "Conserver l'original",
-      "viewAllOccurrences": "Voir toutes les occurrences",
-      "hideOccurrences": "Masquer les occurrences",
+      "viewAllOccurrences": "Voir tous les événements récurrents",
+      "hideOccurrences": "Masquer les événements récurrents",
       "loadMore": "Charger plus"
     },
     "input": {

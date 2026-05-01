@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "To wystąpienie aktywności zostanie usunięte z {{originalDate}} i przeniesione na {{newDate}}. Inne wystąpienia nie będą naruszone.",
       "moveOccurrence": "Przenieś",
       "keepOriginal": "Zachowaj oryginał",
-      "viewAllOccurrences": "Pokaż wszystkie wystąpienia",
-      "hideOccurrences": "Ukryj wystąpienia",
+      "viewAllOccurrences": "Pokaż wszystkie powtarzające się wydarzenia",
+      "hideOccurrences": "Ukryj powtarzające się wydarzenia",
       "loadMore": "Załaduj więcej"
     },
     "input": {

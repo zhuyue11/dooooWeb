@@ -275,8 +275,8 @@
       "activityInstanceDateChangeMessage": "이 활동 항목이 {{originalDate}}에서 제거되고 {{newDate}}로 이동됩니다. 다른 항목은 영향을 받지 않습니다.",
       "moveOccurrence": "이동",
       "keepOriginal": "원래대로 유지",
-      "viewAllOccurrences": "모든 발생 보기",
-      "hideOccurrences": "발생 숨기기",
+      "viewAllOccurrences": "모든 반복 일정 보기",
+      "hideOccurrences": "반복 일정 숨기기",
       "loadMore": "더 보기"
     },
     "input": {
