@@ -20,7 +20,7 @@ const GHOST_RATIOS: Record<string, number> = {
   long: 1025 / 257,
   long2: 1153 / 257,
   long4: 1281 / 257,
-  tank: 513 / 1025,
+  tank: 129 / 257,
 };
 
 const ghosts = [

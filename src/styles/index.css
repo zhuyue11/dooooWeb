@@ -300,3 +300,9 @@ body {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Rocket launch stars ── */
+@keyframes star-twinkle {
+  0%, 100% { opacity: var(--star-base, 0.3); transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}

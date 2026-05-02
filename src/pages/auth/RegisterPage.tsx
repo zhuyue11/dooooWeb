@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoginGhosts } from '@/components/auth/LoginGhosts';
+import { AuthBackground } from '@/components/auth/AuthBackground';
 import { useAuth } from '@/lib/contexts/auth-context';
 import logo from '@/assets/logo.svg';
 
@@ -31,7 +31,7 @@ export function RegisterPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background overflow-hidden">
-      <LoginGhosts />
+      <AuthBackground />
       <div className="relative z-10 flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />

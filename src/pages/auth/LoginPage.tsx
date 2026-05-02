@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
-import { LoginGhosts } from '@/components/auth/LoginGhosts';
+import { AuthBackground } from '@/components/auth/AuthBackground';
 import logo from '@/assets/logo.svg';
 
 export function LoginPage() {
@@ -9,7 +9,7 @@ export function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background overflow-hidden">
-      <LoginGhosts />
+      <AuthBackground />
       {/* Login Card */}
       <div className="relative z-10 flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
         {/* Logo + Title */}
