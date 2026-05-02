@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
+import { LoginGhosts } from '@/components/auth/LoginGhosts';
 import logo from '@/assets/logo.svg';
 
 export function LoginPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="relative flex min-h-screen items-center justify-center bg-background overflow-hidden">
+      <LoginGhosts />
       {/* Login Card */}
-      <div className="flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
+      <div className="relative z-10 flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
         {/* Logo + Title */}
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />

@@ -279,3 +279,24 @@ body {
 .animate-pulse-dot {
   animation: pulse-dot 0.8s ease-in-out infinite;
 }
+
+/* ── Login ghost animations ── */
+@keyframes ghost-drift {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(var(--drift-x), calc(var(--drift-y) * -1)); }
+  50% { transform: translate(calc(var(--drift-x) * -0.5), var(--drift-y)); }
+  75% { transform: translate(calc(var(--drift-x) * -1), calc(var(--drift-y) * -0.5)); }
+}
+@keyframes ghost-rotate {
+  0%, 100% { transform: rotate(0deg); }
+  33% { transform: rotate(3deg); }
+  66% { transform: rotate(-3deg); }
+}
+@keyframes ghost-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(calc(var(--bob) * -1)); }
+}
+@keyframes ghost-enter {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
