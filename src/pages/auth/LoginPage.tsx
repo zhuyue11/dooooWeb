@@ -44,13 +44,6 @@ export function LoginPage() {
             {t('auth.continueWithApple')}
           </button>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4">
-            <div className="h-px flex-1 bg-(--el-auth-divider)" />
-            <span className="text-[13px] text-(--el-auth-divider-text)">{t('auth.orDivider')}</span>
-            <div className="h-px flex-1 bg-(--el-auth-divider)" />
-          </div>
-
           {/* Email */}
           <Link
             to="/login/email"
