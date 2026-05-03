@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
  */
 
 const CELL_SIZE = 6;
-const STEPS_PER_FRAME = 11;
+const STEPS_PER_FRAME = 100;
 
 export function LoginLangtonsAnt() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

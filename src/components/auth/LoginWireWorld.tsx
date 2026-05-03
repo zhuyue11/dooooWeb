@@ -20,47 +20,98 @@ function seededRandom(seed: number) {
 function createGrid(cols: number, rows: number): Uint8Array {
   const grid = new Uint8Array(cols * rows);
   const rand = seededRandom(99);
+  const set = (x: number, y: number, v: number) => {
+    if (x >= 0 && x < cols && y >= 0 && y < rows) grid[y * cols + x] = v;
+  };
+  const wire = (x: number, y: number) => set(x, y, 1);
 
-  // Create random wire paths
-  const wireCount = 12 + Math.floor(rand() * 8);
-  for (let w = 0; w < wireCount; w++) {
+  // Helper: draw a horizontal wire segment
+  const hLine = (x0: number, x1: number, y: number) => {
+    const lo = Math.min(x0, x1), hi = Math.max(x0, x1);
+    for (let x = lo; x <= hi; x++) wire(x, y);
+  };
+  // Helper: draw a vertical wire segment
+  const vLine = (x: number, y0: number, y1: number) => {
+    const lo = Math.min(y0, y1), hi = Math.max(y0, y1);
+    for (let y = lo; y <= hi; y++) wire(x, y);
+  };
+  // Helper: draw a rectangular loop
+  const loop = (x: number, y: number, w: number, h: number) => {
+    hLine(x, x + w, y);
+    hLine(x, x + w, y + h);
+    vLine(x, y, y + h);
+    vLine(x + w, y, y + h);
+  };
+  // Helper: place an electron moving rightward along a horizontal wire
+  const electronH = (x: number, y: number) => {
+    set(x, y, 2);     // head
+    set(x - 1, y, 3); // tail behind it
+  };
+  // Helper: place an electron moving downward along a vertical wire
+  const electronV = (x: number, y: number) => {
+    set(x, y, 2);     // head
+    set(x, y - 1, 3); // tail above it
+  };
+
+  // Spacing for the grid of circuits
+  const spacingX = Math.max(20, Math.floor(cols / 6));
+  const spacingY = Math.max(16, Math.floor(rows / 5));
+
+  // 1) Rectangular loops across the grid
+  for (let gy = 0; gy < 5; gy++) {
+    for (let gx = 0; gx < 6; gx++) {
+      const bx = gx * spacingX + Math.floor(rand() * 4) - 2;
+      const by = gy * spacingY + Math.floor(rand() * 4) - 2;
+      const w = 8 + Math.floor(rand() * (spacingX - 12));
+      const h = 6 + Math.floor(rand() * (spacingY - 10));
+      loop(bx, by, w, h);
+    }
+  }
+
+  // 2) Horizontal bus lines connecting loops
+  for (let i = 0; i < 6; i++) {
+    const y = Math.floor(spacingY * (0.5 + i * 0.9)) + Math.floor(rand() * 3);
+    if (y >= 0 && y < rows) hLine(0, cols - 1, y);
+  }
+
+  // 3) Vertical bus lines connecting loops
+  for (let i = 0; i < 8; i++) {
+    const x = Math.floor(spacingX * (0.3 + i * 0.8)) + Math.floor(rand() * 3);
+    if (x >= 0 && x < cols) vLine(x, 0, rows - 1);
+  }
+
+  // 4) Random branch wires for organic feel
+  for (let i = 0; i < 40; i++) {
     let x = Math.floor(rand() * cols);
     let y = Math.floor(rand() * rows);
-    const length = 30 + Math.floor(rand() * 80);
-
-    for (let i = 0; i < length; i++) {
-      if (x >= 0 && x < cols && y >= 0 && y < rows) {
-        grid[y * cols + x] = 1; // wire
-        // Place electron at start of some wires
-        if (i === 0 && rand() < 0.5) {
-          grid[y * cols + x] = 2; // head
-        } else if (i === 1 && grid[(y * cols + x)] === 1 && rand() < 0.3) {
-          // Check if previous was head
-          const prevIdx = (y * cols + x);
-          if (prevIdx >= 0) grid[prevIdx] = 3; // tail behind head
-        }
-      }
-      // Random walk
-      const dir = Math.floor(rand() * 4);
+    const len = 10 + Math.floor(rand() * 30);
+    const biasDir = Math.floor(rand() * 4);
+    for (let j = 0; j < len; j++) {
+      wire(x, y);
+      const dir = rand() < 0.6 ? biasDir : Math.floor(rand() * 4);
       if (dir === 0) x++;
       else if (dir === 1) x--;
       else if (dir === 2) y++;
       else y--;
-      x = (x + cols) % cols;
-      y = (y + rows) % rows;
+      x = ((x % cols) + cols) % cols;
+      y = ((y % rows) + rows) % rows;
     }
   }
 
-  // Ensure some electrons exist
-  let electronCount = 0;
-  for (let i = 0; i < grid.length; i++) {
-    if (grid[i] === 2) electronCount++;
+  // 5) Seed electrons on horizontal and vertical wire runs
+  for (let y = 0; y < rows; y++) {
+    for (let x = 2; x < cols; x++) {
+      const idx = y * cols + x;
+      if (grid[idx] === 1 && grid[idx - 1] === 1 && grid[idx - 2] === 1) {
+        if (rand() < 0.015) electronH(x, y);
+      }
+    }
   }
-  if (electronCount < 5) {
-    for (let i = 0; i < grid.length && electronCount < 10; i++) {
-      if (grid[i] === 1 && rand() < 0.02) {
-        grid[i] = 2;
-        electronCount++;
+  for (let x = 0; x < cols; x++) {
+    for (let y = 2; y < rows; y++) {
+      const idx = y * cols + x;
+      if (grid[idx] === 1 && grid[(y - 1) * cols + x] === 1 && grid[(y - 2) * cols + x] === 1) {
+        if (rand() < 0.008) electronV(x, y);
       }
     }
   }
@@ -122,11 +173,6 @@ export function LoginWireWorld() {
     let grid = createGrid(cols, rows);
     let lastStep = performance.now();
 
-    function getCellColor(): string {
-      return getComputedStyle(document.documentElement)
-        .getPropertyValue('--el-page-text').trim() || '#333333';
-    }
-
     function draw(now: number) {
       const w = canvas!.width;
       const h = canvas!.height;
@@ -137,7 +183,6 @@ export function LoginWireWorld() {
       }
 
       ctx.clearRect(0, 0, w, h);
-      const cellColor = getCellColor();
 
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
@@ -145,9 +190,9 @@ export function LoginWireWorld() {
           if (state === 0) continue;
 
           if (state === 1) {
-            // Wire
+            // Wire (conductor) — yellow
             ctx.globalAlpha = 0.12;
-            ctx.fillStyle = cellColor;
+            ctx.fillStyle = '#facc15';
           } else if (state === 2) {
             // Electron head
             ctx.globalAlpha = 0.6;
