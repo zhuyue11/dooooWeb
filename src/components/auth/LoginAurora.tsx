@@ -13,14 +13,15 @@ const PALETTE = [
   { r: 96, g: 165, b: 250 },  // blue
 ];
 
+// Speed at which the shared color cycles through the palette (full loop ≈ 2 min)
+const COLOR_CYCLE_SPEED = 0.00008;
+
 interface Band {
   baseY: number;
   amplitude: number;
   wavelength: number;
   speed: number;
   thickness: number;
-  colorSpeed: number;
-  colorOffset: number;
   opacity: number;
   phaseOffset: number;
 }
@@ -30,14 +31,12 @@ function generateBands(): Band[] {
   for (let i = 0; i < 7; i++) {
     const t = i / 6;
     bands.push({
-      baseY: 0.15 + t * 0.55,
-      amplitude: 25 + i * 12,
+      baseY: 0.08 + t * 0.7,
+      amplitude: 50 + i * 25,
       wavelength: 250 + i * 70,
       speed: 0.0003 + i * 0.00006,
-      thickness: 50 + i * 18,
-      colorSpeed: 0.00008 + i * 0.00003,
-      colorOffset: i * (PALETTE.length / 7),
-      opacity: 0.20 + (1 - t) * 0.15,
+      thickness: 70 + i * 25,
+      opacity: 0.35 + (1 - t) * 0.25,
       phaseOffset: i * 1.0,
     });
   }
@@ -81,11 +80,12 @@ export function LoginAurora() {
       const h = canvas!.height;
       ctx.clearRect(0, 0, w, h);
 
+      // Single color shared by all bands, cycling through the palette over time
+      const colorPos = now * COLOR_CYCLE_SPEED;
+      const c = getColor(colorPos);
+
       for (const band of bands) {
         const t = now * band.speed + band.phaseOffset;
-        const colorPos = band.colorOffset + now * band.colorSpeed;
-        const c1 = getColor(colorPos);
-        const c2 = getColor(colorPos + 3);
 
         ctx.beginPath();
         ctx.moveTo(0, h);
@@ -101,13 +101,13 @@ export function LoginAurora() {
         ctx.lineTo(w, h);
         ctx.closePath();
 
-        // Vertical gradient with two shifting colors
+        // Vertical gradient — single color fading in and out
         const gradient = ctx.createLinearGradient(0, band.baseY * h - band.thickness, 0, band.baseY * h + band.thickness * 2);
-        gradient.addColorStop(0, `rgba(${c1.r}, ${c1.g}, ${c1.b}, 0)`);
-        gradient.addColorStop(0.25, `rgba(${c1.r}, ${c1.g}, ${c1.b}, ${band.opacity})`);
-        gradient.addColorStop(0.5, `rgba(${c2.r}, ${c2.g}, ${c2.b}, ${band.opacity * 0.8})`);
-        gradient.addColorStop(0.75, `rgba(${c1.r}, ${c1.g}, ${c1.b}, ${band.opacity * 0.4})`);
-        gradient.addColorStop(1, `rgba(${c2.r}, ${c2.g}, ${c2.b}, 0)`);
+        gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+        gradient.addColorStop(0.15, `rgba(${c.r}, ${c.g}, ${c.b}, ${band.opacity})`);
+        gradient.addColorStop(0.4, `rgba(${c.r}, ${c.g}, ${c.b}, ${band.opacity * 0.9})`);
+        gradient.addColorStop(0.7, `rgba(${c.r}, ${c.g}, ${c.b}, ${band.opacity * 0.55})`);
+        gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
 
         ctx.fillStyle = gradient;
         ctx.fill();

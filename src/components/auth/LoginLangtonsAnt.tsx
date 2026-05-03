@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
  */
 
 const CELL_SIZE = 6;
-const STEPS_PER_FRAME = 100;
+const STEPS_PER_FRAME = 11;
 
 export function LoginLangtonsAnt() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +29,9 @@ export function LoginLangtonsAnt() {
     const grid = new Uint8Array(cols * rows); // 0=white, 1=black
 
     // Directions: 0=up, 1=right, 2=down, 3=left
-    let antX = Math.floor(cols / 2);
+    // Start just to the right of the centered 420px login panel
+    const panelRightEdgePx = (canvas.width + 800) / 2;
+    let antX = Math.floor(panelRightEdgePx / CELL_SIZE) + 2;
     let antY = Math.floor(rows / 2);
     let antDir = 0;
 

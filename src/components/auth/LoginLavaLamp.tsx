@@ -69,19 +69,19 @@ function generateBlobConfigs(): BlobConfig[] {
 
   for (let i = 0; i < BLOB_COUNT; i++) {
     const g = ghostAssets[i % ghostAssets.length];
-    const isLarge = rand() > 0.6;
-    const width = isLarge ? 140 + rand() * 100 : 70 + rand() * 60;
+    const isLarge = rand() > 0.5;
+    const width = isLarge ? 180 + rand() * 140 : 100 + rand() * 80;
 
     result.push({
       src: g.src,
       name: g.name,
       color: COLORS[i % COLORS.length],
       width,
-      opacity: 0.18 + rand() * 0.20,
-      blur: 8 + rand() * 16,
-      scaleMin: 0.85,
-      scaleMax: 1.15 + rand() * 0.15,
-      pulseDuration: 8 + rand() * 12,
+      opacity: 0.35 + rand() * 0.25,
+      blur: 6 + rand() * 10,
+      scaleMin: 0.8,
+      scaleMax: 1.2 + rand() * 0.2,
+      pulseDuration: 6 + rand() * 10,
       relocateInterval: 12000 + rand() * 16000, // 12-28s between moves
       transitionDuration: 10 + rand() * 8,       // 10-18s CSS transition
     });
@@ -172,9 +172,9 @@ export function LoginLavaLamp() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 30% 70%, color-mix(in srgb, ${COLORS[0]} 18%, transparent) 0%, transparent 100%),
-            radial-gradient(ellipse 60% 80% at 70% 30%, color-mix(in srgb, ${COLORS[5]} 18%, transparent) 0%, transparent 100%),
-            radial-gradient(ellipse 70% 50% at 50% 50%, color-mix(in srgb, ${COLORS[8]} 12%, transparent) 0%, transparent 100%)
+            radial-gradient(ellipse 80% 60% at 30% 70%, color-mix(in srgb, ${COLORS[0]} 30%, transparent) 0%, transparent 100%),
+            radial-gradient(ellipse 60% 80% at 70% 30%, color-mix(in srgb, ${COLORS[5]} 30%, transparent) 0%, transparent 100%),
+            radial-gradient(ellipse 70% 50% at 50% 50%, color-mix(in srgb, ${COLORS[8]} 22%, transparent) 0%, transparent 100%)
           `,
         }}
       />
