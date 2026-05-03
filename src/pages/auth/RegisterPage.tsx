@@ -36,24 +36,24 @@ export function RegisterPage() {
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />
           <h1 className="text-2xl font-bold text-(--el-auth-title)">
-            Create account
+            {t('auth.createAccount')}
           </h1>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">Name</label>
+            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.nameLabel')}</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
+              placeholder={t('auth.namePlaceholder')}
               required
               className="h-12 rounded-(--radius-input) border border-(--el-auth-input-border) bg-(--el-auth-input-bg) px-(--spacing-input-x) text-sm text-(--el-auth-title) placeholder:text-(--el-auth-subtitle) focus:border-(--el-auth-input-focus) focus:outline-none"
              
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">Email</label>
+            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.emailLabel')}</label>
             <input
               type="email"
               value={email}
@@ -65,7 +65,7 @@ export function RegisterPage() {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">Password</label>
+            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.passwordLabel')}</label>
             <input
               type="password"
               value={password}
@@ -89,17 +89,17 @@ export function RegisterPage() {
             {isLoading ? (
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : (
-              'Sign up'
+              t('auth.signup')
             )}
           </button>
         </form>
 
         <div className="flex justify-center gap-1">
           <span className="text-[13px] text-(--el-auth-subtitle)">
-            Already have an account?
+            {t('auth.alreadyHaveAccount')}
           </span>
           <Link to="/login" className="text-[13px] font-semibold text-(--el-auth-link) hover:underline">
-            Sign in
+            {t('auth.signIn')}
           </Link>
         </div>
       </div>

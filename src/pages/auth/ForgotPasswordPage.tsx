@@ -31,25 +31,25 @@ export function ForgotPasswordPage() {
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />
           <h1 className="text-2xl font-bold text-(--el-auth-title)">
-            Reset password
+            {t('auth.resetPasswordTitle')}
           </h1>
         </div>
 
         {sent ? (
           <div className="flex flex-col items-center gap-4">
             <p className="text-center text-sm text-(--el-auth-subtitle)">
-              {t('auth.resetEmailSent', 'Check your email for a reset link.')}
+              {t('auth.resetEmailSent')}
             </p>
             <Link to="/login" className="flex items-center gap-1 text-[13px] text-(--el-auth-link) hover:underline">
               <Icon name="arrow_back" size={14} />
-              Back to login
+              {t('auth.backToLogin')}
             </Link>
           </div>
         ) : (
           <>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-(--el-auth-title)">Email</label>
+                <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.emailLabel')}</label>
                 <input
                   type="email"
                   value={email}
@@ -70,14 +70,14 @@ export function ForgotPasswordPage() {
                 {isLoading ? (
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 ) : (
-                  'Send reset link'
+                  t('auth.sendResetLink')
                 )}
               </button>
             </form>
 
             <Link to="/login" className="flex items-center justify-center gap-1 text-[13px] text-(--el-auth-subtitle) hover:text-(--el-auth-title)">
               <Icon name="arrow_back" size={14} />
-              Back to login
+              {t('auth.backToLogin')}
             </Link>
           </>
         )}

@@ -67,7 +67,7 @@
     "loginError": "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
     "signupSuccess": "สร้างบัญชีสำเร็จ",
     "signupError": "สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
-    "welcomeToDoooo": "ยินดีต้อนรับสู่ doooo",
+    "welcomeToDoooo": "ยินดีต้อนรับสู่ DOOOO",
     "signInToContinue": "ลงชื่อเข้าใช้เพื่อดำเนินการต่อ",
     "signingIn": "กำลังลงชื่อเข้าใช้...",
     "signInWithEmail": "ลงชื่อเข้าใช้ด้วยอีเมล",
@@ -109,7 +109,17 @@
     "emailInput": "ช่องกรอกอีเมล",
     "passwordInput": "ช่องกรอกรหัสผ่าน",
     "confirmPasswordInput": "ช่องยืนยันรหัสผ่าน",
-    "invitationCodeInput": "ช่องกรอกรหัสเชิญ"
+    "invitationCodeInput": "ช่องกรอกรหัสเชิญ",
+    "conwaysGameOfLife": "เกมชีวิตของคอนเวย์",
+    "signInSubtitle": "ลงชื่อเข้าใช้เพื่อจัดการงานและแผนของคุณ",
+    "orDivider": "หรือ",
+    "emailLabel": "อีเมล",
+    "passwordLabel": "รหัสผ่าน",
+    "forgotPasswordLink": "ลืมรหัสผ่าน?",
+    "backToLoginOptions": "กลับไปยังตัวเลือกการเข้าสู่ระบบ",
+    "nameLabel": "ชื่อ",
+    "namePlaceholder": "ชื่อของคุณ",
+    "resetEmailSent": "ตรวจสอบอีเมลของคุณเพื่อรับลิงก์รีเซ็ต"
   },
   "tasks": {
     "itemType": {

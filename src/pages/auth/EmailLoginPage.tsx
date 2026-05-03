@@ -36,13 +36,13 @@ export function EmailLoginPage() {
         <div className="flex flex-col items-center gap-4">
           <img src={logo} alt="doooo" className="h-14 w-14" />
           <h1 className="text-2xl font-bold text-(--el-auth-title)">
-            Sign in with Email
+            {t('auth.signInWithEmail')}
           </h1>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">Email</label>
+            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.emailLabel')}</label>
             <input
               type="email"
               value={email}
@@ -55,7 +55,7 @@ export function EmailLoginPage() {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">Password</label>
+            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.passwordLabel')}</label>
             <input
               type="password"
               value={password}
@@ -81,26 +81,26 @@ export function EmailLoginPage() {
             {isLoading ? (
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : (
-              'Sign in'
+              t('auth.signIn')
             )}
           </button>
         </form>
 
         <div className="flex flex-col items-center gap-2">
           <Link to="/forgot-password" className="text-[13px] text-(--el-auth-link) hover:underline">
-            Forgot password?
+            {t('auth.forgotPasswordLink')}
           </Link>
           <div className="flex gap-1">
             <span className="text-[13px] text-(--el-auth-subtitle)">
-              Don't have an account?
+              {t('auth.dontHaveAccount')}
             </span>
             <Link to="/register" className="text-[13px] font-semibold text-(--el-auth-link) hover:underline">
-              Sign up
+              {t('auth.signup')}
             </Link>
           </div>
           <Link to="/login" className="flex items-center gap-1 text-[13px] text-(--el-auth-subtitle) hover:text-(--el-auth-title)">
             <Icon name="arrow_back" size={14} />
-            Back to login options
+            {t('auth.backToLoginOptions')}
           </Link>
         </div>
       </div>

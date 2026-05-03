@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
 import { LoginGhosts } from './LoginGhosts';
 import { LoginRockets } from './LoginRockets';
@@ -6,10 +7,20 @@ import { LoginLavaLamp } from './LoginLavaLamp';
 import { LoginAurora } from './LoginAurora';
 import { LoginTopography } from './LoginTopography';
 import { LoginClouds } from './LoginClouds';
+import { LoginGameOfLife } from './LoginGameOfLife';
 
-const BACKGROUNDS = [LoginGhosts, LoginRockets, LoginLavaLamp, LoginAurora, LoginTopography, LoginClouds] as const;
+const BACKGROUNDS = [
+  { component: LoginGhosts, link: null },
+  { component: LoginRockets, link: null },
+  { component: LoginLavaLamp, link: null },
+  { component: LoginAurora, link: null },
+  { component: LoginTopography, link: null },
+  { component: LoginClouds, link: null },
+  { component: LoginGameOfLife, link: { labelKey: 'auth.conwaysGameOfLife', url: 'https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life' } },
+];
 
 export function AuthBackground() {
+  const { t } = useTranslation();
   const [bgIndex, setBgIndex] = useState(() => Math.floor(Math.random() * BACKGROUNDS.length));
   const [mounted, setMounted] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
@@ -28,7 +39,9 @@ export function AuthBackground() {
     }, 600);
   }, [transitioning]);
 
-  const BgComponent = BACKGROUNDS[bgIndex];
+  const bg = BACKGROUNDS[bgIndex];
+  const BgComponent = bg.component;
+  const { link } = bg;
 
   return (
     <>
@@ -39,14 +52,29 @@ export function AuthBackground() {
         <BgComponent />
       </div>
 
-      {/* Switch button + label — bottom-right corner */}
-      <button
-        onClick={handleSwitch}
-        className="fixed bottom-5 right-5 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-(--el-page-bg) opacity-40 shadow-(--shadow-elevated) transition-opacity hover:opacity-70"
-        aria-label="Switch background"
-      >
-        <Icon name="shuffle" size={16} />
-      </button>
+      <div className="fixed bottom-5 right-5 z-20 flex items-center gap-2">
+        {/* Wiki link — shown when background has one */}
+        {link && (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-9 items-center gap-1.5 rounded-full bg-(--el-page-bg) px-3 opacity-40 shadow-(--shadow-elevated) transition-opacity hover:opacity-70"
+          >
+            <Icon name="info" size={14} />
+            <span className="text-xs font-medium text-(--el-page-text)">{t(link.labelKey)}</span>
+          </a>
+        )}
+
+        {/* Switch button */}
+        <button
+          onClick={handleSwitch}
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-(--el-page-bg) opacity-40 shadow-(--shadow-elevated) transition-opacity hover:opacity-70"
+          aria-label="Switch background"
+        >
+          <Icon name="shuffle" size={16} />
+        </button>
+      </div>
     </>
   );
 }
