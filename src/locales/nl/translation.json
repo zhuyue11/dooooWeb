@@ -119,7 +119,13 @@
     "backToLoginOptions": "Terug naar inlogopties",
     "nameLabel": "Naam",
     "namePlaceholder": "Je naam",
-    "resetEmailSent": "Controleer je e-mail voor de resetlink."
+    "resetEmailSent": "Controleer je e-mail voor de resetlink.",
+    "langtonsAnt": "Langtons mier",
+    "briansBrain": "Brian's Brain",
+    "rule110": "Regel 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Dag en Nacht",
+    "cyclicCA": "Cyclische cellulaire automaat"
   },
   "tasks": {
     "itemType": {

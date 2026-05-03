@@ -119,7 +119,13 @@
     "backToLoginOptions": "返回登入選項",
     "nameLabel": "姓名",
     "namePlaceholder": "您的姓名",
-    "resetEmailSent": "請查看您的電子郵件以取得重設連結。"
+    "resetEmailSent": "請查看您的電子郵件以取得重設連結。",
+    "langtonsAnt": "蘭頓螞蟻",
+    "briansBrain": "布萊恩的大腦",
+    "rule110": "規則110",
+    "wireworld": "線路世界",
+    "dayAndNight": "日與夜",
+    "cyclicCA": "循環細胞自動機"
   },
   "tasks": {
     "itemType": {

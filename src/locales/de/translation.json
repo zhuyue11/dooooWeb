@@ -119,7 +119,13 @@
     "backToLoginOptions": "Zurück zu Anmeldeoptionen",
     "nameLabel": "Name",
     "namePlaceholder": "Ihr Name",
-    "resetEmailSent": "Überprüfen Sie Ihre E-Mail für den Zurücksetzungslink."
+    "resetEmailSent": "Überprüfen Sie Ihre E-Mail für den Zurücksetzungslink.",
+    "langtonsAnt": "Langtons Ameise",
+    "briansBrain": "Brians Gehirn",
+    "rule110": "Regel 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Tag und Nacht",
+    "cyclicCA": "Zyklischer Zellularautomat"
   },
   "tasks": {
     "itemType": {

@@ -119,7 +119,13 @@
     "backToLoginOptions": "ログインオプションに戻る",
     "nameLabel": "名前",
     "namePlaceholder": "お名前",
-    "resetEmailSent": "リセットリンクをメールで確認してください。"
+    "resetEmailSent": "リセットリンクをメールで確認してください。",
+    "langtonsAnt": "ラングトンのアリ",
+    "briansBrain": "ブライアンの脳",
+    "rule110": "ルール110",
+    "wireworld": "ワイヤーワールド",
+    "dayAndNight": "デイ＆ナイト",
+    "cyclicCA": "循環セルオートマトン"
   },
   "tasks": {
     "itemType": {

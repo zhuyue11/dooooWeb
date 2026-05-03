@@ -119,7 +119,13 @@
     "backToLoginOptions": "بازگشت به گزینه‌های ورود",
     "nameLabel": "نام",
     "namePlaceholder": "نام شما",
-    "resetEmailSent": "ایمیل خود را برای لینک بازنشانی بررسی کنید."
+    "resetEmailSent": "ایمیل خود را برای لینک بازنشانی بررسی کنید.",
+    "langtonsAnt": "مورچه لنگتون",
+    "briansBrain": "مغز برایان",
+    "rule110": "قانون ۱۱۰",
+    "wireworld": "دنیای سیم",
+    "dayAndNight": "روز و شب",
+    "cyclicCA": "اتوماتای سلولی دوره‌ای"
   },
   "tasks": {
     "itemType": {

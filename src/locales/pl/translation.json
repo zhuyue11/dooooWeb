@@ -119,7 +119,13 @@
     "backToLoginOptions": "Powrót do opcji logowania",
     "nameLabel": "Imię",
     "namePlaceholder": "Twoje imię",
-    "resetEmailSent": "Sprawdź e-mail, aby uzyskać link do resetowania."
+    "resetEmailSent": "Sprawdź e-mail, aby uzyskać link do resetowania.",
+    "langtonsAnt": "Mrówka Langtona",
+    "briansBrain": "Mózg Briana",
+    "rule110": "Reguła 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Dzień i Noc",
+    "cyclicCA": "Cykliczny automat komórkowy"
   },
   "tasks": {
     "itemType": {

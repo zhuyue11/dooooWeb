@@ -1,27 +1,40 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/components/ui/Icon';
-import { LoginGhosts } from './LoginGhosts';
 import { LoginRockets } from './LoginRockets';
 import { LoginLavaLamp } from './LoginLavaLamp';
 import { LoginAurora } from './LoginAurora';
 import { LoginTopography } from './LoginTopography';
-import { LoginClouds } from './LoginClouds';
 import { LoginGameOfLife } from './LoginGameOfLife';
+import { LoginLangtonsAnt } from './LoginLangtonsAnt';
+import { LoginBriansBrain } from './LoginBriansBrain';
+import { LoginRule110 } from './LoginRule110';
+import { LoginWireWorld } from './LoginWireWorld';
+import { LoginDayNight } from './LoginDayNight';
+import { LoginCyclicCA } from './LoginCyclicCA';
 
 const BACKGROUNDS = [
-  { component: LoginGhosts, link: null },
   { component: LoginRockets, link: null },
   { component: LoginLavaLamp, link: null },
   { component: LoginAurora, link: null },
   { component: LoginTopography, link: null },
-  { component: LoginClouds, link: null },
   { component: LoginGameOfLife, link: { labelKey: 'auth.conwaysGameOfLife', url: 'https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life' } },
+  { component: LoginLangtonsAnt, link: { labelKey: 'auth.langtonsAnt', url: 'https://en.wikipedia.org/wiki/Langton%27s_ant' } },
+  { component: LoginBriansBrain, link: { labelKey: 'auth.briansBrain', url: 'https://en.wikipedia.org/wiki/Brian%27s_Brain' } },
+  { component: LoginRule110, link: { labelKey: 'auth.rule110', url: 'https://en.wikipedia.org/wiki/Rule_110' } },
+  { component: LoginWireWorld, link: { labelKey: 'auth.wireworld', url: 'https://en.wikipedia.org/wiki/Wireworld' } },
+  { component: LoginDayNight, link: { labelKey: 'auth.dayAndNight', url: 'https://en.wikipedia.org/wiki/Day_and_Night_(cellular_automaton)' } },
+  { component: LoginCyclicCA, link: { labelKey: 'auth.cyclicCA', url: 'https://en.wikipedia.org/wiki/Cyclic_cellular_automaton' } },
 ];
 
 export function AuthBackground() {
   const { t } = useTranslation();
-  const [bgIndex, setBgIndex] = useState(() => Math.floor(Math.random() * BACKGROUNDS.length));
+  // Only land on non-pattern backgrounds initially; patterns are reachable via shuffle
+  const [bgIndex, setBgIndex] = useState(() => {
+    const nonPatternCount = BACKGROUNDS.filter(bg => !bg.link).length;
+    return Math.floor(Math.random() * nonPatternCount);
+  });
+  const [resetKey, setResetKey] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -49,7 +62,7 @@ export function AuthBackground() {
         className="transition-opacity duration-[600ms] ease-in-out"
         style={{ opacity: mounted && !transitioning ? 1 : 0 }}
       >
-        <BgComponent />
+        <BgComponent key={resetKey} />
       </div>
 
       <div className="fixed bottom-5 right-5 z-20 flex items-center gap-2">
@@ -64,6 +77,17 @@ export function AuthBackground() {
             <Icon name="info" size={14} />
             <span className="text-xs font-medium text-(--el-page-text)">{t(link.labelKey)}</span>
           </a>
+        )}
+
+        {/* Reset button — shown for automata backgrounds */}
+        {link && (
+          <button
+            onClick={() => setResetKey(k => k + 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-(--el-page-bg) opacity-40 shadow-(--shadow-elevated) transition-opacity hover:opacity-70"
+            aria-label="Reset"
+          >
+            <Icon name="replay" size={16} />
+          </button>
         )}
 
         {/* Switch button */}

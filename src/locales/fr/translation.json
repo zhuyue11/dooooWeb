@@ -119,7 +119,13 @@
     "backToLoginOptions": "Retour aux options",
     "nameLabel": "Nom",
     "namePlaceholder": "Votre nom",
-    "resetEmailSent": "Vérifiez votre e-mail pour le lien de réinitialisation."
+    "resetEmailSent": "Vérifiez votre e-mail pour le lien de réinitialisation.",
+    "langtonsAnt": "Fourmi de Langton",
+    "briansBrain": "Cerveau de Brian",
+    "rule110": "Règle 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Jour et Nuit",
+    "cyclicCA": "Automate cellulaire cyclique"
   },
   "tasks": {
     "itemType": {

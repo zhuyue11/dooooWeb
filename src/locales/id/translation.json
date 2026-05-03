@@ -119,7 +119,13 @@
     "backToLoginOptions": "Kembali ke opsi masuk",
     "nameLabel": "Nama",
     "namePlaceholder": "Nama Anda",
-    "resetEmailSent": "Periksa email Anda untuk tautan pengaturan ulang."
+    "resetEmailSent": "Periksa email Anda untuk tautan pengaturan ulang.",
+    "langtonsAnt": "Semut Langton",
+    "briansBrain": "Otak Brian",
+    "rule110": "Aturan 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Siang dan Malam",
+    "cyclicCA": "Automata seluler siklik"
   },
   "tasks": {
     "itemType": {

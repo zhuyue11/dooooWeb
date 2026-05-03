@@ -119,7 +119,13 @@
     "backToLoginOptions": "العودة لخيارات تسجيل الدخول",
     "nameLabel": "الاسم",
     "namePlaceholder": "اسمك",
-    "resetEmailSent": "تحقق من بريدك الإلكتروني للحصول على رابط إعادة التعيين."
+    "resetEmailSent": "تحقق من بريدك الإلكتروني للحصول على رابط إعادة التعيين.",
+    "langtonsAnt": "نملة لانغتون",
+    "briansBrain": "دماغ براين",
+    "rule110": "القاعدة 110",
+    "wireworld": "عالم الأسلاك",
+    "dayAndNight": "النهار والليل",
+    "cyclicCA": "أوتوماتون خلوي دوري"
   },
   "tasks": {
     "itemType": {

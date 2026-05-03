@@ -119,7 +119,13 @@
     "backToLoginOptions": "로그인 옵션으로 돌아가기",
     "nameLabel": "이름",
     "namePlaceholder": "이름 입력",
-    "resetEmailSent": "이메일에서 재설정 링크를 확인하세요."
+    "resetEmailSent": "이메일에서 재설정 링크를 확인하세요.",
+    "langtonsAnt": "랭턴의 개미",
+    "briansBrain": "브라이언의 뇌",
+    "rule110": "규칙 110",
+    "wireworld": "와이어월드",
+    "dayAndNight": "낮과 밤",
+    "cyclicCA": "순환 셀룰러 오토마톤"
   },
   "tasks": {
     "itemType": {

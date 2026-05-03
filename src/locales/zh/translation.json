@@ -119,7 +119,13 @@
     "backToLoginOptions": "返回登录选项",
     "nameLabel": "姓名",
     "namePlaceholder": "您的姓名",
-    "resetEmailSent": "请查看您的邮箱获取重置链接。"
+    "resetEmailSent": "请查看您的邮箱获取重置链接。",
+    "langtonsAnt": "兰顿蚂蚁",
+    "briansBrain": "布莱恩的大脑",
+    "rule110": "规则110",
+    "wireworld": "线路世界",
+    "dayAndNight": "日与夜",
+    "cyclicCA": "循环细胞自动机"
   },
   "tasks": {
     "itemType": {

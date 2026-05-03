@@ -119,7 +119,13 @@
     "backToLoginOptions": "Quay lại tùy chọn đăng nhập",
     "nameLabel": "Tên",
     "namePlaceholder": "Tên của bạn",
-    "resetEmailSent": "Kiểm tra email để nhận liên kết đặt lại."
+    "resetEmailSent": "Kiểm tra email để nhận liên kết đặt lại.",
+    "langtonsAnt": "Kiến Langton",
+    "briansBrain": "Bộ não Brian",
+    "rule110": "Quy tắc 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Ngày và Đêm",
+    "cyclicCA": "Ô tự động tuần hoàn"
   },
   "tasks": {
     "itemType": {

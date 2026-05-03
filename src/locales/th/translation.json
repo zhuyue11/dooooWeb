@@ -119,7 +119,13 @@
     "backToLoginOptions": "กลับไปยังตัวเลือกการเข้าสู่ระบบ",
     "nameLabel": "ชื่อ",
     "namePlaceholder": "ชื่อของคุณ",
-    "resetEmailSent": "ตรวจสอบอีเมลของคุณเพื่อรับลิงก์รีเซ็ต"
+    "resetEmailSent": "ตรวจสอบอีเมลของคุณเพื่อรับลิงก์รีเซ็ต",
+    "langtonsAnt": "มดของแลงตัน",
+    "briansBrain": "สมองของไบรอัน",
+    "rule110": "กฎ 110",
+    "wireworld": "ไวร์เวิลด์",
+    "dayAndNight": "กลางวันและกลางคืน",
+    "cyclicCA": "ออโตมาตันเซลล์แบบวงจร"
   },
   "tasks": {
     "itemType": {

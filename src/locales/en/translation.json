@@ -119,7 +119,13 @@
     "backToLoginOptions": "Back to login options",
     "nameLabel": "Name",
     "namePlaceholder": "Your name",
-    "resetEmailSent": "Check your email for a reset link."
+    "resetEmailSent": "Check your email for a reset link.",
+    "langtonsAnt": "Langton's Ant",
+    "briansBrain": "Brian's Brain",
+    "rule110": "Rule 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Day & Night",
+    "cyclicCA": "Cyclic Cellular Automaton"
   },
   "tasks": {
     "itemType": {

@@ -119,7 +119,13 @@
     "backToLoginOptions": "Giriş seçeneklerine dön",
     "nameLabel": "İsim",
     "namePlaceholder": "Adınız",
-    "resetEmailSent": "Sıfırlama bağlantısı için e-postanızı kontrol edin."
+    "resetEmailSent": "Sıfırlama bağlantısı için e-postanızı kontrol edin.",
+    "langtonsAnt": "Langton Karıncası",
+    "briansBrain": "Brian'ın Beyni",
+    "rule110": "Kural 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "Gece ve Gündüz",
+    "cyclicCA": "Döngüsel hücresel otomat"
   },
   "tasks": {
     "itemType": {

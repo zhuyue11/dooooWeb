@@ -119,7 +119,13 @@
     "backToLoginOptions": "Назад к вариантам входа",
     "nameLabel": "Имя",
     "namePlaceholder": "Ваше имя",
-    "resetEmailSent": "Проверьте почту для ссылки на сброс."
+    "resetEmailSent": "Проверьте почту для ссылки на сброс.",
+    "langtonsAnt": "Муравей Лэнгтона",
+    "briansBrain": "Мозг Брайана",
+    "rule110": "Правило 110",
+    "wireworld": "Wireworld",
+    "dayAndNight": "День и Ночь",
+    "cyclicCA": "Циклический клеточный автомат"
   },
   "tasks": {
     "itemType": {
