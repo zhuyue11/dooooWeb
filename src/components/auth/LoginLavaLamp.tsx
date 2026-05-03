@@ -77,7 +77,7 @@ function generateBlobConfigs(): BlobConfig[] {
       name: g.name,
       color: COLORS[i % COLORS.length],
       width,
-      opacity: 0.06 + rand() * 0.10,
+      opacity: 0.18 + rand() * 0.20,
       blur: 8 + rand() * 16,
       scaleMin: 0.85,
       scaleMax: 1.15 + rand() * 0.15,
@@ -172,9 +172,9 @@ export function LoginLavaLamp() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 30% 70%, color-mix(in srgb, ${COLORS[0]} 8%, transparent) 0%, transparent 100%),
-            radial-gradient(ellipse 60% 80% at 70% 30%, color-mix(in srgb, ${COLORS[5]} 8%, transparent) 0%, transparent 100%),
-            radial-gradient(ellipse 70% 50% at 50% 50%, color-mix(in srgb, ${COLORS[8]} 5%, transparent) 0%, transparent 100%)
+            radial-gradient(ellipse 80% 60% at 30% 70%, color-mix(in srgb, ${COLORS[0]} 18%, transparent) 0%, transparent 100%),
+            radial-gradient(ellipse 60% 80% at 70% 30%, color-mix(in srgb, ${COLORS[5]} 18%, transparent) 0%, transparent 100%),
+            radial-gradient(ellipse 70% 50% at 50% 50%, color-mix(in srgb, ${COLORS[8]} 12%, transparent) 0%, transparent 100%)
           `,
         }}
       />

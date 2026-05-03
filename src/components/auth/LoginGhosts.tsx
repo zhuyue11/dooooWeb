@@ -99,7 +99,7 @@ function generateScatterGhosts(count: number): ScatterGhost[] {
       x: Math.max(2, Math.min(95, baseX + jitterX)),
       y: Math.max(2, Math.min(85, baseY + jitterY)),
       color: GHOST_COLORS[i % GHOST_COLORS.length],
-      opacity: 0.10 + rand() * 0.12,        // 10-22% — more visible
+      opacity: 0.25 + rand() * 0.20,        // 25-45%
       scale: 0.7 + rand() * 1.0,            // 42-102px wide — bigger
       driftX: 15 + rand() * 30,
       driftY: 10 + rand() * 25,
@@ -184,7 +184,7 @@ export function LoginGhosts() {
               '--bob': `${g.bobHeight}px`,
             } as React.CSSProperties}
           >
-            <div style={{ opacity: 0.25 }}>
+            <div style={{ opacity: 0.55 }}>
               <GhostShape src={g.src} name={g.name} width={GHOST_WIDTH} color={g.color} />
             </div>
           </div>

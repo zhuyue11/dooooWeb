@@ -313,3 +313,9 @@ body {
   50%      { transform: scale(var(--lava-scale-max, 1.15)); }
 }
 
+/* ── Clouds background ── */
+@keyframes clouds-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100vw); }
+}
+
