@@ -12,7 +12,7 @@ test.describe('Login flow', () => {
   test('shows login page with OAuth and email buttons', async ({ page }) => {
     await page.goto('/login');
 
-    await expect(page.getByText('Welcome to DOOOO')).toBeVisible();
+    await expect(page.getByText('Welcome to Doooo')).toBeVisible();
     await expect(page.getByText('Continue with Google')).toBeVisible();
     await expect(page.getByText('Continue with Apple')).toBeVisible();
     await expect(page.getByText('Continue with Email')).toBeVisible();

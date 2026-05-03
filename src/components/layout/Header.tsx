@@ -22,7 +22,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <div className="flex flex-1 items-center gap-2">
         <Logo size={24} />
-        <span className="text-base font-bold text-(--el-header-text)">DOOOO</span>
+        <span className="text-base font-bold text-(--el-header-text)">Doooo</span>
       </div>
 
       <button
