@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { LoginGhosts } from './LoginGhosts';
 import { LoginRockets } from './LoginRockets';
+import { LoginLavaLamp } from './LoginLavaLamp';
 
-const BACKGROUNDS = [LoginGhosts, LoginRockets] as const;
+const BACKGROUNDS = [LoginGhosts, LoginRockets, LoginLavaLamp] as const;
 
 export function AuthBackground() {
   // Randomly pick a background on mount

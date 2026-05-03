@@ -306,3 +306,10 @@ body {
   0%, 100% { opacity: var(--star-base, 0.3); transform: scale(1); }
   50% { opacity: 1; transform: scale(1.3); }
 }
+
+/* ── Lava lamp background ── */
+@keyframes lava-pulse {
+  0%, 100% { transform: scale(var(--lava-scale-min, 0.85)); }
+  50%      { transform: scale(var(--lava-scale-max, 1.15)); }
+}
+
