@@ -8,6 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  handleOAuthExchange: (provider: string, idToken: string) => Promise<void>;
   register: (email: string, password: string, invitationCode?: string) => Promise<void>;
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -43,6 +44,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
   }, []);
 
+  const handleOAuthExchange = useCallback(async (provider: string, idToken: string) => {
+    const res = await api.oauthExchange(provider, idToken);
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, res.token);
+    setUser(res.user);
+  }, []);
+
   const register = useCallback(async (email: string, password: string, invitationCode?: string) => {
     const res = await api.register(email, password, invitationCode);
     localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, res.data.token);
@@ -50,8 +57,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logoutFn = useCallback(async () => {
-    await api.logout();
+    // Clear local state immediately so the UI redirects to /login instantly.
+    // The API call is best-effort — don't block on it.
     setUser(null);
+    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+    api.logout().catch(() => {});
   }, []);
 
   const forgotPassword = useCallback(async (email: string) => {
@@ -78,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         login,
+        handleOAuthExchange,
         register,
         logout: logoutFn,
         forgotPassword,

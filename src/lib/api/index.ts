@@ -115,6 +115,22 @@ export async function logout(): Promise<void> {
   }
 }
 
+// OAuth exchange response — flat shape from /api/auth/oauth-exchange
+// (different from AuthResponse which wraps in { data: { user, token } })
+export interface OAuthExchangeResponse {
+  success: boolean;
+  user: User;
+  token: string;
+}
+
+export async function oauthExchange(provider: string, idToken: string): Promise<OAuthExchangeResponse> {
+  const res = await apiClient.post<OAuthExchangeResponse>('/api/auth/oauth-exchange', {
+    provider,
+    id_token: idToken,
+  });
+  return res.data;
+}
+
 // ===== Tasks =====
 
 export async function getTasks(filters?: TaskFilters): Promise<Task[]> {
