@@ -20,7 +20,6 @@ export interface Task {
   setToDoneAutomatically?: boolean; // Automatically mark task as completed when overdue
   isCompleted: boolean; // Boolean flag for completion status
   completedAt?: string;
-  tags?: string[]; // Array of tag strings
   categoryId?: string;
   originalTaskId?: string; // Reference to the original task when this task is created from "update all future" operation
   groupId?: string; // Group ID if task belongs to a group
@@ -413,7 +412,6 @@ export interface TaskFilters {
   priority?: string;
   projectId?: string;
   date?: string; // Changed from dueDate to date to match frontend convention
-  tags?: string[];
   search?: string;
   page?: number;
   limit?: number;

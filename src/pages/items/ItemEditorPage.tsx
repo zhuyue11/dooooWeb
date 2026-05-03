@@ -211,8 +211,6 @@ export function ItemEditorPage() {
   const [secondReminder, setSecondReminder] = useState<number | undefined>(
     draft?.secondReminderMinutes != null ? draft.secondReminderMinutes : undefined,
   );
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState('');
 
   // Duration / end time mode
   const [useEndTime, setUseEndTime] = useState(false);
@@ -313,7 +311,6 @@ export function ItemEditorPage() {
       setTimeOfDay(task.timeOfDay || null);
       setLocationValue(task.location || '');
       setSelectedRepeat(task.repeat || null);
-      setTags(task.tags || []);
       if (task.dateType) setDateType(task.dateType);
       if (task.showInTodoWhenOverdue != null) setShowInTodoWhenOverdue(task.showInTodoWhenOverdue);
       if (task.setToDoneAutomatically != null) setSetToDoneAutomatically(task.setToDoneAutomatically);
@@ -493,18 +490,6 @@ export function ItemEditorPage() {
     setDuration(null);
     setFirstReminder(undefined);
     setSecondReminder(undefined);
-  }, []);
-
-  const handleAddTag = useCallback(() => {
-    const trimmed = tagInput.trim();
-    if (trimmed && !tags.includes(trimmed)) {
-      setTags((prev) => [...prev, trimmed]);
-    }
-    setTagInput('');
-  }, [tagInput, tags]);
-
-  const handleRemoveTag = useCallback((tag: string) => {
-    setTags((prev) => prev.filter((t) => t !== tag));
   }, []);
 
   const handleSwitchToEndTime = useCallback(() => {
@@ -1841,36 +1826,6 @@ export function ItemEditorPage() {
               </div>
             )}
 
-            {/* Tags */}
-            <div className="px-4 py-2.5">
-              <div className="flex items-center gap-3.5">
-                <Icon name="label" size={20} color={tags.length > 0 ? 'var(--el-modal-icon-selected)' : 'var(--el-modal-icon-unselected)'} />
-                <div className="flex flex-1 flex-wrap items-center gap-1.5">
-                  {tags.map((tag) => (
-                    <span key={tag} className="inline-flex items-center gap-1 rounded-(--radius-btn) bg-(--el-editor-tag-bg) px-(--spacing-btn-x-sm) py-0.5 text-xs font-medium text-(--el-editor-field-value)">
-                      {tag}
-                      <button type="button" onClick={() => handleRemoveTag(tag)} className="text-(--el-editor-field-label) hover:text-(--el-editor-field-value)">
-                        <Icon name="close" size={12} />
-                      </button>
-                    </span>
-                  ))}
-                  <input
-                    type="text"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); }
-                      if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
-                        setTags((prev) => prev.slice(0, -1));
-                      }
-                    }}
-                    onBlur={handleAddTag}
-                    placeholder={tags.length === 0 ? t('itemEditor.addTags') : ''}
-                    className="min-w-[80px] flex-1 bg-transparent text-sm text-(--el-editor-field-value) placeholder:text-(--el-editor-field-label) focus:outline-none"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Info card */}

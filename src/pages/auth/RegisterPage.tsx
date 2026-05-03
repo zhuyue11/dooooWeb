@@ -9,7 +9,6 @@ export function RegisterPage() {
   const { t } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,7 +19,7 @@ export function RegisterPage() {
     setError('');
     setIsLoading(true);
     try {
-      await register(email, password, name);
+      await register(email, password);
       navigate('/home');
     } catch {
       setError(t('auth.registerFailed', 'Registration failed. Please try again.'));
@@ -41,17 +40,6 @@ export function RegisterPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.nameLabel')}</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder={t('auth.namePlaceholder')}
-              required
-              className="h-12 rounded-(--radius-input) border border-(--el-auth-input-border) bg-(--el-auth-input-bg) px-(--spacing-input-x) text-sm text-(--el-auth-title) placeholder:text-(--el-auth-subtitle) focus:border-(--el-auth-input-focus) focus:outline-none"
-             
-            />
-          </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-(--el-auth-title)">{t('auth.emailLabel')}</label>
             <input

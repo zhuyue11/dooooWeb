@@ -76,8 +76,9 @@ export async function login(email: string, password: string): Promise<AuthRespon
   return res.data;
 }
 
-export async function register(email: string, password: string, name: string, invitationCode?: string): Promise<AuthResponse> {
-  const res = await apiClient.post<AuthResponse>('/api/auth/register', { email, password, name, invitationCode });
+export async function register(email: string, password: string, invitationCode?: string): Promise<AuthResponse> {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const res = await apiClient.post<AuthResponse>('/api/auth/register', { email, password, timezone, invitationCode });
   return res.data;
 }
 
@@ -887,7 +888,8 @@ export async function completeAISession(sessionId: string): Promise<void> {
 
 export interface NoteUser {
   id: string;
-  name: string;
+  name: string | null;
+  email: string;
   avatar?: string;
 }
 

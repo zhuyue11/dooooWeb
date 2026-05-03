@@ -77,10 +77,10 @@ function NoteItem({
 
   return (
     <div className="flex gap-2.5 py-2">
-      <MiniAvatar name={note.user.name} />
+      <MiniAvatar name={note.user.name || note.user.email} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-(--el-group-title)">{note.user.name}</span>
+          <span className="text-xs font-medium text-(--el-group-title)">{note.user.name || note.user.email}</span>
           <span className="text-[10px] text-(--el-group-description)">{formatRelativeTime(note.createdAt)}</span>
           {isAuthor && !editing && (
             <div className="ml-auto flex items-center gap-1">
