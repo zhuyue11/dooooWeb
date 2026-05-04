@@ -11,7 +11,8 @@ import {
   GOOGLE_BUTTON_CONTAINER_ID,
   type CredentialResponse,
 } from '@/lib/google-identity';
-import logo from '@/assets/logo.svg';
+import { BrandName } from '@/components/ui/BrandName';
+import { Logo } from '@/components/ui/Logo';
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -54,15 +55,15 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center bg-(--el-page-bg) overflow-hidden">
       <AuthBackground />
       {/* Login Card */}
       <div className="relative z-10 flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
         {/* Logo + Title */}
         <div className="flex flex-col items-center gap-4">
-          <img src={logo} alt="doooo" className="h-14 w-14" />
+          <Logo size={56} />
           <h1 className="text-2xl font-bold text-(--el-auth-title)">
-            {t('auth.welcomeToDoooo')}
+            <BrandName text={t('auth.welcomeToDoooo')} />
           </h1>
           <p className="text-sm text-(--el-auth-subtitle)">
             {t('auth.signInSubtitle')}
@@ -99,7 +100,7 @@ export function LoginPage() {
             to="/login/email"
             className="flex h-(--btn-height-lg) items-center justify-center gap-2.5 rounded-(--radius-btn) bg-(--el-auth-submit-bg) text-[15px] font-semibold text-(--el-auth-submit-text) transition-opacity hover:opacity-90"
           >
-            <Icon name="mail" size={20} color="#ffffff" />
+            <Icon name="mail" size={20} color="var(--el-auth-submit-text)" />
             {t('auth.continueWithEmail')}
           </Link>
         </div>

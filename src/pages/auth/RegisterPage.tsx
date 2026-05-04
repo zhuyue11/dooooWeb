@@ -29,7 +29,7 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center bg-(--el-page-bg) overflow-hidden">
       <AuthBackground />
       <div className="relative z-10 flex w-[420px] flex-col gap-8 rounded-(--radius-card) bg-(--el-auth-card-bg) p-(--spacing-card) shadow-(--shadow-elevated)">
         <div className="flex flex-col items-center gap-4">

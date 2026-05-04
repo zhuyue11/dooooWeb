@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@/components/ui/Icon';
 import { useUnreadNotificationCount } from '@/hooks/useNotifications';
 import { Logo } from '@/components/ui/Logo';
+import { BrandName } from '@/components/ui/BrandName';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -22,7 +23,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <div className="flex flex-1 items-center gap-2">
         <Logo size={24} />
-        <span className="text-base font-bold text-(--el-header-text)">Doooo</span>
+        <BrandName className="text-base font-bold text-(--el-header-text)" />
       </div>
 
       <button
